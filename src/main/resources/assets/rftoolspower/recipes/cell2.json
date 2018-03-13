@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "rftoolspower:cell2"
+  },
+  "pattern": [
+    "rrr",
+    "RMR",
+    "rrr"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "M": {
+      "item": "rftoolspower:cell1"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}
