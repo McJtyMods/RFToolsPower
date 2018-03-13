@@ -7,6 +7,7 @@ import mcjty.lib.network.PacketHandler;
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.WrenchChecker;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -41,7 +42,7 @@ public abstract class CommonProxy {
         RFToolsPowerMessages.registerNetworkMessages(network);
 
 //        ModItems.init();
-//        ModBlocks.init();
+        ModBlocks.init();
 //        ModWorldgen.init();
     }
 
