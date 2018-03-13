@@ -2,12 +2,14 @@ package mcjty.rftoolspower.proxy;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.lib.McJtyLibClient;
-import mcjty.rftools.blocks.ModBlocks;
+import mcjty.rftoolspower.blocks.BakedModelLoader;
+import mcjty.rftoolspower.blocks.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -24,7 +26,7 @@ public class ClientProxy extends CommonProxy {
         super.preInit(e);
         MinecraftForge.EVENT_BUS.register(this);
 //        OBJLoader.INSTANCE.addDomain(RFTools.MODID);
-//        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
         McJtyLibClient.preInit(e);
 //        ClientCommandHandler.registerCommands();
     }
@@ -50,6 +52,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent e) {
         super.postInit(e);
+        ModBlocks.initItemModels();
     }
 
     @Override

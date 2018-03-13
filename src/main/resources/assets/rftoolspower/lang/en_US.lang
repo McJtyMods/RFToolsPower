@@ -1,6 +1,8 @@
 //item.deepresonance.dr_manual.name=Deep Resonance Manual
 
-//tile.deepresonance.radiation_sensor.name=Radiation Sensor
+tile.rftoolspower.cell1.name=Powercell (Low)
+tile.rftoolspower.cell2.name=Powercell (Medium)
+tile.rftoolspower.cell3.name=Powercell (High)
 
 itemGroup.RFToolsPower=RFTools Power
 

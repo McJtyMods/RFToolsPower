@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": { "txt": "rftoolspower:blocks/cell" },
+    "model": "rftoolspower:cell1",
+    "transform": {
+      "gui": {
+        "scale": 0.30,
+        "rotation": [{"x": 35},{"y": 45}]
+      }
+    }
+  },
+  "variants": {
+    "normal": [ {} ],
+    "inventory": [ {} ]
+  }
+}

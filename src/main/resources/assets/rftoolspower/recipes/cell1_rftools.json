@@ -1,11 +1,8 @@
 {
   "conditions": [
     {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:mod_loaded",
-        "modid": "rftools"
-      }
+      "type": "forge:mod_loaded",
+      "modid": "rftools"
     }
   ],
   "result": {
@@ -19,7 +16,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "M": {
-      "item": "minecraft:iron_block"
+      "item": "rftools:machine_frame"
     },
     "R": {
       "item": "minecraft:redstone_block"

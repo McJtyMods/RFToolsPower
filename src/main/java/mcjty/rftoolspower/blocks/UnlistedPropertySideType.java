@@ -1,9 +1,8 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.xnet.blocks.cables.ConnectorType;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-public class UnlistedPropertySideType implements IUnlistedProperty<ConnectorType> {
+public class UnlistedPropertySideType implements IUnlistedProperty<SideType> {
 
     private final String name;
 
@@ -17,17 +16,17 @@ public class UnlistedPropertySideType implements IUnlistedProperty<ConnectorType
     }
 
     @Override
-    public boolean isValid(ConnectorType value) {
+    public boolean isValid(SideType value) {
         return true;
     }
 
     @Override
-    public Class<ConnectorType> getType() {
-        return ConnectorType.class;
+    public Class<SideType> getType() {
+        return SideType.class;
     }
 
     @Override
-    public String valueToString(ConnectorType value) {
-        return value.toString();
+    public String valueToString(SideType value) {
+        return value.getName();
     }
 }

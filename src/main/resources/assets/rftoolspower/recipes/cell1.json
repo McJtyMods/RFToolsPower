@@ -1,23 +1,31 @@
 {
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "rftools"
+      }
+    }
+  ],
   "result": {
-    "item": "deepresonance:dense_glass",
-    "count": 4
+    "item": "rftoolspower:cell1"
   },
   "pattern": [
-    "sgs",
-    "gog",
-    "sgs"
+    "rrr",
+    "RMR",
+    "rrr"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
-    "s": {
-      "item": "deepresonance:spent_filter"
+    "M": {
+      "item": "minecraft:iron_block"
     },
-    "g": {
-      "item": "minecraft:glass"
+    "R": {
+      "item": "minecraft:redstone_block"
     },
-    "o": {
-      "item": "minecraft:obsidian"
+    "r": {
+      "item": "minecraft:redstone"
     }
   }
 }

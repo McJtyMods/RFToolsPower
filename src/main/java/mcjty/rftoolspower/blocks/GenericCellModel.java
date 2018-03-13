@@ -1,8 +1,7 @@
 package mcjty.rftoolspower.blocks;
 
 import com.google.common.collect.ImmutableSet;
-import mcjty.xnet.XNet;
-import mcjty.xnet.blocks.generic.GenericCableBakedModel;
+import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -19,7 +18,7 @@ public class GenericCellModel implements IModel {
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new GenericCableBakedModel(format);
+        return new GenericCellBakedModel(format);
     }
 
     @Override
@@ -30,50 +29,21 @@ public class GenericCellModel implements IModel {
     @Override
     public Collection<ResourceLocation> getTextures() {
         return ImmutableSet.of(
-                new ResourceLocation(XNet.MODID, "blocks/cable0/connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/advanced_connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/normal_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/normal_corner_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/normal_cross_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/normal_end_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/normal_none_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable0/normal_three_netcable"),
-
-                new ResourceLocation(XNet.MODID, "blocks/cable1/connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/advanced_connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/normal_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/normal_corner_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/normal_cross_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/normal_end_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/normal_none_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable1/normal_three_netcable"),
-
-                new ResourceLocation(XNet.MODID, "blocks/cable2/connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/advanced_connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/normal_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/normal_corner_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/normal_cross_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/normal_end_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/normal_none_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable2/normal_three_netcable"),
-
-                new ResourceLocation(XNet.MODID, "blocks/cable3/connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/advanced_connector"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/normal_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/normal_corner_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/normal_cross_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/normal_end_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/normal_none_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable3/normal_three_netcable"),
-
-                new ResourceLocation(XNet.MODID, "blocks/cable4/normal_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable4/normal_corner_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable4/normal_cross_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable4/normal_end_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable4/normal_none_netcable"),
-                new ResourceLocation(XNet.MODID, "blocks/cable4/normal_three_netcable"),
-
-                new ResourceLocation(XNet.MODID, "blocks/connector_side")
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_none"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_none"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_none"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_none"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_none"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_input"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_input"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_input"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_input"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_input"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_output"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_output"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_output"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_output"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_output")
                 );
     }
 

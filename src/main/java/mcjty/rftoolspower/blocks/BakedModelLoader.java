@@ -1,12 +1,7 @@
 package mcjty.rftoolspower.blocks;
 
 import com.google.common.collect.ImmutableSet;
-import mcjty.xnet.XNet;
-import mcjty.xnet.blocks.cables.ConnectorBlock;
-import mcjty.xnet.blocks.cables.NetCableBlock;
-import mcjty.xnet.blocks.facade.FacadeBlock;
-import mcjty.xnet.blocks.facade.FacadeModel;
-import mcjty.xnet.blocks.generic.GenericCableModel;
+import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
@@ -16,17 +11,13 @@ import java.util.Set;
 
 public class BakedModelLoader implements ICustomModelLoader {
 
-    public static final GenericCableModel GENERIC_MODEL = new GenericCableModel();
-    public static final FacadeModel FACADE_MODEL = new FacadeModel();
+    public static final GenericCellModel GENERIC_MODEL = new GenericCellModel();
 
-    private static final Set<String> NAMES = ImmutableSet.of(
-            ConnectorBlock.CONNECTOR,
-            NetCableBlock.NETCABLE,
-            FacadeBlock.FACADE);
+    private static final Set<String> NAMES = ImmutableSet.of("cell1");
 
     @Override
     public boolean accepts(ResourceLocation modelLocation) {
-        if (!modelLocation.getResourceDomain().equals(XNet.MODID)) {
+        if (!modelLocation.getResourceDomain().equals(RFToolsPower.MODID)) {
             return false;
         }
         return NAMES.contains(modelLocation.getResourcePath());
@@ -34,11 +25,7 @@ public class BakedModelLoader implements ICustomModelLoader {
 
     @Override
     public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-        if (FacadeBlock.FACADE.equals(modelLocation.getResourcePath())) {
-            return FACADE_MODEL;
-        } else {
-            return GENERIC_MODEL;
-        }
+        return GENERIC_MODEL;
     }
 
     @Override
