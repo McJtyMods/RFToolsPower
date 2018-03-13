@@ -18,8 +18,8 @@ public class GenericCellBakedModel implements IBakedModel {
 
     public static final ModelResourceLocation modelCell = new ModelResourceLocation(RFToolsPower.MODID + ":" + "cell1");
 
-    private static Map<SideType, TextureAtlasSprite> sideSpriteMap = new HashMap<>();
-    private static Map<SideType, TextureAtlasSprite> topSpriteMap = new HashMap<>();
+    private static Map<String, TextureAtlasSprite> sideSpriteMap = new HashMap<>();
+    private static Map<String, TextureAtlasSprite> topSpriteMap = new HashMap<>();
 
     private VertexFormat format;
 
@@ -40,18 +40,20 @@ public class GenericCellBakedModel implements IBakedModel {
         return outputMask;
     }
 
-    private static TextureAtlasSprite getSideTexture(SideType type) {
-        if (!sideSpriteMap.containsKey(type)) {
-            sideSpriteMap.put(type, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getSideTexture()));
+    private static TextureAtlasSprite getSideTexture(SideType type, int tier) {
+        String key = type.getName() + tier;
+        if (!sideSpriteMap.containsKey(key)) {
+            sideSpriteMap.put(key, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getSideTexture()+tier));
         }
-        return sideSpriteMap.get(type);
+        return sideSpriteMap.get(key);
     }
 
-    private static TextureAtlasSprite getTopTexture(SideType type) {
-        if (!topSpriteMap.containsKey(type)) {
-            topSpriteMap.put(type, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getUpDownTexture()));
+    private static TextureAtlasSprite getTopTexture(SideType type, int tier) {
+        String key = type.getName();
+        if (!topSpriteMap.containsKey(key)) {
+            topSpriteMap.put(key, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getUpDownTexture()));
         }
-        return topSpriteMap.get(type);
+        return topSpriteMap.get(key);
     }
 
     public GenericCellBakedModel(VertexFormat format) {
@@ -119,6 +121,8 @@ public class GenericCellBakedModel implements IBakedModel {
         SideType east = extendedBlockState.getValue(PowerCellBlock.EAST);
         SideType up = extendedBlockState.getValue(PowerCellBlock.UP);
         SideType down = extendedBlockState.getValue(PowerCellBlock.DOWN);
+        Tier tier = extendedBlockState.getValue(PowerCellBlock.TIER);
+        int t = tier.ordinal()+1;
 
         List<BakedQuad> quads = new ArrayList<>();
 
@@ -127,7 +131,7 @@ public class GenericCellBakedModel implements IBakedModel {
         float o = .25f;
 
         if (up != SideType.INVISIBLE) {
-            quads.add(createQuad(v(0, 1, 0), v(0, 1, 1), v(1, 1, 1), v(1, 1, 0), getTopTexture(up), hilight));
+            quads.add(createQuad(v(0, 1, 0), v(0, 1, 1), v(1, 1, 1), v(1, 1, 0), getTopTexture(up, t), hilight));
             if (up.isInput()) {
                 quads.add(createQuad(v(o, 1.02, o), v(o, 1.02, 1-o), v(1-o, 1.02, 1-o), v(1-o, 1.02, o), getInputMask(), hilight));
             }
@@ -136,7 +140,7 @@ public class GenericCellBakedModel implements IBakedModel {
             }
         }
         if (down != SideType.INVISIBLE) {
-            quads.add(createQuad(v(0, 0, 0), v(1, 0, 0), v(1, 0, 1), v(0, 0, 1), getTopTexture(down), hilight));
+            quads.add(createQuad(v(0, 0, 0), v(1, 0, 0), v(1, 0, 1), v(0, 0, 1), getTopTexture(down, t), hilight));
             if (down.isInput()) {
                 quads.add(createQuad(v(o, -.02, o), v(1-o, -.02, o), v(1-o, -.02, 1-o), v(o, -.02, 1-o), getInputMask(), hilight));
             }
@@ -145,7 +149,7 @@ public class GenericCellBakedModel implements IBakedModel {
             }
         }
         if (east != SideType.INVISIBLE) {
-            quads.add(createQuad(v(1, 1, 1), v(1, 0, 1), v(1, 0, 0), v(1, 1, 0), getSideTexture(east), hilight));
+            quads.add(createQuad(v(1, 1, 1), v(1, 0, 1), v(1, 0, 0), v(1, 1, 0), getSideTexture(east, t), hilight));
             if (east.isInput()) {
                 quads.add(createQuad(v(1.02, 1-o, 1-o), v(1.02, o, 1-o), v(1.02, o, o), v(1.02, 1-o, o), getInputMask(), hilight));
             }
@@ -154,7 +158,7 @@ public class GenericCellBakedModel implements IBakedModel {
             }
         }
         if (west != SideType.INVISIBLE) {
-            quads.add(createQuad(v(0, 1, 0), v(0, 0, 0), v(0, 0, 1), v(0, 1, 1), getSideTexture(west), hilight));
+            quads.add(createQuad(v(0, 1, 0), v(0, 0, 0), v(0, 0, 1), v(0, 1, 1), getSideTexture(west, t), hilight));
             if (west.isInput()) {
                 quads.add(createQuad(v(-.02, 1-o, o), v(-.02, o, o), v(-.02, o, 1-o), v(-.02, 1-o, 1-o), getInputMask(), hilight));
             }
@@ -163,7 +167,7 @@ public class GenericCellBakedModel implements IBakedModel {
             }
         }
         if (north != SideType.INVISIBLE) {
-            quads.add(createQuad(v(1, 1, 0), v(1, 0, 0), v(0, 0, 0), v(0, 1, 0), getSideTexture(north), hilight));
+            quads.add(createQuad(v(1, 1, 0), v(1, 0, 0), v(0, 0, 0), v(0, 1, 0), getSideTexture(north, t), hilight));
             if (north.isInput()) {
                 quads.add(createQuad(v(1-o, 1-o, -.02), v(1-o, o, -.02), v(o, o, -.02), v(o, 1-o, -.02), getInputMask(), hilight));
             }
@@ -172,7 +176,7 @@ public class GenericCellBakedModel implements IBakedModel {
             }
         }
         if (south != SideType.INVISIBLE) {
-            quads.add(createQuad(v(0, 1, 1), v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), getSideTexture(south), hilight));
+            quads.add(createQuad(v(0, 1, 1), v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), getSideTexture(south, t), hilight));
             if (south.isInput()) {
                 quads.add(createQuad(v(o, 1-o, 1.02), v(o, o, 1.02), v(1-o, o, 1.02), v(1-o, 1-o, 1.02), getInputMask(), hilight));
             }
@@ -202,7 +206,7 @@ public class GenericCellBakedModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return getSideTexture(SideType.BOTH_NONE);
+        return getSideTexture(SideType.BOTH_NONE, 1);
     }
 
     @Override

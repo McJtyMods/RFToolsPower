@@ -47,6 +47,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
     public static final UnlistedPropertySideType EAST = new UnlistedPropertySideType("east");
     public static final UnlistedPropertySideType UP = new UnlistedPropertySideType("up");
     public static final UnlistedPropertySideType DOWN = new UnlistedPropertySideType("down");
+    public static final UnlistedPropertySideTier TIER = new UnlistedPropertySideTier("tier");
 
     public static PropertyBool UPPER = PropertyBool.create("upper");
     public static PropertyBool LOWER = PropertyBool.create("lower");
@@ -56,8 +57,8 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         return RotationType.NONE;
     }
 
-    public PowerCellBlock(String name) {
-        super(RFToolsPower.instance, Material.IRON, PowerCellTileEntity.class, EmptyContainer.class, name, false);
+    public PowerCellBlock(String name, Class<? extends PowerCellTileEntity> clazz) {
+        super(RFToolsPower.instance, Material.IRON, clazz, EmptyContainer.class, name, false);
         setCreativeTab(RFToolsPower.tabRfToolsPower);
     }
 
@@ -80,10 +81,6 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
             }
         };
         ModelLoader.setCustomStateMapper(this, ignoreState);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initItemModel() {
     }
 
     @Override
@@ -228,14 +225,14 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return state.withProperty(UPPER, world.getBlockState(pos.up()).getBlock() == ModBlocks.cell1Block)
-                .withProperty(LOWER, world.getBlockState(pos.down()).getBlock() == ModBlocks.cell1Block);
+        return state.withProperty(UPPER, world.getBlockState(pos.up()).getBlock() == this)
+                .withProperty(LOWER, world.getBlockState(pos.down()).getBlock() == this);
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
         IProperty[] listedProperties = new IProperty[]{UPPER, LOWER};
-        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[]{NORTH, SOUTH, WEST, EAST, UP, DOWN};
+        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[]{NORTH, SOUTH, WEST, EAST, UP, DOWN, TIER};
         return new ExtendedBlockState(this, listedProperties, unlistedProperties);
     }
 
@@ -256,13 +253,20 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         SideType up = getSideType(world, pos, EnumFacing.UP, upper, lower);
         SideType down = getSideType(world, pos, EnumFacing.DOWN, upper, lower);
 
+        Tier tier = Tier.TIER1;
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof PowerCellTileEntity) {
+            tier = ((PowerCellTileEntity) te).getTier();
+        }
+
         return extendedBlockState
                 .withProperty(NORTH, north)
                 .withProperty(SOUTH, south)
                 .withProperty(WEST, west)
                 .withProperty(EAST, east)
                 .withProperty(UP, up)
-                .withProperty(DOWN, down);
+                .withProperty(DOWN, down)
+                .withProperty(TIER, tier);
     }
 
     protected SideType getSideType(IBlockAccess world, BlockPos pos, EnumFacing facing, boolean upper, boolean lower) {

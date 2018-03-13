@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures": { "txt": "rftoolspower:blocks/cellboth_t1" },
+    "textures": { "txt": "rftoolspower:blocks/cellboth_t3" },
     "model": "rftoolspower:cell1"
 //    "transform": {
 //      "gui": {

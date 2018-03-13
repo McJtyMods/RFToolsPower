@@ -22,7 +22,7 @@ import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
         @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyProvider", modid = "redstoneflux"),
         @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyReceiver", modid = "redstoneflux")
 })
-public class PowerCellTileEntity extends GenericTileEntity implements IEnergyProvider, IEnergyReceiver, ITickable {
+public abstract class PowerCellTileEntity extends GenericTileEntity implements IEnergyProvider, IEnergyReceiver, ITickable {
 
     private PowercellNetwork network = null;
 
@@ -69,6 +69,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements IEnergyPro
         markDirtyClient();
     }
 
+    abstract Tier getTier();
 
     @Optional.Method(modid = "redstoneflux")
     @Override
