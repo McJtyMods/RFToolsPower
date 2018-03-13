@@ -2,6 +2,7 @@ package mcjty.rftoolspower.proxy;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.lib.McJtyLibClient;
+import mcjty.rftools.blocks.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundEvent;
@@ -39,7 +40,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
 //        ModItems.initClient();
-//        ModBlocks.initClient();
+        ModBlocks.initClient();
     }
 
     @SubscribeEvent
