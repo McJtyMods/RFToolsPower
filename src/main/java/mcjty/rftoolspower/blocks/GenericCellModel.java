@@ -29,21 +29,13 @@ public class GenericCellModel implements IModel {
     @Override
     public Collection<ResourceLocation> getTextures() {
         return ImmutableSet.of(
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_none"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_none"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_none"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_none"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_none"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_input"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_input"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_input"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_input"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_input"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_output"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_output"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_output"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_output"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_output")
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/inputmask"),
+                new ResourceLocation(RFToolsPower.MODID, "blocks/outputmask")
                 );
     }
 

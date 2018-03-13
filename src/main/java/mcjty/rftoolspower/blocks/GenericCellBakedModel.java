@@ -23,6 +23,23 @@ public class GenericCellBakedModel implements IBakedModel {
 
     private VertexFormat format;
 
+    private static TextureAtlasSprite inputMask;
+    private static TextureAtlasSprite outputMask;
+
+    private static TextureAtlasSprite getInputMask() {
+        if (inputMask == null) {
+            inputMask = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(RFToolsPower.MODID + ":blocks/inputmask");
+        }
+        return inputMask;
+    }
+
+    private static TextureAtlasSprite getOutputMask() {
+        if (outputMask == null) {
+            outputMask = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(RFToolsPower.MODID + ":blocks/outputmask");
+        }
+        return outputMask;
+    }
+
     private static TextureAtlasSprite getSideTexture(SideType type) {
         if (!sideSpriteMap.containsKey(type)) {
             sideSpriteMap.put(type, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getSideTexture()));
@@ -107,23 +124,61 @@ public class GenericCellBakedModel implements IBakedModel {
 
         float hilight = 1.0f;
 
+        float o = .25f;
+
         if (up != SideType.INVISIBLE) {
             quads.add(createQuad(v(0, 1, 0), v(0, 1, 1), v(1, 1, 1), v(1, 1, 0), getTopTexture(up), hilight));
+            if (up.isInput()) {
+                quads.add(createQuad(v(o, 1.02, o), v(o, 1.02, 1-o), v(1-o, 1.02, 1-o), v(1-o, 1.02, o), getInputMask(), hilight));
+            }
+            if (up.isOutput()) {
+                quads.add(createQuad(v(o, 1.02, o), v(o, 1.02, 1-o), v(1-o, 1.02, 1-o), v(1-o, 1.02, o), getOutputMask(), hilight));
+            }
         }
         if (down != SideType.INVISIBLE) {
             quads.add(createQuad(v(0, 0, 0), v(1, 0, 0), v(1, 0, 1), v(0, 0, 1), getTopTexture(down), hilight));
+            if (down.isInput()) {
+                quads.add(createQuad(v(o, -.02, o), v(1-o, -.02, o), v(1-o, -.02, 1-o), v(o, -.02, 1-o), getInputMask(), hilight));
+            }
+            if (down.isOutput()) {
+                quads.add(createQuad(v(o, -.02, o), v(1-o, -.02, o), v(1-o, -.02, 1-o), v(o, -.02, 1-o), getOutputMask(), hilight));
+            }
         }
         if (east != SideType.INVISIBLE) {
             quads.add(createQuad(v(1, 1, 1), v(1, 0, 1), v(1, 0, 0), v(1, 1, 0), getSideTexture(east), hilight));
+            if (east.isInput()) {
+                quads.add(createQuad(v(1.02, 1-o, 1-o), v(1.02, o, 1-o), v(1.02, o, o), v(1.02, 1-o, o), getInputMask(), hilight));
+            }
+            if (east.isOutput()) {
+                quads.add(createQuad(v(1.02, 1-o, 1-o), v(1.02, o, 1-o), v(1.02, o, o), v(1.02, 1-o, o), getOutputMask(), hilight));
+            }
         }
         if (west != SideType.INVISIBLE) {
             quads.add(createQuad(v(0, 1, 0), v(0, 0, 0), v(0, 0, 1), v(0, 1, 1), getSideTexture(west), hilight));
+            if (west.isInput()) {
+                quads.add(createQuad(v(-.02, 1-o, o), v(-.02, o, o), v(-.02, o, 1-o), v(-.02, 1-o, 1-o), getInputMask(), hilight));
+            }
+            if (west.isOutput()) {
+                quads.add(createQuad(v(-.02, 1-o, o), v(-.02, o, o), v(-.02, o, 1-o), v(-.02, 1-o, 1-o), getOutputMask(), hilight));
+            }
         }
         if (north != SideType.INVISIBLE) {
             quads.add(createQuad(v(1, 1, 0), v(1, 0, 0), v(0, 0, 0), v(0, 1, 0), getSideTexture(north), hilight));
+            if (north.isInput()) {
+                quads.add(createQuad(v(1-o, 1-o, -.02), v(1-o, o, -.02), v(o, o, -.02), v(o, 1-o, -.02), getInputMask(), hilight));
+            }
+            if (north.isOutput()) {
+                quads.add(createQuad(v(1-o, 1-o, -.02), v(1-o, o, -.02), v(o, o, -.02), v(o, 1-o, -.02), getOutputMask(), hilight));
+            }
         }
         if (south != SideType.INVISIBLE) {
             quads.add(createQuad(v(0, 1, 1), v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), getSideTexture(south), hilight));
+            if (south.isInput()) {
+                quads.add(createQuad(v(o, 1-o, 1.02), v(o, o, 1.02), v(1-o, o, 1.02), v(1-o, 1-o, 1.02), getInputMask(), hilight));
+            }
+            if (south.isOutput()) {
+                quads.add(createQuad(v(o, 1-o, 1.02), v(o, o, 1.02), v(1-o, o, 1.02), v(1-o, 1-o, 1.02), getOutputMask(), hilight));
+            }
         }
 
         return quads;
