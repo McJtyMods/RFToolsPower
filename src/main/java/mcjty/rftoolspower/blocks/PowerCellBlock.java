@@ -117,7 +117,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         TileEntity te = world.getTileEntity(data.getPos());
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) te;
-            int rfPerTick = 0;//powerCellTileEntity.getRfPerTickPerSide();
+            int rfPerTick = powerCellTileEntity.getRfPerTickPerSide();
 
             probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
             PowerCellTileEntity.Mode powermode = powerCellTileEntity.getMode(data.getSideHit());
@@ -150,13 +150,17 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack itemStack) {
-        super.onBlockPlacedBy(world, pos, state, placer, itemStack);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
         if (!world.isRemote) {
 
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof PowerCellTileEntity) {
-                // @todo
+                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                int energy = stack.hasTagCompound() ? stack.getTagCompound().getInteger("energy") : 0;
+                powercell.setLocalEnergy(energy);
+                powercell.getNetwork();   // Force a rebuild of the network
+                powercell.markDirtyQuick();
             }
         }
     }
@@ -166,18 +170,16 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         List<ItemStack> drops = super.getDrops(access, pos, metadata, fortune);
         TileEntity te = access.getTileEntity(pos);
         if (te instanceof PowerCellTileEntity) {
-//            DRGeneratorNetwork.Network network = ((GeneratorTileEntity) te).getNetwork();
-//            if (network != null) {
-//                int energy = network.getEnergy() / network.getGeneratorBlocks();
-//                if (!drops.isEmpty()) {
-//                    NBTTagCompound tagCompound = drops.get(0).getTagCompound();
-//                    if (tagCompound == null) {
-//                        tagCompound = new NBTTagCompound();
-//                        drops.get(0).setTagCompound(tagCompound);
-//                    }
-//                    tagCompound.setInteger("energy", energy);
-//                }
-//            }
+            PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            int energy = powercell.getLocalEnergy();
+            if (!drops.isEmpty()) {
+                NBTTagCompound tagCompound = drops.get(0).getTagCompound();
+                if (tagCompound == null) {
+                    tagCompound = new NBTTagCompound();
+                    drops.get(0).setTagCompound(tagCompound);
+                }
+                tagCompound.setInteger("energy", energy);
+            }
         }
         return drops;
     }
@@ -187,13 +189,10 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof PowerCellTileEntity) {
-//                DRGeneratorNetwork.Network network = ((GeneratorTileEntity) te).getNetwork();
-//                if (network != null) {
-//                    int energy = network.getEnergy() / network.getGeneratorBlocks();
-//                    network.setEnergy(network.getEnergy() - energy);
-//                }
-//
-//                ((GeneratorTileEntity) te).removeBlockFromNetwork();
+                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                if (powercell.getNetwork() != null) {
+                    powercell.dismantleNetwork(powercell.getNetwork());
+                }
             }
         }
         super.breakBlock(world, pos, state);

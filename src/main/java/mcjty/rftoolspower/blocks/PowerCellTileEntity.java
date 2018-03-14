@@ -25,6 +25,7 @@ import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
 public abstract class PowerCellTileEntity extends GenericTileEntity implements IEnergyProvider, IEnergyReceiver, ITickable {
 
     private PowercellNetwork network = null;
+    private int localEnergy = 0;
 
     public PowerCellTileEntity() {
     }
@@ -71,10 +72,14 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
     abstract Tier getTier();
 
+    abstract int getLocalMaxEnergy();
+
+    abstract int getRfPerTickPerSide();
+
     @Optional.Method(modid = "redstoneflux")
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return 0;
+        return receiveEnergyFacing(from, maxReceive, simulate);
     }
 
     @Optional.Method(modid = "redstoneflux")
@@ -86,36 +91,86 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     @Optional.Method(modid = "redstoneflux")
     @Override
     public int getEnergyStored(EnumFacing from) {
-        return 0;
+        return getEnergyStoredAsInt();
     }
 
     @Optional.Method(modid = "redstoneflux")
     @Override
     public int getMaxEnergyStored(EnumFacing from) {
-        return 0;
+        return getMaxEnergyStoredAsInt();
     }
 
     @Optional.Method(modid = "redstoneflux")
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
-        return false;
+        return true;
     }
 
-    private int receiveEnergyFacing(EnumFacing facing, int maxReceive, boolean simulate) {
-        return 0;
+    private int receiveEnergyFacing(EnumFacing from, int maxReceive, boolean simulate) {
+        if (modes[from.ordinal()] != Mode.MODE_INPUT) {
+            return 0;
+        }
+        maxReceive = Math.min(maxReceive, getRfPerTickPerSide());
+        int received = receiveEnergyLocal(maxReceive, simulate);
+        if (received > 0) {
+            getNetwork().setEnergy(getNetwork().getEnergy() + (long) received);
+            maxReceive -= received;
+        }
+        while (maxReceive > 0) {
+            for (Long l : getNetwork().getPositions()) {
+                BlockPos p = BlockPos.fromLong(l);
+                TileEntity te = world.getTileEntity(p);
+                if (te instanceof PowerCellTileEntity) {
+                    PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                    received = receiveEnergyLocal(maxReceive, simulate);
+                    if (received > 0) {
+                        getNetwork().setEnergy(getNetwork().getEnergy() + (long) received);
+                        maxReceive -= received;
+                    }
+                }
+            }
+        }
+//        if (!simulate) {
+//            totalInserted += received;
+//            powerIn += received;
+//            markDirty();
+//        }
+        return received;
     }
+
+    private int receiveEnergyLocal(int maxReceive, boolean simulate) {
+        int maxInsert = Math.min(getLocalMaxEnergy() - localEnergy, maxReceive);
+        if (maxInsert > 0) {
+            if (!simulate) {
+                localEnergy += maxInsert;
+                markDirty();
+            }
+        }
+//        return isCreative() ? maxReceive : maxInsert;
+        return maxInsert;
+    }
+
+
 
     private int getEnergyStoredAsInt() {
-        return 0;
+        return (int) Math.min(Integer.MAX_VALUE, getNetwork().getEnergy());
     }
 
     private int getMaxEnergyStoredAsInt() {
-        return 0;
+        return (int) Math.min((long)Integer.MAX_VALUE, getNetwork().getMaxEnergy());
     }
 
     @Override
     public void update() {
 
+    }
+
+    public int getLocalEnergy() {
+        return localEnergy;
+    }
+
+    public void setLocalEnergy(int localEnergy) {
+        this.localEnergy = localEnergy;
     }
 
     public PowercellNetwork getNetwork() {
@@ -131,14 +186,46 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         this.network = network;
     }
 
-    private void buildNetwork(PowercellNetwork network, BlockPos pos) {
-        if (network.contains(pos)) {
-            return;
-        }
+    public void dismantleNetwork(PowercellNetwork network) {
+        network.getPositions().stream().map(BlockPos::fromLong).forEach(pos -> {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof PowerCellTileEntity) {
+                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                powercell.setNetwork(null);
+            }
+        });
+    }
 
+    private void buildNetwork(PowercellNetwork network, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof PowerCellTileEntity) {
+            PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+
+            if (network.contains(pos)) {
+                if (powercell.getNetwork() != network) {
+                    System.out.println("Bad network at pos = " + pos);
+                }
+                return;
+            }
+
+            if (powercell.getNetwork() == network) {
+                System.out.println("Unexpected network at pos = " + pos);
+                return;
+            }
+
+            if (powercell.getNetwork() != null) {
+                // Connected to some other network. First break that down
+                dismantleNetwork(powercell.getNetwork());
+            }
+
+            powercell.setNetwork(network);
             network.add(pos);
+            network.setEnergy(network.getEnergy() + (long) powercell.getLocalEnergy());
+            network.setMaxEnergy(network.getMaxEnergy() + (long) powercell.getLocalMaxEnergy());
+
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                buildNetwork(network, pos.offset(facing));
+            }
         }
     }
 
@@ -165,6 +252,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         modes[3] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m3")];
         modes[4] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m4")];
         modes[5] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m5")];
+        localEnergy = tagCompound.getInteger("local");
     }
 
     @Override
@@ -177,6 +265,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         tagCompound.setByte("m3", (byte) modes[3].ordinal());
         tagCompound.setByte("m4", (byte) modes[4].ordinal());
         tagCompound.setByte("m5", (byte) modes[5].ordinal());
+        tagCompound.setInteger("local", localEnergy);
     }
 
 
