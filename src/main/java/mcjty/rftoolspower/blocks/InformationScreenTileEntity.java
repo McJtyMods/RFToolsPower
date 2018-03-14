@@ -158,8 +158,8 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
             if (mode == 0) {
                 list.add(TextFormatting.BLUE + " RF: " + TextFormatting.WHITE + formatPower(energy));
                 list.add(TextFormatting.BLUE + " Max: " + TextFormatting.WHITE + formatPower(maxEnergy));
-                list.add(TextFormatting.BLUE + " Extracted/t: " + TextFormatting.WHITE + formatPower(rfExtractPerTick));
-                list.add(TextFormatting.BLUE + " Inserted/t: " + TextFormatting.WHITE + formatPower(rfInsertedPerTick));
+                list.add(TextFormatting.BLUE + " Ext/t: " + TextFormatting.WHITE + formatPower(rfExtractPerTick));
+                list.add(TextFormatting.BLUE + " Ins/t: " + TextFormatting.WHITE + formatPower(rfInsertedPerTick));
             } else {
                 list.add(formatEnergyBar(energy, maxEnergy));
             }

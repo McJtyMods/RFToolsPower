@@ -43,7 +43,7 @@ public class RFToolsPower implements ModBase {
         return MODID;
     }
 
-    public static CreativeTabs tabRfToolsPower = new CreativeTabs("RfToolsPower") {
+    public static CreativeTabs tabRfToolsPower = new CreativeTabs("RFToolsPower") {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(Items.DIAMOND);
