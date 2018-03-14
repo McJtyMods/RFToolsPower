@@ -3,6 +3,7 @@
 tile.rftoolspower.cell1.name=Powercell (Low)
 tile.rftoolspower.cell2.name=Powercell (Medium)
 tile.rftoolspower.cell3.name=Powercell (High)
+tile.rftoolspower.information_screen.name=Information Screen
 
 itemGroup.RFToolsPower=RFTools Power
 

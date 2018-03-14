@@ -1,0 +1,27 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "rftools"
+    }
+  ],
+  "result": {
+    "item": "rftoolspower:information_screen"
+  },
+  "pattern": [
+    "ppp",
+    "rMr"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "M": {
+      "item": "rftools:machine_base"
+    },
+    "p": {
+      "item": "minecraft:glass_pane"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}

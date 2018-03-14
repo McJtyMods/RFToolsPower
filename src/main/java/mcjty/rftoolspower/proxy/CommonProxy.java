@@ -9,6 +9,7 @@ import mcjty.lib.varia.WrenchChecker;
 import mcjty.rftoolspower.ForgeEventHandlers;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.config.Config;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -52,8 +53,8 @@ public abstract class CommonProxy {
         Configuration cfg = mainConfig;
         try {
             cfg.load();
-//            cfg.addCustomCategoryComment(GeneralConfiguration.CATEGORY_GENERAL, "General settings");
-//            GeneralConfiguration.init(cfg);
+            cfg.addCustomCategoryComment(Config.CATEGORY_GENERAL, "General settings");
+            Config.init(cfg);
         } catch (Exception e1) {
             Logging.getLogger().log(Level.ERROR, "Problem loading config file!", e1);
         } finally {

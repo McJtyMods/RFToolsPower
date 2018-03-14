@@ -2,7 +2,11 @@ package mcjty.rftoolspower.blocks;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
+import mcjty.lib.compat.RedstoneFluxCompatibility;
 import mcjty.lib.entity.GenericTileEntity;
+import mcjty.lib.varia.EnergyTools;
+import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.api.IBigPower;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -22,7 +26,8 @@ import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
         @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyProvider", modid = "redstoneflux"),
         @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyReceiver", modid = "redstoneflux")
 })
-public abstract class PowerCellTileEntity extends GenericTileEntity implements IEnergyProvider, IEnergyReceiver, ITickable {
+public abstract class PowerCellTileEntity extends GenericTileEntity implements IEnergyProvider, IEnergyReceiver, ITickable,
+        IBigPower {
 
     private PowercellNetwork network = null;
     private int localEnergy = 0;
@@ -106,26 +111,48 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         return true;
     }
 
+    @Override
+    public long getBigEnergy() {
+        return getNetwork().getEnergy();
+    }
+
+    @Override
+    public long getBigMaxEnergy() {
+        return getNetwork().getMaxEnergy();
+    }
+
     private int receiveEnergyFacing(EnumFacing from, int maxReceive, boolean simulate) {
         if (modes[from.ordinal()] != Mode.MODE_INPUT) {
             return 0;
         }
+
+        if (!getNetwork().isValid()) {
+            return 0;
+        }
+
         maxReceive = Math.min(maxReceive, getRfPerTickPerSide());
         int received = receiveEnergyLocal(maxReceive, simulate);
+        PowercellNetwork network = getNetwork();
         if (received > 0) {
-            getNetwork().setEnergy(getNetwork().getEnergy() + (long) received);
+            if (!simulate) {
+                network.addEnergy(received);
+            }
             maxReceive -= received;
         }
-        while (maxReceive > 0) {
-            for (Long l : getNetwork().getPositions()) {
+        int totReceived = received;
+        if (maxReceive > 0) {
+            for (Long l : network.getPositions()) {
                 BlockPos p = BlockPos.fromLong(l);
                 TileEntity te = world.getTileEntity(p);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                    received = receiveEnergyLocal(maxReceive, simulate);
+                    received = powercell.receiveEnergyLocal(maxReceive, simulate);
                     if (received > 0) {
-                        getNetwork().setEnergy(getNetwork().getEnergy() + (long) received);
+                        if (!simulate) {
+                            network.addEnergy(received);
+                        }
                         maxReceive -= received;
+                        totReceived += received;
                     }
                 }
             }
@@ -135,7 +162,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 //            powerIn += received;
 //            markDirty();
 //        }
-        return received;
+        return totReceived;
     }
 
     private int receiveEnergyLocal(int maxReceive, boolean simulate) {
@@ -143,7 +170,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         if (maxInsert > 0) {
             if (!simulate) {
                 localEnergy += maxInsert;
-                markDirty();
+                markDirtyQuick();
             }
         }
 //        return isCreative() ? maxReceive : maxInsert;
@@ -157,12 +184,115 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     private int getMaxEnergyStoredAsInt() {
-        return (int) Math.min((long)Integer.MAX_VALUE, getNetwork().getMaxEnergy());
+        return (int) Math.min(Integer.MAX_VALUE, getNetwork().getMaxEnergy());
     }
 
     @Override
     public void update() {
+        if (!world.isRemote) {
+            if (getNetwork().isValid()) {
+                long energyStored = getNetwork().getEnergy();
+                if (energyStored <= 0) {
+                    return;
+                }
+                sendOutEnergy(energyStored);
+            }
+            validateNetwork();
+        }
+    }
 
+    private void validateNetwork() {
+        final long[] energy = {0};
+        final long[] maxEnergy = {0};
+        getNetwork().getPositions().stream().forEach(l -> {
+            BlockPos p = BlockPos.fromLong(l);
+            TileEntity te = world.getTileEntity(p);
+            if (te instanceof PowerCellTileEntity) {
+                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                energy[0] += powercell.getLocalEnergy();
+                maxEnergy[0] += powercell.getLocalMaxEnergy();
+                if (powercell.network != this.network) {
+                    System.out.println("Network doesn't match at: " + p);
+                }
+            } else {
+                System.out.println("Not a powercell: " + p);
+            }
+        });
+        if (network.getEnergy() != energy[0]) {
+            System.out.println("Energy mismatch! Got " + energy[0] + ", expected " + network.getEnergy());
+        }
+        if (network.getMaxEnergy() != maxEnergy[0]) {
+            System.out.println("Max energy mismatch! Got " + maxEnergy[0] + ", expected " + network.getMaxEnergy());
+        }
+    }
+
+    private void sendOutEnergy(long energyStored) {
+        long energyExtracted = 0;
+
+        for (EnumFacing face : EnumFacing.VALUES) {
+            if (modes[face.ordinal()] == Mode.MODE_OUTPUT) {
+                BlockPos pos = getPos().offset(face);
+                TileEntity te = getWorld().getTileEntity(pos);
+                EnumFacing opposite = face.getOpposite();
+                if (EnergyTools.isEnergyTE(te) || (te != null && te.hasCapability(CapabilityEnergy.ENERGY, opposite))) {
+                    if (!(te instanceof PowerCellTileEntity)) {
+                        int rfPerTick = getRfPerTickPerSide();
+                        int received;
+
+                        int rfToGive = Math.min(rfPerTick, (int) (energyStored));
+
+                        if (RFToolsPower.redstoneflux && RedstoneFluxCompatibility.isEnergyConnection(te)) {
+                            if (RedstoneFluxCompatibility.canConnectEnergy(te, opposite)) {
+                                received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
+                            } else {
+                                received = 0;
+                            }
+                        } else {
+                            // Forge unit
+                            received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
+                        }
+
+                        energyStored -= received;
+                        energyExtracted += received;
+                        if (energyStored <= 0) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (energyExtracted > 0) {
+            network.extractEnergy(energyExtracted);
+            extraEnergyFromNetwork(energyExtracted);
+        }
+    }
+
+    private void extraEnergyFromNetwork(long energyExtracted) {
+        int toExtractLocal = (int) Math.min(energyExtracted, localEnergy);
+        if (toExtractLocal > 0) {
+            // First extract locally
+            localEnergy -= toExtractLocal;
+            energyExtracted -= toExtractLocal;
+            markDirtyQuick();
+            // If we still have energy to extract go find another block in the network
+            if (energyExtracted > 0) {
+                for (Long l : network.getPositions()) {
+                    BlockPos p = BlockPos.fromLong(l);
+                    TileEntity te = world.getTileEntity(p);
+                    if (te instanceof PowerCellTileEntity) {
+                        PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                        toExtractLocal = (int) Math.min(energyExtracted, powercell.localEnergy);
+                        powercell.localEnergy -= toExtractLocal;
+                        powercell.markDirtyQuick();
+                        energyExtracted -= toExtractLocal;
+                        if (energyExtracted <= 0) {
+                            break;      // We're done
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public int getLocalEnergy() {
@@ -176,8 +306,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     public PowercellNetwork getNetwork() {
         if (network == null) {
             // This block has no network. Create one and distribute to all connected powercells
-            network = new PowercellNetwork();
-            buildNetwork(network, pos);
+            buildNetwork(new PowercellNetwork(), pos);
         }
         return network;
     }
@@ -202,26 +331,26 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
 
             if (network.contains(pos)) {
-                if (powercell.getNetwork() != network) {
+                if (powercell.network != network) {
                     System.out.println("Bad network at pos = " + pos);
                 }
                 return;
             }
 
-            if (powercell.getNetwork() == network) {
+            if (powercell.network == network) {
                 System.out.println("Unexpected network at pos = " + pos);
                 return;
             }
 
-            if (powercell.getNetwork() != null) {
+            if (powercell.network != null) {
                 // Connected to some other network. First break that down
-                dismantleNetwork(powercell.getNetwork());
+                dismantleNetwork(powercell.network);
             }
 
             powercell.setNetwork(network);
             network.add(pos);
-            network.setEnergy(network.getEnergy() + (long) powercell.getLocalEnergy());
-            network.setMaxEnergy(network.getMaxEnergy() + (long) powercell.getLocalMaxEnergy());
+            network.setEnergy(network.getEnergy() + powercell.getLocalEnergy());
+            network.setMaxEnergy(network.getMaxEnergy() + powercell.getLocalMaxEnergy());
 
             for (EnumFacing facing : EnumFacing.VALUES) {
                 buildNetwork(network, pos.offset(facing));

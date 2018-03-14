@@ -1,0 +1,30 @@
+{
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "rftools"
+      }
+    }
+  ],
+  "result": {
+    "item": "rftoolspower:information_screen"
+  },
+  "pattern": [
+    "ppp",
+    "rMr"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "M": {
+      "item": "minecraft:iron_block"
+    },
+    "p": {
+      "item": "minecraft:glass_pane"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}

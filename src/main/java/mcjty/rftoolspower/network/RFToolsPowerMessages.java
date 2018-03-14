@@ -1,12 +1,14 @@
 package mcjty.rftoolspower.network;
 
 import mcjty.lib.network.Arguments;
+import mcjty.lib.network.PacketHandler;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketSendServerCommand;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
@@ -17,10 +19,10 @@ public class RFToolsPowerMessages {
         INSTANCE = net;
 
         // Server side
-//        net.registerMessage(mcjty.rftools.network.PacketGetPlayers.Handler.class, PacketGetPlayers.class, PacketHandler.nextPacketID(), Side.SERVER);
+        net.registerMessage(PacketGetMonitorLog.Handler.class, PacketGetMonitorLog.class, PacketHandler.nextPacketID(), Side.SERVER);
 
         // Client side
-//        net.registerMessage(PacketPlayersReady.Handler.class, PacketPlayersReady.class, PacketHandler.nextPacketID(), Side.CLIENT);
+        net.registerMessage(PacketMonitorLogReady.Handler.class, PacketMonitorLogReady.class, PacketHandler.nextPacketID(), Side.CLIENT);
 
 //        PacketHandler.register(PacketHandler.nextPacketID(), PowerCellInfoPacketServer.class, PowerCellInfoPacketClient.class);
     }

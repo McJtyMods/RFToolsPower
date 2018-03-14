@@ -3,11 +3,11 @@ package mcjty.rftoolspower.blocks;
 import mcjty.lib.container.EmptyContainer;
 import mcjty.lib.container.GenericBlock;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.config.Config;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcjty.theoneprobe.api.TextStyleClass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -91,8 +91,8 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, World player, List<String> list, ITooltipFlag whatIsThis) {
-        super.addInformation(itemStack, player, list, whatIsThis);
+    public void addInformation(ItemStack itemStack, World player, List<String> list, ITooltipFlag flag) {
+        super.addInformation(itemStack, player, list, flag);
 
         NBTTagCompound tagCompound = itemStack.getTagCompound();
         if (tagCompound != null) {
@@ -100,11 +100,19 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-//            int totpower = PowerCellConfiguration.rfPerNormalCell * getPowerFactory() / simpleFactor;
-//            list.add(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)");
-//            list.add(TextFormatting.WHITE + "Optionally in a big multi dimensional structure");
-//            list.add(TextFormatting.YELLOW + "Infusing bonus: reduced long distance power");
-//            list.add(TextFormatting.YELLOW + "extraction cost and increased RF/tick output");
+            int totpower = 0;
+            if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell1Block)) {
+                totpower = Config.TIER1_MAXRF;
+            } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell2Block)) {
+                totpower = Config.TIER2_MAXRF;
+            } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell3Block)) {
+                totpower = Config.TIER3_MAXRF;
+            }
+            list.add(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)");
+            list.add(TextFormatting.WHITE + "and can be combined with other cells to form a");
+            list.add(TextFormatting.WHITE + "big multiblock");
+            list.add(TextFormatting.WHITE + "Right click with a wrench to toggle");
+            list.add(TextFormatting.WHITE + "input/output mode for a side");
         } else {
             list.add(TextFormatting.WHITE + RFToolsPower.SHIFT_MESSAGE);
         }
@@ -116,38 +124,50 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
         TileEntity te = world.getTileEntity(data.getPos());
         if (te instanceof PowerCellTileEntity) {
-            PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) te;
-            int rfPerTick = powerCellTileEntity.getRfPerTickPerSide();
+            PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            int rfPerTick = powercell.getRfPerTickPerSide();
 
-            probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
-            PowerCellTileEntity.Mode powermode = powerCellTileEntity.getMode(data.getSideHit());
-            if (powermode == PowerCellTileEntity.Mode.MODE_INPUT) {
-                probeInfo.text(TextFormatting.YELLOW + "Side: input");
-            } else if (powermode == PowerCellTileEntity.Mode.MODE_OUTPUT) {
-                probeInfo.text(TextFormatting.YELLOW + "Side: output");
+            if (powercell.getNetwork().isValid()) {
+                probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
+                PowerCellTileEntity.Mode powermode = powercell.getMode(data.getSideHit());
+                if (powermode == PowerCellTileEntity.Mode.MODE_INPUT) {
+                    probeInfo.text(TextFormatting.YELLOW + "Side: input");
+                } else if (powermode == PowerCellTileEntity.Mode.MODE_OUTPUT) {
+                    probeInfo.text(TextFormatting.YELLOW + "Side: output");
+                }
+            } else {
+                probeInfo.text(TextStyleClass.ERROR + "Too many blocks in network (max " + Config.NETWORK_MAX + ")!");
+            }
+
+            int networkId = powercell.getNetwork().getNetworkId();
+            if (mode == ProbeMode.DEBUG) {
+                probeInfo.text(TextStyleClass.LABEL + "Network ID: " + TextStyleClass.INFO + networkId);
+            }
+            if (mode == ProbeMode.EXTENDED) {
+                probeInfo.text(TextStyleClass.LABEL + "Local Energy: " + TextStyleClass.INFO + powercell.getLocalEnergy());
             }
         }
     }
 
-    private static long lastTime = 0;
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    @Optional.Method(modid = "waila")
-    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currenttip, accessor, config);
-        TileEntity tileEntity = accessor.getTileEntity();
-        if (tileEntity instanceof PowerCellTileEntity) {
-            PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) tileEntity;
-            if (System.currentTimeMillis() - lastTime > 250) {
-                lastTime = System.currentTimeMillis();
-//                RFToolsMessages.INSTANCE.sendToServer(new PacketGetInfoFromServer(RFTools.MODID, new PowerCellInfoPacketServer(powerCellTileEntity)));
-            }
-//            currenttip.add(TextFormatting.GREEN + "Energy: " + PowerCellInfoPacketClient.tooltipEnergy + "/" + total + " RF (" +
-//                    PowerCellInfoPacketClient.tooltipRfPerTick + " RF/t)");
-        }
-        return currenttip;
-    }
+//    private static long lastTime = 0;
+//
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    @Optional.Method(modid = "waila")
+//    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+//        super.getWailaBody(itemStack, currenttip, accessor, config);
+//        TileEntity tileEntity = accessor.getTileEntity();
+//        if (tileEntity instanceof PowerCellTileEntity) {
+//            PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) tileEntity;
+//            if (System.currentTimeMillis() - lastTime > 250) {
+//                lastTime = System.currentTimeMillis();
+////                RFToolsMessages.INSTANCE.sendToServer(new PacketGetInfoFromServer(RFTools.MODID, new PowerCellInfoPacketServer(powerCellTileEntity)));
+//            }
+////            currenttip.add(TextFormatting.GREEN + "Energy: " + PowerCellInfoPacketClient.tooltipEnergy + "/" + total + " RF (" +
+////                    PowerCellInfoPacketClient.tooltipRfPerTick + " RF/t)");
+//        }
+//        return currenttip;
+//    }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
