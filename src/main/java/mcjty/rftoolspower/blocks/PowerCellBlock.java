@@ -2,6 +2,7 @@ package mcjty.rftoolspower.blocks;
 
 import mcjty.lib.container.EmptyContainer;
 import mcjty.lib.container.GenericBlock;
+import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.config.Config;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -39,7 +40,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyContainer> {
+public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyContainer> implements INBTPreservingIngredient {
 
     public static final UnlistedPropertySideType NORTH = new UnlistedPropertySideType("north");
     public static final UnlistedPropertySideType SOUTH = new UnlistedPropertySideType("south");
@@ -125,7 +126,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         TileEntity te = world.getTileEntity(data.getPos());
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-            int rfPerTick = powercell.getRfPerTickPerSide();
+            int rfPerTick = powercell.getRfPerTickReal();
 
             if (powercell.getNetwork().isValid()) {
                 probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
@@ -191,6 +192,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         TileEntity te = access.getTileEntity(pos);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            powercell.redistributeNetwork();
             int energy = powercell.getLocalEnergy();
             if (!drops.isEmpty()) {
                 NBTTagCompound tagCompound = drops.get(0).getTagCompound();

@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "rftoolspower:power_core"
+  },
+  "pattern": [
+    " d ",
+    "rRr",
+    " r "
+  ],
+  "type": "rftoolspower:copy_nbt",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}

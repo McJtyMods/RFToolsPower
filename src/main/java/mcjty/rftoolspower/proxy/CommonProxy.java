@@ -10,6 +10,7 @@ import mcjty.rftoolspower.ForgeEventHandlers;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.items.ModItems;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -44,9 +45,8 @@ public abstract class CommonProxy {
         SimpleNetworkWrapper network = PacketHandler.registerMessages(RFToolsPower.MODID, "rftoolspower");
         RFToolsPowerMessages.registerNetworkMessages(network);
 
-//        ModItems.init();
+        ModItems.init();
         ModBlocks.init();
-//        ModWorldgen.init();
     }
 
     private void readMainConfig() {

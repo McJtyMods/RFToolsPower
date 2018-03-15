@@ -1,24 +1,14 @@
 package mcjty.rftoolspower.blocks;
 
 import mcjty.lib.entity.GenericTileEntity;
-import mcjty.lib.network.Argument;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.network.PacketGetMonitorLog;
-import mcjty.typed.Type;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-
-import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class InformationScreenTileEntity extends GenericTileEntity implements ITickable {
 
@@ -26,10 +16,13 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     private int cnt = 0;
     private long lastExtracted = 0;
     private long lastInserted = 0;
-    private long rfExtractPerTick = 0;
+    private long rfExtractPerTick = 0;      // Also used client side and synced with packet
     private long rfInsertedPerTick = 0;
     private long lastHudTime = 0;
-    private List<String> clientHudLog = new ArrayList<>();
+
+    // Client side information
+    private EnergyTools.EnergyLevelMulti clientPower;
+    private long roughMaxRfPerTick = 0;     // This number indicates a high RF/tick estimate used for rendering
 
     public EnumFacing getBlockOrientation() {
         IBlockState state = world.getBlockState(pos);
@@ -57,6 +50,9 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
                     rfInsertedPerTick = (newInserted - lastInserted)/10;
                     lastExtracted = newExtracted;
                     lastInserted = newInserted;
+                } else {
+                    rfExtractPerTick = -1;
+                    rfInsertedPerTick = -1;
                 }
             }
         }
@@ -64,7 +60,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
 
     public void toggleMode() {
         mode++;
-        if (mode > 1) {
+        if (mode > 2) {
             mode = 0;
         }
         markDirtyClient();
@@ -86,8 +82,29 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
         tagCompound.setByte("mode", (byte) mode);
     }
 
-    public List<String> getClientLog() {
-        return clientHudLog;
+    public void setClientPower(EnergyTools.EnergyLevelMulti power, long rfInsertedPerTick, long rfExtractPerTick, long roughMaxRfPerTick) {
+        this.clientPower = power;
+        this.rfInsertedPerTick = rfInsertedPerTick;
+        this.rfExtractPerTick = rfExtractPerTick;
+        this.roughMaxRfPerTick = roughMaxRfPerTick;
+    }
+
+    public EnergyTools.EnergyLevelMulti getClientPower() {
+        return clientPower;
+    }
+
+    public long calculateRoughMaxRfPerTick() {
+        BlockPos offset = getPos().offset(getBlockOrientation().getOpposite());
+        TileEntity te = world.getTileEntity(offset);
+        if (te instanceof PowerCellTileEntity) {
+            PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            return (long) powercell.getRfPerTickPerSide() * 2;
+        }
+        return -1;
+    }
+
+    public long getRoughMaxRfPerTick() {
+        return roughMaxRfPerTick;
     }
 
     public long getLastUpdateTime() {
@@ -98,115 +115,28 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
         lastHudTime = t;
     }
 
-    DecimalFormat format = new DecimalFormat("#.###");
-
-    private String formatPower(long l) {
-        if (l < 100000) {
-            return Long.toString(l);
-        } else if (l < 10000000) {
-            Double d = l / 1000.0;
-            return format.format(d)+"K";
-        } else if (l < 10000000000L) {
-            Double d = l / 1000000.0;
-            return format.format(d)+"M";
-        } else {
-            Double d = l / 1000000000.0;
-            return format.format(d)+"G";
-        }
+    public long getRfExtractPerTick() {
+        return rfExtractPerTick;
     }
 
-    private String formatEnergyBar(long energy, long max) {
-        if (max <= 0) {
-            return "";
-        }
-        StringBuilder builder = new StringBuilder(" ");
-        int bars = (int) (energy * 12 / max);
-        if (bars > 0) {
-            builder.append(TextFormatting.GREEN);
-            for (int i = 0; i < Math.max(bars, 7); i++) {
-                builder.append('#');
-                bars--;
-            }
-            if (bars > 0) {
-                builder.append(TextFormatting.YELLOW);
-                for (int i = 0; i < Math.max(bars, 3); i++) {
-                    builder.append('#');
-                    bars--;
-                }
-                if (bars > 0) {
-                    builder.append(TextFormatting.RED);
-                    for (int i = 0; i < Math.max(bars, 2); i++) {
-                        builder.append('#');
-                        bars--;
-                    }
-                }
-            }
-        }
-        return builder.toString();
+    public long getRfInsertedPerTick() {
+        return rfInsertedPerTick;
     }
 
-    public List<String> getLog() {
+    public EnergyTools.EnergyLevelMulti getPower() {
         BlockPos offset = getPos().offset(getBlockOrientation().getOpposite());
         TileEntity te = world.getTileEntity(offset);
-        List<String> list = new ArrayList<>();
-        list.add("");
-
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
             long energy = powercell.getNetwork().getEnergy();
             long maxEnergy = powercell.getNetwork().getMaxEnergy();
-            if (mode == 0) {
-                list.add(TextFormatting.BLUE + " RF: " + TextFormatting.WHITE + formatPower(energy));
-                list.add(TextFormatting.BLUE + " Max: " + TextFormatting.WHITE + formatPower(maxEnergy));
-                list.add(TextFormatting.BLUE + " Ext/t: " + TextFormatting.WHITE + formatPower(rfExtractPerTick));
-                list.add(TextFormatting.BLUE + " Ins/t: " + TextFormatting.WHITE + formatPower(rfInsertedPerTick));
-            } else {
-                list.add(formatEnergyBar(energy, maxEnergy));
-            }
+            return new EnergyTools.EnergyLevelMulti(energy, maxEnergy);
         } else if (EnergyTools.isEnergyTE(te)) {
-            EnergyTools.EnergyLevelMulti info = EnergyTools.getEnergyLevelMulti(te);
-            long energy = info.getEnergy();
-            long maxEnergy = info.getMaxEnergy();
-//            if (mode == 0) {
-                list.add(TextFormatting.BLUE + " Power: " + TextFormatting.WHITE + formatPower(energy));
-                list.add(TextFormatting.BLUE + " Max: " + TextFormatting.WHITE + formatPower(maxEnergy));
-//            } else {
-//                list.add(formatEnergyBar(energy, maxEnergy));
-//            }
+            return EnergyTools.getEnergyLevelMulti(te);
         } else {
-            list.add(TextFormatting.RED + " Not a powercell");
-            list.add(TextFormatting.RED + " or anything that");
-            list.add(TextFormatting.RED + " supports power");
+            return null;
         }
-        return list;
     }
 
-
-    @Nonnull
-    @Override
-    public <T> List<T> executeWithResultList(String command, Map<String, Argument> args, Type<T> type) {
-        List<T> rc = super.executeWithResultList(command, args, type);
-        if (!rc.isEmpty()) {
-            return rc;
-        }
-        if (PacketGetMonitorLog.CMD_GETLOG.equals(command)) {
-            return type.convert(getLog());
-        }
-        return rc;
-    }
-
-
-    @Override
-    public <T> boolean execute(String command, List<T> list, Type<T> type) {
-        boolean rc = super.execute(command, list, type);
-        if (rc) {
-            return true;
-        }
-        if (PacketGetMonitorLog.CLIENTCMD_GETLOG.equals(command)) {
-            clientHudLog = Type.STRING.convert(list);
-            return true;
-        }
-        return false;
-    }
 
 }
