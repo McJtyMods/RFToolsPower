@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "rftools"
+    }
+  ],
+  "result": {
+    "item": "rftoolspower:power_core2"
+  },
+  "pattern": [
+    "ses",
+    "rRr",
+    "srs"
+  ],
+  "type": "rftoolspower:copy_nbt",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "e": {
+      "item": "minecraft:emerald"
+    },
+    "s": {
+      "item": "rftools:dimensional_shard"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}

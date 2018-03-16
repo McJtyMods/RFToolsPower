@@ -1,11 +1,20 @@
 {
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "rftools"
+      }
+    }
+  ],
   "result": {
-    "item": "rftoolspower:power_core"
+    "item": "rftoolspower:power_core3"
   },
   "pattern": [
     " d ",
     "rRr",
-    " r "
+    " e "
   ],
   "type": "rftoolspower:copy_nbt",
   "key": {
@@ -14,6 +23,9 @@
     },
     "d": {
       "item": "minecraft:diamond"
+    },
+    "e": {
+      "item": "minecraft:emerald"
     },
     "r": {
       "item": "minecraft:redstone"

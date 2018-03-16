@@ -16,9 +16,9 @@ import java.util.List;
 
 public class PowerCoreItem extends Item {
 
-    public PowerCoreItem() {
-        setUnlocalizedName("rftoolspower.power_core");
-        setRegistryName("power_core");
+    public PowerCoreItem(String tier) {
+        setUnlocalizedName("rftoolspower.power_core" + tier);
+        setRegistryName("power_core" + tier);
         setCreativeTab(RFToolsPower.tabRfToolsPower);
         McJtyRegister.registerLater(this, RFToolsPower.instance);
     }

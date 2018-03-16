@@ -2,11 +2,11 @@ package mcjty.rftoolspower.blocks;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
+import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.compat.RedstoneFluxCompatibility;
 import mcjty.lib.entity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.api.IBigPower;
 import mcjty.rftoolspower.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

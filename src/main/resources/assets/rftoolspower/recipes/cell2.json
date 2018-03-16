@@ -3,9 +3,9 @@
     "item": "rftoolspower:cell2"
   },
   "pattern": [
-    "rrr",
+    "rRr",
     "RMR",
-    "rrr"
+    "rRr"
   ],
   "type": "rftoolspower:copy_nbt",
   "key": {
@@ -13,7 +13,7 @@
       "item": "rftoolspower:cell1"
     },
     "R": {
-      "item": "rftoolspower:power_core"
+      "item": "rftoolspower:power_core2"
     },
     "r": {
       "item": "minecraft:redstone"

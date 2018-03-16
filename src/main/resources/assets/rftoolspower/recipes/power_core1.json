@@ -1,19 +1,19 @@
 {
   "result": {
-    "item": "rftoolspower:cell3"
+    "item": "rftoolspower:power_core1"
   },
   "pattern": [
+    " d ",
     "rRr",
-    "RMR",
-    "rRr"
+    " r "
   ],
   "type": "rftoolspower:copy_nbt",
   "key": {
-    "M": {
-      "item": "rftoolspower:cell2"
-    },
     "R": {
-      "item": "rftoolspower:power_core3"
+      "item": "minecraft:redstone_block"
+    },
+    "d": {
+      "item": "minecraft:diamond"
     },
     "r": {
       "item": "minecraft:redstone"

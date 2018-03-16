@@ -9,9 +9,9 @@
     "item": "rftoolspower:cell1"
   },
   "pattern": [
-    "rrr",
+    "rRr",
     "RMR",
-    "rrr"
+    "rRr"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
@@ -19,7 +19,7 @@
       "item": "rftools:machine_frame"
     },
     "R": {
-      "item": "rftoolspower:power_core"
+      "item": "rftoolspower:power_core1"
     },
     "r": {
       "item": "minecraft:redstone"

@@ -70,7 +70,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
         } else {
             list.add(TextFormatting.RED + " Not a powercell");
             list.add(TextFormatting.RED + " or anything that");
-            list.add(TextFormatting.RED + " infoscreens power");
+            list.add(TextFormatting.RED + " supports power");
         }
         return list;
     }

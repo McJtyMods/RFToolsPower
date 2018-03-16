@@ -9,20 +9,20 @@
     }
   ],
   "result": {
-    "item": "rftoolspower:cell1"
+    "item": "rftoolspower:power_core2"
   },
   "pattern": [
+    " e ",
     "rRr",
-    "RMR",
-    "rRr"
+    " r "
   ],
-  "type": "minecraft:crafting_shaped",
+  "type": "rftoolspower:copy_nbt",
   "key": {
-    "M": {
-      "item": "minecraft:iron_block"
-    },
     "R": {
-      "item": "rftoolspower:power_core1"
+      "item": "minecraft:redstone_block"
+    },
+    "e": {
+      "item": "minecraft:emerald"
     },
     "r": {
       "item": "minecraft:redstone"
