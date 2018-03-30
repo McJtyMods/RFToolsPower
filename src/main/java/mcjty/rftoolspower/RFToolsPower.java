@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.event.*;
         version = RFToolsPower.VERSION)
 public class RFToolsPower implements ModBase {
     public static final String MODID = "rftoolspower";
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.1.1";
     public static final String MIN_FORGE_VER = "14.22.0.2464";
     public static final String MIN_MCJTYLIB_VER = "2.6.6";
 
