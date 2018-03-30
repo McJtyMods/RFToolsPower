@@ -209,27 +209,36 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         if (network.getPositions().isEmpty()) {
             return;
         }
-        final long[] energy = {0};
+        final long[] energy = {0, 0, 0};  // For each tier
+        final int[] count = {0, 0, 0};
         network.getPositions().stream().forEach(l -> {
             BlockPos p = BlockPos.fromLong(l);
             TileEntity te = world.getTileEntity(p);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                energy[0] += powercell.getLocalEnergy();
+                int t = powercell.getTier().ordinal();
+                energy[t] += powercell.getLocalEnergy();
+                count[t]++;
             }
         });
-        int energyPerBlock = (int) (energy[0] / network.getPositions().size());
-        final int[] energyToSet = {energyPerBlock + (int) (energy[0] % network.getPositions().size())};   // First block gets more (remainder)
-        network.getPositions().stream().forEach(l -> {
-            BlockPos p = BlockPos.fromLong(l);
-            TileEntity te = world.getTileEntity(p);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                powercell.setLocalEnergy(energyToSet[0]);
-                powercell.markDirtyQuick();
-                energyToSet[0] = energyPerBlock;
+        for (Tier tier : Tier.values()) {
+            if (count[tier.ordinal()] > 0) {
+                int energyPerBlock = (int) (energy[tier.ordinal()] / count[tier.ordinal()]);
+                final int[] energyToSet = {energyPerBlock + (int) (energy[tier.ordinal()] % count[tier.ordinal()])};   // First block gets more (remainder)
+                network.getPositions().stream().forEach(l -> {
+                    BlockPos p = BlockPos.fromLong(l);
+                    TileEntity te = world.getTileEntity(p);
+                    if (te instanceof PowerCellTileEntity) {
+                        PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                        if (powercell.getTier() == tier) {
+                            powercell.setLocalEnergy(energyToSet[0]);
+                            powercell.markDirtyQuick();
+                            energyToSet[0] = energyPerBlock;
+                        }
+                    }
+                });
             }
-        });
+        }
     }
 
     private void validateNetwork() {

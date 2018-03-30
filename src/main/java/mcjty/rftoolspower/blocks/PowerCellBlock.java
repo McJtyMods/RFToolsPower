@@ -97,7 +97,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
 
         NBTTagCompound tagCompound = itemStack.getTagCompound();
         if (tagCompound != null) {
-            list.add(TextFormatting.YELLOW + "Energy: " + tagCompound.getInteger("energy"));
+            list.add(TextFormatting.BLUE + "Energy: " + TextFormatting.YELLOW + tagCompound.getInteger("energy"));
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
