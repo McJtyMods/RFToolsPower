@@ -279,7 +279,8 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
                         int rfPerTick = getRfPerTickReal();
                         int received;
 
-                        int rfToGive = Math.min(rfPerTick, (int) (energyStored));
+                        // Do min with 'long' and cast to int afterwards
+                        int rfToGive = (int) Math.min(rfPerTick, energyStored);
 
                         if (RFToolsPower.redstoneflux && RedstoneFluxCompatibility.isEnergyConnection(te)) {
                             if (RedstoneFluxCompatibility.canConnectEnergy(te, opposite)) {
