@@ -22,6 +22,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
+import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_OUTPUT;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyProvider", modid = "redstoneflux"),
@@ -56,6 +57,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     private PowerCellTileEntity.Mode modes[] = new PowerCellTileEntity.Mode[] {
             MODE_NONE, MODE_NONE, MODE_NONE,
             MODE_NONE, MODE_NONE, MODE_NONE };
+    private int outputCount = 0;        // Caches the number of sides that have outputs
 
     public Mode getMode(EnumFacing side) {
         return modes[side.ordinal()];
@@ -73,7 +75,17 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
                 modes[side.ordinal()] = Mode.MODE_NONE;
                 break;
         }
+        updateOutputCount();
         markDirtyClient();
+    }
+
+    private void updateOutputCount() {
+        outputCount = 0;
+        for (Mode mode : modes) {
+            if (mode == MODE_OUTPUT) {
+                outputCount++;
+            }
+        }
     }
 
     abstract Tier getTier();
@@ -193,14 +205,16 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     @Override
     public void update() {
         if (!world.isRemote) {
-            if (getNetwork().isValid()) {
-                long energyStored = getNetwork().getEnergy();
-                if (energyStored <= 0) {
-                    return;
+            if (outputCount > 0) {
+                if (getNetwork().isValid()) {
+                    long energyStored = getNetwork().getEnergy();
+                    if (energyStored <= 0) {
+                        return;
+                    }
+                    sendOutEnergy(energyStored);
                 }
-                sendOutEnergy(energyStored);
+//                validateNetwork();
             }
-            validateNetwork();
         }
     }
 
@@ -425,6 +439,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         modes[3] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m3")];
         modes[4] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m4")];
         modes[5] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m5")];
+        updateOutputCount();
         localEnergy = tagCompound.getInteger("local");
     }
 
