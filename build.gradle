@@ -108,6 +108,10 @@ dependencies {
         deobfCompile "com.github.mcjty:mcjtylib:${mcjtylib_version}"
         deobfCompile "com.github.mcjty:rftools:1.12-7.30"
         deobfCompile "com.github.mcjty:xnet:1.12-1.6.7"
+    } else {
+	compile project(':McJtyLib')
+	compile project(':RFTools')
+	compile project(':XNet')
     }
     compile "li.cil.oc:OpenComputers:${oc_version}"
 }
