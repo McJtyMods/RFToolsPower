@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.blocks;
 
 import mcjty.lib.container.EmptyContainer;
-import mcjty.lib.container.GenericBlock;
+import mcjty.lib.blocks.GenericBlock;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.block.material.Material;

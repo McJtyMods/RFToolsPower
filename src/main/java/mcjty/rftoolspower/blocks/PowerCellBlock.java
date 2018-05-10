@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.blocks;
 
 import mcjty.lib.container.EmptyContainer;
-import mcjty.lib.container.GenericBlock;
+import mcjty.lib.blocks.GenericBlock;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.config.Config;

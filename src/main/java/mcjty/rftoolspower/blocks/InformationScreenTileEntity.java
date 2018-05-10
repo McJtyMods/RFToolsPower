@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.lib.entity.GenericTileEntity;
+import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import net.minecraft.block.state.IBlockState;
