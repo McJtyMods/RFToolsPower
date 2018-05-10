@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.lib.gui.HudRenderHelper;
-import mcjty.lib.gui.RenderHelper;
+import mcjty.lib.client.HudRenderHelper;
+import mcjty.lib.client.RenderHelper;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.network.PacketGetMonitorLog;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
