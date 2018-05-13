@@ -1,9 +1,9 @@
 package mcjty.rftoolspower.network;
 
-import mcjty.lib.network.Arguments;
 import mcjty.lib.network.PacketHandler;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketSendServerCommand;
+import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,19 +27,19 @@ public class RFToolsPowerMessages {
 //        PacketHandler.register(PacketHandler.nextPacketID(), PowerCellInfoPacketServer.class, PowerCellInfoPacketClient.class);
     }
 
-    public static void sendToServer(String command, @Nonnull Arguments.Builder argumentBuilder) {
+    public static void sendToServer(String command, @Nonnull TypedMap.Builder argumentBuilder) {
         INSTANCE.sendToServer(new PacketSendServerCommand(RFToolsPower.MODID, command, argumentBuilder.build()));
     }
 
     public static void sendToServer(String command) {
-        INSTANCE.sendToServer(new PacketSendServerCommand(RFToolsPower.MODID, command, Arguments.EMPTY));
+        INSTANCE.sendToServer(new PacketSendServerCommand(RFToolsPower.MODID, command, TypedMap.EMPTY));
     }
 
-    public static void sendToClient(EntityPlayer player, String command, @Nonnull Arguments.Builder argumentBuilder) {
+    public static void sendToClient(EntityPlayer player, String command, @Nonnull TypedMap.Builder argumentBuilder) {
         INSTANCE.sendTo(new PacketSendClientCommand(RFToolsPower.MODID, command, argumentBuilder.build()), (EntityPlayerMP) player);
     }
 
     public static void sendToClient(EntityPlayer player, String command) {
-        INSTANCE.sendTo(new PacketSendClientCommand(RFToolsPower.MODID, command, Arguments.EMPTY), (EntityPlayerMP) player);
+        INSTANCE.sendTo(new PacketSendClientCommand(RFToolsPower.MODID, command, TypedMap.EMPTY), (EntityPlayerMP) player);
     }
 }
