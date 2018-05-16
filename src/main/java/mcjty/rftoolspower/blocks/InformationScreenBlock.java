@@ -27,7 +27,7 @@ import java.util.List;
 public class InformationScreenBlock extends GenericBlock<InformationScreenTileEntity, EmptyContainer> {
 
     public InformationScreenBlock() {
-        super(RFToolsPower.instance, Material.IRON, InformationScreenTileEntity.class, EmptyContainer.class, "information_screen", false);
+        super(RFToolsPower.instance, Material.IRON, InformationScreenTileEntity.class, EmptyContainer::new, "information_screen", false);
         setCreativeTab(RFToolsPower.tabRfToolsPower);
     }
 
