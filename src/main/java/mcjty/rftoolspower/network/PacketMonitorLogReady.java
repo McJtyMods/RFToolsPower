@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketMonitorLogReady implements IMessage {
 
     private BlockPos pos;
-    private EnergyTools.EnergyLevelMulti power;
+    private EnergyTools.EnergyLevel power;
     private long rfPerTickInserted;
     private long rfPerTickExtracted;
     private long roughMaxRfPerTick;
@@ -26,7 +26,7 @@ public class PacketMonitorLogReady implements IMessage {
         rfPerTickInserted = buf.readLong();
         roughMaxRfPerTick = buf.readLong();
         if (buf.readBoolean()) {
-            power = new EnergyTools.EnergyLevelMulti(buf.readLong(), buf.readLong());
+            power = new EnergyTools.EnergyLevel(buf.readLong(), buf.readLong());
         } else {
             power = null;
         }
@@ -50,7 +50,7 @@ public class PacketMonitorLogReady implements IMessage {
     public PacketMonitorLogReady() {
     }
 
-    public PacketMonitorLogReady(BlockPos pos, EnergyTools.EnergyLevelMulti power, long rfPerTickInserted, long rfPerTickExtracted,
+    public PacketMonitorLogReady(BlockPos pos, EnergyTools.EnergyLevel power, long rfPerTickInserted, long rfPerTickExtracted,
                                  long roughMaxRfPerTick) {
         this.pos = pos;
         this.power = power;

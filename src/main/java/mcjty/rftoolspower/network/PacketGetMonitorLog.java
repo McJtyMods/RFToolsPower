@@ -40,7 +40,7 @@ public class PacketGetMonitorLog implements IMessage {
             TileEntity te = player.getEntityWorld().getTileEntity(message.pos);
             if (te instanceof InformationScreenTileEntity) {
                 InformationScreenTileEntity info = (InformationScreenTileEntity) te;
-                EnergyTools.EnergyLevelMulti power = info.getPower();
+                EnergyTools.EnergyLevel power = info.getPower();
 
                 RFToolsPowerMessages.INSTANCE.sendTo(new PacketMonitorLogReady(message.pos, power, info.getRfInsertedPerTick(), info.getRfExtractPerTick(),
                         info.calculateRoughMaxRfPerTick()), player);

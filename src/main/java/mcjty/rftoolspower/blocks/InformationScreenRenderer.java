@@ -42,7 +42,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
             return;
         }
 
-        EnergyTools.EnergyLevelMulti power = infoscreen.getClientPower();
+        EnergyTools.EnergyLevel power = infoscreen.getClientPower();
         if (infoscreen.getMode() == 0 || power == null) {
             List<String> log = getLog(power, infoscreen);
             HudRenderHelper.HudPlacement hudPlacement = HudRenderHelper.HudPlacement.HUD_FRONT;
@@ -54,7 +54,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
         }
     }
 
-    private static List<String> getLog(EnergyTools.EnergyLevelMulti power, InformationScreenTileEntity infoscreen) {
+    private static List<String> getLog(EnergyTools.EnergyLevel power, InformationScreenTileEntity infoscreen) {
         List<String> list = new ArrayList<>();
         list.add("");
 
@@ -92,7 +92,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
         }
     }
 
-    public static void renderGraphical(EnergyTools.EnergyLevelMulti power,
+    public static void renderGraphical(EnergyTools.EnergyLevel power,
                                  EnumFacing orientation,
                                  double x, double y, double z, float scale,
                                  InformationScreenTileEntity infoscreen) {

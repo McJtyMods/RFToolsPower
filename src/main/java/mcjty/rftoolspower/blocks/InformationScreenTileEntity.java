@@ -21,7 +21,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     private long lastHudTime = 0;
 
     // Client side information
-    private EnergyTools.EnergyLevelMulti clientPower;
+    private EnergyTools.EnergyLevel clientPower;
     private long roughMaxRfPerTick = 0;     // This number indicates a high RF/tick estimate used for rendering
 
     public EnumFacing getBlockOrientation() {
@@ -82,14 +82,14 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
         tagCompound.setByte("mode", (byte) mode);
     }
 
-    public void setClientPower(EnergyTools.EnergyLevelMulti power, long rfInsertedPerTick, long rfExtractPerTick, long roughMaxRfPerTick) {
+    public void setClientPower(EnergyTools.EnergyLevel power, long rfInsertedPerTick, long rfExtractPerTick, long roughMaxRfPerTick) {
         this.clientPower = power;
         this.rfInsertedPerTick = rfInsertedPerTick;
         this.rfExtractPerTick = rfExtractPerTick;
         this.roughMaxRfPerTick = roughMaxRfPerTick;
     }
 
-    public EnergyTools.EnergyLevelMulti getClientPower() {
+    public EnergyTools.EnergyLevel getClientPower() {
         return clientPower;
     }
 
@@ -123,14 +123,14 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
         return rfInsertedPerTick;
     }
 
-    public EnergyTools.EnergyLevelMulti getPower() {
+    public EnergyTools.EnergyLevel getPower() {
         BlockPos offset = getPos().offset(getBlockOrientation().getOpposite());
         TileEntity te = world.getTileEntity(offset);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
             long energy = powercell.getNetwork().getEnergy();
             long maxEnergy = powercell.getNetwork().getMaxEnergy();
-            return new EnergyTools.EnergyLevelMulti(energy, maxEnergy);
+            return new EnergyTools.EnergyLevel(energy, maxEnergy);
         } else if (EnergyTools.isEnergyTE(te)) {
             return EnergyTools.getEnergyLevelMulti(te);
         } else {
