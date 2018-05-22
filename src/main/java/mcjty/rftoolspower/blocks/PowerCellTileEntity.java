@@ -298,13 +298,13 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
                         if (RFToolsPower.redstoneflux && RedstoneFluxCompatibility.isEnergyConnection(te)) {
                             if (RedstoneFluxCompatibility.canConnectEnergy(te, opposite)) {
-                                received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
+                                received = (int) EnergyTools.receiveEnergy(te, opposite, rfToGive);
                             } else {
                                 received = 0;
                             }
                         } else {
                             // Forge unit
-                            received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
+                            received = (int) EnergyTools.receiveEnergy(te, opposite, rfToGive);
                         }
 
                         energyStored -= received;
