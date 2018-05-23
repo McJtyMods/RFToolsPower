@@ -288,7 +288,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
                 BlockPos pos = getPos().offset(face);
                 TileEntity te = getWorld().getTileEntity(pos);
                 EnumFacing opposite = face.getOpposite();
-                if (EnergyTools.isEnergyTE(te) || (te != null && te.hasCapability(CapabilityEnergy.ENERGY, opposite))) {
+                if (EnergyTools.isEnergyTE(te, opposite) || (te != null && te.hasCapability(CapabilityEnergy.ENERGY, opposite))) {
                     if (!(te instanceof PowerCellTileEntity)) {
                         int rfPerTick = getRfPerTickReal();
                         int received;
