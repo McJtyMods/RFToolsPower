@@ -147,13 +147,13 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             return 0;
         }
 
-        if (!getNetwork().isValid()) {
+        PowercellNetwork network = getNetwork();
+        if (network == null || !network.isValid()) {
             return 0;
         }
 
         maxReceive = Math.min(maxReceive, getRfPerTickReal());
         int received = receiveEnergyLocal(maxReceive, simulate);
-        PowercellNetwork network = getNetwork();
         if (received > 0) {
             if (!simulate) {
                 network.addEnergy(received);
@@ -206,8 +206,9 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     public void update() {
         if (!world.isRemote) {
             if (outputCount > 0) {
-                if (getNetwork().isValid()) {
-                    long energyStored = getNetwork().getEnergy();
+                PowercellNetwork network = getNetwork();
+                if (network != null && network.isValid()) {
+                    long energyStored = network.getEnergy();
                     if (energyStored <= 0) {
                         return;
                     }
@@ -220,7 +221,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
     public void redistributeNetwork() {
         PowercellNetwork network = getNetwork();
-        if (network.getPositions().isEmpty()) {
+        if (network == null || network.getPositions().isEmpty()) {
             return;
         }
         final long[] energy = {0, 0, 0};  // For each tier
