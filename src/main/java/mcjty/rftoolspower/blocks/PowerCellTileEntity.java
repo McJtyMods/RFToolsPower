@@ -133,12 +133,12 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     @Override
-    public long getBigEnergy() {
+    public long getStoredPower() {
         return getNetwork().getEnergy();
     }
 
     @Override
-    public long getBigMaxEnergy() {
+    public long getCapacity() {
         return getNetwork().getMaxEnergy();
     }
 
