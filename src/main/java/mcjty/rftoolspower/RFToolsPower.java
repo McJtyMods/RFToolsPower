@@ -22,9 +22,9 @@ import net.minecraftforge.fml.common.event.*;
         version = RFToolsPower.VERSION)
 public class RFToolsPower implements ModBase {
     public static final String MODID = "rftoolspower";
-    public static final String VERSION = "1.1.0alpha";
+    public static final String VERSION = "1.1.0-alpha";
     public static final String MIN_FORGE_VER = "14.22.0.2464";
-    public static final String MIN_MCJTYLIB_VER = "3.0.0";
+    public static final String MIN_MCJTYLIB_VER = "3.0.0-alpha";
 
     @SidedProxy(clientSide = "mcjty.rftoolspower.proxy.ClientProxy", serverSide = "mcjty.rftoolspower.proxy.ServerProxy")
     public static CommonProxy proxy;
