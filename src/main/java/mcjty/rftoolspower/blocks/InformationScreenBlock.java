@@ -63,20 +63,20 @@ public class InformationScreenBlock extends GenericBlock<InformationScreenTileEn
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         IBlockState blockState = world.getBlockState(pos);
-        if (blockState.getBlock() instanceof InformationScreenBlock) {
-            EnumFacing side = OrientationTools.getOrientationHoriz(state);
-            switch (side) {
-                case SOUTH:
-                    return BLOCK_NORTH;
-                case NORTH:
-                    return BLOCK_SOUTH;
-                case EAST:
-                    return BLOCK_WEST;
-                case WEST:
-                    return BLOCK_EAST;
-            }
+        if (!(blockState.getBlock() instanceof InformationScreenBlock)) {
+            return BLOCK_NORTH;
         }
-        return BLOCK_NORTH;
+        EnumFacing side = OrientationTools.getOrientationHoriz(state);
+        switch (side) {
+            case NORTH:
+                return BLOCK_SOUTH;
+            case EAST:
+                return BLOCK_WEST;
+            case WEST:
+                return BLOCK_EAST;
+            default:
+                return BLOCK_NORTH;
+        }
     }
 
     @Override
