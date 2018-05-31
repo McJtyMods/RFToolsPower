@@ -8,6 +8,8 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.config.Config;
+import net.darkhax.tesla.api.ITeslaConsumer;
+import net.darkhax.tesla.api.ITeslaHolder;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -454,7 +456,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
+        if (capability == CapabilityEnergy.ENERGY || capability == EnergyTools.TESLA_HOLDER || (capability == EnergyTools.TESLA_CONSUMER && facing != null)) {
             return true;
         }
         return super.hasCapability(capability, facing);
@@ -462,7 +464,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
+        if (capability == CapabilityEnergy.ENERGY || capability == EnergyTools.TESLA_HOLDER || (capability == EnergyTools.TESLA_CONSUMER && facing != null)) {
             if (facing == null) {
                 if (nullHandler == null) {
                     createNullHandler();
@@ -479,7 +481,11 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     private void createSidedHandler(EnumFacing facing) {
-        class SidedHandler implements IEnergyStorage {
+        @Optional.InterfaceList({
+            @Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaConsumer", modid = "tesla"),
+            @Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = "tesla")
+        })
+        class SidedHandler implements IEnergyStorage, ITeslaConsumer, ITeslaHolder {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 return PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
@@ -509,12 +515,31 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             public boolean canReceive() {
                 return true;
             }
+
+            @Optional.Method(modid = "tesla")
+            @Override
+            public long getStoredPower() {
+                return PowerCellTileEntity.this.getStoredPower();
+            }
+
+            @Optional.Method(modid = "tesla")
+            @Override
+            public long getCapacity() {
+                return PowerCellTileEntity.this.getCapacity();
+            }
+
+            @Optional.Method(modid = "tesla")
+            @Override
+            public long givePower(long power, boolean simulated) {
+                return PowerCellTileEntity.this.receiveEnergyFacing(facing, EnergyTools.unsignedClampToInt(power), simulated); // TODO make this actually work with longs
+            }
         }
         sidedHandlers[facing.ordinal()] = new SidedHandler();
     }
 
     private void createNullHandler() {
-        class NullHandler implements IEnergyStorage {
+        @Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = "tesla")
+        class NullHandler implements IEnergyStorage, ITeslaHolder {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 return 0;
@@ -543,6 +568,18 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             @Override
             public boolean canReceive() {
                 return false;
+            }
+
+            @Optional.Method(modid = "tesla")
+            @Override
+            public long getStoredPower() {
+                return PowerCellTileEntity.this.getStoredPower();
+            }
+
+            @Optional.Method(modid = "tesla")
+            @Override
+            public long getCapacity() {
+                return PowerCellTileEntity.this.getCapacity();
             }
         }
         nullHandler = new NullHandler();
