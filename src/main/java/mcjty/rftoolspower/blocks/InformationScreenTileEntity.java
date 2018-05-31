@@ -131,8 +131,8 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
             long energy = powercell.getNetwork().getEnergy();
             long maxEnergy = powercell.getNetwork().getMaxEnergy();
             return new EnergyTools.EnergyLevel(energy, maxEnergy);
-        } else if (EnergyTools.isEnergyTE(te, null)) {
-            return EnergyTools.getEnergyLevelMulti(te, null);
+        } else if (EnergyTools.isEnergyTE(te, getBlockOrientation())) {
+            return EnergyTools.getEnergyLevelMulti(te, getBlockOrientation());
         } else {
             return null;
         }
