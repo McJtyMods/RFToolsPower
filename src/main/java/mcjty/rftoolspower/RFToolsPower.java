@@ -32,8 +32,6 @@ public class RFToolsPower implements ModBase {
     @Mod.Instance("rftoolspower")
     public static RFToolsPower instance;
 
-    public static boolean redstoneflux = false;
-
     /**
      * This is used to keep track of GUIs that we make
      */
@@ -77,11 +75,6 @@ public class RFToolsPower implements ModBase {
         proxy.init(e);
 
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.theoneprobe.TheOneProbeSupport");
-
-        if (Loader.isModLoaded("redstoneflux")) {
-            redstoneflux = true;
-            Logging.log("RFTools Detected RedstoneFlux: enabling support");
-        }
     }
 
     @Mod.EventHandler
