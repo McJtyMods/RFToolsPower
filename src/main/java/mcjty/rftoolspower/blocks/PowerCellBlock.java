@@ -98,11 +98,11 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
 
         NBTTagCompound tagCompound = itemStack.getTagCompound();
         if (tagCompound != null) {
-            list.add(TextFormatting.BLUE + "Energy: " + TextFormatting.YELLOW + tagCompound.getInteger("energy"));
+            list.add(TextFormatting.BLUE + "Energy: " + TextFormatting.YELLOW + tagCompound.getLong("energy"));
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-            int totpower = 0;
+            long totpower = 0;
             if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell1Block)) {
                 totpower = Config.TIER1_MAXRF;
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell2Block)) {
@@ -127,7 +127,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         TileEntity te = world.getTileEntity(data.getPos());
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-            int rfPerTick = powercell.getRfPerTickReal();
+            long rfPerTick = powercell.getRfPerTickReal();
 
             if (powercell.getNetwork().isValid()) {
                 probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
@@ -179,7 +179,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                int energy = stack.hasTagCompound() ? stack.getTagCompound().getInteger("energy") : 0;
+                long energy = stack.hasTagCompound() ? stack.getTagCompound().getLong("energy") : 0;
                 powercell.setLocalEnergy(energy);
                 powercell.getNetwork();   // Force a rebuild of the network
                 powercell.markDirtyQuick();
@@ -194,14 +194,14 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
             powercell.redistributeNetwork();
-            int energy = powercell.getLocalEnergy();
+            long energy = powercell.getLocalEnergy();
             if (!drops.isEmpty()) {
                 NBTTagCompound tagCompound = drops.get(0).getTagCompound();
                 if (tagCompound == null) {
                     tagCompound = new NBTTagCompound();
                     drops.get(0).setTagCompound(tagCompound);
                 }
-                tagCompound.setInteger("energy", energy);
+                tagCompound.setLong("energy", energy);
             }
         }
     }

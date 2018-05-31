@@ -34,7 +34,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         IBigPower {
 
     private PowercellNetwork network = null;
-    private int localEnergy = 0;
+    private long localEnergy = 0;
 
     public PowerCellTileEntity() {
     }
@@ -92,13 +92,13 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
     abstract Tier getTier();
 
-    abstract int getLocalMaxEnergy();
+    abstract long getLocalMaxEnergy();
 
-    abstract int getRfPerTickPerSide();
+    abstract long getRfPerTickPerSide();
 
-    public int getRfPerTickReal() {
+    public long getRfPerTickReal() {
         if (Config.RFPERTICK_SCALE > 0) {
-            return (int) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * Config.RFPERTICK_SCALE);
+            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * Config.RFPERTICK_SCALE);
         } else {
             return getRfPerTickPerSide();
         }
@@ -107,7 +107,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     @Optional.Method(modid = "redstoneflux")
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return receiveEnergyFacing(from, maxReceive, simulate);
+        return (int)receiveEnergyFacing(from, maxReceive, simulate);
     }
 
     @Optional.Method(modid = "redstoneflux")
@@ -144,7 +144,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         return getNetwork().getMaxEnergy();
     }
 
-    private int receiveEnergyFacing(EnumFacing from, int maxReceive, boolean simulate) {
+    private long receiveEnergyFacing(EnumFacing from, long maxReceive, boolean simulate) {
         if (modes[from.ordinal()] != Mode.MODE_INPUT) {
             return 0;
         }
@@ -155,14 +155,14 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         }
 
         maxReceive = Math.min(maxReceive, getRfPerTickReal());
-        int received = receiveEnergyLocal(maxReceive, simulate);
+        long received = receiveEnergyLocal(maxReceive, simulate);
         if (received > 0) {
             if (!simulate) {
                 network.addEnergy(received);
             }
             maxReceive -= received;
         }
-        int totReceived = received;
+        long totReceived = received;
         if (maxReceive > 0) {
             for (Long l : network.getPositions()) {
                 BlockPos p = BlockPos.fromLong(l);
@@ -183,8 +183,8 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         return totReceived;
     }
 
-    private int receiveEnergyLocal(int maxReceive, boolean simulate) {
-        int maxInsert = Math.min(getLocalMaxEnergy() - localEnergy, maxReceive);
+    private long receiveEnergyLocal(long maxReceive, boolean simulate) {
+        long maxInsert = Math.min(getLocalMaxEnergy() - localEnergy, maxReceive);
         if (maxInsert > 0) {
             if (!simulate) {
                 localEnergy += maxInsert;
@@ -197,11 +197,11 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
 
     private int getEnergyStoredAsInt() {
-        return (int) Math.min(Integer.MAX_VALUE, getNetwork().getEnergy());
+        return (int) Math.min(Integer.MAX_VALUE, getNetwork().getEnergy()); // TODO replace with EnergyTools one
     }
 
     private int getMaxEnergyStoredAsInt() {
-        return (int) Math.min(Integer.MAX_VALUE, getNetwork().getMaxEnergy());
+        return (int) Math.min(Integer.MAX_VALUE, getNetwork().getMaxEnergy()); // TODO replace with EnergyTools one
     }
 
     @Override
@@ -240,8 +240,8 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         });
         for (Tier tier : Tier.values()) {
             if (count[tier.ordinal()] > 0) {
-                int energyPerBlock = (int) (energy[tier.ordinal()] / count[tier.ordinal()]);
-                final int[] energyToSet = {energyPerBlock + (int) (energy[tier.ordinal()] % count[tier.ordinal()])};   // First block gets more (remainder)
+                long energyPerBlock = energy[tier.ordinal()] / count[tier.ordinal()];
+                final long[] energyToSet = {energyPerBlock + energy[tier.ordinal()] % count[tier.ordinal()]};   // First block gets more (remainder)
                 network.getPositions().stream().forEach(l -> {
                     BlockPos p = BlockPos.fromLong(l);
                     TileEntity te = world.getTileEntity(p);
@@ -293,12 +293,10 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
                 EnumFacing opposite = face.getOpposite();
                 if (EnergyTools.isEnergyTE(te, opposite) || (te != null && te.hasCapability(CapabilityEnergy.ENERGY, opposite))) {
                     if (!(te instanceof PowerCellTileEntity)) {
-                        int rfPerTick = getRfPerTickReal();
+                        long rfPerTick = getRfPerTickReal();
+                        long rfToGive = Math.min(rfPerTick, energyStored);
 
-                        // Do min with 'long' and cast to int afterwards
-                        int rfToGive = (int) Math.min(rfPerTick, energyStored);
-
-                        int received = (int) EnergyTools.receiveEnergy(te, opposite, rfToGive);
+                        long received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
 
                         energyStored -= received;
                         energyExtracted += received;
@@ -317,7 +315,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     private void extractEnergyFromNetwork(long energyExtracted) {
-        int toExtractLocal = (int) Math.min(energyExtracted, localEnergy);
+        long toExtractLocal = Math.min(energyExtracted, localEnergy);
         if (toExtractLocal > 0) {
             // First extract locally
             localEnergy -= toExtractLocal;
@@ -332,7 +330,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
                 TileEntity te = world.getTileEntity(p);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                    toExtractLocal = (int) Math.min(energyExtracted, powercell.localEnergy);
+                    toExtractLocal = Math.min(energyExtracted, powercell.localEnergy);
                     if (toExtractLocal > 0) {
                         powercell.localEnergy -= toExtractLocal;
                         energyExtracted -= toExtractLocal;
@@ -346,11 +344,11 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         }
     }
 
-    public int getLocalEnergy() {
+    public long getLocalEnergy() {
         return localEnergy;
     }
 
-    public void setLocalEnergy(int localEnergy) {
+    public void setLocalEnergy(long localEnergy) {
         this.localEnergy = localEnergy;
     }
 
@@ -425,7 +423,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     @Override
     public void readRestorableFromNBT(NBTTagCompound tagCompound) {
         super.readRestorableFromNBT(tagCompound);
-//        energy = tagCompound.getInteger("energy");
+//        energy = tagCompound.getLong("energy");
         modes[0] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m0")];
         modes[1] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m1")];
         modes[2] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m2")];
@@ -433,20 +431,20 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         modes[4] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m4")];
         modes[5] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m5")];
         updateOutputCount();
-        localEnergy = tagCompound.getInteger("local");
+        localEnergy = tagCompound.getLong("local");
     }
 
     @Override
     public void writeRestorableToNBT(NBTTagCompound tagCompound) {
         super.writeRestorableToNBT(tagCompound);
-//        tagCompound.setInteger("energy", energy);
+//        tagCompound.setLong("energy", energy);
         tagCompound.setByte("m0", (byte) modes[0].ordinal());
         tagCompound.setByte("m1", (byte) modes[1].ordinal());
         tagCompound.setByte("m2", (byte) modes[2].ordinal());
         tagCompound.setByte("m3", (byte) modes[3].ordinal());
         tagCompound.setByte("m4", (byte) modes[4].ordinal());
         tagCompound.setByte("m5", (byte) modes[5].ordinal());
-        tagCompound.setInteger("local", localEnergy);
+        tagCompound.setLong("local", localEnergy);
     }
 
 
@@ -488,7 +486,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         class SidedHandler implements IEnergyStorage, ITeslaConsumer, ITeslaHolder {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
-                return PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
+                return (int)PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
             }
 
             @Override
@@ -531,7 +529,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             @Optional.Method(modid = "tesla")
             @Override
             public long givePower(long power, boolean simulated) {
-                return PowerCellTileEntity.this.receiveEnergyFacing(facing, EnergyTools.unsignedClampToInt(power), simulated); // TODO make this actually work with longs
+                return PowerCellTileEntity.this.receiveEnergyFacing(facing, power, simulated);
             }
         }
         sidedHandlers[facing.ordinal()] = new SidedHandler();

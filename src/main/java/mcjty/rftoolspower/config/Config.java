@@ -5,7 +5,7 @@ import net.minecraftforge.common.config.Configuration;
 public class Config {
     public static final String CATEGORY_GENERAL = "general";
 
-    public static int TIER1_MAXRF = 500000;
+    public static int TIER1_MAXRF = 500000; // TODO make these longs
     public static int TIER2_MAXRF = 4000000;
     public static int TIER3_MAXRF = 20000000;
 
