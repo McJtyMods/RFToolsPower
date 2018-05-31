@@ -479,7 +479,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     private void createSidedHandler(EnumFacing facing) {
-        sidedHandlers[facing.ordinal()] = new IEnergyStorage() {
+        class SidedHandler implements IEnergyStorage {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 return PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
@@ -509,11 +509,12 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             public boolean canReceive() {
                 return true;
             }
-        };
+        }
+        sidedHandlers[facing.ordinal()] = new SidedHandler();
     }
 
     private void createNullHandler() {
-        nullHandler = new IEnergyStorage() {
+        class NullHandler implements IEnergyStorage {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 return 0;
@@ -543,6 +544,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             public boolean canReceive() {
                 return false;
             }
-        };
+        }
+        nullHandler = new NullHandler();
     }
 }
