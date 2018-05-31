@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -187,8 +188,8 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess access, BlockPos pos, IBlockState metadata, int fortune) {
-        List<ItemStack> drops = super.getDrops(access, pos, metadata, fortune);
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess access, BlockPos pos, IBlockState metadata, int fortune) {
+        super.getDrops(drops, access, pos, metadata, fortune);
         TileEntity te = access.getTileEntity(pos);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
@@ -203,7 +204,6 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
                 tagCompound.setInteger("energy", energy);
             }
         }
-        return drops;
     }
 
     @Override
