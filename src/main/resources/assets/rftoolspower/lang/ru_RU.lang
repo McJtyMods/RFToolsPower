@@ -1,0 +1,13 @@
+item.rftoolspower.power_core1.name=Энергоядро (низкое)
+item.rftoolspower.power_core2.name=Энергоядро (среднее)
+item.rftoolspower.power_core3.name=Энергоядро (высокое)
+
+tile.rftoolspower.cell1.name=Энергоячейка (низкая)
+tile.rftoolspower.cell2.name=Энергоячейка (средняя)
+tile.rftoolspower.cell3.name=Энергоячейка (высокая)
+tile.rftoolspower.information_screen.name=Информационный экран
+
+itemGroup.RFToolsPower=RFTools Power
+
+message.shiftMessage=Нажмите Shift
+
