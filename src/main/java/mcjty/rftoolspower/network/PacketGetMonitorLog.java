@@ -7,6 +7,7 @@ import mcjty.rftoolspower.blocks.InformationScreenTileEntity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -36,6 +37,11 @@ public class PacketGetMonitorLog implements IMessage {
 
         @Override
         public IMessage onMessage(PacketGetMonitorLog message, MessageContext ctx) {
+            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
+            return null;
+        }
+
+        private void handle(PacketGetMonitorLog message, MessageContext ctx) {
             EntityPlayerMP player = ctx.getServerHandler().player;
             TileEntity te = player.getEntityWorld().getTileEntity(message.pos);
             if (te instanceof InformationScreenTileEntity) {
@@ -45,8 +51,6 @@ public class PacketGetMonitorLog implements IMessage {
                 RFToolsPowerMessages.INSTANCE.sendTo(new PacketMonitorLogReady(message.pos, power, info.getRfInsertedPerTick(), info.getRfExtractPerTick(),
                         info.calculateRoughMaxRfPerTick()), player);
             }
-
-            return null;
         }
     }
 }
