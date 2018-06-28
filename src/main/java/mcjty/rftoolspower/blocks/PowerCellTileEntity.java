@@ -3,10 +3,8 @@ package mcjty.rftoolspower.blocks;
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import mcjty.lib.api.power.IBigPower;
-import mcjty.lib.compat.RedstoneFluxCompatibility;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.config.Config;
 import net.darkhax.tesla.api.ITeslaConsumer;
 import net.darkhax.tesla.api.ITeslaHolder;
@@ -22,6 +20,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_OUTPUT;
@@ -374,6 +375,9 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         });
     }
 
+    private static Set<BlockPos> alreadyReportedBad = new HashSet<>();
+    private static Set<BlockPos> alreadyReportedUnexpected = new HashSet<>();
+
     private void buildNetwork(PowercellNetwork network, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof PowerCellTileEntity) {
@@ -381,13 +385,19 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
             if (network.contains(pos)) {
                 if (powercell.network != network) {
-                    System.out.println("Bad network at pos = " + pos);
+                    if (!alreadyReportedBad.contains(pos)) {
+                        System.out.println("Bad network at pos = " + pos + " (dimension " + world.provider.getDimension() + ")");
+                        alreadyReportedBad.add(pos);
+                    }
                 }
                 return;
             }
 
             if (powercell.network == network) {
-                System.out.println("Unexpected network at pos = " + pos);
+                if (!alreadyReportedUnexpected.contains(pos)) {
+                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + world.provider.getDimension() + ")");
+                    alreadyReportedUnexpected.add(pos);
+                }
                 return;
             }
 
