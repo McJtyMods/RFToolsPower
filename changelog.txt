@@ -1,3 +1,7 @@
+1.1.1:
+- Fix problem with network packet doing things on the wrong thread
+- Fix a lot of console spam if things go wrong and added a bit more diagnostics
+
 1.1.0:
 - Made compatible with the latest McJtyLib (3.0.0)
 - Bugfix with a rare crash that could occur when switching dimensions
