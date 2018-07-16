@@ -106,7 +106,8 @@ public class GenericCellBakedModel implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-        if (state == null || side != null) {
+
+        if (side != null) {
             return Collections.emptyList();
         }
 
