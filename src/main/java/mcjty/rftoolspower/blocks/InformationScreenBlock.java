@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.lib.container.EmptyContainer;
 import mcjty.lib.blocks.GenericBlock;
+import mcjty.lib.container.EmptyContainer;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.block.material.Material;
@@ -17,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -31,11 +30,10 @@ public class InformationScreenBlock extends GenericBlock<InformationScreenTileEn
         setCreativeTab(RFToolsPower.tabRfToolsPower);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void initModel() {
         super.initModel();
-        ClientRegistry.bindTileEntitySpecialRenderer(InformationScreenTileEntity.class, new InformationScreenRenderer());
+        InformationScreenRenderer.register();
     }
 
     @SideOnly(Side.CLIENT)
