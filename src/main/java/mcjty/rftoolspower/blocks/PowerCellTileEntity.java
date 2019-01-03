@@ -1,7 +1,5 @@
 package mcjty.rftoolspower.blocks;
 
-import cofh.redstoneflux.api.IEnergyProvider;
-import cofh.redstoneflux.api.IEnergyReceiver;
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
@@ -27,12 +25,7 @@ import java.util.Set;
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_OUTPUT;
 
-@Optional.InterfaceList({
-        @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyProvider", modid = "redstoneflux"),
-        @Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyReceiver", modid = "redstoneflux")
-})
-public abstract class PowerCellTileEntity extends GenericTileEntity implements IEnergyProvider, IEnergyReceiver, ITickable,
-        IBigPower {
+public abstract class PowerCellTileEntity extends GenericTileEntity implements ITickable, IBigPower {
 
     private PowercellNetwork network = null;
     private long localEnergy = 0;
@@ -103,36 +96,6 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         } else {
             return getRfPerTickPerSide();
         }
-    }
-
-    @Optional.Method(modid = "redstoneflux")
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return (int)receiveEnergyFacing(from, maxReceive, simulate);
-    }
-
-    @Optional.Method(modid = "redstoneflux")
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
-    }
-
-    @Optional.Method(modid = "redstoneflux")
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        return getEnergyStoredAsInt();
-    }
-
-    @Optional.Method(modid = "redstoneflux")
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return getMaxEnergyStoredAsInt();
-    }
-
-    @Optional.Method(modid = "redstoneflux")
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
     }
 
     @Override
