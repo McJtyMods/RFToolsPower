@@ -1,7 +1,8 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.lib.container.EmptyContainer;
+import mcjty.lib.McJtyLib;
 import mcjty.lib.blocks.GenericBlock;
+import mcjty.lib.container.EmptyContainer;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.config.Config;
@@ -15,7 +16,6 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -70,19 +69,11 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void initModel() {
         ResourceLocation name = getRegistryName();
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(name.getResourceDomain(), name.getResourcePath()+"item"), "inventory"));
-
+        McJtyLib.proxy.initCustomItemModel(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(name.getResourceDomain(), name.getResourcePath()+"item"), "inventory"));
         // To make sure that our ISBM model is chosen for all states we use this custom state mapper:
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return GenericCellBakedModel.modelCell;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
+        McJtyLib.proxy.initStateMapper(this, GenericCellBakedModel.modelCell);
     }
 
     @Override
