@@ -38,12 +38,12 @@ public class GenericCellModel implements IModel {
                 new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_t2"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_t2"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_t2"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_t2"),
+//                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_t2"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_t3"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_t3"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_t3"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_t3"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_t3"),
+//                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_t3"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/inputmask"),
                 new ResourceLocation(RFToolsPower.MODID, "blocks/outputmask")
                 );
