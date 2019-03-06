@@ -19,7 +19,7 @@ public class PowerCoreItem extends Item {
     public PowerCoreItem(String tier) {
         setUnlocalizedName("rftoolspower.power_core" + tier);
         setRegistryName("power_core" + tier);
-        setCreativeTab(RFToolsPower.tabRfToolsPower);
+        setCreativeTab(RFToolsPower.setup.getTab());
         McJtyRegister.registerLater(this, RFToolsPower.instance);
     }
 

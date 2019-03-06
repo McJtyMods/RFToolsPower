@@ -60,7 +60,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
 
     public PowerCellBlock(String name, Class<? extends PowerCellTileEntity> clazz) {
         super(RFToolsPower.instance, Material.IRON, clazz, EmptyContainer::new, name, false);
-        setCreativeTab(RFToolsPower.tabRfToolsPower);
+        setCreativeTab(RFToolsPower.setup.getTab());
     }
 
     @Override

@@ -1,15 +1,9 @@
 package mcjty.rftoolspower;
 
 import mcjty.lib.base.ModBase;
-import mcjty.lib.compat.MainCompatHandler;
-import mcjty.lib.varia.Logging;
-import mcjty.rftoolspower.blocks.ModBlocks;
-import mcjty.rftoolspower.proxy.CommonProxy;
-import net.minecraft.creativetab.CreativeTabs;
+import mcjty.lib.proxy.IProxy;
+import mcjty.rftoolspower.proxy.CommonSetup;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -27,27 +21,16 @@ public class RFToolsPower implements ModBase {
     public static final String MIN_MCJTYLIB_VER = "3.1.0";
 
     @SidedProxy(clientSide = "mcjty.rftoolspower.proxy.ClientProxy", serverSide = "mcjty.rftoolspower.proxy.ServerProxy")
-    public static CommonProxy proxy;
+    public static IProxy proxy;
+    public static CommonSetup setup = new CommonSetup();
 
     @Mod.Instance("rftoolspower")
     public static RFToolsPower instance;
-
-    /**
-     * This is used to keep track of GUIs that we make
-     */
-    private static int modGuiIndex = 0;
 
     @Override
     public String getModId() {
         return MODID;
     }
-
-    public static CreativeTabs tabRfToolsPower = new CreativeTabs("RFToolsPower") {
-        @Override
-        public ItemStack getTabIconItem() {
-            return new ItemStack(ModBlocks.cell1Block);
-        }
-    };
 
     public static final String SHIFT_MESSAGE = "<Press Shift>";
 
@@ -62,9 +45,8 @@ public class RFToolsPower implements ModBase {
      */
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {
+        setup.preInit(e);
         proxy.preInit(e);
-        MainCompatHandler.registerWaila();
-        MainCompatHandler.registerTOP();
     }
 
     /**
@@ -72,10 +54,19 @@ public class RFToolsPower implements ModBase {
      */
     @Mod.EventHandler
     public void init(FMLInitializationEvent e) {
+        setup.init(e);
         proxy.init(e);
-
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.theoneprobe.TheOneProbeSupport");
     }
+
+    /**
+     * Handle interaction with other mods, complete your setup based on this.
+     */
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent e) {
+        setup.postInit(e);
+        proxy.postInit(e);
+    }
+
 
     @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
@@ -84,14 +75,6 @@ public class RFToolsPower implements ModBase {
     @Mod.EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
 //        TeleportDestinations.clearInstance();
-    }
-
-    /**
-     * Handle interaction with other mods, complete your setup based on this.
-     */
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
-        proxy.postInit(e);
     }
 
     @Override

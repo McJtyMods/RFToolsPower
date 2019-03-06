@@ -27,7 +27,7 @@ public class InformationScreenBlock extends GenericBlock<InformationScreenTileEn
 
     public InformationScreenBlock() {
         super(RFToolsPower.instance, Material.IRON, InformationScreenTileEntity.class, EmptyContainer::new, "information_screen", false);
-        setCreativeTab(RFToolsPower.tabRfToolsPower);
+        setCreativeTab(RFToolsPower.setup.getTab());
     }
 
     @Override

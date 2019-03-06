@@ -1,7 +1,8 @@
 package mcjty.rftoolspower.proxy;
 
+import mcjty.lib.compat.MainCompatHandler;
 import mcjty.lib.network.PacketHandler;
-import mcjty.lib.proxy.AbstractCommonProxy;
+import mcjty.lib.setup.DefaultCommonSetup;
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.WrenchChecker;
 import mcjty.rftoolspower.ForgeEventHandlers;
@@ -10,9 +11,11 @@ import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.config.Config;
 import mcjty.rftoolspower.items.ModItems;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -20,7 +23,7 @@ import org.apache.logging.log4j.Level;
 
 import java.io.File;
 
-public abstract class CommonProxy extends AbstractCommonProxy {
+public class CommonSetup extends DefaultCommonSetup {
 
     @Override
     public void preInit(FMLPreInitializationEvent e) {
@@ -37,6 +40,14 @@ public abstract class CommonProxy extends AbstractCommonProxy {
 
         ModItems.init();
         ModBlocks.init();
+
+        MainCompatHandler.registerWaila();
+        MainCompatHandler.registerTOP();
+    }
+
+    @Override
+    public void createTabs() {
+        createTab("RFToolsPower", new ItemStack(ModBlocks.cell1Block));
     }
 
     private void readMainConfig() {
@@ -57,6 +68,7 @@ public abstract class CommonProxy extends AbstractCommonProxy {
     @Override
     public void init(FMLInitializationEvent e) {
         super.init(e);
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.theoneprobe.TheOneProbeSupport");
 //        NetworkRegistry.INSTANCE.registerGuiHandler(RFTools.instance, new GuiProxy());
 //        MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
     }
