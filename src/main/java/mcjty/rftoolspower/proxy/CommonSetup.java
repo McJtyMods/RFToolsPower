@@ -1,12 +1,10 @@
 package mcjty.rftoolspower.proxy;
 
 import mcjty.lib.compat.MainCompatHandler;
-import mcjty.lib.network.PacketHandler;
 import mcjty.lib.setup.DefaultCommonSetup;
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.WrenchChecker;
 import mcjty.rftoolspower.ForgeEventHandlers;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.config.Config;
 import mcjty.rftoolspower.items.ModItems;
@@ -18,7 +16,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
@@ -35,8 +32,7 @@ public class CommonSetup extends DefaultCommonSetup {
 
         readMainConfig();
 
-        SimpleNetworkWrapper network = PacketHandler.registerMessages(RFToolsPower.MODID, "rftoolspower");
-        RFToolsPowerMessages.registerNetworkMessages(network);
+        RFToolsPowerMessages.registerMessages("rftoolspower");
 
         ModItems.init();
         ModBlocks.init();

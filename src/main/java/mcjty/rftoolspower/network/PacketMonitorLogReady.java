@@ -2,14 +2,15 @@ package mcjty.rftoolspower.network;
 
 import io.netty.buffer.ByteBuf;
 import mcjty.lib.network.NetworkTools;
+import mcjty.lib.thirteen.Context;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.InformationScreenTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.util.function.Supplier;
 
 public class PacketMonitorLogReady implements IMessage {
 
@@ -50,6 +51,10 @@ public class PacketMonitorLogReady implements IMessage {
     public PacketMonitorLogReady() {
     }
 
+    public PacketMonitorLogReady(ByteBuf buf) {
+        fromBytes(buf);
+    }
+
     public PacketMonitorLogReady(BlockPos pos, EnergyTools.EnergyLevel power, long rfPerTickInserted, long rfPerTickExtracted,
                                  long roughMaxRfPerTick) {
         this.pos = pos;
@@ -59,19 +64,15 @@ public class PacketMonitorLogReady implements IMessage {
         this.roughMaxRfPerTick = roughMaxRfPerTick;
     }
 
-    public static class Handler implements IMessageHandler<PacketMonitorLogReady, IMessage> {
-        @Override
-        public IMessage onMessage(PacketMonitorLogReady message, MessageContext ctx) {
-            RFToolsPower.proxy.addScheduledTaskClient(() -> handle(message, ctx));
-            return null;
-        }
-
-        private void handle(PacketMonitorLogReady message, MessageContext ctx) {
-            TileEntity te = RFToolsPower.proxy.getClientWorld().getTileEntity(message.pos);
+    public void handle(Supplier<Context> supplier) {
+        Context ctx = supplier.get();
+        ctx.enqueueWork(() -> {
+            TileEntity te = RFToolsPower.proxy.getClientWorld().getTileEntity(pos);
             if (te instanceof InformationScreenTileEntity) {
                 InformationScreenTileEntity info = (InformationScreenTileEntity) te;
-                info.setClientPower(message.power, message.rfPerTickInserted, message.rfPerTickExtracted, message.roughMaxRfPerTick);
+                info.setClientPower(power, rfPerTickInserted, rfPerTickExtracted, roughMaxRfPerTick);
             }
-        }
+        });
+        ctx.setPacketHandled(true);
     }
 }

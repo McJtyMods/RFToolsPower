@@ -3,28 +3,41 @@ package mcjty.rftoolspower.network;
 import mcjty.lib.network.PacketHandler;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketSendServerCommand;
+import mcjty.lib.thirteen.ChannelBuilder;
+import mcjty.lib.thirteen.SimpleChannel;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
 public class RFToolsPowerMessages {
     public static SimpleNetworkWrapper INSTANCE;
 
-    public static void registerNetworkMessages(SimpleNetworkWrapper net) {
-        INSTANCE = net;
+    public static void registerMessages(String name) {
+        SimpleChannel net = ChannelBuilder
+                .named(new ResourceLocation(RFToolsPower.MODID, name))
+                .networkProtocolVersion(() -> "1.0")
+                .clientAcceptedVersions(s -> true)
+                .serverAcceptedVersions(s -> true)
+                .simpleChannel();
+
+        INSTANCE = net.getNetwork();
 
         // Server side
-        net.registerMessage(PacketGetMonitorLog.Handler.class, PacketGetMonitorLog.class, PacketHandler.nextPacketID(), Side.SERVER);
+        net.registerMessageServer(id(), PacketGetMonitorLog.class, PacketGetMonitorLog::toBytes, PacketGetMonitorLog::new, PacketGetMonitorLog::handle);
 
         // Client side
-        net.registerMessage(PacketMonitorLogReady.Handler.class, PacketMonitorLogReady.class, PacketHandler.nextPacketID(), Side.CLIENT);
+        net.registerMessageServer(id(), PacketMonitorLogReady.class, PacketMonitorLogReady::toBytes, PacketMonitorLogReady::new, PacketMonitorLogReady::handle);
 
 //        PacketHandler.register(PacketHandler.nextPacketID(), PowerCellInfoPacketServer.class, PowerCellInfoPacketClient.class);
+    }
+
+    private static int id() {
+        return PacketHandler.nextPacketID();
     }
 
     public static void sendToServer(String command, @Nonnull TypedMap.Builder argumentBuilder) {
