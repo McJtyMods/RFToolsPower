@@ -2,7 +2,6 @@ package mcjty.rftoolspower.proxy;
 
 import mcjty.lib.compat.MainCompatHandler;
 import mcjty.lib.setup.DefaultCommonSetup;
-import mcjty.lib.varia.WrenchChecker;
 import mcjty.rftoolspower.ForgeEventHandlers;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.config.ConfigSetup;
@@ -22,8 +21,6 @@ public class CommonSetup extends DefaultCommonSetup {
 
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandlers());
 
-        setupModCompat();
-
         RFToolsPowerMessages.registerMessages("rftoolspower");
 
         ConfigSetup.init();
@@ -31,7 +28,8 @@ public class CommonSetup extends DefaultCommonSetup {
         ModBlocks.init();
     }
 
-    private void setupModCompat() {
+    @Override
+    protected void setupModCompat() {
         MainCompatHandler.registerWaila();
         MainCompatHandler.registerTOP();
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.theoneprobe.TheOneProbeSupport");
@@ -46,6 +44,5 @@ public class CommonSetup extends DefaultCommonSetup {
     public void postInit(FMLPostInitializationEvent e) {
         super.postInit(e);
         ConfigSetup.postInit();
-        WrenchChecker.init();
     }
 }
