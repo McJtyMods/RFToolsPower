@@ -2,7 +2,7 @@ package mcjty.rftoolspower;
 
 import mcjty.lib.base.ModBase;
 import mcjty.lib.proxy.IProxy;
-import mcjty.rftoolspower.setup.CommonSetup;
+import mcjty.rftoolspower.setup.ModSetup;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -22,7 +22,7 @@ public class RFToolsPower implements ModBase {
 
     @SidedProxy(clientSide = "mcjty.rftoolspower.setup.ClientProxy", serverSide = "mcjty.rftoolspower.setup.ServerProxy")
     public static IProxy proxy;
-    public static CommonSetup setup = new CommonSetup();
+    public static ModSetup setup = new ModSetup();
 
     @Mod.Instance("rftoolspower")
     public static RFToolsPower instance;

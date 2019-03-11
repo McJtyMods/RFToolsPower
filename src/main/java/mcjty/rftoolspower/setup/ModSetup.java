@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.setup;
 
 import mcjty.lib.compat.MainCompatHandler;
-import mcjty.lib.setup.DefaultCommonSetup;
+import mcjty.lib.setup.DefaultModSetup;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.config.ConfigSetup;
 import mcjty.rftoolspower.items.ModItems;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class CommonSetup extends DefaultCommonSetup {
+public class ModSetup extends DefaultModSetup {
 
     @Override
     public void preInit(FMLPreInitializationEvent e) {
