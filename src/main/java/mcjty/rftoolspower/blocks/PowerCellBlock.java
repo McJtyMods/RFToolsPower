@@ -5,7 +5,7 @@ import mcjty.lib.blocks.GenericBlock;
 import mcjty.lib.container.EmptyContainer;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.config.ConfigSetup;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -95,11 +95,11 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
             long totpower = 0;
             if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell1Block)) {
-                totpower = Config.TIER1_MAXRF;
+                totpower = ConfigSetup.TIER1_MAXRF;
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell2Block)) {
-                totpower = Config.TIER2_MAXRF;
+                totpower = ConfigSetup.TIER2_MAXRF;
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell3Block)) {
-                totpower = Config.TIER3_MAXRF;
+                totpower = ConfigSetup.TIER3_MAXRF;
             }
             list.add(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)");
             list.add(TextFormatting.WHITE + "and can be combined with other cells to form a");
@@ -129,7 +129,7 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
                     probeInfo.text(TextFormatting.YELLOW + "Side: output");
                 }
             } else {
-                probeInfo.text(TextStyleClass.ERROR + "Too many blocks in network (max " + Config.NETWORK_MAX + ")!");
+                probeInfo.text(TextStyleClass.ERROR + "Too many blocks in network (max " + ConfigSetup.NETWORK_MAX + ")!");
             }
 
             int networkId = powercell.getNetwork().getNetworkId();

@@ -3,7 +3,7 @@ package mcjty.rftoolspower.blocks;
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.config.ConfigSetup;
 import net.darkhax.tesla.api.ITeslaConsumer;
 import net.darkhax.tesla.api.ITeslaHolder;
 import net.minecraft.nbt.NBTTagCompound;
@@ -91,8 +91,8 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     abstract long getRfPerTickPerSide();
 
     public long getRfPerTickReal() {
-        if (Config.RFPERTICK_SCALE > 0) {
-            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * Config.RFPERTICK_SCALE);
+        if (ConfigSetup.RFPERTICK_SCALE > 0) {
+            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * ConfigSetup.RFPERTICK_SCALE);
         } else {
             return getRfPerTickPerSide();
         }

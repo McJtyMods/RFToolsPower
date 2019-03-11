@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.config.ConfigSetup;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class PowercellNetwork {
     }
 
     public boolean isValid() {
-        return positions.size() <= Config.NETWORK_MAX;
+        return positions.size() <= ConfigSetup.NETWORK_MAX;
     }
 
     public boolean contains(BlockPos pos) {

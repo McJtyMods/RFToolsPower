@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.config.ConfigSetup;
 
 public class PowerCellTileEntity3 extends PowerCellTileEntity {
 
@@ -11,12 +11,12 @@ public class PowerCellTileEntity3 extends PowerCellTileEntity {
 
     @Override
     long getLocalMaxEnergy() {
-        return Config.TIER3_MAXRF;
+        return ConfigSetup.TIER3_MAXRF;
     }
 
     @Override
     long getRfPerTickPerSide() {
-        return Config.TIER3_RFPERTICK;
+        return ConfigSetup.TIER3_RFPERTICK;
     }
 
 }
