@@ -20,7 +20,7 @@ public class RFToolsPower implements ModBase {
     public static final String MIN_FORGE_VER = "14.22.0.2464";
     public static final String MIN_MCJTYLIB_VER = "3.1.0";
 
-    @SidedProxy(clientSide = "mcjty.rftoolspower.proxy.ClientProxy", serverSide = "mcjty.rftoolspower.proxy.ServerProxy")
+    @SidedProxy(clientSide = "mcjty.rftoolspower.setup.ClientProxy", serverSide = "mcjty.rftoolspower.setup.ServerProxy")
     public static IProxy proxy;
     public static CommonSetup setup = new CommonSetup();
 
