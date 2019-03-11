@@ -28,8 +28,6 @@ public class CommonSetup extends DefaultCommonSetup {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandlers());
 //        CommandHandler.registerCommands();
 
-        mainConfig = new Configuration(new File(modConfigDir.getPath() + File.separator + "rftools", "rftoolspower.cfg"));
-
         readMainConfig();
 
         RFToolsPowerMessages.registerMessages("rftoolspower");
@@ -46,7 +44,10 @@ public class CommonSetup extends DefaultCommonSetup {
         createTab("RFToolsPower", new ItemStack(ModBlocks.cell1Block));
     }
 
+    private Configuration mainConfig;
+
     private void readMainConfig() {
+        mainConfig = new Configuration(new File(modConfigDir.getPath() + File.separator + "rftools", "rftoolspower.cfg"));
         Configuration cfg = mainConfig;
         try {
             cfg.load();
