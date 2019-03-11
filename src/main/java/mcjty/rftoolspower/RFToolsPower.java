@@ -2,7 +2,7 @@ package mcjty.rftoolspower;
 
 import mcjty.lib.base.ModBase;
 import mcjty.lib.proxy.IProxy;
-import mcjty.rftoolspower.proxy.CommonSetup;
+import mcjty.rftoolspower.setup.CommonSetup;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;

@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.proxy;
+package mcjty.rftoolspower.setup;
 
 import mcjty.lib.McJtyLibClient;
 import mcjty.lib.setup.DefaultClientProxy;
