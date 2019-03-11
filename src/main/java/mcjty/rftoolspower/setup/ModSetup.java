@@ -28,7 +28,7 @@ public class ModSetup extends DefaultModSetup {
     protected void setupModCompat() {
         MainCompatHandler.registerWaila();
         MainCompatHandler.registerTOP();
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.theoneprobe.TheOneProbeSupport");
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.compat.theoneprobe.TheOneProbeSupport");
     }
 
     @Override
