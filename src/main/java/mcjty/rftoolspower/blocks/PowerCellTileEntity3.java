@@ -11,12 +11,12 @@ public class PowerCellTileEntity3 extends PowerCellTileEntity {
 
     @Override
     long getLocalMaxEnergy() {
-        return ConfigSetup.TIER3_MAXRF;
+        return ConfigSetup.TIER3_MAXRF.get();
     }
 
     @Override
     long getRfPerTickPerSide() {
-        return ConfigSetup.TIER3_RFPERTICK;
+        return ConfigSetup.TIER3_RFPERTICK.get();
     }
 
 }

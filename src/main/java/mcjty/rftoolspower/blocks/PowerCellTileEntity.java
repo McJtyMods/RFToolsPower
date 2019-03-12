@@ -91,8 +91,8 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     abstract long getRfPerTickPerSide();
 
     public long getRfPerTickReal() {
-        if (ConfigSetup.RFPERTICK_SCALE > 0) {
-            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * ConfigSetup.RFPERTICK_SCALE);
+        if (ConfigSetup.RFPERTICK_SCALE.get() > 0) {
+            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * ConfigSetup.RFPERTICK_SCALE.get());
         } else {
             return getRfPerTickPerSide();
         }

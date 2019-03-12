@@ -29,7 +29,7 @@ public class PowercellNetwork {
     }
 
     public boolean isValid() {
-        return positions.size() <= ConfigSetup.NETWORK_MAX;
+        return positions.size() <= ConfigSetup.NETWORK_MAX.get();
     }
 
     public boolean contains(BlockPos pos) {

@@ -95,11 +95,11 @@ public class PowerCellBlock extends GenericBlock<PowerCellTileEntity, EmptyConta
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
             long totpower = 0;
             if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell1Block)) {
-                totpower = ConfigSetup.TIER1_MAXRF;
+                totpower = ConfigSetup.TIER1_MAXRF.get();
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell2Block)) {
-                totpower = ConfigSetup.TIER2_MAXRF;
+                totpower = ConfigSetup.TIER2_MAXRF.get();
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.cell3Block)) {
-                totpower = ConfigSetup.TIER3_MAXRF;
+                totpower = ConfigSetup.TIER3_MAXRF.get();
             }
             list.add(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)");
             list.add(TextFormatting.WHITE + "and can be combined with other cells to form a");
