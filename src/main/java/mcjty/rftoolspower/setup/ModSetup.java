@@ -17,9 +17,10 @@ public class ModSetup extends DefaultModSetup {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
 
+        ConfigSetup.init();
+
         RFToolsPowerMessages.registerMessages("rftoolspower");
 
-        ConfigSetup.init();
         ModItems.init();
         ModBlocks.init();
     }
