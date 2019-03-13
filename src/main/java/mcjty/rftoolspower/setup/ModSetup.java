@@ -17,8 +17,6 @@ public class ModSetup extends DefaultModSetup {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
 
-        ConfigSetup.init();
-
         RFToolsPowerMessages.registerMessages("rftoolspower");
 
         ModItems.init();
@@ -30,6 +28,11 @@ public class ModSetup extends DefaultModSetup {
         MainCompatHandler.registerWaila();
         MainCompatHandler.registerTOP();
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.compat.theoneprobe.TheOneProbeSupport");
+    }
+
+    @Override
+    protected void setupConfig() {
+        ConfigSetup.init();
     }
 
     @Override
