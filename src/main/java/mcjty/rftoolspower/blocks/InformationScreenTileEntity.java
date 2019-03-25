@@ -44,12 +44,14 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                     PowercellNetwork network = powercell.getNetwork();
-                    long newExtracted = network.getExtracted();
-                    long newInserted = network.getInserted();
-                    rfExtractPerTick = (newExtracted - lastExtracted)/10;
-                    rfInsertedPerTick = (newInserted - lastInserted)/10;
-                    lastExtracted = newExtracted;
-                    lastInserted = newInserted;
+                    if (network != null) {
+                        long newExtracted = network.getExtracted();
+                        long newInserted = network.getInserted();
+                        rfExtractPerTick = (newExtracted - lastExtracted) / 10;
+                        rfInsertedPerTick = (newInserted - lastInserted) / 10;
+                        lastExtracted = newExtracted;
+                        lastInserted = newInserted;
+                    }
                 } else {
                     rfExtractPerTick = -1;
                     rfInsertedPerTick = -1;
