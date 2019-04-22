@@ -37,7 +37,7 @@ public class ModSetup extends DefaultModSetup {
 
     @Override
     public void createTabs() {
-        createTab("RFToolsPower", new ItemStack(ModBlocks.cell1Block));
+        createTab("RFToolsPower", () -> new ItemStack(ModBlocks.cell1Block));
     }
 
     @Override
