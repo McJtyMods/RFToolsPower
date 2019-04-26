@@ -1,4 +1,5 @@
-Upcoming:
+1.2.0:
+- Depends on McJtyLib 3.5.0!
 - Added some crash protection that shouldn't be needed but apparently is
 
 1.1.2:
