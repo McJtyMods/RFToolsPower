@@ -7,6 +7,7 @@ import mcjty.rftoolspower.blocks.InformationScreenTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -40,7 +41,7 @@ public class PacketGetMonitorLog {
                 EnergyTools.EnergyLevel power = info.getPower();
 
                 RFToolsPowerMessages.INSTANCE.sendTo(new PacketMonitorLogReady(pos, power, info.getRfInsertedPerTick(), info.getRfExtractPerTick(),
-                        info.calculateRoughMaxRfPerTick()), player);
+                        info.calculateRoughMaxRfPerTick()), player.connection.netManager, NetworkDirection.PLAY_TO_SERVER);
             }
         });
         ctx.setPacketHandled(true);

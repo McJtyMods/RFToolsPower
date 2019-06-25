@@ -1,9 +1,9 @@
 package mcjty.rftoolspower.config;
 
-import mcjty.lib.thirteen.ConfigSpec;
+import com.electronwill.nightconfig.core.ConfigSpec;
 import mcjty.lib.varia.Logging;
 import mcjty.rftoolspower.RFToolsPower;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
@@ -11,20 +11,20 @@ import java.io.File;
 public class ConfigSetup {
     public static final String CATEGORY_GENERAL = "general";
 
-    public static ConfigSpec.IntValue TIER1_MAXRF; // TODO make these longs
-    public static ConfigSpec.IntValue TIER2_MAXRF;
-    public static ConfigSpec.IntValue TIER3_MAXRF;
+    public static ForgeConfigSpec.IntValue TIER1_MAXRF; // TODO make these longs
+    public static ForgeConfigSpec.IntValue TIER2_MAXRF;
+    public static ForgeConfigSpec.IntValue TIER3_MAXRF;
 
-    public static ConfigSpec.IntValue TIER1_RFPERTICK;
-    public static ConfigSpec.IntValue TIER2_RFPERTICK;
-    public static ConfigSpec.IntValue TIER3_RFPERTICK;
+    public static ForgeConfigSpec.IntValue TIER1_RFPERTICK;
+    public static ForgeConfigSpec.IntValue TIER2_RFPERTICK;
+    public static ForgeConfigSpec.IntValue TIER3_RFPERTICK;
 
-    public static ConfigSpec.DoubleValue RFPERTICK_SCALE;
+    public static ForgeConfigSpec.DoubleValue RFPERTICK_SCALE;
 
-    public static ConfigSpec.IntValue NETWORK_MAX;
+    public static ForgeConfigSpec.IntValue NETWORK_MAX;
 
-    private static final ConfigSpec.Builder SERVER_BUILDER = new ConfigSpec.Builder();
-    private static final ConfigSpec.Builder CLIENT_BUILDER = new ConfigSpec.Builder();
+    private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+    private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
     static {
         SERVER_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
@@ -66,7 +66,7 @@ public class ConfigSetup {
     public static ConfigSpec SERVER_CONFIG;
     public static ConfigSpec CLIENT_CONFIG;
 
-    public static Configuration mainConfig;
+//    public static Configuration mainConfig;
 
     public static void init() {
         mainConfig = new Configuration(new File(RFToolsPower.setup.getModConfigDir().getPath() + File.separator + "rftools", "rftoolspower.cfg"));
