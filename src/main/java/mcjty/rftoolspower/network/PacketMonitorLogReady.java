@@ -2,17 +2,16 @@ package mcjty.rftoolspower.network;
 
 import io.netty.buffer.ByteBuf;
 import mcjty.lib.network.NetworkTools;
-import mcjty.lib.thirteen.Context;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.InformationScreenTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PacketMonitorLogReady implements IMessage {
+public class PacketMonitorLogReady {
 
     private BlockPos pos;
     private EnergyTools.EnergyLevel power;
@@ -20,20 +19,6 @@ public class PacketMonitorLogReady implements IMessage {
     private long rfPerTickExtracted;
     private long roughMaxRfPerTick;
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        pos = NetworkTools.readPos(buf);
-        rfPerTickExtracted = buf.readLong();
-        rfPerTickInserted = buf.readLong();
-        roughMaxRfPerTick = buf.readLong();
-        if (buf.readBoolean()) {
-            power = new EnergyTools.EnergyLevel(buf.readLong(), buf.readLong());
-        } else {
-            power = null;
-        }
-    }
-
-    @Override
     public void toBytes(ByteBuf buf) {
         NetworkTools.writePos(buf, pos);
         buf.writeLong(rfPerTickExtracted);
@@ -52,7 +37,15 @@ public class PacketMonitorLogReady implements IMessage {
     }
 
     public PacketMonitorLogReady(ByteBuf buf) {
-        fromBytes(buf);
+        pos = NetworkTools.readPos(buf);
+        rfPerTickExtracted = buf.readLong();
+        rfPerTickInserted = buf.readLong();
+        roughMaxRfPerTick = buf.readLong();
+        if (buf.readBoolean()) {
+            power = new EnergyTools.EnergyLevel(buf.readLong(), buf.readLong());
+        } else {
+            power = null;
+        }
     }
 
     public PacketMonitorLogReady(BlockPos pos, EnergyTools.EnergyLevel power, long rfPerTickInserted, long rfPerTickExtracted,
@@ -64,8 +57,8 @@ public class PacketMonitorLogReady implements IMessage {
         this.roughMaxRfPerTick = roughMaxRfPerTick;
     }
 
-    public void handle(Supplier<Context> supplier) {
-        Context ctx = supplier.get();
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
             TileEntity te = RFToolsPower.proxy.getClientWorld().getTileEntity(pos);
             if (te instanceof InformationScreenTileEntity) {

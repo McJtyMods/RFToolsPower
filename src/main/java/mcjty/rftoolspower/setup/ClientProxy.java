@@ -3,13 +3,13 @@ package mcjty.rftoolspower.setup;
 import mcjty.lib.setup.DefaultClientProxy;
 import mcjty.rftoolspower.blocks.BakedModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ClientProxy extends DefaultClientProxy {
 
     @Override
-    public void preInit(FMLPreInitializationEvent e) {
-        super.preInit(e);
+    public void init(FMLCommonSetupEvent e) {
+        super.init(e);
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
     }
 }

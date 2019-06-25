@@ -7,15 +7,18 @@ import mcjty.rftoolspower.config.ConfigSetup;
 import mcjty.rftoolspower.items.ModItems;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.item.Items;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ModSetup extends DefaultModSetup {
 
+    public ModSetup() {
+        createTab("rftoolspower", () -> new ItemStack(Items.DIAMOND));
+    }   // @todo
+
     @Override
-    public void preInit(FMLPreInitializationEvent e) {
-        super.preInit(e);
+    public void init(FMLCommonSetupEvent e) {
+        super.init(e);
 
         RFToolsPowerMessages.registerMessages("rftoolspower");
 
@@ -27,22 +30,10 @@ public class ModSetup extends DefaultModSetup {
     protected void setupModCompat() {
         MainCompatHandler.registerWaila();
         MainCompatHandler.registerTOP();
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.compat.theoneprobe.TheOneProbeSupport");
+//        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "mcjty.rftools.compat.theoneprobe.TheOneProbeSupport");
     }
 
-    @Override
     protected void setupConfig() {
         ConfigSetup.init();
-    }
-
-    @Override
-    public void createTabs() {
-        createTab("RFToolsPower", () -> new ItemStack(ModBlocks.cell1Block));
-    }
-
-    @Override
-    public void postInit(FMLPostInitializationEvent e) {
-        super.postInit(e);
-        ConfigSetup.postInit();
     }
 }
