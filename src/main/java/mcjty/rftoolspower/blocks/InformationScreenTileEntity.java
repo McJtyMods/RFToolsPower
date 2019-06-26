@@ -3,14 +3,16 @@ package mcjty.rftoolspower.blocks;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
-public class InformationScreenTileEntity extends GenericTileEntity implements ITickable {
+import static mcjty.rftoolspower.blocks.ModBlocks.TYPE_INFORMATION_SCREEN;
+
+public class InformationScreenTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
     private int mode = 0;
     private int cnt = 0;
@@ -24,8 +26,13 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     private EnergyTools.EnergyLevel clientPower;
     private long roughMaxRfPerTick = 0;     // This number indicates a high RF/tick estimate used for rendering
 
+
+    public InformationScreenTileEntity() {
+        super(TYPE_INFORMATION_SCREEN);
+    }
+
     public Direction getBlockOrientation() {
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof InformationScreenBlock) {
             return OrientationTools.getOrientationHoriz(state);
         } else {
@@ -34,7 +41,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (!world.isRemote) {
             cnt--;
             if (cnt <= 0) {
@@ -73,15 +80,15 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     }
 
     @Override
-    public void readRestorableFromNBT(NBTTagCompound tagCompound) {
-        super.readRestorableFromNBT(tagCompound);
+    public void read(CompoundNBT tagCompound) {
+        super.read(tagCompound);
         mode = tagCompound.getByte("mode");
     }
 
     @Override
-    public void writeRestorableToNBT(NBTTagCompound tagCompound) {
-        super.writeRestorableToNBT(tagCompound);
-        tagCompound.setByte("mode", (byte) mode);
+    public CompoundNBT write(CompoundNBT tagCompound) {
+        tagCompound.putByte("mode", (byte) mode);
+        return super.write(tagCompound);
     }
 
     public void setClientPower(EnergyTools.EnergyLevel power, long rfInsertedPerTick, long rfExtractPerTick, long roughMaxRfPerTick) {

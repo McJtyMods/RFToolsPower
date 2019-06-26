@@ -26,11 +26,14 @@ public final class ModBlocks {
     @ObjectHolder("rftoolspower:cell3")
     public static TileEntityType<?> TYPE_CELL3;
 
-    // @todo 1.14 remove
+    @ObjectHolder("rftoolspower:information_screen")
+    public static TileEntityType<?> TYPE_INFORMATION_SCREEN;
+
     public static void initClient() {
+        InformationScreenRenderer.register();
+
         CELL1.initModel();
         CELL2.initModel();
         CELL3.initModel();
-        INFORMATION_SCREEN.initModel();
     }
 }

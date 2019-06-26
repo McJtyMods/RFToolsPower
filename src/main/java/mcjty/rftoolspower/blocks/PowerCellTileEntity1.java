@@ -1,8 +1,12 @@
 package mcjty.rftoolspower.blocks;
 
-import mcjty.rftoolspower.config.ConfigSetup;
+import mcjty.rftoolspower.config.Config;
 
 public class PowerCellTileEntity1 extends PowerCellTileEntity {
+
+    public PowerCellTileEntity1() {
+        super(ModBlocks.TYPE_CELL1);
+    }
 
     @Override
     Tier getTier() {
@@ -11,11 +15,11 @@ public class PowerCellTileEntity1 extends PowerCellTileEntity {
 
     @Override
     long getLocalMaxEnergy() {
-        return ConfigSetup.TIER1_MAXRF.get();
+        return Config.TIER1_MAXRF.get();
     }
 
     @Override
     long getRfPerTickPerSide() {
-        return ConfigSetup.TIER1_RFPERTICK.get();
+        return Config.TIER1_RFPERTICK.get();
     }
 }

@@ -106,10 +106,14 @@ public class GenericCellBakedModel implements IBakedModel {
         return new Vec3d(x, y, z);
     }
 
-    @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+        return getQuads(state, side, rand);
+    }
 
+    @Nonnull
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         if (side != null) {
             return Collections.emptyList();
         }

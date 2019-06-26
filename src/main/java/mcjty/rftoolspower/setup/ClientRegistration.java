@@ -2,7 +2,6 @@ package mcjty.rftoolspower.setup;
 
 
 import mcjty.rftoolspower.blocks.ModBlocks;
-import mcjty.rftoolspower.items.ModItems;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -15,7 +14,6 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        ModItems.initClient();
         ModBlocks.initClient();
     }
 

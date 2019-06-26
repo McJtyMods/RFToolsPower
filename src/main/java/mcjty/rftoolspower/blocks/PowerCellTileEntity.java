@@ -4,7 +4,7 @@ import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.config.ConfigSetup;
+import mcjty.rftoolspower.config.Config;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -33,11 +33,6 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
     private LazyOptional<NullHandler> nullStorage = LazyOptional.of(() -> createNullHandler());
     private LazyOptional<SidedHandler>[] sidedStorages;
-
-    // Forge energy
-    private IEnergyStorage[] sidedHandlers = new IEnergyStorage[6];
-    private IEnergyStorage nullHandler;
-
 
     public PowerCellTileEntity(TileEntityType<?> type) {
         super(type);
@@ -106,8 +101,8 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     abstract long getRfPerTickPerSide();
 
     public long getRfPerTickReal() {
-        if (ConfigSetup.RFPERTICK_SCALE.get() > 0) {
-            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * ConfigSetup.RFPERTICK_SCALE.get());
+        if (Config.RFPERTICK_SCALE.get() > 0) {
+            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * Config.RFPERTICK_SCALE.get());
         } else {
             return getRfPerTickPerSide();
         }
@@ -368,7 +363,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             if (network.contains(pos)) {
                 if (powercell.network != network) {
                     if (!alreadyReportedBad.contains(pos)) {
-                        System.out.println("Bad network at pos = " + pos + " (dimension " + world.provider.getDimension() + ")");
+                        System.out.println("Bad network at pos = " + pos + " (dimension " + world.getDimension().getType() + ")");
                         alreadyReportedBad.add(pos);
                     }
                 }
@@ -377,7 +372,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
 
             if (powercell.network == network) {
                 if (!alreadyReportedUnexpected.contains(pos)) {
-                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + world.provider.getDimension() + ")");
+                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + world.getDimension().getType() + ")");
                     alreadyReportedUnexpected.add(pos);
                 }
                 return;
@@ -446,16 +441,20 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             if (facing == null) {
                 return nullStorage.cast();
             } else {
-                if (sidedHandlers[facing.ordinal()] == null) {
-                    createSidedHandler(facing);
-                }
-                return (T) sidedHandlers[facing.ordinal()];
+                return sidedStorages[facing.ordinal()].cast();
             }
         }
         return super.getCapability(capability, facing);
     }
 
     class SidedHandler implements IEnergyStorage {
+
+        private final Direction facing;
+
+        public SidedHandler(Direction facing) {
+            this.facing = facing;
+        }
+
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
             return (int)PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
@@ -488,7 +487,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     private SidedHandler createSidedHandler(Direction facing) {
-        return new SidedHandler();
+        return new SidedHandler(facing);
     }
 
     class NullHandler implements IEnergyStorage {

@@ -1,30 +1,27 @@
 package mcjty.rftoolspower.blocks;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import mcjty.lib.client.HudRenderHelper;
 import mcjty.lib.client.RenderHelper;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.network.PacketGetMonitorLog;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@SideOnly(Side.CLIENT)
-public class InformationScreenRenderer extends TileEntitySpecialRenderer<InformationScreenTileEntity> {
+public class InformationScreenRenderer extends TileEntityRenderer<InformationScreenTileEntity> {
 
     @Override
-    public void render(InformationScreenTileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+    public void render(InformationScreenTileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+        super.render(te, x, y, z, partialTicks, destroyStage);
         renderHud(te, x, y, z);
     }
 
@@ -48,9 +45,9 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
             List<String> log = getLog(power, infoscreen);
             HudRenderHelper.HudPlacement hudPlacement = HudRenderHelper.HudPlacement.HUD_FRONT;
             HudRenderHelper.HudOrientation hudOrientation = HudRenderHelper.HudOrientation.HUD_SOUTH;
-            HudRenderHelper.renderHud(log, hudPlacement, hudOrientation, orientation, x - orientation.getFrontOffsetX() * .95, y, z - orientation.getFrontOffsetZ() * .95, 1.0f + scale);
+            HudRenderHelper.renderHud(log, hudPlacement, hudOrientation, orientation, x - orientation.getXOffset() * .95, y, z - orientation.getZOffset() * .95, 1.0f + scale);
         } else {
-            renderGraphical(power, orientation, x - orientation.getFrontOffsetX() * .95, y, z - orientation.getFrontOffsetZ() * .95, 1.0f + scale,
+            renderGraphical(power, orientation, x - orientation.getXOffset() * .95, y, z - orientation.getZOffset() * .95, 1.0f + scale,
                     infoscreen);
         }
     }
@@ -98,22 +95,22 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
                                  double x, double y, double z, float scale,
                                  InformationScreenTileEntity infoscreen) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
-        GlStateManager.rotate(-getHudAngle(orientation), 0.0F, 1.0F, 0.0F);
-        GlStateManager.translate(0.0F, -0.2500F, -0.4375F + .9);
+        GlStateManager.translatef((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
+        GlStateManager.rotatef(-getHudAngle(orientation), 0.0F, 1.0F, 0.0F);
+        GlStateManager.translatef(0.0F, -0.2500F, -0.4375F + .9f);
 
         net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-        Minecraft.getInstance().entityRenderer.disableLightmap();
+        Minecraft.getInstance().gameRenderer.disableLightmap();
         GlStateManager.disableBlend();
         GlStateManager.disableLighting();
 
         if (power.getMaxEnergy() > 0) {
             int mode = infoscreen.getMode();
-            GlStateManager.translate(-0.5F, 0.5F, 0.07F);
+            GlStateManager.translatef(-0.5F, 0.5F, 0.07F);
             float f3 = 0.0075F;
-            GlStateManager.scale(f3 * scale, -f3 * scale, f3);
-            GlStateManager.glNormal3f(0.0F, 0.0F, 1.0F);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.scalef(f3 * scale, -f3 * scale, f3);
+            GlStateManager.normal3f(0.0F, 0.0F, 1.0F);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             long pct = power.getEnergy() * 100 / power.getMaxEnergy();
             for (int i = 0 ; i < 100 ; i += 5) {
@@ -135,7 +132,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
                 }
             }
         }
-        Minecraft.getInstance().entityRenderer.enableLightmap();
+        Minecraft.getInstance().gameRenderer.enableLightmap();
 
 //        RenderHelper.enableStandardItemLighting();
         GlStateManager.enableLighting();

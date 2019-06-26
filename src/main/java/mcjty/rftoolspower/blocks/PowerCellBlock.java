@@ -6,7 +6,7 @@ import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.config.ConfigSetup;
+import mcjty.rftoolspower.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -49,7 +49,7 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         return RotationType.NONE;
     }
 
-    public PowerCellBlock(String name, Class<? extends PowerCellTileEntity> clazz) {
+    public PowerCellBlock(String name) {
         super(name, new BlockBuilder());
         // @todo 1.14
 //        setCreativeTab(RFToolsPower.setup.getTab());
@@ -62,7 +62,7 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         McJtyLib.proxy.initStateMapper(this, GenericCellBakedModel.modelCell);
     }
 
-//    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
+//    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
 //        return false;
 //    }
 
@@ -79,11 +79,11 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         if (McJtyLib.proxy.isShiftKeyDown()) {
             long totpower = 0;
             if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL1)) {
-                totpower = ConfigSetup.TIER1_MAXRF.get();
+                totpower = Config.TIER1_MAXRF.get();
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL2)) {
-                totpower = ConfigSetup.TIER2_MAXRF.get();
+                totpower = Config.TIER2_MAXRF.get();
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL3)) {
-                totpower = ConfigSetup.TIER3_MAXRF.get();
+                totpower = Config.TIER3_MAXRF.get();
             }
             list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));
             list.add(new StringTextComponent(TextFormatting.WHITE + "and can be combined with other cells to form a"));
@@ -97,7 +97,7 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
 
 //    @Override
 //    @Optional.Method(modid = "theoneprobe")
-//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, BlockState blockState, IProbeHitData data) {
 //        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
 //        TileEntity te = world.getTileEntity(data.getPos());
 //        if (te instanceof PowerCellTileEntity) {
@@ -164,7 +164,7 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
     }
 
 //    @Override
-//    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess access, BlockPos pos, IBlockState metadata, int fortune) {
+//    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess access, BlockPos pos, BlockState metadata, int fortune) {
 //        super.getDrops(drops, access, pos, metadata, fortune);
 //        TileEntity te = access.getTileEntity(pos);
 //        if (te instanceof PowerCellTileEntity) {
@@ -172,9 +172,9 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
 //            powercell.redistributeNetwork();
 //            long energy = powercell.getLocalEnergy();
 //            if (!drops.isEmpty()) {
-//                NBTTagCompound tagCompound = drops.get(0).getTagCompound();
+//                CompoundNBT tagCompound = drops.get(0).getTagCompound();
 //                if (tagCompound == null) {
-//                    tagCompound = new NBTTagCompound();
+//                    tagCompound = new CompoundNBT();
 //                    drops.get(0).setTagCompound(tagCompound);
 //                }
 //                tagCompound.setLong("energy", energy);
@@ -183,7 +183,7 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
 //    }
 
 //    @Override
-//    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+//    public void breakBlock(World world, BlockPos pos, BlockState state) {
 //        if (!world.isRemote) {
 //            TileEntity te = world.getTileEntity(pos);
 //            if (te instanceof PowerCellTileEntity) {
@@ -195,11 +195,11 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
 //        }
 //        super.breakBlock(world, pos, state);
 //        if (!world.isRemote) {
-//            IBlockState stateUp = world.getBlockState(pos.up());
+//            BlockState stateUp = world.getBlockState(pos.up());
 //            if (stateUp.getBlock() == ModBlocks.cell1Block) {
 //                world.notifyBlockUpdate(pos.up(), stateUp, stateUp, 3);
 //            }
-//            IBlockState stateDown = world.getBlockState(pos.down());
+//            BlockState stateDown = world.getBlockState(pos.down());
 //            if (stateDown.getBlock() == ModBlocks.cell1Block) {
 //                world.notifyBlockUpdate(pos.down(), stateDown, stateDown, 3);
 //            }
@@ -222,7 +222,7 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
 
 
 //    @Override
-//    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+//    public BlockState getActualState(BlockState state, IBlockAccess world, BlockPos pos) {
 //        return state.withProperty(UPPER, world.getBlockState(pos.up()).getBlock() == this)
 //                .withProperty(LOWER, world.getBlockState(pos.down()).getBlock() == this);
 //    }
