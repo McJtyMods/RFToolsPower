@@ -1,16 +1,18 @@
 package mcjty.rftoolspower.blocks;
 
 import mcjty.rftoolspower.RFToolsPower;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 
@@ -28,14 +30,14 @@ public class GenericCellBakedModel implements IBakedModel {
 
     private static TextureAtlasSprite getInputMask() {
         if (inputMask == null) {
-            inputMask = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(RFToolsPower.MODID + ":blocks/inputmask");
+            inputMask = Minecraft.getInstance().getTextureMap().getAtlasSprite(RFToolsPower.MODID + ":blocks/inputmask");
         }
         return inputMask;
     }
 
     private static TextureAtlasSprite getOutputMask() {
         if (outputMask == null) {
-            outputMask = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(RFToolsPower.MODID + ":blocks/outputmask");
+            outputMask = Minecraft.getInstance().getTextureMap().getAtlasSprite(RFToolsPower.MODID + ":blocks/outputmask");
         }
         return outputMask;
     }
@@ -43,7 +45,7 @@ public class GenericCellBakedModel implements IBakedModel {
     private static TextureAtlasSprite getSideTexture(SideType type, int tier) {
         String key = type.getName() + tier;
         if (!sideSpriteMap.containsKey(key)) {
-            sideSpriteMap.put(key, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getSideTexture()+tier));
+            sideSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(type.getSideTexture()+tier));
         }
         return sideSpriteMap.get(key);
     }
@@ -51,7 +53,7 @@ public class GenericCellBakedModel implements IBakedModel {
     private static TextureAtlasSprite getTopTexture(SideType type, int tier) {
         String key = type.getName();
         if (!topSpriteMap.containsKey(key)) {
-            topSpriteMap.put(key, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(type.getUpDownTexture()));
+            topSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(type.getUpDownTexture()));
         }
         return topSpriteMap.get(key);
     }
@@ -104,24 +106,25 @@ public class GenericCellBakedModel implements IBakedModel {
         return new Vec3d(x, y, z);
     }
 
+    @Nonnull
     @Override
-    public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 
         if (side != null) {
             return Collections.emptyList();
         }
 
-        IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
+        BlockState extendedBlockState = state;
 
         // Called with the blockstate from our block. Here we get the values of the six properties and pass that to
         // our baked model implementation.
-        SideType north = extendedBlockState.getValue(PowerCellBlock.NORTH);
-        SideType south = extendedBlockState.getValue(PowerCellBlock.SOUTH);
-        SideType west = extendedBlockState.getValue(PowerCellBlock.WEST);
-        SideType east = extendedBlockState.getValue(PowerCellBlock.EAST);
-        SideType up = extendedBlockState.getValue(PowerCellBlock.UP);
-        SideType down = extendedBlockState.getValue(PowerCellBlock.DOWN);
-        Tier tier = extendedBlockState.getValue(PowerCellBlock.TIER);
+        SideType north = extendedBlockState.get(PowerCellBlock.NORTH);
+        SideType south = extendedBlockState.get(PowerCellBlock.SOUTH);
+        SideType west = extendedBlockState.get(PowerCellBlock.WEST);
+        SideType east = extendedBlockState.get(PowerCellBlock.EAST);
+        SideType up = extendedBlockState.get(PowerCellBlock.UP);
+        SideType down = extendedBlockState.get(PowerCellBlock.DOWN);
+        Tier tier = extendedBlockState.get(PowerCellBlock.TIER);
         int t = tier.ordinal()+1;
 
         List<BakedQuad> quads = new ArrayList<>();
@@ -216,7 +219,7 @@ public class GenericCellBakedModel implements IBakedModel {
 
     @Override
     public ItemOverrideList getOverrides() {
-        return ItemOverrideList.NONE;
+        return ItemOverrideList.EMPTY;
     }
 
 }

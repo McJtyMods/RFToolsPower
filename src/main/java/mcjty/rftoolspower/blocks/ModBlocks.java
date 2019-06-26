@@ -1,27 +1,36 @@
 package mcjty.rftoolspower.blocks;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.registries.ObjectHolder;
 
 public final class ModBlocks {
 
-    public static PowerCellBlock cell1Block;
-    public static PowerCellBlock cell2Block;
-    public static PowerCellBlock cell3Block;
-    public static InformationScreenBlock informationScreenBlock;
+    @ObjectHolder("rftoolspower:cell1")
+    public static PowerCellBlock CELL1;
 
-    public static void init() {
-        cell1Block = new PowerCellBlock("cell1", PowerCellTileEntity1.class);
-        cell2Block = new PowerCellBlock("cell2", PowerCellTileEntity2.class);
-        cell3Block = new PowerCellBlock("cell3", PowerCellTileEntity3.class);
-        informationScreenBlock = new InformationScreenBlock();
-    }
+    @ObjectHolder("rftoolspower:cell2")
+    public static PowerCellBlock CELL2;
 
-    @SideOnly(Side.CLIENT)
+    @ObjectHolder("rftoolspower:cell3")
+    public static PowerCellBlock CELL3;
+
+    @ObjectHolder("rftoolspower:information_screen")
+    public static InformationScreenBlock INFORMATION_SCREEN;
+
+    @ObjectHolder("rftoolspower:cell1")
+    public static TileEntityType<?> TYPE_CELL1;
+
+    @ObjectHolder("rftoolspower:cell2")
+    public static TileEntityType<?> TYPE_CELL2;
+
+    @ObjectHolder("rftoolspower:cell3")
+    public static TileEntityType<?> TYPE_CELL3;
+
+    // @todo 1.14 remove
     public static void initClient() {
-        cell1Block.initModel();
-        cell2Block.initModel();
-        cell3Block.initModel();
-        informationScreenBlock.initModel();
+        CELL1.initModel();
+        CELL2.initModel();
+        CELL3.initModel();
+        INFORMATION_SCREEN.initModel();
     }
 }

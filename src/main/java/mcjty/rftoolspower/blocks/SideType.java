@@ -3,6 +3,9 @@ package mcjty.rftoolspower.blocks;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.util.IStringSerializable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum SideType implements IStringSerializable {
     INVISIBLE(null, null, false, false),
     BOTH_OUTPUT(RFToolsPower.MODID + ":blocks/cellboth_t", RFToolsPower.MODID + ":blocks/cellhoriz_t1", false, true),
@@ -17,6 +20,8 @@ public enum SideType implements IStringSerializable {
     LOWER_OUTPUT(RFToolsPower.MODID + ":blocks/celllower_t", RFToolsPower.MODID + ":blocks/cellhoriz_t1", false, true),
     LOWER_INPUT(RFToolsPower.MODID + ":blocks/celllower_t", RFToolsPower.MODID + ":blocks/cellhoriz_t1", true, false),
     LOWER_NONE(RFToolsPower.MODID + ":blocks/celllower_t", RFToolsPower.MODID + ":blocks/cellhoriz_t1", false, false);
+
+    public static final List<SideType> VALUES = Arrays.asList(values());
 
     private final String sideTexture;
     private final String upDownTexture;

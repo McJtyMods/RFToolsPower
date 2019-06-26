@@ -3,34 +3,48 @@ package mcjty.rftoolspower.blocks;
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
+import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.config.ConfigSetup;
-import net.darkhax.tesla.api.ITeslaConsumer;
-import net.darkhax.tesla.api.ITeslaHolder;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_OUTPUT;
 
-public abstract class PowerCellTileEntity extends GenericTileEntity implements ITickable, IBigPower {
+public abstract class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
 
     private PowercellNetwork network = null;
     private long localEnergy = 0;
 
-    public PowerCellTileEntity() {
+    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(() -> createNullHandler());
+    private LazyOptional<SidedHandler>[] sidedStorages;
+
+    // Forge energy
+    private IEnergyStorage[] sidedHandlers = new IEnergyStorage[6];
+    private IEnergyStorage nullHandler;
+
+
+    public PowerCellTileEntity(TileEntityType<?> type) {
+        super(type);
+        sidedStorages = new LazyOptional[OrientationTools.DIRECTION_VALUES.length];
+        for (Direction direction : OrientationTools.DIRECTION_VALUES) {
+            sidedStorages[direction.ordinal()] = LazyOptional.of(() -> createSidedHandler(direction));
+        }
     }
 
     public enum Mode implements IStringSerializable {
@@ -45,6 +59,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         }
 
         @Override
+        @Nonnull
         public String getName() {
             return name;
         }
@@ -55,11 +70,11 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             MODE_NONE, MODE_NONE, MODE_NONE };
     private int outputCount = 0;        // Caches the number of sides that have outputs
 
-    public Mode getMode(EnumFacing side) {
+    public Mode getMode(Direction side) {
         return modes[side.ordinal()];
     }
 
-    public void toggleMode(EnumFacing side) {
+    public void toggleMode(Direction side) {
         switch (modes[side.ordinal()]) {
             case MODE_NONE:
                 modes[side.ordinal()] = Mode.MODE_INPUT;
@@ -108,7 +123,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         return getNetwork().getMaxEnergy();
     }
 
-    private long receiveEnergyFacing(EnumFacing from, long maxReceive, boolean simulate) {
+    private long receiveEnergyFacing(Direction from, long maxReceive, boolean simulate) {
         if (modes[from.ordinal()] != Mode.MODE_INPUT) {
             return 0;
         }
@@ -169,7 +184,7 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (!world.isRemote) {
             if (outputCount > 0) {
                 PowercellNetwork network = getNetwork();
@@ -248,33 +263,37 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
     }
 
     private void sendOutEnergy(long energyStored) {
-        long energyExtracted = 0;
+        final long[] stored = {energyStored};
+        final long[] energyExtracted = {0};
 
-        for (EnumFacing face : EnumFacing.VALUES) {
+        for (Direction face : Direction.values()) {
             if (modes[face.ordinal()] == Mode.MODE_OUTPUT) {
                 BlockPos pos = getPos().offset(face);
                 TileEntity te = getWorld().getTileEntity(pos);
-                EnumFacing opposite = face.getOpposite();
-                if (EnergyTools.isEnergyTE(te, opposite) || (te != null && te.hasCapability(CapabilityEnergy.ENERGY, opposite))) {
-                    if (!(te instanceof PowerCellTileEntity)) {
-                        long rfPerTick = getRfPerTickReal();
-                        long rfToGive = Math.min(rfPerTick, energyStored);
+                Direction opposite = face.getOpposite();
+                if (te != null) {
+                    // @todo tesla
+                    te.getCapability(CapabilityEnergy.ENERGY, opposite).ifPresent(e -> {
+                        if (!(te instanceof PowerCellTileEntity)) {
+                            long rfPerTick = getRfPerTickReal();
+                            long rfToGive = Math.min(rfPerTick, stored[0]);
 
-                        long received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
+                            long received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
 
-                        energyStored -= received;
-                        energyExtracted += received;
-                        if (energyStored <= 0) {
-                            break;
+                            stored[0] -= received;
+                            energyExtracted[0] += received;
                         }
+                    });
+                    if (stored[0] <= 0) {
+                        break;
                     }
                 }
             }
         }
 
-        if (energyExtracted > 0) {
-            network.extractEnergy(energyExtracted);
-            extractEnergyFromNetwork(energyExtracted);
+        if (energyExtracted[0] > 0) {
+            network.extractEnergy(energyExtracted[0]);
+            extractEnergyFromNetwork(energyExtracted[0]);
         }
     }
 
@@ -374,29 +393,27 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             network.setEnergy(network.getEnergy() + powercell.getLocalEnergy());
             network.setMaxEnergy(network.getMaxEnergy() + powercell.getLocalMaxEnergy());
 
-            for (EnumFacing facing : EnumFacing.VALUES) {
+            for (Direction facing : OrientationTools.DIRECTION_VALUES) {
                 buildNetwork(network, pos.offset(facing));
             }
         }
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         Mode[] old = new Mode[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
         super.onDataPacket(net, packet);
         for (int i = 0 ; i < 6 ; i++) {
             if (old[i] != modes[i]) {
-                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
+                world.markForRerender(getPos());
                 return;
             }
         }
     }
 
-
     @Override
-    public void readRestorableFromNBT(NBTTagCompound tagCompound) {
-        super.readRestorableFromNBT(tagCompound);
-//        energy = tagCompound.getLong("energy");
+    public void read(CompoundNBT tagCompound) {
+        super.read(tagCompound);
         modes[0] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m0")];
         modes[1] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m1")];
         modes[2] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m2")];
@@ -407,40 +424,27 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         localEnergy = tagCompound.getLong("local");
     }
 
+    @Nonnull
     @Override
-    public void writeRestorableToNBT(NBTTagCompound tagCompound) {
-        super.writeRestorableToNBT(tagCompound);
-//        tagCompound.setLong("energy", energy);
-        tagCompound.setByte("m0", (byte) modes[0].ordinal());
-        tagCompound.setByte("m1", (byte) modes[1].ordinal());
-        tagCompound.setByte("m2", (byte) modes[2].ordinal());
-        tagCompound.setByte("m3", (byte) modes[3].ordinal());
-        tagCompound.setByte("m4", (byte) modes[4].ordinal());
-        tagCompound.setByte("m5", (byte) modes[5].ordinal());
-        tagCompound.setLong("local", localEnergy);
+    public CompoundNBT write(CompoundNBT tagCompound) {
+        tagCompound.putByte("m0", (byte) modes[0].ordinal());
+        tagCompound.putByte("m1", (byte) modes[1].ordinal());
+        tagCompound.putByte("m2", (byte) modes[2].ordinal());
+        tagCompound.putByte("m3", (byte) modes[3].ordinal());
+        tagCompound.putByte("m4", (byte) modes[4].ordinal());
+        tagCompound.putByte("m5", (byte) modes[5].ordinal());
+        tagCompound.putLong("local", localEnergy);
+        return super.write(tagCompound);
     }
 
 
-    // Forge energy
-    private IEnergyStorage[] sidedHandlers = new IEnergyStorage[6];
-    private IEnergyStorage nullHandler;
-
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY || capability == EnergyTools.TESLA_HOLDER || (capability == EnergyTools.TESLA_CONSUMER && facing != null)) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY || capability == EnergyTools.TESLA_HOLDER || (capability == EnergyTools.TESLA_CONSUMER && facing != null)) {
+    @Nonnull
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
+        // @todo tesla support
+        if (capability == CapabilityEnergy.ENERGY) {
             if (facing == null) {
-                if (nullHandler == null) {
-                    createNullHandler();
-                }
-                return (T) nullHandler;
+                return nullStorage.cast();
             } else {
                 if (sidedHandlers[facing.ordinal()] == null) {
                     createSidedHandler(facing);
@@ -451,108 +455,75 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         return super.getCapability(capability, facing);
     }
 
-    private void createSidedHandler(EnumFacing facing) {
-        @Optional.InterfaceList({
-            @Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaConsumer", modid = "tesla"),
-            @Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = "tesla")
-        })
-        class SidedHandler implements IEnergyStorage, ITeslaConsumer, ITeslaHolder {
-            @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                return (int)PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
-            }
-
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                return 0;
-            }
-
-            @Override
-            public int getEnergyStored() {
-                return PowerCellTileEntity.this.getEnergyStoredAsInt();
-            }
-
-            @Override
-            public int getMaxEnergyStored() {
-                return PowerCellTileEntity.this.getMaxEnergyStoredAsInt();
-            }
-
-            @Override
-            public boolean canExtract() {
-                return false;
-            }
-
-            @Override
-            public boolean canReceive() {
-                return true;
-            }
-
-            @Optional.Method(modid = "tesla")
-            @Override
-            public long getStoredPower() {
-                return PowerCellTileEntity.this.getStoredPower();
-            }
-
-            @Optional.Method(modid = "tesla")
-            @Override
-            public long getCapacity() {
-                return PowerCellTileEntity.this.getCapacity();
-            }
-
-            @Optional.Method(modid = "tesla")
-            @Override
-            public long givePower(long power, boolean simulated) {
-                return PowerCellTileEntity.this.receiveEnergyFacing(facing, power, simulated);
-            }
+    class SidedHandler implements IEnergyStorage {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            return (int)PowerCellTileEntity.this.receiveEnergyFacing(facing, maxReceive, simulate);
         }
-        sidedHandlers[facing.ordinal()] = new SidedHandler();
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            return 0;
+        }
+
+        @Override
+        public int getEnergyStored() {
+            return PowerCellTileEntity.this.getEnergyStoredAsInt();
+        }
+
+        @Override
+        public int getMaxEnergyStored() {
+            return PowerCellTileEntity.this.getMaxEnergyStoredAsInt();
+        }
+
+        @Override
+        public boolean canExtract() {
+            return false;
+        }
+
+        @Override
+        public boolean canReceive() {
+            return true;
+        }
     }
 
-    private void createNullHandler() {
-        @Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = "tesla")
-        class NullHandler implements IEnergyStorage, ITeslaHolder {
-            @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                return 0;
-            }
+    private SidedHandler createSidedHandler(Direction facing) {
+        return new SidedHandler();
+    }
 
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                return 0;
-            }
-
-            @Override
-            public int getEnergyStored() {
-                return PowerCellTileEntity.this.getEnergyStoredAsInt();
-            }
-
-            @Override
-            public int getMaxEnergyStored() {
-                return PowerCellTileEntity.this.getMaxEnergyStoredAsInt();
-            }
-
-            @Override
-            public boolean canExtract() {
-                return false;
-            }
-
-            @Override
-            public boolean canReceive() {
-                return false;
-            }
-
-            @Optional.Method(modid = "tesla")
-            @Override
-            public long getStoredPower() {
-                return PowerCellTileEntity.this.getStoredPower();
-            }
-
-            @Optional.Method(modid = "tesla")
-            @Override
-            public long getCapacity() {
-                return PowerCellTileEntity.this.getCapacity();
-            }
+    class NullHandler implements IEnergyStorage {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            return 0;
         }
-        nullHandler = new NullHandler();
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            return 0;
+        }
+
+        @Override
+        public int getEnergyStored() {
+            return PowerCellTileEntity.this.getEnergyStoredAsInt();
+        }
+
+        @Override
+        public int getMaxEnergyStored() {
+            return PowerCellTileEntity.this.getMaxEnergyStoredAsInt();
+        }
+
+        @Override
+        public boolean canExtract() {
+            return false;
+        }
+
+        @Override
+        public boolean canReceive() {
+            return false;
+        }
+    }
+
+    private NullHandler createNullHandler() {
+        return new NullHandler();
     }
 }

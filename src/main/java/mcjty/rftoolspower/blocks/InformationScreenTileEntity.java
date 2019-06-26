@@ -6,7 +6,7 @@ import mcjty.lib.varia.OrientationTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
@@ -24,7 +24,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     private EnergyTools.EnergyLevel clientPower;
     private long roughMaxRfPerTick = 0;     // This number indicates a high RF/tick estimate used for rendering
 
-    public EnumFacing getBlockOrientation() {
+    public Direction getBlockOrientation() {
         IBlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof InformationScreenBlock) {
             return OrientationTools.getOrientationHoriz(state);

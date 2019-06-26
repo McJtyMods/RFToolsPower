@@ -1,6 +1,6 @@
 package crazypants.enderio.api.redstone;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 /**
@@ -11,6 +11,6 @@ import net.minecraft.world.World;
  */
 public interface IRedstoneConnectable {
 
-    boolean shouldRedstoneConduitConnect(World world, int x, int y, int z, EnumFacing from);
+    boolean shouldRedstoneConduitConnect(World world, int x, int y, int z, Direction from);
 
 }

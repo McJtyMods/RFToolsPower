@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -64,7 +64,7 @@ public class InformationScreenBlock extends GenericBlock<InformationScreenTileEn
         if (!(blockState.getBlock() instanceof InformationScreenBlock)) {
             return BLOCK_NORTH;
         }
-        EnumFacing side = OrientationTools.getOrientationHoriz(state);
+        Direction side = OrientationTools.getOrientationHoriz(state);
         switch (side) {
             case NORTH:
                 return BLOCK_SOUTH;
@@ -78,7 +78,7 @@ public class InformationScreenBlock extends GenericBlock<InformationScreenTileEn
     }
 
     @Override
-    protected boolean wrenchUse(World world, BlockPos pos, EnumFacing side, EntityPlayer player) {
+    protected boolean wrenchUse(World world, BlockPos pos, Direction side, EntityPlayer player) {
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof InformationScreenTileEntity) {

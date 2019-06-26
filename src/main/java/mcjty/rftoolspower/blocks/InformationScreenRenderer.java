@@ -8,7 +8,7 @@ import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +38,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
             RFToolsPowerMessages.INSTANCE.sendToServer(new PacketGetMonitorLog(infoscreen.getPos()));
             infoscreen.setLastUpdateTime(t);
         }
-        EnumFacing orientation = infoscreen.getBlockOrientation();
+        Direction orientation = infoscreen.getBlockOrientation();
         if (orientation == null) {
             return;
         }
@@ -94,7 +94,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
     }
 
     public static void renderGraphical(EnergyTools.EnergyLevel power,
-                                 EnumFacing orientation,
+                                 Direction orientation,
                                  double x, double y, double z, float scale,
                                  InformationScreenTileEntity infoscreen) {
         GlStateManager.pushMatrix();
@@ -103,7 +103,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
         GlStateManager.translate(0.0F, -0.2500F, -0.4375F + .9);
 
         net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-        Minecraft.getMinecraft().entityRenderer.disableLightmap();
+        Minecraft.getInstance().entityRenderer.disableLightmap();
         GlStateManager.disableBlend();
         GlStateManager.disableLighting();
 
@@ -135,7 +135,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
                 }
             }
         }
-        Minecraft.getMinecraft().entityRenderer.enableLightmap();
+        Minecraft.getInstance().entityRenderer.enableLightmap();
 
 //        RenderHelper.enableStandardItemLighting();
         GlStateManager.enableLighting();
@@ -167,7 +167,7 @@ public class InformationScreenRenderer extends TileEntitySpecialRenderer<Informa
         return col;
     }
 
-    private static float getHudAngle(EnumFacing orientation) {
+    private static float getHudAngle(Direction orientation) {
         float f3 = 0.0f;
 
         if (orientation != null) {
