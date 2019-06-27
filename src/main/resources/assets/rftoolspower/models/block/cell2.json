@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "rftoolspower:block/cellboth_t1"
+    "all": "rftoolspower:block/cellboth_t2"
   }
 }

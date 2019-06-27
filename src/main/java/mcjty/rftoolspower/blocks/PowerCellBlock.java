@@ -8,6 +8,7 @@ import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.config.Config;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,18 +29,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngredient {
-
-    public static final PropertySideType NORTH = new PropertySideType("north");
-    public static final PropertySideType SOUTH = new PropertySideType("south");
-    public static final PropertySideType WEST = new PropertySideType("west");
-    public static final PropertySideType EAST = new PropertySideType("east");
-    public static final PropertySideType UP = new PropertySideType("up");
-    public static final PropertySideType DOWN = new PropertySideType("down");
-    public static final PropertySideTier TIER = new PropertySideTier("tier");
 
     public static BooleanProperty UPPER = BooleanProperty.create("upper");
     public static BooleanProperty LOWER = BooleanProperty.create("lower");
@@ -49,10 +43,9 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         return RotationType.NONE;
     }
 
-    public PowerCellBlock(String name) {
-        super(name, new BlockBuilder());
-        // @todo 1.14
-//        setCreativeTab(RFToolsPower.setup.getTab());
+    public PowerCellBlock(Tier tier) {
+        super("cell" + tier.getSuffix(), new BlockBuilder()
+                .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
     }
 
     public void initModel() {
@@ -219,103 +212,22 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         return true;
     }
 
-
-
-//    @Override
-//    public BlockState getActualState(BlockState state, IBlockAccess world, BlockPos pos) {
-//        return state.withProperty(UPPER, world.getBlockState(pos.up()).getBlock() == this)
-//                .withProperty(LOWER, world.getBlockState(pos.down()).getBlock() == this);
-//    }
-
+    @Override
+    public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+        return state.with(UPPER, world.getBlockState(pos.up()).getBlock() == this)
+                .with(LOWER, world.getBlockState(pos.down()).getBlock() == this);
+    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
-        builder.add(UPPER, LOWER, NORTH, SOUTH, WEST, EAST, UP, DOWN, TIER);
+        builder.add(UPPER, LOWER);
     }
 
     @Override
-    public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-        return getStateInternal(state, world, pos);
-    }
-
-    public BlockState getStateInternal(BlockState state, IBlockReader world, BlockPos pos) {
-        boolean upper = Boolean.TRUE.equals(state.get(UPPER));
-        boolean lower = Boolean.TRUE.equals(state.get(LOWER));
-
-        SideType north = getSideType(world, pos, Direction.NORTH, upper, lower);
-        SideType south = getSideType(world, pos, Direction.SOUTH, upper, lower);
-        SideType west = getSideType(world, pos, Direction.WEST, upper, lower);
-        SideType east = getSideType(world, pos, Direction.EAST, upper, lower);
-        SideType up = getSideType(world, pos, Direction.UP, upper, lower);
-        SideType down = getSideType(world, pos, Direction.DOWN, upper, lower);
-
-        Tier tier = Tier.TIER1;
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof PowerCellTileEntity) {
-            tier = ((PowerCellTileEntity) te).getTier();
-        }
-
-        return state
-                .with(NORTH, north)
-                .with(SOUTH, south)
-                .with(WEST, west)
-                .with(EAST, east)
-                .with(UP, up)
-                .with(DOWN, down)
-                .with(TIER, tier);
-    }
-
-    protected SideType getSideType(IBlockReader world, BlockPos pos, Direction facing, boolean upper, boolean lower) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof PowerCellTileEntity) {
-            PowerCellTileEntity.Mode mode = ((PowerCellTileEntity) te).getMode(facing);
-            switch (mode) {
-                case MODE_NONE:
-                    if (upper && lower) {
-                        return SideType.MIDDLE_NONE;
-                    } else if (upper) {
-                        return SideType.LOWER_NONE;
-                    } else if (lower) {
-                        return SideType.UPPER_NONE;
-                    } else {
-                        return SideType.BOTH_NONE;
-                    }
-                case MODE_INPUT:
-                    if (upper && lower) {
-                        return SideType.MIDDLE_INPUT;
-                    } else if (upper) {
-                        return SideType.LOWER_INPUT;
-                    } else if (lower) {
-                        return SideType.UPPER_INPUT;
-                    } else {
-                        return SideType.BOTH_INPUT;
-                    }
-                case MODE_OUTPUT:
-                    if (upper && lower) {
-                        return SideType.MIDDLE_OUTPUT;
-                    } else if (upper) {
-                        return SideType.LOWER_OUTPUT;
-                    } else if (lower) {
-                        return SideType.UPPER_OUTPUT;
-                    } else {
-                        return SideType.BOTH_OUTPUT;
-                    }
-                default:
-                    return SideType.BOTH_NONE;
-            }
-        } else {
-            if (upper && lower) {
-                return SideType.MIDDLE_NONE;
-            } else if (upper) {
-                return SideType.LOWER_NONE;
-            } else if (lower) {
-                return SideType.UPPER_NONE;
-            } else {
-                return SideType.BOTH_NONE;
-            }
-        }
-
+    @Nonnull
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
 }

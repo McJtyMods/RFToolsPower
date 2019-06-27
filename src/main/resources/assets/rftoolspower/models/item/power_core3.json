@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "rftoolspower:items/power_core3"
+    "layer0": "rftoolspower:item/power_core3"
   }
 }

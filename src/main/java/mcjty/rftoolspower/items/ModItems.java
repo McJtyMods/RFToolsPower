@@ -1,13 +1,15 @@
 package mcjty.rftoolspower.items;
 
-public class ModItems {
-    public static PowerCoreItem powerCore1Item;
-    public static PowerCoreItem powerCore2Item;
-    public static PowerCoreItem powerCore3Item;
+import net.minecraftforge.registries.ObjectHolder;
 
-    public static void init() {
-        powerCore1Item = new PowerCoreItem("1");
-        powerCore2Item = new PowerCoreItem("2");
-        powerCore3Item = new PowerCoreItem("3");
-    }
+public class ModItems {
+
+    @ObjectHolder("rftoolspower:power_core1")
+    public static PowerCoreItem powerCore1Item;
+
+    @ObjectHolder("rftoolspower:power_core2")
+    public static PowerCoreItem powerCore2Item;
+
+    @ObjectHolder("rftoolspower:power_core3")
+    public static PowerCoreItem powerCore3Item;
 }

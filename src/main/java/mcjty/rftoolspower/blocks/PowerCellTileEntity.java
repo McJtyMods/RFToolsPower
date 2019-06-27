@@ -5,15 +5,19 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.config.Config;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -26,16 +30,27 @@ import java.util.Set;
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
 import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_OUTPUT;
 
-public abstract class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
+public class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
 
     private PowercellNetwork network = null;
     private long localEnergy = 0;
+    private final Tier tier;
+
+    public static final ModelProperty<SideType> NORTH = new ModelProperty<>();
+    public static final ModelProperty<SideType> SOUTH = new ModelProperty<>();
+    public static final ModelProperty<SideType> WEST = new ModelProperty<>();
+    public static final ModelProperty<SideType> EAST = new ModelProperty<>();
+    public static final ModelProperty<SideType> UP = new ModelProperty<>();
+    public static final ModelProperty<SideType> DOWN = new ModelProperty<>();
+    public static final ModelProperty<Tier> TIER = new ModelProperty<>();
+
 
     private LazyOptional<NullHandler> nullStorage = LazyOptional.of(() -> createNullHandler());
     private LazyOptional<SidedHandler>[] sidedStorages;
 
-    public PowerCellTileEntity(TileEntityType<?> type) {
-        super(type);
+    public PowerCellTileEntity(Tier tier) {
+        super(tier.getType());
+        this.tier = tier;
         sidedStorages = new LazyOptional[OrientationTools.DIRECTION_VALUES.length];
         for (Direction direction : OrientationTools.DIRECTION_VALUES) {
             sidedStorages[direction.ordinal()] = LazyOptional.of(() -> createSidedHandler(direction));
@@ -94,11 +109,33 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
         }
     }
 
-    abstract Tier getTier();
+    public Tier getTier() {
+        return tier;
+    }
 
-    abstract long getLocalMaxEnergy();
+    public long getLocalMaxEnergy() {
+        switch (tier) {
+            case TIER1:
+                return Config.TIER1_MAXRF.get();
+            case TIER2:
+                return Config.TIER2_MAXRF.get();
+            case TIER3:
+                return Config.TIER3_MAXRF.get();
+        }
+        return 0;
+    }
 
-    abstract long getRfPerTickPerSide();
+    public long getRfPerTickPerSide() {
+        switch (tier) {
+            case TIER1:
+                return Config.TIER1_RFPERTICK.get();
+            case TIER2:
+                return Config.TIER2_RFPERTICK.get();
+            case TIER3:
+                return Config.TIER3_RFPERTICK.get();
+        }
+        return 0;
+    }
 
     public long getRfPerTickReal() {
         if (Config.RFPERTICK_SCALE.get() > 0) {
@@ -405,6 +442,84 @@ public abstract class PowerCellTileEntity extends GenericTileEntity implements I
             }
         }
     }
+
+    @Nonnull
+    @Override
+    public IModelData getModelData() {
+        BlockState state = world.getBlockState(pos);
+        boolean upper = Boolean.TRUE.equals(state.get(PowerCellBlock.UPPER));
+        boolean lower = Boolean.TRUE.equals(state.get(PowerCellBlock.LOWER));
+
+        SideType north = getSideType(world, pos, Direction.NORTH, upper, lower);
+        SideType south = getSideType(world, pos, Direction.SOUTH, upper, lower);
+        SideType west = getSideType(world, pos, Direction.WEST, upper, lower);
+        SideType east = getSideType(world, pos, Direction.EAST, upper, lower);
+        SideType up = getSideType(world, pos, Direction.UP, upper, lower);
+        SideType down = getSideType(world, pos, Direction.DOWN, upper, lower);
+
+        return new ModelDataMap.Builder()
+                .withInitial(NORTH, north)
+                .withInitial(SOUTH, south)
+                .withInitial(WEST, west)
+                .withInitial(EAST, east)
+                .withInitial(UP, up)
+                .withInitial(DOWN, down)
+                .withInitial(TIER, tier)
+                .build();
+    }
+
+    private SideType getSideType(IBlockReader world, BlockPos pos, Direction facing, boolean upper, boolean lower) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof PowerCellTileEntity) {
+            PowerCellTileEntity.Mode mode = ((PowerCellTileEntity) te).getMode(facing);
+            switch (mode) {
+                case MODE_NONE:
+                    if (upper && lower) {
+                        return SideType.MIDDLE_NONE;
+                    } else if (upper) {
+                        return SideType.LOWER_NONE;
+                    } else if (lower) {
+                        return SideType.UPPER_NONE;
+                    } else {
+                        return SideType.BOTH_NONE;
+                    }
+                case MODE_INPUT:
+                    if (upper && lower) {
+                        return SideType.MIDDLE_INPUT;
+                    } else if (upper) {
+                        return SideType.LOWER_INPUT;
+                    } else if (lower) {
+                        return SideType.UPPER_INPUT;
+                    } else {
+                        return SideType.BOTH_INPUT;
+                    }
+                case MODE_OUTPUT:
+                    if (upper && lower) {
+                        return SideType.MIDDLE_OUTPUT;
+                    } else if (upper) {
+                        return SideType.LOWER_OUTPUT;
+                    } else if (lower) {
+                        return SideType.UPPER_OUTPUT;
+                    } else {
+                        return SideType.BOTH_OUTPUT;
+                    }
+                default:
+                    return SideType.BOTH_NONE;
+            }
+        } else {
+            if (upper && lower) {
+                return SideType.MIDDLE_NONE;
+            } else if (upper) {
+                return SideType.LOWER_NONE;
+            } else if (lower) {
+                return SideType.UPPER_NONE;
+            } else {
+                return SideType.BOTH_NONE;
+            }
+        }
+
+    }
+
 
     @Override
     public void read(CompoundNBT tagCompound) {

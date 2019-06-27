@@ -21,4 +21,8 @@ public class ClientRegistration {
     public static void registerSounds(RegistryEvent.Register<SoundEvent> sounds) {
     }
 
+//    @SubscribeEvent
+//    public static void onModelBake(ModelBakeEvent event) {
+//        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), ""), new GenericCellBakedModel());
+//    }
 }

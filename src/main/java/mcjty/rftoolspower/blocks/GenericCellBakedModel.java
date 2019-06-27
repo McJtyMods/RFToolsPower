@@ -3,11 +3,15 @@ package mcjty.rftoolspower.blocks;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
@@ -16,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 
-public class GenericCellBakedModel implements IBakedModel {
+public class GenericCellBakedModel implements IDynamicBakedModel {
 
     public static final ModelResourceLocation modelCell = new ModelResourceLocation(RFToolsPower.MODID + ":" + "cell1");
 
@@ -107,28 +111,19 @@ public class GenericCellBakedModel implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
-        return getQuads(state, side, rand);
-    }
-
     @Nonnull
-    @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData data) {
         if (side != null) {
             return Collections.emptyList();
         }
 
-        BlockState extendedBlockState = state;
-
-        // Called with the blockstate from our block. Here we get the values of the six properties and pass that to
-        // our baked model implementation.
-        SideType north = extendedBlockState.get(PowerCellBlock.NORTH);
-        SideType south = extendedBlockState.get(PowerCellBlock.SOUTH);
-        SideType west = extendedBlockState.get(PowerCellBlock.WEST);
-        SideType east = extendedBlockState.get(PowerCellBlock.EAST);
-        SideType up = extendedBlockState.get(PowerCellBlock.UP);
-        SideType down = extendedBlockState.get(PowerCellBlock.DOWN);
-        Tier tier = extendedBlockState.get(PowerCellBlock.TIER);
+        SideType north = data.getData(PowerCellTileEntity.NORTH);
+        SideType south = data.getData(PowerCellTileEntity.SOUTH);
+        SideType west = data.getData(PowerCellTileEntity.WEST);
+        SideType east = data.getData(PowerCellTileEntity.EAST);
+        SideType up = data.getData(PowerCellTileEntity.UP);
+        SideType down = data.getData(PowerCellTileEntity.DOWN);
+        Tier tier = data.getData(PowerCellTileEntity.TIER);
         int t = tier.ordinal()+1;
 
         List<BakedQuad> quads = new ArrayList<>();
@@ -194,7 +189,6 @@ public class GenericCellBakedModel implements IBakedModel {
 
         return quads;
     }
-
 
     @Override
     public boolean isAmbientOcclusion() {

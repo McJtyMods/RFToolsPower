@@ -34,21 +34,21 @@ public class GenericCellModel implements IUnbakedModel {
     @Override
     public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
         return ImmutableSet.of(
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_t1"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_t1"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_t1"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_t1"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellhoriz_t1"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_t2"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_t2"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_t2"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_t2"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellboth_t3"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/celllower_t3"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellmiddle_t3"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/cellupper_t3"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/inputmask"),
-                new ResourceLocation(RFToolsPower.MODID, "blocks/outputmask")
+                new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "block/celllower_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellhoriz_t1"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t2"),
+                new ResourceLocation(RFToolsPower.MODID, "block/celllower_t2"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t2"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t2"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t3"),
+                new ResourceLocation(RFToolsPower.MODID, "block/celllower_t3"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t3"),
+                new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t3"),
+                new ResourceLocation(RFToolsPower.MODID, "block/inputmask"),
+                new ResourceLocation(RFToolsPower.MODID, "block/outputmask")
                 );
     }
 

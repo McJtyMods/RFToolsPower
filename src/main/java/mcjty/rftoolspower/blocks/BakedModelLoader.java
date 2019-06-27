@@ -14,16 +14,16 @@ public class BakedModelLoader implements ICustomModelLoader {
 
     public static final GenericCellModel GENERIC_MODEL = new GenericCellModel();
 
-    private static final Set<String> NAMES = ImmutableSet.of("cell1");
+    private static final Set<String> NAMES = ImmutableSet.of("cell1", "cell2", "cell3");
 
     @Override
     public boolean accepts(ResourceLocation modelLocation) {
         if (!modelLocation.getNamespace().equals(RFToolsPower.MODID)) {
             return false;
         }
-        if (modelLocation instanceof ModelResourceLocation && ((ModelResourceLocation)modelLocation).getVariant().equals("inventory")) {
-            return false;
-        }
+//        if (modelLocation instanceof ModelResourceLocation && ((ModelResourceLocation)modelLocation).getVariant().equals("inventory")) {
+//            return false;
+//        }
         return NAMES.contains(modelLocation.getPath());
     }
 
