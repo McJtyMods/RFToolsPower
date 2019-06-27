@@ -34,6 +34,6 @@ public class BakedModelLoader implements ICustomModelLoader {
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-
+        System.out.println("BakedModelLoader.onResourceManagerReload");
     }
 }
