@@ -3,7 +3,6 @@ package mcjty.rftoolspower.blocks;
 import com.google.common.collect.ImmutableSet;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
