@@ -49,7 +49,8 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
     private static TextureAtlasSprite getSideTexture(SideType type, int tier) {
         String key = type.getName() + tier;
         if (!sideSpriteMap.containsKey(key)) {
-            sideSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(type.getSideTexture()+tier));
+            String name = type.getSideTexture() + tier;
+            sideSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(name));
         }
         return sideSpriteMap.get(key);
     }
@@ -57,7 +58,8 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
     private static TextureAtlasSprite getTopTexture(SideType type, int tier) {
         String key = type.getName();
         if (!topSpriteMap.containsKey(key)) {
-            topSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(type.getUpDownTexture()));
+//            topSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(type.getUpDownTexture()));
+            topSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite("rftoolspower:block/cellboth_t1"));
         }
         return topSpriteMap.get(key);
     }
