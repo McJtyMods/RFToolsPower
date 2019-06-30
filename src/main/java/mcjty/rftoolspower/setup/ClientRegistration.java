@@ -55,5 +55,17 @@ public class ClientRegistration {
         event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=false,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
         event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=true,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
         event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=true,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), ""), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=false,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=false,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=true,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=true,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), ""), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=false,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=false,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=true,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=true,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
     }
 }
