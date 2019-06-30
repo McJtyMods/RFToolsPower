@@ -10,10 +10,10 @@ import mcjty.rftoolspower.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,12 +21,12 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -48,12 +48,6 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
                 .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
     }
 
-    public void initModel() {
-        ResourceLocation name = getRegistryName();
-        McJtyLib.proxy.initCustomItemModel(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(name.getNamespace(), name.getPath()+"item"), "inventory"));
-        // To make sure that our ISBM model is chosen for all states we use this custom state mapper:
-        McJtyLib.proxy.initStateMapper(this, GenericCellBakedModel.modelCell);
-    }
 
 //    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
 //        return false;
@@ -212,11 +206,32 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         return true;
     }
 
+    @Nullable
     @Override
-    public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        BlockState state = super.getStateForPlacement(context);
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
         return state.with(UPPER, world.getBlockState(pos.up()).getBlock() == this)
                 .with(LOWER, world.getBlockState(pos.down()).getBlock() == this);
     }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+        if (facing == Direction.UP) {
+            return stateIn.with(UPPER, facingState.getBlock() == this);
+        }
+        if (facing == Direction.DOWN) {
+            return stateIn.with(LOWER, facingState.getBlock() == this);
+        }
+        return stateIn;
+    }
+
+    //    @Override
+//    public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+//        return state.with(UPPER, world.getBlockState(pos.up()).getBlock() == this)
+//                .with(LOWER, world.getBlockState(pos.down()).getBlock() == this);
+//    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {

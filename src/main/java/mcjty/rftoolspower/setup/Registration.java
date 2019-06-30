@@ -5,6 +5,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.*;
 import mcjty.rftoolspower.items.PowerCoreItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -21,6 +22,7 @@ public class Registration {
         event.getRegistry().register(new PowerCellBlock(Tier.TIER1));
         event.getRegistry().register(new PowerCellBlock(Tier.TIER2));
         event.getRegistry().register(new PowerCellBlock(Tier.TIER3));
+        event.getRegistry().register(new Block(Block.Properties.create(Material.IRON)).setRegistryName("celltextures"));
     }
 
     @SubscribeEvent

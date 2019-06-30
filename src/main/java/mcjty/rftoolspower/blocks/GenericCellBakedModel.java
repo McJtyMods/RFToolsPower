@@ -17,15 +17,15 @@ import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 
 public class GenericCellBakedModel implements IDynamicBakedModel {
 
     public static final ModelResourceLocation modelCell = new ModelResourceLocation(RFToolsPower.MODID + ":" + "cell1");
-
-    private static Map<String, TextureAtlasSprite> sideSpriteMap = new HashMap<>();
-    private static Map<String, TextureAtlasSprite> topSpriteMap = new HashMap<>();
 
     private VertexFormat format;
 
@@ -46,22 +46,14 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
         return outputMask;
     }
 
-    private static TextureAtlasSprite getSideTexture(SideType type, int tier) {
-        String key = type.getName() + tier;
-        if (!sideSpriteMap.containsKey(key)) {
-            String name = type.getSideTexture() + tier;
-            sideSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(name));
-        }
-        return sideSpriteMap.get(key);
+    private static TextureAtlasSprite getSideTexture(boolean upper, boolean lower, SideType type, int tier) {
+        String name = type.getSideTexture(upper, lower, tier);
+        return Minecraft.getInstance().getTextureMap().getAtlasSprite(name);
     }
 
     private static TextureAtlasSprite getTopTexture(SideType type, int tier) {
-        String key = type.getName();
-        if (!topSpriteMap.containsKey(key)) {
-//            topSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite(type.getUpDownTexture()));
-            topSpriteMap.put(key, Minecraft.getInstance().getTextureMap().getAtlasSprite("rftoolspower:block/cellboth_t1"));
-        }
-        return topSpriteMap.get(key);
+        String name = type.getUpDownTexture();
+        return Minecraft.getInstance().getTextureMap().getAtlasSprite(name);
     }
 
     public GenericCellBakedModel(VertexFormat format) {
@@ -119,6 +111,9 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
             return Collections.emptyList();
         }
 
+        boolean upper = Boolean.TRUE.equals(state.get(PowerCellBlock.UPPER));
+        boolean lower = Boolean.TRUE.equals(state.get(PowerCellBlock.LOWER));
+
         SideType north = data.getData(PowerCellTileEntity.NORTH);
         SideType south = data.getData(PowerCellTileEntity.SOUTH);
         SideType west = data.getData(PowerCellTileEntity.WEST);
@@ -153,7 +148,7 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
             }
         }
         if (east != SideType.INVISIBLE) {
-            quads.add(createQuad(v(1, 1, 1), v(1, 0, 1), v(1, 0, 0), v(1, 1, 0), getSideTexture(east, t), hilight));
+            quads.add(createQuad(v(1, 1, 1), v(1, 0, 1), v(1, 0, 0), v(1, 1, 0), getSideTexture(upper, lower, east, t), hilight));
             if (east.isInput()) {
                 quads.add(createQuad(v(1.02, 1-o, 1-o), v(1.02, o, 1-o), v(1.02, o, o), v(1.02, 1-o, o), getInputMask(), hilight));
             }
@@ -162,7 +157,7 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
             }
         }
         if (west != SideType.INVISIBLE) {
-            quads.add(createQuad(v(0, 1, 0), v(0, 0, 0), v(0, 0, 1), v(0, 1, 1), getSideTexture(west, t), hilight));
+            quads.add(createQuad(v(0, 1, 0), v(0, 0, 0), v(0, 0, 1), v(0, 1, 1), getSideTexture(upper, lower, west, t), hilight));
             if (west.isInput()) {
                 quads.add(createQuad(v(-.02, 1-o, o), v(-.02, o, o), v(-.02, o, 1-o), v(-.02, 1-o, 1-o), getInputMask(), hilight));
             }
@@ -171,7 +166,7 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
             }
         }
         if (north != SideType.INVISIBLE) {
-            quads.add(createQuad(v(1, 1, 0), v(1, 0, 0), v(0, 0, 0), v(0, 1, 0), getSideTexture(north, t), hilight));
+            quads.add(createQuad(v(1, 1, 0), v(1, 0, 0), v(0, 0, 0), v(0, 1, 0), getSideTexture(upper, lower, north, t), hilight));
             if (north.isInput()) {
                 quads.add(createQuad(v(1-o, 1-o, -.02), v(1-o, o, -.02), v(o, o, -.02), v(o, 1-o, -.02), getInputMask(), hilight));
             }
@@ -180,7 +175,7 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
             }
         }
         if (south != SideType.INVISIBLE) {
-            quads.add(createQuad(v(0, 1, 1), v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), getSideTexture(south, t), hilight));
+            quads.add(createQuad(v(0, 1, 1), v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), getSideTexture(upper, lower, south, t), hilight));
             if (south.isInput()) {
                 quads.add(createQuad(v(o, 1-o, 1.02), v(o, o, 1.02), v(1-o, o, 1.02), v(1-o, 1-o, 1.02), getInputMask(), hilight));
             }
@@ -209,7 +204,7 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return getSideTexture(SideType.BOTH_NONE, 1);
+        return getSideTexture(false, false, SideType.NONE, 1);
     }
 
     @Override

@@ -49,10 +49,10 @@ public class InformationScreenBlock extends BaseBlockNew {
         }
     }
 
-    public static final VoxelShape BLOCK_NORTH = Block.makeCuboidShape(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.05F);
-    public static final VoxelShape BLOCK_SOUTH = Block.makeCuboidShape(0.0F, 0.0F, 0.95F, 1.0F, 1.0F, 1.0F);
-    public static final VoxelShape BLOCK_WEST = Block.makeCuboidShape(0.0F, 0.0F, 0.0F, 0.05F, 1.0F, 1.0F);
-    public static final VoxelShape BLOCK_EAST = Block.makeCuboidShape(0.95F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+    public static final VoxelShape BLOCK_NORTH = Block.makeCuboidShape(0.0F, 0.0F, 0.0F, 16.0F, 16.0F, 1F);
+    public static final VoxelShape BLOCK_SOUTH = Block.makeCuboidShape(0.0F, 0.0F, 15F, 1.0F, 16.0F, 16.0F);
+    public static final VoxelShape BLOCK_WEST = Block.makeCuboidShape(0.0F, 0.0F, 0.0F, 1F, 16.0F, 16.0F);
+    public static final VoxelShape BLOCK_EAST = Block.makeCuboidShape(15F, 0.0F, 0.0F, 16.0F, 16.0F, 16.0F);
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {

@@ -1,9 +1,13 @@
 package mcjty.rftoolspower.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 
 public final class ModBlocks {
+
+    @ObjectHolder("rftoolspower:celltextures")
+    public static Block CELL_TEXTURES;
 
     @ObjectHolder("rftoolspower:cell1")
     public static PowerCellBlock CELL1;
@@ -31,9 +35,5 @@ public final class ModBlocks {
 
     public static void initClient() {
         InformationScreenRenderer.register();
-
-        CELL1.initModel();
-        CELL2.initModel();
-        CELL3.initModel();
     }
 }

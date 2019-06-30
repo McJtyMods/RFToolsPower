@@ -113,14 +113,25 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         return tier;
     }
 
+    // @todo temporary until long values work in forge!
+    private long safeCast(Object o) {
+        if (o instanceof Long) {
+            return (Long) o;
+        } else if (o instanceof Integer) {
+            return (long) (Integer) o;
+        } else {
+            return 0;
+        }
+    }
+
     public long getLocalMaxEnergy() {
         switch (tier) {
             case TIER1:
-                return Config.TIER1_MAXRF.get();
+                return safeCast(Config.TIER1_MAXRF.get());
             case TIER2:
-                return Config.TIER2_MAXRF.get();
+                return safeCast(Config.TIER2_MAXRF.get());
             case TIER3:
-                return Config.TIER3_MAXRF.get();
+                return safeCast(Config.TIER3_MAXRF.get());
         }
         return 0;
     }
@@ -474,48 +485,16 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             PowerCellTileEntity.Mode mode = ((PowerCellTileEntity) te).getMode(facing);
             switch (mode) {
                 case MODE_NONE:
-                    if (upper && lower) {
-                        return SideType.MIDDLE_NONE;
-                    } else if (upper) {
-                        return SideType.LOWER_NONE;
-                    } else if (lower) {
-                        return SideType.UPPER_NONE;
-                    } else {
-                        return SideType.BOTH_NONE;
-                    }
+                    return SideType.NONE;
                 case MODE_INPUT:
-                    if (upper && lower) {
-                        return SideType.MIDDLE_INPUT;
-                    } else if (upper) {
-                        return SideType.LOWER_INPUT;
-                    } else if (lower) {
-                        return SideType.UPPER_INPUT;
-                    } else {
-                        return SideType.BOTH_INPUT;
-                    }
+                    return SideType.INPUT;
                 case MODE_OUTPUT:
-                    if (upper && lower) {
-                        return SideType.MIDDLE_OUTPUT;
-                    } else if (upper) {
-                        return SideType.LOWER_OUTPUT;
-                    } else if (lower) {
-                        return SideType.UPPER_OUTPUT;
-                    } else {
-                        return SideType.BOTH_OUTPUT;
-                    }
+                    return SideType.OUTPUT;
                 default:
-                    return SideType.BOTH_NONE;
+                    return SideType.NONE;
             }
         } else {
-            if (upper && lower) {
-                return SideType.MIDDLE_NONE;
-            } else if (upper) {
-                return SideType.LOWER_NONE;
-            } else if (lower) {
-                return SideType.UPPER_NONE;
-            } else {
-                return SideType.BOTH_NONE;
-            }
+            return SideType.NONE;
         }
 
     }

@@ -2,22 +2,19 @@ package mcjty.rftoolspower.setup;
 
 
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.blocks.*;
-import net.minecraft.client.Minecraft;
+import mcjty.rftoolspower.blocks.BakedModelLoader;
+import mcjty.rftoolspower.blocks.GenericCellBakedModel;
+import mcjty.rftoolspower.blocks.ModBlocks;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.Collections;
 
 @Mod.EventBusSubscriber(modid = RFToolsPower.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientRegistration {
@@ -32,26 +29,24 @@ public class ClientRegistration {
     public static void registerSounds(RegistryEvent.Register<SoundEvent> sounds) {
     }
 
-    @SubscribeEvent
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        Minecraft mc = Minecraft.getInstance();
-        for (SideType value : SideType.VALUES) {
-            if (value.getSideTexture() != null) {
-//                event.getMap().stitch(mc.getResourceManager(), Collections.singleton(new ResourceLocation(value.getSideTexture())), mc.getProfiler());
-                for (Tier tier : Tier.VALUES) {
-                    ResourceLocation location = new ResourceLocation(value.getSideTexture() + tier.getSuffix());
-                    System.out.println("location = " + location);
-                    event.getMap().func_215244_a(mc.textureManager, mc.getResourceManager(),
-                            location, mc);
-                }
-            }
-            if (value.getUpDownTexture() != null) {
-//                event.getMap().stitch(mc.getResourceManager(), Collections.singleton(new ResourceLocation(value.getUpDownTexture())), mc.getProfiler());
-                event.getMap().func_215244_a(mc.textureManager, mc.getResourceManager(),
-                        new ResourceLocation(value.getUpDownTexture()), mc);
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+//        Minecraft mc = Minecraft.getInstance();
+//        for (SideType value : SideType.VALUES) {
+//            if (value.getSideTexture() != null) {
+//                for (Tier tier : Tier.VALUES) {
+//                    ResourceLocation location = new ResourceLocation(value.getSideTexture() + tier.getSuffix());
+//                    System.out.println("location = " + location);
+//                    event.getMap().func_215244_a(mc.textureManager, mc.getResourceManager(),
+//                            location, mc);
+//                }
+//            }
+//            if (value.getUpDownTexture() != null) {
+//                event.getMap().func_215244_a(mc.textureManager, mc.getResourceManager(),
+//                        new ResourceLocation(value.getUpDownTexture()), mc);
+//            }
+//        }
+//    }
 
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
