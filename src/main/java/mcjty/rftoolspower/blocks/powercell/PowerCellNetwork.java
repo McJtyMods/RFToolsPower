@@ -1,12 +1,12 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.powercell;
 
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.config.PowerCellConfig;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class PowercellNetwork {
+public class PowerCellNetwork {
 
     private long energy;
     private long maxEnergy;
@@ -20,7 +20,7 @@ public class PowercellNetwork {
 
     private Set<Long> positions = new HashSet<>();
 
-    public PowercellNetwork() {
+    public PowerCellNetwork() {
         networkId = lastNetworkId++;
     }
 
@@ -29,7 +29,7 @@ public class PowercellNetwork {
     }
 
     public boolean isValid() {
-        return positions.size() <= Config.NETWORK_MAX.get();
+        return positions.size() <= PowerCellConfig.NETWORK_MAX.get();
     }
 
     public boolean contains(BlockPos pos) {

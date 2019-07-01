@@ -32,8 +32,6 @@ public class RFToolsPowerMessages {
 
         // Client side
         net.registerMessage(id(), PacketMonitorLogReady.class, PacketMonitorLogReady::toBytes, PacketMonitorLogReady::new, PacketMonitorLogReady::handle);
-
-//        PacketHandler.register(PacketHandler.nextPacketID(), PowerCellInfoPacketServer.class, PowerCellInfoPacketClient.class);
     }
 
     private static int id() {

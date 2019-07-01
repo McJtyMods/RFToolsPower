@@ -1,7 +1,7 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.informationscreen;
 
 import mcjty.lib.McJtyLib;
-import mcjty.lib.blocks.BaseBlockNew;
+import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.varia.OrientationTools;
@@ -23,14 +23,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class InformationScreenBlock extends BaseBlockNew {
-
-    public static final String REGNAME = "information_screen";
+public class InformationScreenBlock extends BaseBlock {
 
     public InformationScreenBlock() {
-        super(REGNAME, new BlockBuilder());
+        super(InformationScreenTileEntity.REGNAME, new BlockBuilder()
+                .tileEntitySupplier(() -> new InformationScreenTileEntity()));
     }
 
     @Override
@@ -54,7 +54,9 @@ public class InformationScreenBlock extends BaseBlockNew {
     public static final VoxelShape BLOCK_WEST = Block.makeCuboidShape(0.0F, 0.0F, 0.0F, 1F, 16.0F, 16.0F);
     public static final VoxelShape BLOCK_EAST = Block.makeCuboidShape(15F, 0.0F, 0.0F, 16.0F, 16.0F, 16.0F);
 
+    @SuppressWarnings("deprecation")
     @Override
+    @Nonnull
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         Direction side = OrientationTools.getOrientationHoriz(state);
         switch (side) {
@@ -89,7 +91,9 @@ public class InformationScreenBlock extends BaseBlockNew {
     }
 
 
+    @SuppressWarnings("deprecation")
     @Override
+    @Nonnull
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }

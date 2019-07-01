@@ -1,13 +1,4 @@
 {
-  "conditions": [
-    {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:mod_loaded",
-        "modid": "rftools"
-      }
-    }
-  ],
   "result": {
     "item": "rftoolspower:information_screen"
   },
@@ -18,7 +9,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "M": {
-      "item": "minecraft:iron_block"
+      "item": "rftoolsbase:machine_base"
     },
     "p": {
       "item": "minecraft:glass_pane"

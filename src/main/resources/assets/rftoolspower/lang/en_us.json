@@ -7,8 +7,11 @@
     "block.rftoolspower.cell2": "Powercell (Medium)",
     "block.rftoolspower.cell3": "Powercell (High)",
     "block.rftoolspower.information_screen": "Information Screen",
+    "block.rftoolspower.coalgenerator": "Coal Generator",
 
     "itemGroup.rftoolspower": "RFTools Power",
 
-    "message.shiftMessage": "Press Shift"
+    "message.rftoolspower.shiftmessage": "Press Shift",
+
+    "message.rftoolspower.coalgenerator": "@fThis machine produces RF (%s RF/t)\n@ffrom coal or charcoal\n@eInfusing bonus: more power generation\n@eand lasts longer on a single fuel"
 }

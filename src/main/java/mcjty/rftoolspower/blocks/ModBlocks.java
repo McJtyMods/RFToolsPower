@@ -1,39 +1,60 @@
 package mcjty.rftoolspower.blocks;
 
+import mcjty.lib.container.GenericContainer;
+import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.blocks.generator.CoalGeneratorTileEntity;
+import mcjty.rftoolspower.blocks.informationscreen.InformationScreenBlock;
+import mcjty.rftoolspower.blocks.informationscreen.InformationScreenTileEntity;
+import mcjty.rftoolspower.blocks.powercell.PowerCellBlock;
+import mcjty.rftoolspower.blocks.powercell.PowerCellTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 
 public final class ModBlocks {
 
-    @ObjectHolder("rftoolspower:celltextures")
+    // ----- Blocks -----
+
+    // @todo dummy object just to have the powercell textures. Remove if a better solution is implemented in 1.14
+    @ObjectHolder(RFToolsPower.MODID + ":celltextures")
     public static Block CELL_TEXTURES;
 
-    @ObjectHolder("rftoolspower:cell1")
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static PowerCellBlock CELL1;
 
-    @ObjectHolder("rftoolspower:cell2")
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static PowerCellBlock CELL2;
 
-    @ObjectHolder("rftoolspower:cell3")
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static PowerCellBlock CELL3;
 
-    @ObjectHolder("rftoolspower:information_screen")
+    @ObjectHolder(RFToolsPower.MODID + ":" + InformationScreenTileEntity.REGNAME)
     public static InformationScreenBlock INFORMATION_SCREEN;
 
-    @ObjectHolder("rftoolspower:cell1")
+    @ObjectHolder(RFToolsPower.MODID + ":" + CoalGeneratorTileEntity.REGNAME)
+    public static Block COALGENERATOR;
+
+    // ----- Tile entities -----
+
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static TileEntityType<?> TYPE_CELL1;
 
-    @ObjectHolder("rftoolspower:cell2")
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static TileEntityType<?> TYPE_CELL2;
 
-    @ObjectHolder("rftoolspower:cell3")
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static TileEntityType<?> TYPE_CELL3;
 
-    @ObjectHolder("rftoolspower:information_screen")
+    @ObjectHolder(RFToolsPower.MODID + ":" + InformationScreenTileEntity.REGNAME)
     public static TileEntityType<?> TYPE_INFORMATION_SCREEN;
 
-    public static void initClient() {
-        InformationScreenRenderer.register();
-    }
+    @ObjectHolder(RFToolsPower.MODID + ":" + CoalGeneratorTileEntity.REGNAME)
+    public static TileEntityType<?> TYPE_COALGENERATOR;
+
+    // ----- Containers -----
+
+    @ObjectHolder(RFToolsPower.MODID + ":" + CoalGeneratorTileEntity.REGNAME)
+    public static ContainerType<GenericContainer> CONTAINER_COALGENERATOR;
+
 }

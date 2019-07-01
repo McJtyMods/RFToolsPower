@@ -1,12 +1,13 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.powercell;
 
 import mcjty.lib.McJtyLib;
-import mcjty.lib.blocks.BaseBlockNew;
+import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.config.PowerCellConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -33,7 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngredient {
+public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredient {
 
     public static BooleanProperty UPPER = BooleanProperty.create("upper");
     public static BooleanProperty LOWER = BooleanProperty.create("lower");
@@ -48,12 +49,6 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
                 .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
     }
 
-
-//    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
-//        return false;
-//    }
-
-
     @Override
     public void addInformation(ItemStack itemStack, @Nullable IBlockReader player, List<ITextComponent> list, ITooltipFlag flag) {
         super.addInformation(itemStack, player, list, flag);
@@ -66,11 +61,11 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
         if (McJtyLib.proxy.isShiftKeyDown()) {
             long totpower = 0;
             if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL1)) {
-                totpower = Config.TIER1_MAXRF.get();
+                totpower = PowerCellConfig.TIER1_MAXRF.get();
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL2)) {
-                totpower = Config.TIER2_MAXRF.get();
+                totpower = PowerCellConfig.TIER2_MAXRF.get();
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL3)) {
-                totpower = Config.TIER3_MAXRF.get();
+                totpower = PowerCellConfig.TIER3_MAXRF.get();
             }
             list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));
             list.add(new StringTextComponent(TextFormatting.WHITE + "and can be combined with other cells to form a"));
@@ -169,29 +164,30 @@ public class PowerCellBlock extends BaseBlockNew implements INBTPreservingIngred
 //        }
 //    }
 
-//    @Override
-//    public void breakBlock(World world, BlockPos pos, BlockState state) {
-//        if (!world.isRemote) {
-//            TileEntity te = world.getTileEntity(pos);
-//            if (te instanceof PowerCellTileEntity) {
-//                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-//                if (powercell.getNetwork() != null) {
-//                    powercell.dismantleNetwork(powercell.getNetwork());
-//                }
-//            }
-//        }
-//        super.breakBlock(world, pos, state);
-//        if (!world.isRemote) {
-//            BlockState stateUp = world.getBlockState(pos.up());
-//            if (stateUp.getBlock() == ModBlocks.cell1Block) {
-//                world.notifyBlockUpdate(pos.up(), stateUp, stateUp, 3);
-//            }
-//            BlockState stateDown = world.getBlockState(pos.down());
-//            if (stateDown.getBlock() == ModBlocks.cell1Block) {
-//                world.notifyBlockUpdate(pos.down(), stateDown, stateDown, 3);
-//            }
-//        }
-//    }
+
+    @Override
+    public void onReplaced(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
+        if (!world.isRemote) {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof PowerCellTileEntity) {
+                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                if (powercell.getNetwork() != null) {
+                    powercell.dismantleNetwork(powercell.getNetwork());
+                }
+            }
+        }
+        super.onReplaced(state, world, pos, newstate, isMoving);
+        if (!world.isRemote) {
+            BlockState stateUp = world.getBlockState(pos.up());
+            if (stateUp.getBlock() instanceof PowerCellBlock) {
+                world.notifyBlockUpdate(pos.up(), stateUp, stateUp, 3);
+            }
+            BlockState stateDown = world.getBlockState(pos.down());
+            if (stateDown.getBlock() instanceof PowerCellBlock) {
+                world.notifyBlockUpdate(pos.down(), stateDown, stateDown, 3);
+            }
+        }
+    }
 
 
     @Override

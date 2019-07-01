@@ -1,0 +1,7 @@
+{
+  "parent": "rftoolsbase:block/rftoolsblock_glow",
+  "textures": {
+    "front": "rftoolspower:block/coalgenerator",
+    "frontglow":  "rftoolspower:block/coalgenerator_glow"
+  }
+}

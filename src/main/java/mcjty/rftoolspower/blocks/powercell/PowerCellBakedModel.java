@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.powercell;
 
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.block.BlockState;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class GenericCellBakedModel implements IDynamicBakedModel {
+public class PowerCellBakedModel implements IDynamicBakedModel {
 
     private VertexFormat format;
 
@@ -63,7 +63,7 @@ public class GenericCellBakedModel implements IDynamicBakedModel {
         return Minecraft.getInstance().getTextureMap().getAtlasSprite(name);
     }
 
-    public GenericCellBakedModel(VertexFormat format) {
+    public PowerCellBakedModel(VertexFormat format) {
         this.format = format;
     }
 

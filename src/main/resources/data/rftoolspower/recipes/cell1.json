@@ -1,13 +1,4 @@
 {
-  "conditions": [
-    {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:mod_loaded",
-        "modid": "rftools"
-      }
-    }
-  ],
   "result": {
     "item": "rftoolspower:cell1"
   },
@@ -19,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "M": {
-      "item": "minecraft:iron_block"
+      "item": "rftoolsbase:machine_frame"
     },
     "R": {
       "item": "rftoolspower:power_core1"

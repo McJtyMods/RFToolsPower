@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.powercell;
 
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;

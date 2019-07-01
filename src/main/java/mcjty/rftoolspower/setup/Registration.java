@@ -1,12 +1,21 @@
 package mcjty.rftoolspower.setup;
 
 
+import mcjty.lib.blocks.BaseBlockItem;
+import mcjty.lib.container.GenericContainer;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.blocks.*;
+import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.blocks.generator.CoalGeneratorTileEntity;
+import mcjty.rftoolspower.blocks.informationscreen.InformationScreenBlock;
+import mcjty.rftoolspower.blocks.informationscreen.InformationScreenTileEntity;
+import mcjty.rftoolspower.blocks.powercell.PowerCellBlock;
+import mcjty.rftoolspower.blocks.powercell.PowerCellTileEntity;
+import mcjty.rftoolspower.blocks.powercell.Tier;
+import mcjty.rftoolspower.config.CoalGeneratorConfig;
 import mcjty.rftoolspower.items.PowerCoreItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItem;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -23,19 +32,26 @@ public class Registration {
         event.getRegistry().register(new PowerCellBlock(Tier.TIER2));
         event.getRegistry().register(new PowerCellBlock(Tier.TIER3));
         event.getRegistry().register(new Block(Block.Properties.create(Material.IRON)).setRegistryName("celltextures"));
+        if (CoalGeneratorConfig.ENABLED.get()) {
+            event.getRegistry().register(CoalGeneratorTileEntity.createBlock());
+        }
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         Item.Properties properties = new Item.Properties().group(RFToolsPower.setup.getTab());
-        event.getRegistry().register(new BlockItem(ModBlocks.INFORMATION_SCREEN, properties).setRegistryName(InformationScreenBlock.REGNAME));
-        event.getRegistry().register(new BlockItem(ModBlocks.CELL1, properties).setRegistryName("cell1"));
-        event.getRegistry().register(new BlockItem(ModBlocks.CELL2, properties).setRegistryName("cell2"));
-        event.getRegistry().register(new BlockItem(ModBlocks.CELL3, properties).setRegistryName("cell3"));
+        event.getRegistry().register(new BaseBlockItem(ModBlocks.INFORMATION_SCREEN, properties));
+        event.getRegistry().register(new BaseBlockItem(ModBlocks.CELL1, properties));
+        event.getRegistry().register(new BaseBlockItem(ModBlocks.CELL2, properties));
+        event.getRegistry().register(new BaseBlockItem(ModBlocks.CELL3, properties));
 
         event.getRegistry().register(new PowerCoreItem("1"));
         event.getRegistry().register(new PowerCoreItem("2"));
         event.getRegistry().register(new PowerCoreItem("3"));
+
+        if (CoalGeneratorConfig.ENABLED.get()) {
+            event.getRegistry().register(new BaseBlockItem(ModBlocks.COALGENERATOR, properties));
+        }
     }
 
     @SubscribeEvent
@@ -44,5 +60,16 @@ public class Registration {
         event.getRegistry().register(TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER2), ModBlocks.CELL2).build(null).setRegistryName(ModBlocks.CELL2.getRegistryName()));
         event.getRegistry().register(TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER3), ModBlocks.CELL3).build(null).setRegistryName(ModBlocks.CELL3.getRegistryName()));
         event.getRegistry().register(TileEntityType.Builder.create(InformationScreenTileEntity::new, ModBlocks.INFORMATION_SCREEN).build(null).setRegistryName(ModBlocks.INFORMATION_SCREEN.getRegistryName()));
+        if (CoalGeneratorConfig.ENABLED.get()) {
+            event.getRegistry().register(TileEntityType.Builder.create(CoalGeneratorTileEntity::new, ModBlocks.COALGENERATOR).build(null).setRegistryName(ModBlocks.COALGENERATOR.getRegistryName()));
+        }
     }
+
+    @SubscribeEvent
+    public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
+        if (CoalGeneratorConfig.ENABLED.get()) {
+            event.getRegistry().register(GenericContainer.createContainerType("coalgenerator"));
+        }
+    }
+
 }

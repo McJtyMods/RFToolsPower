@@ -1,10 +1,10 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.powercell;
 
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.config.PowerCellConfig;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -25,11 +25,15 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-import static mcjty.rftoolspower.blocks.SideType.NONE;
+import static mcjty.rftoolspower.blocks.powercell.SideType.NONE;
 
 public class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
 
-    private PowercellNetwork network = null;
+    public static final String REGNAME1 = "cell1";
+    public static final String REGNAME2 = "cell2";
+    public static final String REGNAME3 = "cell3";
+
+    private PowerCellNetwork network = null;
     private long localEnergy = 0;
     private final Tier tier;
 
@@ -106,11 +110,11 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public long getLocalMaxEnergy() {
         switch (tier) {
             case TIER1:
-                return safeCast(Config.TIER1_MAXRF.get());
+                return safeCast(PowerCellConfig.TIER1_MAXRF.get());
             case TIER2:
-                return safeCast(Config.TIER2_MAXRF.get());
+                return safeCast(PowerCellConfig.TIER2_MAXRF.get());
             case TIER3:
-                return safeCast(Config.TIER3_MAXRF.get());
+                return safeCast(PowerCellConfig.TIER3_MAXRF.get());
         }
         return 0;
     }
@@ -118,18 +122,18 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public long getRfPerTickPerSide() {
         switch (tier) {
             case TIER1:
-                return Config.TIER1_RFPERTICK.get();
+                return PowerCellConfig.TIER1_RFPERTICK.get();
             case TIER2:
-                return Config.TIER2_RFPERTICK.get();
+                return PowerCellConfig.TIER2_RFPERTICK.get();
             case TIER3:
-                return Config.TIER3_RFPERTICK.get();
+                return PowerCellConfig.TIER3_RFPERTICK.get();
         }
         return 0;
     }
 
     public long getRfPerTickReal() {
-        if (Config.RFPERTICK_SCALE.get() > 0) {
-            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * Config.RFPERTICK_SCALE.get());
+        if (PowerCellConfig.RFPERTICK_SCALE.get() > 0) {
+            return (long) (getRfPerTickPerSide() + (getNetwork().getPositions().size()-1) * getRfPerTickPerSide() * PowerCellConfig.RFPERTICK_SCALE.get());
         } else {
             return getRfPerTickPerSide();
         }
@@ -150,7 +154,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             return 0;
         }
 
-        PowercellNetwork network = getNetwork();
+        PowerCellNetwork network = getNetwork();
         if (network == null || !network.isValid()) {
             return 0;
         }
@@ -209,7 +213,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public void tick() {
         if (!world.isRemote) {
             if (outputCount > 0) {
-                PowercellNetwork network = getNetwork();
+                PowerCellNetwork network = getNetwork();
                 if (network != null && network.isValid()) {
                     long energyStored = network.getEnergy();
                     if (energyStored <= 0) {
@@ -223,7 +227,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     }
 
     public void redistributeNetwork() {
-        PowercellNetwork network = getNetwork();
+        PowerCellNetwork network = getNetwork();
         if (network == null || network.getPositions().isEmpty()) {
             return;
         }
@@ -357,19 +361,19 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         this.localEnergy = localEnergy;
     }
 
-    public PowercellNetwork getNetwork() {
+    public PowerCellNetwork getNetwork() {
         if (network == null) {
             // This block has no network. Create one and distribute to all connected powercells
-            buildNetwork(new PowercellNetwork(), pos);
+            buildNetwork(new PowerCellNetwork(), pos);
         }
         return network;
     }
 
-    public void setNetwork(PowercellNetwork network) {
+    public void setNetwork(PowerCellNetwork network) {
         this.network = network;
     }
 
-    public void dismantleNetwork(PowercellNetwork network) {
+    public void dismantleNetwork(PowerCellNetwork network) {
         network.getPositions().stream().map(BlockPos::fromLong).forEach(pos -> {
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof PowerCellTileEntity) {
@@ -382,7 +386,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     private static Set<BlockPos> alreadyReportedBad = new HashSet<>();
     private static Set<BlockPos> alreadyReportedUnexpected = new HashSet<>();
 
-    private void buildNetwork(PowercellNetwork network, BlockPos pos) {
+    private void buildNetwork(PowerCellNetwork network, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;

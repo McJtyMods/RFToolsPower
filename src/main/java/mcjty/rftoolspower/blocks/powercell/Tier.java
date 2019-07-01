@@ -1,5 +1,6 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.powercell;
 
+import mcjty.rftoolspower.blocks.ModBlocks;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 

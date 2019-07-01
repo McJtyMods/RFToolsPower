@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.informationscreen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import mcjty.lib.client.HudRenderHelper;

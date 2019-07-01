@@ -1,27 +1,43 @@
 package mcjty.rftoolspower.setup;
 
 
+import com.google.common.collect.Lists;
+import mcjty.lib.McJtyLib;
+import mcjty.lib.container.GenericContainer;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.blocks.BakedModelLoader;
-import mcjty.rftoolspower.blocks.GenericCellBakedModel;
 import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.blocks.generator.CoalGeneratorTileEntity;
+import mcjty.rftoolspower.blocks.generator.GuiCoalGenerator;
+import mcjty.rftoolspower.blocks.informationscreen.InformationScreenRenderer;
+import mcjty.rftoolspower.blocks.powercell.PowerCellBakedModel;
+import mcjty.rftoolspower.config.CoalGeneratorConfig;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = RFToolsPower.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientRegistration {
 
     @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent event) {
-//        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+    public static void init(FMLClientSetupEvent event) {
+        InformationScreenRenderer.register();
+
+        if (CoalGeneratorConfig.ENABLED.get()) {
+            ScreenManager.IScreenFactory<GenericContainer, GuiCoalGenerator> factory = (container, inventory, title) -> {
+                TileEntity te = McJtyLib.proxy.getClientWorld().getTileEntity(container.getPos());
+                return Tools.safeMap(te, (CoalGeneratorTileEntity i) -> new GuiCoalGenerator(i, container, inventory), "Invalid tile entity!");
+            };
+            ScreenManager.registerFactory(ModBlocks.CONTAINER_COALGENERATOR, factory);
+        }
     }
 
     @SubscribeEvent
@@ -49,22 +65,14 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), ""), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=false,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=false,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=true,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL1.getRegistryName(), "lower=true,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), ""), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=false,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=false,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=true,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL2.getRegistryName(), "lower=true,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), ""), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=false,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=false,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=true,upper=false"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.CELL3.getRegistryName(), "lower=true,upper=true"), new GenericCellBakedModel(DefaultVertexFormats.BLOCK));
+        PowerCellBakedModel model = new PowerCellBakedModel(DefaultVertexFormats.BLOCK);
+        Lists.newArrayList(ModBlocks.CELL1, ModBlocks.CELL2, ModBlocks.CELL3).stream()
+                .forEach(block -> {
+                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), ""), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=false,upper=false"), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=false,upper=true"), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=true,upper=false"), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=true,upper=true"), model);
+                });
     }
 }

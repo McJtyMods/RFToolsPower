@@ -1,8 +1,10 @@
-package mcjty.rftoolspower.blocks;
+package mcjty.rftoolspower.blocks.informationscreen;
 
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
+import mcjty.rftoolspower.blocks.powercell.PowerCellNetwork;
+import mcjty.rftoolspower.blocks.powercell.PowerCellTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -10,9 +12,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
+
 import static mcjty.rftoolspower.blocks.ModBlocks.TYPE_INFORMATION_SCREEN;
 
 public class InformationScreenTileEntity extends GenericTileEntity implements ITickableTileEntity {
+
+    public static final String REGNAME = "information_screen";
 
     private int mode = 0;
     private int cnt = 0;
@@ -50,7 +56,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
                 TileEntity te = world.getTileEntity(offset);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                    PowercellNetwork network = powercell.getNetwork();
+                    PowerCellNetwork network = powercell.getNetwork();
                     if (network != null) {
                         long newExtracted = network.getExtracted();
                         long newInserted = network.getInserted();
@@ -86,6 +92,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     }
 
     @Override
+    @Nonnull
     public CompoundNBT write(CompoundNBT tagCompound) {
         tagCompound.putByte("mode", (byte) mode);
         return super.write(tagCompound);
@@ -146,6 +153,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
             return null;
         }
     }
+
 
 
 }
