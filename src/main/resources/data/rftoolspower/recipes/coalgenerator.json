@@ -14,8 +14,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "c": {
-      "item": "minecraft:coal",
-      "data": 0
+      "item": "minecraft:coal"
     },
     "T": {
       "item": "minecraft:redstone_torch"

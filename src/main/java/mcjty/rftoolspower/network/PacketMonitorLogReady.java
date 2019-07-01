@@ -32,9 +32,6 @@ public class PacketMonitorLogReady {
         }
     }
 
-    public PacketMonitorLogReady() {
-    }
-
     public PacketMonitorLogReady(PacketBuffer buf) {
         pos = buf.readBlockPos();
         rfPerTickExtracted = buf.readLong();

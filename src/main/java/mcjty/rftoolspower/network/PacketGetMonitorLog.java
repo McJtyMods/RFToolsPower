@@ -20,9 +20,6 @@ public class PacketGetMonitorLog {
         buf.writeBlockPos(pos);
     }
 
-    public PacketGetMonitorLog() {
-    }
-
     public PacketGetMonitorLog(PacketBuffer buf) {
         pos = buf.readBlockPos();
     }
