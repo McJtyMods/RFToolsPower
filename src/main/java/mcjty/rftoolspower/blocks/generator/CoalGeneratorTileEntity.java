@@ -83,7 +83,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
             @Override
             public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-                return layer == BlockRenderLayer.SOLID && layer == BlockRenderLayer.CUTOUT;
+                return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.CUTOUT;
             }
         };
     }

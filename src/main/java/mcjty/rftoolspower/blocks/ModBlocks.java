@@ -23,10 +23,10 @@ public final class ModBlocks {
     @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static PowerCellBlock CELL1;
 
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME2)
     public static PowerCellBlock CELL2;
 
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME3)
     public static PowerCellBlock CELL3;
 
     @ObjectHolder(RFToolsPower.MODID + ":" + InformationScreenTileEntity.REGNAME)
@@ -40,10 +40,10 @@ public final class ModBlocks {
     @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static TileEntityType<?> TYPE_CELL1;
 
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME2)
     public static TileEntityType<?> TYPE_CELL2;
 
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
+    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME3)
     public static TileEntityType<?> TYPE_CELL3;
 
     @ObjectHolder(RFToolsPower.MODID + ":" + InformationScreenTileEntity.REGNAME)

@@ -144,14 +144,16 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
         TileEntity te = world.getTileEntity(offset);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-            long energy = powercell.getNetwork().getEnergy();
-            long maxEnergy = powercell.getNetwork().getMaxEnergy();
-            return new EnergyTools.EnergyLevel(energy, maxEnergy);
+            PowerCellNetwork network = powercell.getNetwork();
+            if (network != null) {
+                long energy = network.getEnergy();
+                long maxEnergy = network.getMaxEnergy();
+                return new EnergyTools.EnergyLevel(energy, maxEnergy);
+            }
         } else if (EnergyTools.isEnergyTE(te, getBlockOrientation())) {
             return EnergyTools.getEnergyLevelMulti(te, getBlockOrientation());
-        } else {
-            return null;
         }
+        return null;
     }
 
 
