@@ -34,7 +34,7 @@ public class PacketGetMonitorLog {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
-            PlayerEntity player = McJtyLib.proxy.getClientPlayer();
+            PlayerEntity player = ctx.getSender();
             TileEntity te = player.getEntityWorld().getTileEntity(pos);
             if (te instanceof InformationScreenTileEntity) {
                 InformationScreenTileEntity info = (InformationScreenTileEntity) te;

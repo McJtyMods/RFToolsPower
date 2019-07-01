@@ -68,7 +68,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     public static BaseBlock createBlock() {
         return new BaseBlock(REGNAME, new BlockBuilder()
-                .tileEntitySupplier(() -> new CoalGeneratorTileEntity())
+                .tileEntitySupplier(CoalGeneratorTileEntity::new)
                 .hasGui()
                 .infusable()
                 .info("message.rftoolspower.shiftmessage")
@@ -134,8 +134,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public void tick() {
         if (!world.isRemote) {
 
-            boolean workingOld = isWorking();
-
             itemHandler.ifPresent(itemHandler -> {
                 energyHandler.ifPresent(energy -> {
                     markDirtyQuick();
@@ -145,8 +143,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                     if (!isMachineEnabled()) {
                         return;
                     }
-
-                    boolean working = burning > 0;
 
                     if (burning > 0) {
                         burning--;
@@ -163,9 +159,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 });
             });
 
-            boolean workingNew = isWorking();
-            if (workingOld != workingNew) {
-                world.setBlockState(pos, world.getBlockState(pos).with(BlockStateProperties.LIT, workingNew), 3);
+            BlockState state = world.getBlockState(pos);
+            if (state.get(BlockStateProperties.LIT) != isWorking()) {
+                world.setBlockState(pos, state.with(BlockStateProperties.LIT, isWorking()), 3);
             }
         }
     }
