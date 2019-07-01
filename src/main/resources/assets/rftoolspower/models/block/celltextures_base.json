@@ -9,7 +9,7 @@
         "north": { "texture": "#celllower_t1", "cullface": "north" },
         "south": { "texture": "#cellmiddle_t1", "cullface": "south" },
         "west":  { "texture": "#cellupper_t1", "cullface": "west" },
-        "east":  { "texture": "#cellboth_t1", "cullface": "east" }
+        "east":  { "texture": "#inputmask", "cullface": "east" }
       }
     },
     {   "from": [ 0, 0, 0 ],
@@ -20,7 +20,7 @@
         "north": { "texture": "#celllower_t2", "cullface": "north" },
         "south": { "texture": "#cellmiddle_t2", "cullface": "south" },
         "west":  { "texture": "#cellupper_t2", "cullface": "west" },
-        "east":  { "texture": "#cellboth_t2", "cullface": "east" }
+        "east":  { "texture": "#outputmask", "cullface": "east" }
       }
     },
     {   "from": [ 0, 0, 0 ],

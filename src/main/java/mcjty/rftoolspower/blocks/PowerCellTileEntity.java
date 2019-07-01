@@ -5,16 +5,14 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.config.Config;
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -27,8 +25,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_NONE;
-import static mcjty.rftoolspower.blocks.PowerCellTileEntity.Mode.MODE_OUTPUT;
+import static mcjty.rftoolspower.blocks.SideType.NONE;
 
 public class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
 
@@ -45,7 +42,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public static final ModelProperty<Tier> TIER = new ModelProperty<>();
 
 
-    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(() -> createNullHandler());
+    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(this::createNullHandler);
     private LazyOptional<SidedHandler>[] sidedStorages;
 
     public PowerCellTileEntity(Tier tier) {
@@ -57,43 +54,25 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         }
     }
 
-    public enum Mode implements IStringSerializable {
-        MODE_NONE("none"),
-        MODE_INPUT("input"),   // Blue
-        MODE_OUTPUT("output"); // Yellow
-
-        private final String name;
-
-        Mode(String name) {
-            this.name = name;
-        }
-
-        @Override
-        @Nonnull
-        public String getName() {
-            return name;
-        }
-    }
-
-    private PowerCellTileEntity.Mode modes[] = new PowerCellTileEntity.Mode[] {
-            MODE_NONE, MODE_NONE, MODE_NONE,
-            MODE_NONE, MODE_NONE, MODE_NONE };
+    private SideType modes[] = new SideType[] {
+            NONE, NONE, NONE,
+            NONE, NONE, NONE };
     private int outputCount = 0;        // Caches the number of sides that have outputs
 
-    public Mode getMode(Direction side) {
+    public SideType getMode(Direction side) {
         return modes[side.ordinal()];
     }
 
     public void toggleMode(Direction side) {
         switch (modes[side.ordinal()]) {
-            case MODE_NONE:
-                modes[side.ordinal()] = Mode.MODE_INPUT;
+            case NONE:
+                modes[side.ordinal()] = SideType.INPUT;
                 break;
-            case MODE_INPUT:
-                modes[side.ordinal()] = Mode.MODE_OUTPUT;
+            case INPUT:
+                modes[side.ordinal()] = SideType.OUTPUT;
                 break;
-            case MODE_OUTPUT:
-                modes[side.ordinal()] = Mode.MODE_NONE;
+            case OUTPUT:
+                modes[side.ordinal()] = SideType.NONE;
                 break;
         }
         updateOutputCount();
@@ -102,8 +81,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
     private void updateOutputCount() {
         outputCount = 0;
-        for (Mode mode : modes) {
-            if (mode == MODE_OUTPUT) {
+        for (SideType mode : modes) {
+            if (mode == SideType.OUTPUT) {
                 outputCount++;
             }
         }
@@ -167,7 +146,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     }
 
     private long receiveEnergyFacing(Direction from, long maxReceive, boolean simulate) {
-        if (modes[from.ordinal()] != Mode.MODE_INPUT) {
+        if (modes[from.ordinal()] != SideType.INPUT) {
             return 0;
         }
 
@@ -310,7 +289,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         final long[] energyExtracted = {0};
 
         for (Direction face : Direction.values()) {
-            if (modes[face.ordinal()] == Mode.MODE_OUTPUT) {
+            if (modes[face.ordinal()] == SideType.OUTPUT) {
                 BlockPos pos = getPos().offset(face);
                 TileEntity te = getWorld().getTileEntity(pos);
                 Direction opposite = face.getOpposite();
@@ -444,10 +423,11 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        Mode[] old = new Mode[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
+        SideType[] old = new SideType[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
         super.onDataPacket(net, packet);
         for (int i = 0 ; i < 6 ; i++) {
             if (old[i] != modes[i]) {
+                ModelDataManager.requestModelDataRefresh(this);
                 world.markForRerender(getPos());
                 return;
             }
@@ -457,58 +437,27 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     @Nonnull
     @Override
     public IModelData getModelData() {
-        BlockState state = world.getBlockState(pos);
-        boolean upper = Boolean.TRUE.equals(state.get(PowerCellBlock.UPPER));
-        boolean lower = Boolean.TRUE.equals(state.get(PowerCellBlock.LOWER));
-
-        SideType north = getSideType(world, pos, Direction.NORTH, upper, lower);
-        SideType south = getSideType(world, pos, Direction.SOUTH, upper, lower);
-        SideType west = getSideType(world, pos, Direction.WEST, upper, lower);
-        SideType east = getSideType(world, pos, Direction.EAST, upper, lower);
-        SideType up = getSideType(world, pos, Direction.UP, upper, lower);
-        SideType down = getSideType(world, pos, Direction.DOWN, upper, lower);
-
         return new ModelDataMap.Builder()
-                .withInitial(NORTH, north)
-                .withInitial(SOUTH, south)
-                .withInitial(WEST, west)
-                .withInitial(EAST, east)
-                .withInitial(UP, up)
-                .withInitial(DOWN, down)
+                .withInitial(NORTH, getMode(Direction.NORTH))
+                .withInitial(SOUTH, getMode(Direction.SOUTH))
+                .withInitial(WEST, getMode(Direction.WEST))
+                .withInitial(EAST, getMode(Direction.EAST))
+                .withInitial(UP, getMode(Direction.UP))
+                .withInitial(DOWN, getMode(Direction.DOWN))
                 .withInitial(TIER, tier)
                 .build();
-    }
-
-    private SideType getSideType(IBlockReader world, BlockPos pos, Direction facing, boolean upper, boolean lower) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof PowerCellTileEntity) {
-            PowerCellTileEntity.Mode mode = ((PowerCellTileEntity) te).getMode(facing);
-            switch (mode) {
-                case MODE_NONE:
-                    return SideType.NONE;
-                case MODE_INPUT:
-                    return SideType.INPUT;
-                case MODE_OUTPUT:
-                    return SideType.OUTPUT;
-                default:
-                    return SideType.NONE;
-            }
-        } else {
-            return SideType.NONE;
-        }
-
     }
 
 
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-        modes[0] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m0")];
-        modes[1] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m1")];
-        modes[2] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m2")];
-        modes[3] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m3")];
-        modes[4] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m4")];
-        modes[5] = PowerCellTileEntity.Mode.values()[tagCompound.getByte("m5")];
+        modes[0] = SideType.VALUES[tagCompound.getByte("m0")];
+        modes[1] = SideType.VALUES[tagCompound.getByte("m1")];
+        modes[2] = SideType.VALUES[tagCompound.getByte("m2")];
+        modes[3] = SideType.VALUES[tagCompound.getByte("m3")];
+        modes[4] = SideType.VALUES[tagCompound.getByte("m4")];
+        modes[5] = SideType.VALUES[tagCompound.getByte("m5")];
         updateOutputCount();
         localEnergy = tagCompound.getLong("local");
     }

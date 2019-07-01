@@ -21,8 +21,7 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-//        ModBlocks.initClient();
-        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+//        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
     }
 
     @SubscribeEvent

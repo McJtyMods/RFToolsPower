@@ -13,6 +13,8 @@
     "cellboth_t3":  "rftoolspower:block/cellboth_t3",
     "celllower_t3": "rftoolspower:block/celllower_t3",
     "cellmiddle_t3": "rftoolspower:block/cellmiddle_t3",
-    "cellupper_t3":  "rftoolspower:block/cellupper_t3"
+    "cellupper_t3":  "rftoolspower:block/cellupper_t3",
+    "inputmask":  "rftoolspower:block/inputmask",
+    "outputmask":  "rftoolspower:block/outputmask"
   }
 }

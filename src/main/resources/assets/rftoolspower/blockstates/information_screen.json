@@ -1,16 +1,8 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "rftoolspower:information_screen"
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "facing": {
-      "north": {"x": 90},
-      "south": {"x": 90, "y": 180},
-      "west": {"x": 90, "y": 270},
-      "east": {"x": 90, "y": 90}
-    }
+    "facing=north": { "model": "rftoolspower:block/information_screen", "x": 90 },
+    "facing=south": { "model": "rftoolspower:block/information_screen", "x": 90, "y": 180 },
+    "facing=west": { "model": "rftoolspower:block/information_screen", "x": 90, "y": 270 },
+    "facing=east": { "model": "rftoolspower:block/information_screen", "x": 90, "y": 90 }
   }
 }
