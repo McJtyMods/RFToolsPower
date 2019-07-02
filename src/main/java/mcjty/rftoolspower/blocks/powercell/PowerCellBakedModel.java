@@ -128,6 +128,9 @@ public class PowerCellBakedModel implements IDynamicBakedModel {
         SideType up = data.getData(PowerCellTileEntity.UP);
         SideType down = data.getData(PowerCellTileEntity.DOWN);
         Tier tier = data.getData(PowerCellTileEntity.TIER);
+        if (tier == null) {
+            return Collections.emptyList();
+        }
         int t = tier.ordinal()+1;
 
         List<BakedQuad> quads = new ArrayList<>();

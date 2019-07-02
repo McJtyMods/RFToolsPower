@@ -1,8 +1,4 @@
 {
-  "conditions": [{
-    "type": "minecraft:item_exists",
-    "item": "rftoolspower:coalgenerator"
-  }],
   "result": {
     "item": "rftoolspower:coalgenerator"
   },
