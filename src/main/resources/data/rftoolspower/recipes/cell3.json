@@ -7,7 +7,7 @@
     "RMR",
     "rRr"
   ],
-  "type": "rftoolspower:copy_nbt",
+  "type": "mcjtylib:copy_nbt",
   "key": {
     "M": {
       "item": "rftoolspower:cell2"
