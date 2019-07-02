@@ -97,7 +97,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     }
 
     // @todo temporary until long values work in forge!
-    private long safeCast(Object o) {
+    public static long safeCast(Object o) {
         if (o instanceof Long) {
             return (Long) o;
         } else if (o instanceof Integer) {
@@ -456,26 +456,25 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-        modes[0] = SideType.VALUES[tagCompound.getByte("m0")];
-        modes[1] = SideType.VALUES[tagCompound.getByte("m1")];
-        modes[2] = SideType.VALUES[tagCompound.getByte("m2")];
-        modes[3] = SideType.VALUES[tagCompound.getByte("m3")];
-        modes[4] = SideType.VALUES[tagCompound.getByte("m4")];
-        modes[5] = SideType.VALUES[tagCompound.getByte("m5")];
+        String mode = tagCompound.getString("Mode");
+        if (mode.length() >= 6) {
+            for (int i = 0 ; i < 6 ; i++) {
+                modes[i] = SideType.VALUES[Integer.parseInt(mode.substring(i, i+1))];
+            }
+        }
         updateOutputCount();
-        localEnergy = tagCompound.getLong("local");
+        localEnergy = tagCompound.getLong("Energy");
     }
 
     @Nonnull
     @Override
     public CompoundNBT write(CompoundNBT tagCompound) {
-        tagCompound.putByte("m0", (byte) modes[0].ordinal());
-        tagCompound.putByte("m1", (byte) modes[1].ordinal());
-        tagCompound.putByte("m2", (byte) modes[2].ordinal());
-        tagCompound.putByte("m3", (byte) modes[3].ordinal());
-        tagCompound.putByte("m4", (byte) modes[4].ordinal());
-        tagCompound.putByte("m5", (byte) modes[5].ordinal());
-        tagCompound.putLong("local", localEnergy);
+        String mode = "";
+        for (int i = 0 ; i < 6 ; i++) {
+            mode += modes[i].ordinal();
+        }
+        tagCompound.putString("Mode", mode);
+        tagCompound.putLong("Energy", localEnergy);
         return super.write(tagCompound);
     }
 

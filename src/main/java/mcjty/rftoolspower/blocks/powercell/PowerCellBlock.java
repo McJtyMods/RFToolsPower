@@ -8,6 +8,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.config.PowerCellConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -49,6 +50,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
     public PowerCellBlock(Tier tier) {
         super("cell" + tier.getSuffix(), new BlockBuilder()
+                .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
     }
 
@@ -64,11 +66,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
         if (McJtyLib.proxy.isShiftKeyDown()) {
             long totpower = 0;
             if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL1)) {
-                totpower = PowerCellConfig.TIER1_MAXRF.get();
+                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL2)) {
-                totpower = PowerCellConfig.TIER2_MAXRF.get();
+                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
             } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL3)) {
-                totpower = PowerCellConfig.TIER3_MAXRF.get();
+                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
             }
             list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));
             list.add(new StringTextComponent(TextFormatting.WHITE + "and can be combined with other cells to form a"));

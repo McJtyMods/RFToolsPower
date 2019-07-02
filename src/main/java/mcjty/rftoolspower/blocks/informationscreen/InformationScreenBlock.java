@@ -6,6 +6,7 @@ import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -30,6 +31,7 @@ public class InformationScreenBlock extends BaseBlock {
 
     public InformationScreenBlock() {
         super(InformationScreenTileEntity.REGNAME, new BlockBuilder()
+                .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(() -> new InformationScreenTileEntity()));
     }
 

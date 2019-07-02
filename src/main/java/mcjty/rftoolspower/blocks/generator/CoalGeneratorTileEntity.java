@@ -12,6 +12,7 @@ import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.lib.varia.RedstoneMode;
 import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.config.CoalGeneratorConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -69,6 +70,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public static BaseBlock createBlock() {
         return new BaseBlock(REGNAME, new BlockBuilder()
                 .tileEntitySupplier(CoalGeneratorTileEntity::new)
+                .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .hasGui()
                 .infusable()
                 .info("message.rftoolspower.shiftmessage")
@@ -237,21 +239,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         return false;
     }
 
-//    @Override
-//    public IBlockState getActualState(IBlockState state) {
-//        return state.withProperty(WORKING, isWorking());
-//    }
-
-//    @Override
-//    @Optional.Method(modid = "theoneprobe")
-//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-//        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
-//        Boolean working = isWorking();
-//        if (working) {
-//            probeInfo.text(TextFormatting.GREEN + "Producing " + getRfPerTick() + " RF/t");
-//        }
-//    }
-//
 //    @SideOnly(Side.CLIENT)
 //    @Override
 //    @Optional.Method(modid = "waila")

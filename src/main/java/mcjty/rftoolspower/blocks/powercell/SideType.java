@@ -3,7 +3,6 @@ package mcjty.rftoolspower.blocks.powercell;
 import net.minecraft.util.IStringSerializable;
 
 public enum SideType implements IStringSerializable {
-//    INVISIBLE(false, false),
     NONE(false, false),
     OUTPUT(false, true),
     INPUT(true, false);
