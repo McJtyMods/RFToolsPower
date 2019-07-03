@@ -1,0 +1,17 @@
+{
+    "item.rftoolspower.power_core1": "能量核心(低)",
+    "item.rftoolspower.power_core2": "能量核心(中)",
+    "item.rftoolspower.power_core3": "能量核心(高)",
+
+    "block.rftoolspower.cell1": "蓄电池(低)",
+    "block.rftoolspower.cell2": "蓄电池(中)",
+    "block.rftoolspower.cell3": "蓄电池(高)",
+    "block.rftoolspower.information_screen": "信息屏幕",
+    "block.rftoolspower.coalgenerator": "煤炭发电机",
+
+    "itemGroup.rftoolspower": "RFTools能量",
+
+    "message.rftoolspower.shiftmessage": "按Shift键显示更多",
+
+    "message.rftoolspower.coalgenerator": "@f这台机器可以从木炭或煤炭中\n@f生产RF能量(%s RF/t)\n@e注能加成:更多的能量产生\n@e单个燃料能燃烧更长时间"
+}
