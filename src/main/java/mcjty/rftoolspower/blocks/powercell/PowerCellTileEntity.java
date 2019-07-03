@@ -4,7 +4,9 @@ import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.config.PowerCellConfig;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -12,6 +14,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -371,6 +374,21 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
     public void setNetwork(PowerCellNetwork network) {
         this.network = network;
+    }
+
+    @Override
+    public void onReplaced(World world, BlockPos pos, BlockState state) {
+        if (getNetwork() != null) {
+            dismantleNetwork(getNetwork());
+        }
+        BlockState stateUp = world.getBlockState(pos.up());
+        if (stateUp.getBlock() instanceof PowerCellBlock) {
+            world.notifyBlockUpdate(pos.up(), stateUp, stateUp, 3);
+        }
+        BlockState stateDown = world.getBlockState(pos.down());
+        if (stateDown.getBlock() instanceof PowerCellBlock) {
+            world.notifyBlockUpdate(pos.down(), stateDown, stateDown, 3);
+        }
     }
 
     public void dismantleNetwork(PowerCellNetwork network) {

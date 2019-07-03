@@ -6,6 +6,7 @@ import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -35,7 +36,6 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredient {
@@ -60,7 +60,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
         CompoundNBT tagCompound = itemStack.getTag();
         if (tagCompound != null) {
-            list.add(new StringTextComponent(TextFormatting.BLUE + "Energy: " + TextFormatting.YELLOW + tagCompound.getLong("energy")));
+            list.add(new StringTextComponent(TextFormatting.BLUE + "Energy: " + TextFormatting.YELLOW + tagCompound.getLong("Energy")));
         }
 
         if (McJtyLib.proxy.isShiftKeyDown()) {
@@ -82,36 +82,6 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
         }
     }
 
-//    @Override
-//    @Optional.Method(modid = "theoneprobe")
-//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, BlockState blockState, IProbeHitData data) {
-//        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
-//        TileEntity te = world.getTileEntity(data.getPos());
-//        if (te instanceof PowerCellTileEntity) {
-//            PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-//            long rfPerTick = powercell.getRfPerTickReal();
-//
-//            if (powercell.getNetwork().isValid()) {
-//                probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
-//                PowerCellTileEntity.Mode powermode = powercell.getMode(data.getSideHit());
-//                if (powermode == PowerCellTileEntity.Mode.MODE_INPUT) {
-//                    probeInfo.text(TextFormatting.YELLOW + "Side: input");
-//                } else if (powermode == PowerCellTileEntity.Mode.MODE_OUTPUT) {
-//                    probeInfo.text(TextFormatting.YELLOW + "Side: output");
-//                }
-//            } else {
-//                probeInfo.text(TextStyleClass.ERROR + "Too many blocks in network (max " + ConfigSetup.NETWORK_MAX + ")!");
-//            }
-//
-//            int networkId = powercell.getNetwork().getNetworkId();
-//            if (mode == ProbeMode.DEBUG) {
-//                probeInfo.text(TextStyleClass.LABEL + "Network ID: " + TextStyleClass.INFO + networkId);
-//            }
-//            if (mode == ProbeMode.EXTENDED) {
-//                probeInfo.text(TextStyleClass.LABEL + "Local Energy: " + TextStyleClass.INFO + powercell.getLocalEnergy());
-//            }
-//        }
-//    }
 
 //    private static long lastTime = 0;
 //
@@ -168,31 +138,6 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 //            }
 //        }
 //    }
-
-
-    @Override
-    public void onReplaced(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-                if (powercell.getNetwork() != null) {
-                    powercell.dismantleNetwork(powercell.getNetwork());
-                }
-            }
-        }
-        super.onReplaced(state, world, pos, newstate, isMoving);
-        if (!world.isRemote) {
-            BlockState stateUp = world.getBlockState(pos.up());
-            if (stateUp.getBlock() instanceof PowerCellBlock) {
-                world.notifyBlockUpdate(pos.up(), stateUp, stateUp, 3);
-            }
-            BlockState stateDown = world.getBlockState(pos.down());
-            if (stateDown.getBlock() instanceof PowerCellBlock) {
-                world.notifyBlockUpdate(pos.down(), stateDown, stateDown, 3);
-            }
-        }
-    }
 
 
     @Override
