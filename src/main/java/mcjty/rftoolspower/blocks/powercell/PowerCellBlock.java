@@ -1,12 +1,10 @@
 package mcjty.rftoolspower.blocks.powercell;
 
-import com.google.common.collect.Lists;
 import mcjty.lib.McJtyLib;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
-import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -35,6 +33,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -193,6 +192,6 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
     @Override
     public Collection<String> getTagsToPreserve() {
-        return Lists.newArrayList("m0", "m1", "m2", "m3", "m4", "m5", "m6", "local");
+        return Arrays.asList("m0", "m1", "m2", "m3", "m4", "m5", "m6", "local");
     }
 }
