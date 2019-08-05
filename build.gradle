@@ -64,6 +64,7 @@ targetCompatibility = 1.8
 
 minecraft {
     mappings channel: 'snapshot', version: "${mcp_mappings}"
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client = {
@@ -82,6 +83,12 @@ minecraft {
             workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'FMLAT': 'accesstransformer.cfg'
     }
 }
 
