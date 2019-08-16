@@ -287,7 +287,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Nullable
     @Override
     public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
-        GenericContainer container = new GenericContainer(ModBlocks.CONTAINER_COALGENERATOR, windowId, CoalGeneratorTileEntity.CONTAINER_FACTORY, getPos());
+        GenericContainer container = new GenericContainer(ModBlocks.CONTAINER_COALGENERATOR, windowId, CoalGeneratorTileEntity.CONTAINER_FACTORY, getPos(), this);
         itemHandler.ifPresent(h -> container.setupInventories(h, inventory));
         energyHandler.ifPresent(e -> e.addIntegerListeners(container));
         return container;
