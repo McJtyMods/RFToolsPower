@@ -262,7 +262,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
             @Override
             public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
-                return isItemExtractable(slot, stack);
+                return true;
             }
 
             @Override
