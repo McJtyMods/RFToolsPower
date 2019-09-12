@@ -4,7 +4,6 @@ import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.config.PowerCellConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -474,14 +473,16 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-        String mode = tagCompound.getString("Mode");
+
+        CompoundNBT info = tagCompound.getCompound("Info");
+        String mode = info.getString("mode");
         if (mode.length() >= 6) {
             for (int i = 0 ; i < 6 ; i++) {
                 modes[i] = SideType.VALUES[Integer.parseInt(mode.substring(i, i+1))];
             }
         }
         updateOutputCount();
-        localEnergy = tagCompound.getLong("Energy");
+        localEnergy = info.getLong("energy");
     }
 
     @Nonnull
@@ -491,8 +492,9 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         for (int i = 0 ; i < 6 ; i++) {
             mode += modes[i].ordinal();
         }
-        tagCompound.putString("Mode", mode);
-        tagCompound.putLong("Energy", localEnergy);
+        CompoundNBT info = getOrCreateInfo(tagCompound);
+        info.putString("mode", mode);
+        info.putLong("energy", localEnergy);
         return super.write(tagCompound);
     }
 

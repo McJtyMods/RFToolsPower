@@ -210,7 +210,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-        burning = tagCompound.getInt("burning");
+        CompoundNBT data = tagCompound.getCompound("Data");
+        burning = data.getInt("burning");
         itemHandler.ifPresent(h -> h.deserializeNBT(tagCompound.getList("Items", Constants.NBT.TAG_COMPOUND)));
         energyHandler.ifPresent(h -> h.setEnergy(tagCompound.getLong("Energy")));
     }
@@ -219,7 +220,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Nonnull
     public CompoundNBT write(CompoundNBT tagCompound) {
         super.write(tagCompound);
-        tagCompound.putInt("burning", burning);
+        CompoundNBT infoTag = getOrCreateInfo(tagCompound);
+        infoTag.putInt("burning", burning);
         itemHandler.ifPresent(h -> tagCompound.put("Items", h.serializeNBT()));
         energyHandler.ifPresent(h -> tagCompound.putLong("Energy", h.getEnergy()));
         return tagCompound;

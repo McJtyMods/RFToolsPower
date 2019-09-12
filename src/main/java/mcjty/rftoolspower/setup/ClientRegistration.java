@@ -2,20 +2,14 @@ package mcjty.rftoolspower.setup;
 
 
 import com.google.common.collect.Lists;
-import mcjty.lib.McJtyLib;
-import mcjty.lib.container.GenericContainer;
-import mcjty.lib.varia.Tools;
+import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
-import mcjty.rftoolspower.blocks.generator.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.blocks.generator.GuiCoalGenerator;
 import mcjty.rftoolspower.blocks.informationscreen.InformationScreenRenderer;
 import mcjty.rftoolspower.blocks.powercell.PowerCellBakedModel;
-import mcjty.rftoolspower.config.CoalGeneratorConfig;
-import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -30,14 +24,7 @@ public class ClientRegistration {
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
         InformationScreenRenderer.register();
-
-        if (CoalGeneratorConfig.ENABLED.get()) {
-            ScreenManager.IScreenFactory<GenericContainer, GuiCoalGenerator> factory = (container, inventory, title) -> {
-                TileEntity te = McJtyLib.proxy.getClientWorld().getTileEntity(container.getPos());
-                return Tools.safeMap(te, (CoalGeneratorTileEntity i) -> new GuiCoalGenerator(i, container, inventory), "Invalid tile entity!");
-            };
-            ScreenManager.registerFactory(ModBlocks.CONTAINER_COALGENERATOR, factory);
-        }
+        GenericGuiContainer.register(ModBlocks.CONTAINER_COALGENERATOR, GuiCoalGenerator::new);
     }
 
     @SubscribeEvent

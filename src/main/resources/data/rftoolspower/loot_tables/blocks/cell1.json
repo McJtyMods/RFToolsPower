@@ -17,18 +17,8 @@
               "source": "block_entity",
               "ops": [
                 {
-                  "source": "Mode",
-                  "target": "BlockEntityTag.Mode",
-                  "op": "replace"
-                },
-                {
                   "source": "Info",
                   "target": "BlockEntityTag.Info",
-                  "op": "replace"
-                },
-                {
-                  "source": "Energy",
-                  "target": "BlockEntityTag.Energy",
                   "op": "replace"
                 }
               ]
