@@ -1,6 +1,11 @@
 package mcjty.rftoolspower.blocks.generator;
 
+import mcjty.lib.api.container.CapabilityContainerProvider;
+import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.information.IMachineInformation;
+import mcjty.lib.api.infusable.CapabilityInfusable;
+import mcjty.lib.api.infusable.DefaultInfusable;
+import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.*;
@@ -18,8 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -61,6 +65,12 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(this::createItemHandler);
     private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
+    private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
+            .containerSupplier((windowId,player) -> new GenericContainer(ModBlocks.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
+            .itemHandler(itemHandler)
+            .energyHandler(energyHandler));
+    private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
+
     private int burning;
 
     public CoalGeneratorTileEntity() {
@@ -71,7 +81,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         return new BaseBlock(REGNAME, new BlockBuilder()
                 .tileEntitySupplier(CoalGeneratorTileEntity::new)
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
-                .hasGui()
                 .infusable()
                 .info("message.rftoolspower.shiftmessage")
                 .infoExtended("message.rftoolspower.coalgenerator")
@@ -156,7 +165,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                         if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
                             burning *= 9;
                         }
-                        burning += (int) (burning * getInfusedFactor() / 2.0f);
+                        float factor = infusableHandler.map(inf -> inf.getInfusedFactor()).orElse(1.0f);
+                        burning += (int) (burning * factor / 2.0f);
                     }
                 });
             });
@@ -170,7 +180,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     public long getRfPerTick() {
         long rf = CoalGeneratorConfig.RFPERTICK.get();
-        rf += (long) (rf * getInfusedFactor());
+        float factor = infusableHandler.map(inf -> inf.getInfusedFactor()).orElse(1.0f);
+        rf += (long) (rf * factor);
         return rf;
     }
 
@@ -283,16 +294,12 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
         }
+        if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
+            return screenHandler.cast();
+        }
+        if (cap == CapabilityInfusable.INFUSABLE_CAPABILITY) {
+            return infusableHandler.cast();
+        }
         return super.getCapability(cap, facing);
     }
-
-    @Nullable
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
-        GenericContainer container = new GenericContainer(ModBlocks.CONTAINER_COALGENERATOR, windowId, CoalGeneratorTileEntity.CONTAINER_FACTORY, getPos(), this);
-        itemHandler.ifPresent(h -> container.setupInventories(h, inventory));
-        energyHandler.ifPresent(e -> e.addIntegerListeners(container));
-        return container;
-    }
-
 }
