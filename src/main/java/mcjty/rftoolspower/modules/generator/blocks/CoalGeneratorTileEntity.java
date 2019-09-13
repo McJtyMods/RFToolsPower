@@ -2,6 +2,7 @@ package mcjty.rftoolspower.modules.generator.blocks;
 
 import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;
+import mcjty.lib.api.information.CapabilityPowerInformation;
 import mcjty.lib.api.information.IPowerInformation;
 import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.api.infusable.DefaultInfusable;
@@ -47,7 +48,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity, IPowerInformation {
+public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
     public static final String REGNAME = "coalgenerator";
     public static final String CMD_RSMODE = "coalgen.setRsMode";
@@ -72,6 +73,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
     private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
+    private LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(() -> createPowerInfo());
 
     private int burning;
 
@@ -101,33 +103,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         };
     }
 
-
-    @Override
-    public long getEnergyDiffPerTick() {
-        return burning > 0 ? getRfPerTick() : 0;
-    }
-
-    @Nullable
-    @Override
-    public String getEnergyUnitName() {
-        return "RF";
-    }
-
-    @Override
-    public boolean isMachineActive() {
-        return isMachineEnabled();
-    }
-
-    @Override
-    public boolean isMachineRunning() {
-        return isMachineEnabled();
-    }
-
-    @Nullable
-    @Override
-    public String getMachineStatus() {
-        return burning > 0 ? "generating power" : "idle";
-    }
 
     @Override
     protected boolean needsRedstoneMode() {
@@ -260,6 +235,37 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 //        }
 //    }
 
+    private IPowerInformation createPowerInfo() {
+        return new IPowerInformation() {
+            @Override
+            public long getEnergyDiffPerTick() {
+                return burning > 0 ? getRfPerTick() : 0;
+            }
+
+            @Nullable
+            @Override
+            public String getEnergyUnitName() {
+                return "RF";
+            }
+
+            @Override
+            public boolean isMachineActive() {
+                return isMachineEnabled();
+            }
+
+            @Override
+            public boolean isMachineRunning() {
+                return isMachineEnabled();
+            }
+
+            @Nullable
+            @Override
+            public String getMachineStatus() {
+                return burning > 0 ? "generating power" : "idle";
+            }
+        };
+    }
+
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
@@ -274,6 +280,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         }
         if (cap == CapabilityInfusable.INFUSABLE_CAPABILITY) {
             return infusableHandler.cast();
+        }
+        if (cap == CapabilityPowerInformation.POWER_INFORMATION_CAPABILITY) {
+            return powerInfoHandler.cast();
         }
         return super.getCapability(cap, facing);
     }
