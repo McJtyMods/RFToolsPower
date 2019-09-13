@@ -8,7 +8,10 @@ import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.*;
+import mcjty.lib.container.ContainerFactory;
+import mcjty.lib.container.GenericContainer;
+import mcjty.lib.container.NoDirectionItemHander;
+import mcjty.lib.container.SlotDefinition;
 import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
@@ -52,17 +55,17 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_COALINPUT = 0;
     public static final int SLOT_CHARGEITEM = 1;
 
-    public static final ContainerFactory CONTAINER_FACTORY = new ContainerFactory() {
+    public static final ContainerFactory CONTAINER_FACTORY = new ContainerFactory(2) {
         @Override
         protected void setup() {
-            addSlotBox(new SlotDefinition(SlotType.SLOT_SPECIFICITEM, new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)),
-                    ContainerFactory.CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24, 1, 18, 1, 18);
-            addSlotBox(new SlotDefinition(SlotType.SLOT_OUTPUT), ContainerFactory.CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24, 1, 18, 1, 18);
-            layoutPlayerInventorySlots(10, 70);
+            slot(SlotDefinition.specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)),
+                    CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24);
+            slot(SlotDefinition.specific(stack -> EnergyTools.isEnergyItem(stack)), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24);
+            playerSlots(10, 70);
         }
     };
 
-    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(this::createItemHandler);
+    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> new NoDirectionItemHander(this, CONTAINER_FACTORY));
     private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
     private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(ModBlocks.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
@@ -256,29 +259,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 //            currenttip.add(TextFormatting.GREEN + "Producing " + getRfPerTick() + " RF/t");
 //        }
 //    }
-
-    private NoDirectionItemHander createItemHandler() {
-        return new NoDirectionItemHander(CoalGeneratorTileEntity.this, CONTAINER_FACTORY, 2) {
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                if (slot == SLOT_COALINPUT) {
-                    return stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL || stack.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK);
-                } else {
-                    return EnergyTools.isEnergyItem(stack);
-                }
-            }
-
-            @Override
-            public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
-                return true;
-            }
-
-            @Override
-            public boolean isItemExtractable(int slot, @Nonnull ItemStack stack) {
-                return true;
-            }
-        };
-    }
 
     @Nonnull
     @Override
