@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks.generator;
+package mcjty.rftoolspower.modules.generator.blocks;
 
 import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;

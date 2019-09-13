@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks.powercell;
+package mcjty.rftoolspower.modules.powercell.data;
 
 import mcjty.rftoolspower.config.PowerCellConfig;
 import net.minecraft.util.math.BlockPos;

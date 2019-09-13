@@ -1,10 +1,10 @@
-package mcjty.rftoolspower.blocks.informationscreen;
+package mcjty.rftoolspower.modules.informationscreen.blocks;
 
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.blocks.powercell.PowerCellNetwork;
-import mcjty.rftoolspower.blocks.powercell.PowerCellTileEntity;
+import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
+import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;

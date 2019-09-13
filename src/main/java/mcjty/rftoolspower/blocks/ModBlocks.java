@@ -2,11 +2,11 @@ package mcjty.rftoolspower.blocks;
 
 import mcjty.lib.container.GenericContainer;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.blocks.generator.CoalGeneratorTileEntity;
-import mcjty.rftoolspower.blocks.informationscreen.InformationScreenBlock;
-import mcjty.rftoolspower.blocks.informationscreen.InformationScreenTileEntity;
-import mcjty.rftoolspower.blocks.powercell.PowerCellBlock;
-import mcjty.rftoolspower.blocks.powercell.PowerCellTileEntity;
+import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
+import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenBlock;
+import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
+import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
+import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;

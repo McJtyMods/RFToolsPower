@@ -5,6 +5,8 @@ import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketSendServerCommand;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.informationscreen.network.PacketGetMonitorLog;
+import mcjty.rftoolspower.modules.informationscreen.network.PacketMonitorLogReady;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;

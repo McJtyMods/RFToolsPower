@@ -1,6 +1,10 @@
-package mcjty.rftoolspower.blocks.powercell;
+package mcjty.rftoolspower.modules.powercell.client;
 
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.powercell.data.SideType;
+import mcjty.rftoolspower.modules.powercell.data.Tier;
+import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
+import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;

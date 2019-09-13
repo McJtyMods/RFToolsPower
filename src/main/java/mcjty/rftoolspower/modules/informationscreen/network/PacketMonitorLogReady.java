@@ -1,8 +1,8 @@
-package mcjty.rftoolspower.network;
+package mcjty.rftoolspower.modules.informationscreen.network;
 
 import mcjty.lib.McJtyLib;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.rftoolspower.blocks.informationscreen.InformationScreenTileEntity;
+import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

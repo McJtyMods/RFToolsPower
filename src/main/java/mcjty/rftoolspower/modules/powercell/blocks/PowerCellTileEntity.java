@@ -1,10 +1,13 @@
-package mcjty.rftoolspower.blocks.powercell;
+package mcjty.rftoolspower.modules.powercell.blocks;
 
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.config.PowerCellConfig;
+import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
+import mcjty.rftoolspower.modules.powercell.data.SideType;
+import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -27,7 +30,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-import static mcjty.rftoolspower.blocks.powercell.SideType.NONE;
+import static mcjty.rftoolspower.modules.powercell.data.SideType.NONE;
 
 public class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
 

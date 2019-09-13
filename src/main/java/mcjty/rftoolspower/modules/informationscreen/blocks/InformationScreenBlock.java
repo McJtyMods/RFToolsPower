@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks.informationscreen;
+package mcjty.rftoolspower.modules.informationscreen.blocks;
 
 import mcjty.lib.McJtyLib;
 import mcjty.lib.blocks.BaseBlock;

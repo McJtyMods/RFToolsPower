@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks.powercell;
+package mcjty.rftoolspower.modules.powercell.blocks;
 
 import mcjty.lib.McJtyLib;
 import mcjty.lib.blocks.BaseBlock;
@@ -9,6 +9,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.config.PowerCellConfig;
+import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

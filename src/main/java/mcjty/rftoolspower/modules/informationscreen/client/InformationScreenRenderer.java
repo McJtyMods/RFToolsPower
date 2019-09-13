@@ -1,10 +1,11 @@
-package mcjty.rftoolspower.blocks.informationscreen;
+package mcjty.rftoolspower.modules.informationscreen.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import mcjty.lib.client.HudRenderHelper;
 import mcjty.lib.client.RenderHelper;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.rftoolspower.network.PacketGetMonitorLog;
+import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
+import mcjty.rftoolspower.modules.informationscreen.network.PacketGetMonitorLog;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;

@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.blocks.powercell;
+package mcjty.rftoolspower.modules.powercell.data;
 
 import net.minecraft.util.IStringSerializable;
 
