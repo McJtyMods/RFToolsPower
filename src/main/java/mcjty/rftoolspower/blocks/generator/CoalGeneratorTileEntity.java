@@ -36,7 +36,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -221,10 +220,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-        CompoundNBT data = tagCompound.getCompound("Data");
-        burning = data.getInt("burning");
-        itemHandler.ifPresent(h -> h.deserializeNBT(tagCompound.getList("Items", Constants.NBT.TAG_COMPOUND)));
-        energyHandler.ifPresent(h -> h.setEnergy(tagCompound.getLong("Energy")));
+        CompoundNBT info = tagCompound.getCompound("Info");
+        burning = info.getInt("burning");
     }
 
     @Override
@@ -233,8 +230,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         super.write(tagCompound);
         CompoundNBT infoTag = getOrCreateInfo(tagCompound);
         infoTag.putInt("burning", burning);
-        itemHandler.ifPresent(h -> tagCompound.put("Items", h.serializeNBT()));
-        energyHandler.ifPresent(h -> tagCompound.putLong("Energy", h.getEnergy()));
         return tagCompound;
     }
 
