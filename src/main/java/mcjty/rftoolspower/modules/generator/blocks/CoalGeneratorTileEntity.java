@@ -2,7 +2,7 @@ package mcjty.rftoolspower.modules.generator.blocks;
 
 import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;
-import mcjty.lib.api.information.IMachineInformation;
+import mcjty.lib.api.information.IPowerInformation;
 import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
@@ -47,7 +47,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity, IMachineInformation {
+public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity, IPowerInformation {
 
     public static final String REGNAME = "coalgenerator";
     public static final String CMD_RSMODE = "coalgen.setRsMode";
