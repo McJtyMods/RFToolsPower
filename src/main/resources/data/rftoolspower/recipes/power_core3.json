@@ -1,28 +1,29 @@
 {
-  "result": {
-    "item": "rftoolspower:power_core3"
-  },
+  "type": "minecraft:crafting_shaped",
+  "group": "rftools",
   "pattern": [
     "sds",
     "rRr",
     "ses"
   ],
-  "type": "minecraft:crafting_shaped",
   "key": {
-    "R": {
-      "item": "minecraft:redstone_block"
-    },
-    "d": {
-      "item": "minecraft:diamond"
-    },
     "s": {
       "item": "rftoolsbase:dimensionalshard"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
     },
     "e": {
       "item": "minecraft:emerald"
     },
-    "r": {
-      "item": "minecraft:redstone"
+    "d": {
+      "item": "minecraft:diamond"
     }
+  },
+  "result": {
+    "item": "rftoolspower:power_core3"
   }
 }

@@ -1,22 +1,23 @@
 {
-  "result": {
-    "item": "rftoolspower:cell3"
-  },
+  "type": "mcjtylib:copy_nbt",
+  "group": "rftools",
   "pattern": [
     "rRr",
     "RMR",
     "rRr"
   ],
-  "type": "mcjtylib:copy_nbt",
   "key": {
-    "M": {
-      "item": "rftoolspower:cell2"
+    "r": {
+      "item": "minecraft:redstone"
     },
     "R": {
       "item": "rftoolspower:power_core3"
     },
-    "r": {
-      "item": "minecraft:redstone"
+    "M": {
+      "item": "rftoolspower:cell2"
     }
+  },
+  "result": {
+    "item": "rftoolspower:cell3"
   }
 }

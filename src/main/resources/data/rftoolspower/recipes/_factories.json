@@ -1,5 +1,0 @@
-{
-  "recipes": {
-    "copy_nbt": "mcjty.lib.crafting.CopyNBTRecipeFactory"
-  }
-}

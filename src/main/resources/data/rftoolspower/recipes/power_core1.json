@@ -1,22 +1,23 @@
 {
-  "result": {
-    "item": "rftoolspower:power_core1"
-  },
+  "type": "minecraft:crafting_shaped",
+  "group": "rftools",
   "pattern": [
     " d ",
     "rRr",
     " r "
   ],
-  "type": "minecraft:crafting_shaped",
   "key": {
+    "r": {
+      "item": "minecraft:redstone"
+    },
     "R": {
       "item": "minecraft:redstone_block"
     },
     "d": {
       "item": "minecraft:diamond"
-    },
-    "r": {
-      "item": "minecraft:redstone"
     }
+  },
+  "result": {
+    "item": "rftoolspower:power_core1"
   }
 }
