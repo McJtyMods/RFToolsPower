@@ -47,11 +47,11 @@ public class Recipes extends BaseRecipeProvider {
                 .key('K', mcjty.rftoolspower.items.ModItems.POWER_CORE2)
                 .key('P', ModBlocks.CELL1)
                 .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(ModBlocks.CELL1)),
-                "rKr", "KFK", "rKr");
+                "rKr", "KPK", "rKr");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(ModBlocks.CELL3)
                 .key('K', mcjty.rftoolspower.items.ModItems.POWER_CORE3)
                 .key('P', ModBlocks.CELL2)
                 .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(ModBlocks.CELL2)),
-                "rKr", "KFK", "rKr");
+                "rKr", "KPK", "rKr");
     }
 }
