@@ -22,6 +22,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -385,11 +386,11 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         }
         BlockState stateUp = world.getBlockState(pos.up());
         if (stateUp.getBlock() instanceof PowerCellBlock) {
-            world.notifyBlockUpdate(pos.up(), stateUp, stateUp, 3);
+            world.notifyBlockUpdate(pos.up(), stateUp, stateUp, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
         BlockState stateDown = world.getBlockState(pos.down());
         if (stateDown.getBlock() instanceof PowerCellBlock) {
-            world.notifyBlockUpdate(pos.down(), stateDown, stateDown, 3);
+            world.notifyBlockUpdate(pos.down(), stateDown, stateDown, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
     }
 
