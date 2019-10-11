@@ -5,16 +5,15 @@ import mcjty.lib.blocks.BaseBlockItem;
 import mcjty.lib.container.GenericContainer;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.config.CoalGeneratorConfig;
+import mcjty.rftoolspower.items.PowerCoreItem;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenBlock;
 import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import mcjty.rftoolspower.config.CoalGeneratorConfig;
-import mcjty.rftoolspower.items.PowerCoreItem;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -31,7 +30,6 @@ public class Registration {
         event.getRegistry().register(new PowerCellBlock(Tier.TIER1));
         event.getRegistry().register(new PowerCellBlock(Tier.TIER2));
         event.getRegistry().register(new PowerCellBlock(Tier.TIER3));
-        event.getRegistry().register(new Block(Block.Properties.create(Material.IRON)).setRegistryName("celltextures"));
         if (CoalGeneratorConfig.ENABLED.get()) {
             event.getRegistry().register(CoalGeneratorTileEntity.createBlock());
         }

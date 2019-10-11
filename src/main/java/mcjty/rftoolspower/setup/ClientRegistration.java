@@ -10,9 +10,11 @@ import mcjty.rftoolspower.modules.informationscreen.client.InformationScreenRend
 import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,24 +33,28 @@ public class ClientRegistration {
     public static void registerSounds(RegistryEvent.Register<SoundEvent> sounds) {
     }
 
-//    @SubscribeEvent
-//    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-//        Minecraft mc = Minecraft.getInstance();
-//        for (SideType value : SideType.VALUES) {
-//            if (value.getSideTexture() != null) {
-//                for (Tier tier : Tier.VALUES) {
-//                    ResourceLocation location = new ResourceLocation(value.getSideTexture() + tier.getSuffix());
-//                    System.out.println("location = " + location);
-//                    event.getMap().func_215244_a(mc.textureManager, mc.getResourceManager(),
-//                            location, mc);
-//                }
-//            }
-//            if (value.getUpDownTexture() != null) {
-//                event.getMap().func_215244_a(mc.textureManager, mc.getResourceManager(),
-//                        new ResourceLocation(value.getUpDownTexture()), mc);
-//            }
-//        }
-//    }
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+        if (!event.getMap().getBasePath().equals("textures")) {
+            return;
+        }
+
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellhoriz_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/celllower_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/celllower_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/celllower_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/inputmask"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/outputmask"));
+    }
 
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {

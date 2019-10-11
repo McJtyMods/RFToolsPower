@@ -16,10 +16,6 @@ public final class ModBlocks {
 
     // ----- Blocks -----
 
-    // @todo dummy object just to have the powercell textures. Remove if a better solution is implemented in 1.14
-    @ObjectHolder(RFToolsPower.MODID + ":celltextures")
-    public static Block CELL_TEXTURES;
-
     @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
     public static PowerCellBlock CELL1;
 
