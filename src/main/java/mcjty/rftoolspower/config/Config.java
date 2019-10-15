@@ -2,6 +2,9 @@ package mcjty.rftoolspower.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
+import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
 
@@ -31,6 +34,7 @@ public class Config {
 
         PowerCellConfig.setup(COMMON_BUILDER);
         CoalGeneratorConfig.setup(COMMON_BUILDER);
+        DimensionalCellConfiguration.setup(COMMON_BUILDER, CLIENT_BUILDER);
 
         COMMON_BUILDER.pop();
         CLIENT_BUILDER.pop();

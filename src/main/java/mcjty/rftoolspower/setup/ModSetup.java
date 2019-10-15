@@ -9,6 +9,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ModSetup extends DefaultModSetup {
 
+    public boolean rftoolsDimensions = false;   // @todo 1.14 support for RFTools Dimensions
+
     public ModSetup() {
         createTab("rftoolspower", () -> new ItemStack(ModBlocks.CELL1));
     }

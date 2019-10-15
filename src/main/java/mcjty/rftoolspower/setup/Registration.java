@@ -5,7 +5,7 @@ import mcjty.lib.blocks.BaseBlockItem;
 import mcjty.lib.container.GenericContainer;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
-import mcjty.rftoolspower.config.CoalGeneratorConfig;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.items.PowerCoreItem;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenBlock;

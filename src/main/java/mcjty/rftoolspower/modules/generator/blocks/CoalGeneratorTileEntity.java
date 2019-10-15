@@ -22,7 +22,7 @@ import mcjty.lib.varia.OrientationTools;
 import mcjty.lib.varia.RedstoneMode;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.config.CoalGeneratorConfig;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

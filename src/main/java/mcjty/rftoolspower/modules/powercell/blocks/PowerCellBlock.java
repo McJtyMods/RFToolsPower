@@ -8,7 +8,7 @@ import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.config.PowerCellConfig;
+import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;

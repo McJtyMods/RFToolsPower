@@ -14,6 +14,8 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public final class ModBlocks {
 
+    // @todo 1.14 MOVE to proper Setup classes
+
     // ----- Blocks -----
 
     @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)

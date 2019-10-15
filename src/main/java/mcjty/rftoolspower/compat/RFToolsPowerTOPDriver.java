@@ -8,7 +8,7 @@ import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
-import mcjty.rftoolspower.config.PowerCellConfig;
+import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;

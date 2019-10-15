@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.config;
+package mcjty.rftoolspower.modules.powercell;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

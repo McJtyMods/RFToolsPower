@@ -4,7 +4,7 @@ import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.config.PowerCellConfig;
+import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
