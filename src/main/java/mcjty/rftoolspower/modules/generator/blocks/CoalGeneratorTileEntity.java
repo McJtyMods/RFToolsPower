@@ -20,9 +20,9 @@ import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.lib.varia.RedstoneMode;
-import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -69,7 +69,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> new NoDirectionItemHander(this, CONTAINER_FACTORY));
     private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
     private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
-            .containerSupplier((windowId,player) -> new GenericContainer(ModBlocks.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
     private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
@@ -78,7 +78,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private int burning;
 
     public CoalGeneratorTileEntity() {
-        super(ModBlocks.TYPE_COALGENERATOR);
+        super(CoalGeneratorSetup.TYPE_COALGENERATOR);
     }
 
     public static BaseBlock createBlock() {

@@ -4,9 +4,12 @@ package mcjty.rftoolspower.setup;
 import com.google.common.collect.Lists;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
+import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.informationscreen.client.InformationScreenRenderer;
+import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -26,7 +29,8 @@ public class ClientRegistration {
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
         InformationScreenRenderer.register();
-        GenericGuiContainer.register(ModBlocks.CONTAINER_COALGENERATOR, GuiCoalGenerator::new);
+        GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR, GuiCoalGenerator::new);
+        GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL, GuiDimensionalCell::new);
     }
 
     @SubscribeEvent
@@ -59,7 +63,7 @@ public class ClientRegistration {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
         PowerCellBakedModel model = new PowerCellBakedModel(DefaultVertexFormats.BLOCK);
-        Lists.newArrayList(ModBlocks.CELL1, ModBlocks.CELL2, ModBlocks.CELL3).stream()
+        Lists.newArrayList(PowerCellSetup.CELL1, PowerCellSetup.CELL2, PowerCellSetup.CELL3).stream()
                 .forEach(block -> {
                     event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), ""), model);
                     event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=false,upper=false"), model);

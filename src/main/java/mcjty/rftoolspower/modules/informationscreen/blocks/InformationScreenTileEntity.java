@@ -3,8 +3,8 @@ package mcjty.rftoolspower.modules.informationscreen.blocks;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
+import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
-import static mcjty.rftoolspower.blocks.ModBlocks.TYPE_INFORMATION_SCREEN;
+import static mcjty.rftoolspower.modules.informationscreen.InformationScreenSetup.TYPE_INFORMATION_SCREEN;
 
 public class InformationScreenTileEntity extends GenericTileEntity implements ITickableTileEntity {
 

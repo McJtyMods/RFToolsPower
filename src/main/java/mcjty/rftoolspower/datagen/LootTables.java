@@ -1,7 +1,9 @@
 package mcjty.rftoolspower.datagen;
 
 import mcjty.lib.datagen.BaseLootTableProvider;
-import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
+import mcjty.rftoolspower.modules.informationscreen.InformationScreenSetup;
+import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.data.DataGenerator;
 
 public class LootTables extends BaseLootTableProvider {
@@ -12,11 +14,11 @@ public class LootTables extends BaseLootTableProvider {
 
     @Override
     protected void addTables() {
-        lootTables.put(ModBlocks.COALGENERATOR, createStandardTable("coalgenerator", ModBlocks.COALGENERATOR));
-        lootTables.put(ModBlocks.CELL1, createStandardTable("cell1", ModBlocks.CELL1));
-        lootTables.put(ModBlocks.CELL2, createStandardTable("cell2", ModBlocks.CELL2));
-        lootTables.put(ModBlocks.CELL3, createStandardTable("cell3", ModBlocks.CELL3));
-        lootTables.put(ModBlocks.INFORMATION_SCREEN, createSimpleTable("informationscreen", ModBlocks.INFORMATION_SCREEN));
+        lootTables.put(CoalGeneratorSetup.COALGENERATOR, createStandardTable("coalgenerator", CoalGeneratorSetup.COALGENERATOR));
+        lootTables.put(PowerCellSetup.CELL1, createStandardTable("cell1", PowerCellSetup.CELL1));
+        lootTables.put(PowerCellSetup.CELL2, createStandardTable("cell2", PowerCellSetup.CELL2));
+        lootTables.put(PowerCellSetup.CELL3, createStandardTable("cell3", PowerCellSetup.CELL3));
+        lootTables.put(InformationScreenSetup.INFORMATION_SCREEN, createSimpleTable("informationscreen", InformationScreenSetup.INFORMATION_SCREEN));
     }
 
     @Override

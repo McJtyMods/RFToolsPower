@@ -3,7 +3,7 @@ package mcjty.rftoolspower.compat;
 import mcjty.lib.compat.theoneprobe.McJtyLibTOPDriver;
 import mcjty.lib.compat.theoneprobe.TOPDriver;
 import mcjty.lib.varia.Tools;
-import mcjty.rftoolspower.blocks.ModBlocks;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
@@ -32,7 +32,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
         ResourceLocation id = blockState.getBlock().getRegistryName();
         if (!drivers.containsKey(id)) {
-            if (blockState.getBlock() == ModBlocks.COALGENERATOR) {
+            if (blockState.getBlock() == CoalGeneratorSetup.COALGENERATOR) {
                 drivers.put(id, new CoalDriver());
             } else if (blockState.getBlock() instanceof PowerCellBlock) {
                 drivers.put(id, new PowerCellDriver());

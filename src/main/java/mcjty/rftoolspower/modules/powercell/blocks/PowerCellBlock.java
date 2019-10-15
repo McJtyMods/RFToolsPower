@@ -6,9 +6,9 @@ import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.blocks.ModBlocks;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
+import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -65,11 +65,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
         if (McJtyLib.proxy.isShiftKeyDown()) {
             long totpower = 0;
-            if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL1)) {
+            if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL1)) {
                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
-            } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL2)) {
+            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL2)) {
                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
-            } else if (itemStack.getItem() == Item.getItemFromBlock(ModBlocks.CELL3)) {
+            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL3)) {
                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
             }
             list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));
