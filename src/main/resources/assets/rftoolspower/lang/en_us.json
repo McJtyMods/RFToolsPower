@@ -3,6 +3,10 @@
     "item.rftoolspower.power_core2": "Power Core (Medium)",
     "item.rftoolspower.power_core3": "Power Core (High)",
 
+    "block.rftoolspower.dimensionalcell": "Dimensional Cell",
+    "block.rftoolspower.dimensionalcell_simple": "Dimensional Cell (Simple)",
+    "block.rftoolspower.dimensionalcell_advanced": "Dimensional Cell (Advanced)",
+    "block.rftoolspower.dimensionalcell_creative": "Dimensional Cell (Creative)",
     "block.rftoolspower.cell1": "Powercell (Low)",
     "block.rftoolspower.cell2": "Powercell (Medium)",
     "block.rftoolspower.cell3": "Powercell (High)",
@@ -13,5 +17,7 @@
 
     "message.rftoolspower.shiftmessage": "Press Shift",
 
-    "message.rftoolspower.coalgenerator": "@fThis machine produces RF (%s RF/t)\n@ffrom coal or charcoal\n@eInfusing bonus: more power generation\n@eand lasts longer on a single fuel"
+    "message.rftoolspower.coalgenerator": "@fThis machine produces RF (%s RF/t)\n@ffrom coal or charcoal\n@eInfusing bonus: more power generation\n@eand lasts longer on a single fuel",
+    "message.rftoolspower.dimensional_cell": "@eEnergy: %s\n@fPress Shift",
+    "message.rftoolspower.dimensional_cell_shift": "@eEnergy: %s\n@fThis block can store power (%s RF)\n@fOptionally in a big multi dimensional structure\n@eInfusing bonus: reduced long distance power\n@eextraction cost and increased RF/tick output"
 }

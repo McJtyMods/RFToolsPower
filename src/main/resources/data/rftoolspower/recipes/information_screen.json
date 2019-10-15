@@ -2,18 +2,18 @@
   "type": "minecraft:crafting_shaped",
   "group": "rftools",
   "pattern": [
-    "ppp",
-    "rMr"
+    "---",
+    "rAr"
   ],
   "key": {
-    "p": {
-      "item": "minecraft:glass_pane"
+    "-": {
+      "tag": "forge:glass_panes"
+    },
+    "A": {
+      "item": "rftoolsbase:machine_base"
     },
     "r": {
       "item": "minecraft:redstone"
-    },
-    "M": {
-      "item": "rftoolsbase:machine_base"
     }
   },
   "result": {

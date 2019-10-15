@@ -1,0 +1,49 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rftoolspower:block/dimensionalcell.obj",
+    "custom": { "flip-v": true },
+    "textures": {
+      "particle": "rftoolspower:block/dimensionalcelladvanced",
+      "#None_powercellW.png": "rftoolspower:block/dimensionalcelladvanced",
+      "#None_powercellE.png": "rftoolspower:block/dimensionalcelladvanced",
+      "#None_powercellN.png": "rftoolspower:block/dimensionalcelladvanced",
+      "#None_powercellS.png": "rftoolspower:block/dimensionalcelladvanced",
+      "#None_powercellU.png": "rftoolspower:block/dimensionalcelladvanced",
+      "#None_powercellD.png": "rftoolspower:block/dimensionalcelladvanced"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "down": {
+      "none": { "textures": { "#None_powercellD.png": "rftoolspower:block/dimensionalcelladvanced" } },
+      "input": { "textures": { "#None_powercellD.png": "rftoolspower:block/dimensionalcellinadvanced" } },
+      "output": { "textures": { "#None_powercellD.png": "rftoolspower:block/dimensionalcelloutadvanced" } }
+    },
+    "east": {
+      "none": { "textures": { "#None_powercellE.png": "rftoolspower:block/dimensionalcelladvanced" } },
+      "input": { "textures": { "#None_powercellE.png": "rftoolspower:block/dimensionalcellinadvanced" } },
+      "output": { "textures": { "#None_powercellE.png": "rftoolspower:block/dimensionalcelloutadvanced" } }
+    },
+    "north": {
+      "none": { "textures": { "#None_powercellN.png": "rftoolspower:block/dimensionalcelladvanced" } },
+      "input": { "textures": { "#None_powercellN.png": "rftoolspower:block/dimensionalcellinadvanced" } },
+      "output": { "textures": { "#None_powercellN.png": "rftoolspower:block/dimensionalcelloutadvanced" } }
+    },
+    "south": {
+      "none": { "textures": { "#None_powercellS.png": "rftoolspower:block/dimensionalcelladvanced" } },
+      "input": { "textures": { "#None_powercellS.png": "rftoolspower:block/dimensionalcellinadvanced" } },
+      "output": { "textures": { "#None_powercellS.png": "rftoolspower:block/dimensionalcelloutadvanced" } }
+    },
+    "up": {
+      "none": { "textures": { "#None_powercellU.png": "rftoolspower:block/dimensionalcelladvanced" } },
+      "input": { "textures": { "#None_powercellU.png": "rftoolspower:block/dimensionalcellinadvanced" } },
+      "output": { "textures": { "#None_powercellU.png": "rftoolspower:block/dimensionalcelloutadvanced" } }
+    },
+    "west": {
+      "none": { "textures": { "#None_powercellW.png": "rftoolspower:block/dimensionalcelladvanced" } },
+      "input": { "textures": { "#None_powercellW.png": "rftoolspower:block/dimensionalcellinadvanced" } },
+      "output": { "textures": { "#None_powercellW.png": "rftoolspower:block/dimensionalcelloutadvanced" } }
+    }
+  }
+}

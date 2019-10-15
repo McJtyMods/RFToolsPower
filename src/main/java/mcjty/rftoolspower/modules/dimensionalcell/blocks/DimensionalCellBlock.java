@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.api.module.DefaultModuleSupport;
 import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.SmartWrenchMode;
@@ -9,13 +8,11 @@ import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolsbase.items.SmartWrenchItem;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
-import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
+import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -27,12 +24,13 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameter;
+import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -52,32 +50,56 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public static final EnumProperty<DimensionalCellTileEntity.Mode> UP = EnumProperty.create("up", DimensionalCellTileEntity.Mode.class);
     public static final EnumProperty<DimensionalCellTileEntity.Mode> DOWN = EnumProperty.create("down", DimensionalCellTileEntity.Mode.class);
 
+    private final DimensionalCellType type;
+
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
+        return false;
+    }
+
     private LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
-            return false;
-            // @todo 1.14 return (itemStack.getItem() instanceof PowerCellCardItem);
+             return (itemStack.getItem() instanceof PowerCellCardItem);
         }
     });
 
-    private static long lastTime = 0;
-
-    public DimensionalCellBlock(String name, Supplier<TileEntity> supplier) {
-        super(name, new BlockBuilder()
-                .tileEntitySupplier(supplier)
-                .infusable());
+    public DimensionalCellType getType() {
+        return type;
     }
 
-    // @todo 1.14
-//    @Override
-//    public void initModel() {
-//        // If a block and item model have the same name, the block model wins even when rendering the item,
-//        // due to MinecraftForge/MinecraftForge#4898. Since we have powercell blocks and items with different
-//        // models, append "_item" to powercell items.
-//        ResourceLocation blockRegistryName = getRegistryName();
-//        ResourceLocation itemRegistryName = new ResourceLocation(blockRegistryName.getResourceDomain(), blockRegistryName.getResourcePath() + "_item");
-//        McJtyLib.proxy.initCustomItemModel(Item.getItemFromBlock(this), 0, new ModelResourceLocation(itemRegistryName, "inventory"));
-//    }
+    public static DimensionalCellType getType(Block block) {
+        if (block instanceof DimensionalCellBlock) {
+            return ((DimensionalCellBlock) block).getType();
+        } else {
+            return DimensionalCellType.UNKNOWN;
+        }
+    }
+
+    public DimensionalCellBlock(String name, DimensionalCellType type, Supplier<TileEntity> supplier) {
+        super(name, new BlockBuilder()
+                .tileEntitySupplier(supplier)
+                .infusable()
+                .info("message.rftoolspower.dimensional_cell")
+                .infoParameter(stack -> {
+                    return stack.getTag() == null ? "<empty>" : String.valueOf(stack.getTag().getInt("energy"));
+                })
+                .infoExtended("message.rftoolspower.dimensional_cell_shift")
+                .infoExtendedParameter(stack -> {
+                    return stack.getTag() == null ? "<empty>" : String.valueOf(stack.getTag().getInt("energy"));
+                })
+                .infoExtendedParameter(stack -> {
+                    return String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
+                })
+        );
+        this.type = type;
+    }
+
 
     @Override
     public RotationType getRotationType() {
@@ -86,58 +108,18 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     @Override
     public Collection<String> getTagsToPreserve() {
-        return Collections.emptyList(); // @todo 1.14
+        return Collections.singleton("Info");
     }
 
-    @Override
-    public void addInformation(ItemStack itemStack, @Nullable IBlockReader world, List<ITextComponent> list, ITooltipFlag advanced) {
-        super.addInformation(itemStack, world, list, advanced);
-
-        CompoundNBT tagCompound = itemStack.getTag();
-        if (tagCompound != null) {
-            list.add(new StringTextComponent(TextFormatting.YELLOW + "Energy: " + tagCompound.getInt("energy")));
-        }
-
-        // @todo move to lang file
-        if (McJtyLib.proxy.isShiftKeyDown()) {
-            int totpower = DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor() / DimensionalCellConfiguration.simpleFactor.get();
-            list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "Optionally in a big multi dimensional structure"));
-            list.add(new StringTextComponent(TextFormatting.YELLOW + "Infusing bonus: reduced long distance power"));
-            list.add(new StringTextComponent(TextFormatting.YELLOW + "extraction cost and increased RF/tick output"));
-        } else {
-            list.add(new StringTextComponent(TextFormatting.WHITE + RFToolsPower.SHIFT_MESSAGE));
-        }
-    }
-
-    private boolean isAdvanced() {
-        return isAdvanced(this);
-    }
-
-    private boolean isSimple() {
-        return isSimple(this);
-    }
-
-    public static boolean isAdvanced(Block block) {
-        return block == DimensionalCellSetup.advancedDimensionalCellBlock || block == DimensionalCellSetup.creativeDimensionalCellBlock;
-    }
-
-    public static boolean isSimple(Block block) {
-        return block == DimensionalCellSetup.simpleDimensionalCellBlock;
-    }
-
-    public static boolean isCreative(Block block) {
-        return block == DimensionalCellSetup.creativeDimensionalCellBlock;
-    }
-
-    private int getPowerFactor() {
-        if (isSimple()) {
+    private static int getPowerFactor(DimensionalCellType type) {
+        if (type.isSimple()) {
             return 1;
         }
-        return isAdvanced() ? (DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()) : DimensionalCellConfiguration.simpleFactor.get();
+        return type.isAdvanced() ? (DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()) : DimensionalCellConfiguration.simpleFactor.get();
     }
 
-    // @todo 1.14
+// @todo 1.14
+//    private static long lastTime = 0;
 //    @Override
 //    @Optional.Method(modid = "theoneprobe")
 //    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
@@ -257,13 +239,13 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     DimensionalCellNetwork.Network network = dimensionalCellNetwork.getChannel(networkId);
                     network.receiveEnergy(energy);
                     Block block = world.getBlockState(pos).getBlock();
-                    network.add(world, dimensionalCellTileEntity.getGlobalPos(), isAdvanced(block), isSimple(block));
+                    network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
                     dimensionalCellNetwork.save();
                 }
             }
         } else if (!stack.hasTag() && !world.isRemote) {
             DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getTileEntity(pos);
-            if (dimensionalCellTileEntity != null && isCreative(this)) {
+            if (dimensionalCellTileEntity != null && type.isCreative()) {
                 dimensionalCellTileEntity.setAllOutput();
             }
         }
@@ -274,29 +256,34 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         }
     }
 
-    // @todo 1.14
-//    @Override
-//    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess blockAccess, BlockPos pos, IBlockState state, int fortune) {
-//        World world = (World) blockAccess;
-//        super.getDrops(drops, world, pos, state, fortune);
-//        if (!world.isRemote) {
-//            TileEntity te = world.getTileEntity(pos);
-//            if (te instanceof PowerCellTileEntity) {
-//                PowerCellNetwork.Network network = ((PowerCellTileEntity) te).getNetwork();
-//                if (network != null) {
-//                    int energy = network.getEnergySingleBlock(isAdvanced(), isSimple());
-//                    if (!drops.isEmpty()) {
-//                        NBTTagCompound tagCompound = drops.get(0).getTagCompound();
-//                        if (tagCompound == null) {
-//                            tagCompound = new NBTTagCompound();
-//                            drops.get(0).setTagCompound(tagCompound);
-//                        }
-//                        tagCompound.setInteger("energy", energy);
-//                    }
-//                }
-//            }
-//        }
-//    }
+    // @todo 1.14 is this the right way? Perhaps not
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        World world = builder.getWorld();
+        BlockPos pos = builder.get(LootParameters.POSITION);
+        List<ItemStack> drops = super.getDrops(state, builder);
+        if (!world.isRemote) {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof DimensionalCellTileEntity) {
+                DimensionalCellNetwork.Network network = ((DimensionalCellTileEntity) te).getNetwork();
+                if (network != null) {
+                    int energy = network.getEnergySingleBlock(getType());
+                    if (!drops.isEmpty()) {
+                        CompoundNBT tagCompound = drops.get(0).getTag();
+                        if (tagCompound == null) {
+                            tagCompound = new CompoundNBT();
+                            drops.get(0).setTag(tagCompound);
+                        }
+                        if (tagCompound.contains("BlockEntityTag") && tagCompound.getCompound("BlockEntityTag").contains("Info")) {
+                            CompoundNBT info = tagCompound.getCompound("BlockEntityTag").getCompound("Info");
+                            info.putInt("energy", energy);
+                        }
+                    }
+                }
+            }
+        }
+        return drops;
+    }
 
 
     @Override
@@ -307,9 +294,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
                 DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
                 if (network != null) {
-                    int a = network.extractEnergySingleBlock(isAdvanced(), isSimple());
+                    int a = network.extractEnergySingleBlock(type);
                     Block block = world.getBlockState(pos).getBlock();
-                    network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.isAdvanced(block), DimensionalCellBlock.isSimple(block));
+                    network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
                     DimensionalCellNetwork.getChannels().save();
                     cellTileEntity.setNetworkId(-1);
                 }
@@ -326,9 +313,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
                 DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
                 if (network != null) {
-                    int a = network.extractEnergySingleBlock(isAdvanced(), isSimple());
+                    int a = network.extractEnergySingleBlock(type);
                     Block block = world.getBlockState(pos).getBlock();
-                    network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.isAdvanced(block), DimensionalCellBlock.isSimple(block));
+                    network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
                     DimensionalCellNetwork.getChannels().save();
                 }
             }
@@ -336,33 +323,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         super.onReplaced(state, world, pos, newstate, isMoving);
     }
 
-    // @todo 1.14
-//    @Override
-//    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-//        TileEntity tileEntity = world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
-//        if (tileEntity instanceof PowerCellTileEntity) {
-//            PowerCellTileEntity te = (PowerCellTileEntity) tileEntity;
-//            PowerCellTileEntity.Mode north = te.getMode(EnumFacing.NORTH);
-//            PowerCellTileEntity.Mode south = te.getMode(EnumFacing.SOUTH);
-//            PowerCellTileEntity.Mode west = te.getMode(EnumFacing.WEST);
-//            PowerCellTileEntity.Mode east = te.getMode(EnumFacing.EAST);
-//            PowerCellTileEntity.Mode up = te.getMode(EnumFacing.UP);
-//            PowerCellTileEntity.Mode down = te.getMode(EnumFacing.DOWN);
-//            return state.withProperty(NORTH, north).withProperty(SOUTH, south).withProperty(WEST, west).withProperty(EAST, east).withProperty(UP, up).withProperty(DOWN, down);
-//        }
-//        return state.withProperty(NORTH, PowerCellTileEntity.Mode.MODE_NONE)
-//                .withProperty(SOUTH, PowerCellTileEntity.Mode.MODE_NONE)
-//                .withProperty(WEST, PowerCellTileEntity.Mode.MODE_NONE)
-//                .withProperty(EAST, PowerCellTileEntity.Mode.MODE_NONE)
-//                .withProperty(UP, PowerCellTileEntity.Mode.MODE_NONE)
-//                .withProperty(DOWN, PowerCellTileEntity.Mode.MODE_NONE);
-//    }
-
-
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
-        // @todo 1.14, add this to the blockstate?
         builder.add(NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
 
@@ -371,26 +334,4 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
         return layer == BlockRenderLayer.TRANSLUCENT;
     }
-    // @todo 1.14
-//    @Nonnull
-//    @Override
-//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
-//        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-//            return itemHandler.cast();
-//        }
-//        if (cap == CapabilityEnergy.ENERGY) {
-//            return energyHandler.cast();
-//        }
-//        if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
-//            return screenHandler.cast();
-//        }
-//        if (cap == CapabilityInfusable.INFUSABLE_CAPABILITY) {
-//            return infusableHandler.cast();
-//        }
-//        if (cap == CapabilityModuleSupport.MODULE_CAPABILITY) {
-//            return moduleSupportHandler.cast();
-//        }
-//        return super.getCapability(cap, facing);
-//    }
-
 }

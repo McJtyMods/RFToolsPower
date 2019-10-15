@@ -39,10 +39,10 @@ public class DimensionalCellSetup {
     public static ContainerType<DimensionalCellContainer> CONTAINER_DIMENSIONAL_CELL;
 
     public static void registerBlocks(final RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell", DimensionalCellNormalTileEntity::new));
-        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell_advanced", DimensionalCellAdvancedTileEntity::new));
-        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell_creative", DimensionalCellCreativeTileEntity::new));
-        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell_simple", DimensionalCellSimpleTileEntity::new));
+        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell", DimensionalCellType.NORMAL, DimensionalCellNormalTileEntity::new));
+        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell_advanced", DimensionalCellType.ADVANCED, DimensionalCellAdvancedTileEntity::new));
+        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell_creative", DimensionalCellType.CREATIVE, DimensionalCellCreativeTileEntity::new));
+        event.getRegistry().register(new DimensionalCellBlock("dimensionalcell_simple", DimensionalCellType.SIMPLE, DimensionalCellSimpleTileEntity::new));
     }
 
     public static void registerItems(final RegistryEvent.Register<Item> event) {
@@ -51,6 +51,7 @@ public class DimensionalCellSetup {
         event.getRegistry().register(new BaseBlockItem(advancedDimensionalCellBlock, properties));
         event.getRegistry().register(new BaseBlockItem(creativeDimensionalCellBlock, properties));
         event.getRegistry().register(new BaseBlockItem(simpleDimensionalCellBlock, properties));
+        event.getRegistry().register(new PowerCellCardItem());
     }
 
     public static void registerTiles(final RegistryEvent.Register<TileEntityType<?>> event) {

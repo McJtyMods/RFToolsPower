@@ -3,7 +3,7 @@
   "group": "rftools",
   "pattern": [
     "cTc",
-    "cMc",
+    "cFc",
     "cTc"
   ],
   "key": {
@@ -13,7 +13,7 @@
     "T": {
       "item": "minecraft:redstone_torch"
     },
-    "M": {
+    "F": {
       "item": "rftoolsbase:machine_frame"
     }
   },

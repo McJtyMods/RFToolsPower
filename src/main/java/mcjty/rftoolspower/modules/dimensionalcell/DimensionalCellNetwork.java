@@ -7,6 +7,7 @@ import mcjty.lib.worlddata.AbstractWorldData;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
+import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellType;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -21,18 +22,18 @@ import java.util.*;
 
 public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNetwork> {
 
-    private static final String POWERCELL_NETWORK_NAME = "RFToolsPowerCellNetwork";
+    private static final String DIMENSIONALCELL_NETWORK_NAME = "RFToolsDimensionalCellNetwork";
 
     private int lastId = 0;
 
     private final Map<Integer,Network> networks = new HashMap<>();
 
     public DimensionalCellNetwork() {
-        super(POWERCELL_NETWORK_NAME);
+        super(DIMENSIONALCELL_NETWORK_NAME);
     }
 
     public static DimensionalCellNetwork getChannels() {
-        return getData(DimensionalCellNetwork::new, POWERCELL_NETWORK_NAME);
+        return getData(DimensionalCellNetwork::new, DIMENSIONALCELL_NETWORK_NAME);
     }
 
     public Network getOrCreateNetwork(int id) {
@@ -132,10 +133,10 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
                 BlockState state = world.getBlockState(c.getCoordinate());
                 if (state.getBlock() == DimensionalCellSetup.dimensionalCellBlock) {
                     blocks.add(c);
-                } else if (DimensionalCellBlock.isAdvanced(state.getBlock())) {
+                } else if (DimensionalCellBlock.getType(state.getBlock()).isAdvanced()) {
                     blocks.add(c);
                     advancedBlocks++;
-                } else if (DimensionalCellBlock.isSimple(state.getBlock())) {
+                } else if (DimensionalCellBlock.getType(state.getBlock()).isSimple()) {
                     blocks.add(c);
                     simpleBlocks++;
                 } else {
@@ -145,28 +146,28 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
         }
 
-        public void add(World world, GlobalCoordinate g, boolean advanced, boolean simple) {
+        public void add(World world, GlobalCoordinate g, DimensionalCellType type) {
             if (!blocks.contains(g)) {
                 blocks.add(g);
                 costFactor = null;
-                if (advanced) {
+                if (type.isAdvanced()) {
                     advancedBlocks++;
                 }
-                if (simple) {
+                if (type.isSimple()) {
                     simpleBlocks++;
                 }
                 updateNetwork(world);
             }
         }
 
-        public void remove(World world, GlobalCoordinate g, boolean advanced, boolean simple) {
+        public void remove(World world, GlobalCoordinate g, DimensionalCellType type) {
             if (blocks.contains(g)) {
                 blocks.remove(g);
                 costFactor = null;
-                if (advanced) {
+                if (type.isAdvanced()) {
                     advancedBlocks--;
                 }
-                if (simple) {
+                if (type.isSimple()) {
                     simpleBlocks--;
                 }
                 updateNetwork(world);
@@ -270,24 +271,24 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             return f == null ? 1.0f : f;
         }
 
-        public int getEnergySingleBlock(boolean advanced, boolean simple) {
+        public int getEnergySingleBlock(DimensionalCellType type) {
             // Count how many blocks there would be if all powercells would be simple blocks:
             int simpleBlockCount = Math.max(1,
                     (blocks.size() - advancedBlocks - simpleBlocks) * DimensionalCellConfiguration.simpleFactor.get()
                     + advancedBlocks * DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()
                     + simpleBlocks);
             long rc = energy / simpleBlockCount;
-            if (advanced) {
+            if (type.isAdvanced()) {
                 rc *= DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get();
-            } else if (!simple) {
+            } else if (!type.isSimple()) {
                 rc *= DimensionalCellConfiguration.simpleFactor.get();
             }
             return rc > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)rc;
         }
 
-        public int extractEnergySingleBlock(boolean advanced, boolean simple) {
+        public int extractEnergySingleBlock(DimensionalCellType type) {
             // Calculate the average energy with advanced, normal, and simple blocks seen as the equivalent number of simple blocks
-            return extractEnergy(getEnergySingleBlock(advanced, simple));
+            return extractEnergy(getEnergySingleBlock(type));
         }
 
         public int getEnergy() {

@@ -18,6 +18,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +32,7 @@ public class ClientRegistration {
         InformationScreenRenderer.register();
         GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR, GuiCoalGenerator::new);
         GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL, GuiDimensionalCell::new);
+        OBJLoader.INSTANCE.addDomain(RFToolsPower.MODID);
     }
 
     @SubscribeEvent

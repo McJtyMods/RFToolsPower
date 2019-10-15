@@ -2,19 +2,19 @@
   "type": "mcjtylib:copy_nbt",
   "group": "rftools",
   "pattern": [
-    "rRr",
-    "RMR",
-    "rRr"
+    "rKr",
+    "KPK",
+    "rKr"
   ],
   "key": {
-    "r": {
-      "item": "minecraft:redstone"
-    },
-    "R": {
+    "K": {
       "item": "rftoolspower:power_core2"
     },
-    "M": {
+    "P": {
       "item": "rftoolspower:cell1"
+    },
+    "r": {
+      "item": "minecraft:redstone"
     }
   },
   "result": {

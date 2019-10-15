@@ -2,25 +2,28 @@
   "type": "minecraft:crafting_shaped",
   "group": "rftools",
   "pattern": [
-    "ses",
-    "rRr",
-    "srs"
+    "RdR",
+    "PFP",
+    "ReR"
   ],
   "key": {
-    "r": {
-      "item": "minecraft:redstone"
+    "P": {
+      "item": "minecraft:prismarine_shard"
     },
     "R": {
       "item": "minecraft:redstone_block"
     },
-    "s": {
-      "item": "rftoolsbase:dimensionalshard"
+    "d": {
+      "item": "minecraft:diamond"
     },
     "e": {
       "item": "minecraft:emerald"
+    },
+    "F": {
+      "item": "rftoolsbase:machine_frame"
     }
   },
   "result": {
-    "item": "rftoolspower:power_core2"
+    "item": "rftoolspower:dimensionalcell"
   }
 }

@@ -21,6 +21,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -43,6 +44,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
+
+import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock.*;
 
 public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
 
@@ -190,46 +193,51 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-        readRestorableFromNBT(tagCompound);
-    }
-
-    // @todo loot tables
-    public void readRestorableFromNBT(CompoundNBT tagCompound) {
-        energy = tagCompound.getInt("energy");
-        totalInserted = tagCompound.getLong("totIns");
-        totalExtracted = tagCompound.getLong("totExt");
-        networkId = tagCompound.getInt("networkId");
-        modes[0] = Mode.values()[tagCompound.getByte("m0")];
-        modes[1] = Mode.values()[tagCompound.getByte("m1")];
-        modes[2] = Mode.values()[tagCompound.getByte("m2")];
-        modes[3] = Mode.values()[tagCompound.getByte("m3")];
-        modes[4] = Mode.values()[tagCompound.getByte("m4")];
-        modes[5] = Mode.values()[tagCompound.getByte("m5")];
+        CompoundNBT info = tagCompound.getCompound("Info");
+        energy = info.getInt("energy");
+        totalInserted = info.getLong("totIns");
+        totalExtracted = info.getLong("totExt");
+        networkId = info.getInt("networkId");
+        modes[0] = Mode.values()[info.getByte("m0")];
+        modes[1] = Mode.values()[info.getByte("m1")];
+        modes[2] = Mode.values()[info.getByte("m2")];
+        modes[3] = Mode.values()[info.getByte("m3")];
+        modes[4] = Mode.values()[info.getByte("m4")];
+        modes[5] = Mode.values()[info.getByte("m5")];
     }
 
     @Override
     public CompoundNBT write(CompoundNBT tagCompound) {
         super.write(tagCompound);
-        writeRestorableToNBT(tagCompound);
+        CompoundNBT info = getOrCreateInfo(tagCompound);
+        info.putInt("energy", energy);
+        info.putLong("totIns", totalInserted);
+        info.putLong("totExt", totalExtracted);
+        info.putInt("networkId", networkId);
+        info.putByte("m0", (byte) modes[0].ordinal());
+        info.putByte("m1", (byte) modes[1].ordinal());
+        info.putByte("m2", (byte) modes[2].ordinal());
+        info.putByte("m3", (byte) modes[3].ordinal());
+        info.putByte("m4", (byte) modes[4].ordinal());
+        info.putByte("m5", (byte) modes[5].ordinal());
         return tagCompound;
-    }
-
-    // @todo 1.14 loot tables
-    public void writeRestorableToNBT(CompoundNBT tagCompound) {
-        tagCompound.putInt("energy", energy);
-        tagCompound.putLong("totIns", totalInserted);
-        tagCompound.putLong("totExt", totalExtracted);
-        tagCompound.putInt("networkId", networkId);
-        tagCompound.putByte("m0", (byte) modes[0].ordinal());
-        tagCompound.putByte("m1", (byte) modes[1].ordinal());
-        tagCompound.putByte("m2", (byte) modes[2].ordinal());
-        tagCompound.putByte("m3", (byte) modes[3].ordinal());
-        tagCompound.putByte("m4", (byte) modes[4].ordinal());
-        tagCompound.putByte("m5", (byte) modes[5].ordinal());
     }
 
     public Mode getMode(Direction side) {
         return modes[side.ordinal()];
+    }
+
+    private void updateState() {
+        Mode north = getMode(Direction.NORTH);
+        Mode south = getMode(Direction.SOUTH);
+        Mode west = getMode(Direction.WEST);
+        Mode east = getMode(Direction.EAST);
+        Mode up = getMode(Direction.UP);
+        Mode down = getMode(Direction.DOWN);
+        BlockState state = world.getBlockState(pos);
+        world.setBlockState(pos, state.with(NORTH, north).with(SOUTH, south).with(WEST, west).with(EAST, east).with(UP, up).with(DOWN, down),
+                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+        markDirtyQuick();
     }
 
     public void toggleMode(Direction side) {
@@ -244,7 +252,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 modes[side.ordinal()] = Mode.MODE_NONE;
                 break;
         }
-        markDirtyClient();
+        updateState();
     }
 
     @Override
@@ -261,7 +269,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 powerOut = 0;
             }
 
-            if (isCreative()) {
+            if (getDimensionalCellType().isCreative()) {
                 // A creative powercell automatically generates 1000000 RF/tick
                 int gain = 1000000;
                 int networkId = getNetworkId();
@@ -350,8 +358,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (!world.isRemote) {
             DimensionalCellNetwork.Network network = getNetwork();
             if (network != null) {
-                energy = network.extractEnergySingleBlock(isAdvanced(), isSimple());
-                network.remove(world, getGlobalPos(), isAdvanced(), isSimple());
+                energy = network.extractEnergySingleBlock(getDimensionalCellType());
+                network.remove(world, getGlobalPos(), getDimensionalCellType());
                 DimensionalCellNetwork.getChannels().save();
             }
         }
@@ -371,7 +379,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 }
                 networkId = id;
                 DimensionalCellNetwork.Network network = getNetwork();
-                network.add(world, getGlobalPos(), isAdvanced(), isSimple());
+                network.add(world, getGlobalPos(), getDimensionalCellType());
                 network.receiveEnergy(energy);
                 channels.save();
             } else {
@@ -381,24 +389,16 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         });
     }
 
-    private boolean isAdvanced() {
-        return DimensionalCellBlock.isAdvanced(world.getBlockState(getPos()).getBlock());
-    }
-
-    private boolean isSimple() {
-        return DimensionalCellBlock.isSimple(world.getBlockState(getPos()).getBlock());
-    }
-
-    private boolean isCreative() {
-        return DimensionalCellBlock.isCreative(world.getBlockState(getPos()).getBlock());
+    private DimensionalCellType getDimensionalCellType() {
+        return DimensionalCellBlock.getType(world.getBlockState(pos).getBlock());
     }
 
     // Get the power factor relative to the simple powercell
     private int getPowerFactor() {
-        if (isSimple()) {
+        if (getDimensionalCellType().isSimple()) {
             return 1;
         }
-        return isAdvanced() ? (DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()) : DimensionalCellConfiguration.simpleFactor.get();
+        return getDimensionalCellType().isAdvanced() ? (DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()) : DimensionalCellConfiguration.simpleFactor.get();
     }
 
     public int getEnergy() {
@@ -459,7 +459,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 DimensionalCellNetwork.getChannels().save();
             }
         }
-        return isCreative() ? maxReceive : maxInsert;
+        return getDimensionalCellType().isCreative() ? maxReceive : maxInsert;
     }
 
     private int receiveEnergyLocal(int maxReceive, boolean simulate) {
@@ -472,7 +472,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 markDirty();
             }
         }
-        return isCreative() ? maxReceive : maxInsert;
+        return getDimensionalCellType().isCreative() ? maxReceive : maxInsert;
     }
 
     private int extractEnergyInternal(int maxExtract, boolean simulate, int maximum) {
@@ -550,21 +550,21 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         for (Direction facing : OrientationTools.DIRECTION_VALUES) {
             modes[facing.ordinal()] = Mode.MODE_OUTPUT;
         }
-        markDirtyClient();
+        updateState();
     }
 
     private void setAllInput() {
         for (Direction facing : OrientationTools.DIRECTION_VALUES) {
             modes[facing.ordinal()] = Mode.MODE_INPUT;
         }
-        markDirtyClient();
+        updateState();
     }
 
     private void setAllNone() {
         for (Direction facing : OrientationTools.DIRECTION_VALUES) {
             modes[facing.ordinal()] = Mode.MODE_NONE;
         }
-        markDirtyClient();
+        updateState();
     }
 
     @Override
@@ -614,8 +614,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 return TypedMap.builder()
                         .put(PARAM_ENERGY, getEnergy())
                         .put(PARAM_BLOCKS, 1)
-                        .put(PARAM_SIMPLEBLOCKS, isSimple() ? 1 : 0)
-                        .put(PARAM_ADVANCEDBLOCKS, isAdvanced() ? 1 : 0)
+                        .put(PARAM_SIMPLEBLOCKS, getDimensionalCellType().isSimple() ? 1 : 0)
+                        .put(PARAM_ADVANCEDBLOCKS, getDimensionalCellType().isAdvanced() ? 1 : 0)
                         .put(PARAM_TOTAL_INSERTED, getTotalInserted())
                         .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
                         .put(PARAM_RFPERTICK, getRfPerTickPerSide())

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "dimensionalcell_simple",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "rftoolspower:dimensionalcell_simple"
+        }
+      ]
+    }
+  ]
+}
