@@ -12,7 +12,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Items;
-import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -59,16 +58,16 @@ public class Recipes extends BaseRecipeProvider {
                         .key('P', PowerCellSetup.CELL2)
                         .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL2)),
                 "rKr", "KPK", "rKr");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.dimensionalCellBlock)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL)
                         .key('P', Items.PRISMARINE_SHARD)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "RdR", "PFP", "ReR");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.simpleDimensionalCellBlock)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE)
                         .key('q', Items.QUARTZ)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "RdR", "qFq", "RdR");
-        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.advancedDimensionalCellBlock)
-                        .key('K', DimensionalCellSetup.dimensionalCellBlock)
+        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED)
+                        .key('K', DimensionalCellSetup.DIMENSIONAL_CELL)
                         .key('*', Items.DIAMOND)    // @todo 1.14 infused diamond!
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "R*R", "*K*", "R*R");

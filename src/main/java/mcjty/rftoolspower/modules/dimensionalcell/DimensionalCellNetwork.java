@@ -131,7 +131,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             for (GlobalCoordinate c : copy) {
                 World world = mcjty.lib.varia.TeleportationTools.getWorldForDimension(c.getDimension());
                 BlockState state = world.getBlockState(c.getCoordinate());
-                if (state.getBlock() == DimensionalCellSetup.dimensionalCellBlock) {
+                if (state.getBlock() == DimensionalCellSetup.DIMENSIONAL_CELL) {
                     blocks.add(c);
                 } else if (DimensionalCellBlock.getType(state.getBlock()).isAdvanced()) {
                     blocks.add(c);

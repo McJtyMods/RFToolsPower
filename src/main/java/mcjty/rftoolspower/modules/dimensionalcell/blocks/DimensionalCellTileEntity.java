@@ -583,11 +583,11 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 msg = "dimension missing!";
             } else {
                 Block block = w.getBlockState(b.getCoordinate()).getBlock();
-                if (block == DimensionalCellSetup.dimensionalCellBlock) {
+                if (block == DimensionalCellSetup.DIMENSIONAL_CELL) {
                     msg = "normal";
-                } else if (block == DimensionalCellSetup.advancedDimensionalCellBlock) {
+                } else if (block == DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED) {
                     msg = "advanced";
-                } else if (block == DimensionalCellSetup.creativeDimensionalCellBlock) {
+                } else if (block == DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE) {
                     msg = "creative";
                 } else {
                     msg = "not a powercell!";
