@@ -1,10 +1,10 @@
 package mcjty.rftoolspower.modules.informationscreen.network;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
 import mcjty.rftoolspower.network.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -38,8 +38,9 @@ public class PacketGetMonitorLog {
                 InformationScreenTileEntity info = (InformationScreenTileEntity) te;
                 EnergyTools.EnergyLevel power = info.getPower();
 
-                RFToolsPowerMessages.INSTANCE.sendTo(new PacketMonitorLogReady(pos, power, info.getRfInsertedPerTick(), info.getRfExtractPerTick(),
-                        info.calculateRoughMaxRfPerTick()), McJtyLib.proxy.getNetworkManager(player), NetworkDirection.PLAY_TO_SERVER);
+                PacketMonitorLogReady packet = new PacketMonitorLogReady(pos, power, info.getRfInsertedPerTick(), info.getRfExtractPerTick(),
+                        info.calculateRoughMaxRfPerTick());
+                RFToolsPowerMessages.INSTANCE.sendTo(packet, ((ServerPlayerEntity) player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             }
         });
         ctx.setPacketHandled(true);
