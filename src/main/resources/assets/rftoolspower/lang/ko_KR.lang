@@ -1,0 +1,12 @@
+item.rftoolspower.power_core1.name=낮은 파워 코어
+item.rftoolspower.power_core2.name=중간 파워 코어
+item.rftoolspower.power_core3.name=높은 파워 코어
+
+tile.rftoolspower.cell1.name=낮은 파워셀
+tile.rftoolspower.cell2.name=중간 파워셀
+tile.rftoolspower.cell3.name=높은 파워셀
+tile.rftoolspower.information_screen.name=안내 스크린
+
+itemGroup.RFToolsPower=RF툴즈(파워)
+
+message.shiftMessage=Shift키를 누르세요.
