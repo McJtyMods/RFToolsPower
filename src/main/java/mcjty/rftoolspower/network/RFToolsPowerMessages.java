@@ -1,8 +1,6 @@
 package mcjty.rftoolspower.network;
 
-import mcjty.lib.network.PacketHandler;
-import mcjty.lib.network.PacketSendClientCommand;
-import mcjty.lib.network.PacketSendServerCommand;
+import mcjty.lib.network.*;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.informationscreen.network.PacketGetMonitorLog;
@@ -34,6 +32,9 @@ public class RFToolsPowerMessages {
 
         // Client side
         net.registerMessage(id(), PacketMonitorLogReady.class, PacketMonitorLogReady::toBytes, PacketMonitorLogReady::new, PacketMonitorLogReady::handle);
+
+        net.registerMessage(id(), PacketRequestDataFromServer.class, PacketRequestDataFromServer::toBytes, PacketRequestDataFromServer::new,
+                new ChannelBoundHandler<>(net, PacketRequestDataFromServer::handle));
 
         PacketHandler.registerStandardMessages(net);
     }

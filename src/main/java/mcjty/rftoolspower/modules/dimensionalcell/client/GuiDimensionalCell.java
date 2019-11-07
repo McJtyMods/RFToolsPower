@@ -81,7 +81,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private void requestRF() {
         if (System.currentTimeMillis() - lastTime > 250) {
             lastTime = System.currentTimeMillis();
-            tileEntity.requestDataFromServer(RFToolsPower.MODID, DimensionalCellTileEntity.CMD_GET_INFO, TypedMap.EMPTY);
+            tileEntity.requestDataFromServer(RFToolsPowerMessages.INSTANCE, DimensionalCellTileEntity.CMD_GET_INFO, TypedMap.EMPTY);
         }
     }
 
