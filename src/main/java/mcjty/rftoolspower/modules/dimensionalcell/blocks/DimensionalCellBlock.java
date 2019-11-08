@@ -24,12 +24,10 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameter;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -235,7 +233,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     // No network, energy is already restored to the local block
                 } else {
                     int energy = stack.getTag().getInt("energy");
-                    DimensionalCellNetwork dimensionalCellNetwork = DimensionalCellNetwork.getChannels();
+                    DimensionalCellNetwork dimensionalCellNetwork = DimensionalCellNetwork.get(world);
                     DimensionalCellNetwork.Network network = dimensionalCellNetwork.getChannel(networkId);
                     network.receiveEnergy(energy);
                     Block block = world.getBlockState(pos).getBlock();
@@ -297,7 +295,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     int a = network.extractEnergySingleBlock(type);
                     Block block = world.getBlockState(pos).getBlock();
                     network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
-                    DimensionalCellNetwork.getChannels().save();
+                    DimensionalCellNetwork.get(world).save();
                     cellTileEntity.setNetworkId(-1);
                 }
             }
@@ -316,7 +314,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     int a = network.extractEnergySingleBlock(type);
                     Block block = world.getBlockState(pos).getBlock();
                     network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
-                    DimensionalCellNetwork.getChannels().save();
+                    DimensionalCellNetwork.get(world).save();
                 }
             }
         }

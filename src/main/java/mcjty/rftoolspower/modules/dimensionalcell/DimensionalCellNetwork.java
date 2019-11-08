@@ -32,8 +32,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
         super(DIMENSIONALCELL_NETWORK_NAME);
     }
 
-    public static DimensionalCellNetwork getChannels() {
-        return getData(DimensionalCellNetwork::new, DIMENSIONALCELL_NETWORK_NAME);
+    public static DimensionalCellNetwork get(World world) {
+        return getData(world, DimensionalCellNetwork::new, DIMENSIONALCELL_NETWORK_NAME);
     }
 
     public Network getOrCreateNetwork(int id) {

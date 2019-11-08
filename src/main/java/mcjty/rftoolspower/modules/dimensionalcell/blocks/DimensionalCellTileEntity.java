@@ -174,7 +174,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (networkId == -1) {
             return null;
         }
-        DimensionalCellNetwork generatorNetwork = DimensionalCellNetwork.getChannels();
+        DimensionalCellNetwork generatorNetwork = DimensionalCellNetwork.get(world);
         return generatorNetwork.getOrCreateNetwork(networkId);
     }
 
@@ -360,7 +360,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             if (network != null) {
                 energy = network.extractEnergySingleBlock(getDimensionalCellType());
                 network.remove(world, getGlobalPos(), getDimensionalCellType());
-                DimensionalCellNetwork.getChannels().save();
+                DimensionalCellNetwork.get(world).save();
             }
         }
         networkId = -1;
@@ -372,7 +372,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             ItemStack stack = h.getStackInSlot(DimensionalCellContainer.SLOT_CARD);
             int id = PowerCellCardItem.getId(stack);
             if (!world.isRemote) {
-                DimensionalCellNetwork channels = DimensionalCellNetwork.getChannels();
+                DimensionalCellNetwork channels = DimensionalCellNetwork.get(world);
                 if (id == -1) {
                     id = channels.newChannel();
                     PowerCellCardItem.setId(stack, id);
@@ -456,7 +456,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (maxInsert > 0) {
             if (!simulate) {
                 maxInsert = network.receiveEnergy(maxInsert);
-                DimensionalCellNetwork.getChannels().save();
+                DimensionalCellNetwork.get(world).save();
             }
         }
         return getDimensionalCellType().isCreative() ? maxReceive : maxInsert;
@@ -501,7 +501,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
         if (!simulate) {
             maxExtract = network.extractEnergy(maxExtract);
-            DimensionalCellNetwork.getChannels().save();
+            DimensionalCellNetwork.get(world).save();
         }
         return maxExtract;
     }
