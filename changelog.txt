@@ -1,3 +1,6 @@
+1.2.8:
+- Updates to the latest McJtyLib
+
 1.2.3:
 - Update to latest Forge
 
