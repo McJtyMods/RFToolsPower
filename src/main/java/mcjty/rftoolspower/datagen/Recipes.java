@@ -68,8 +68,12 @@ public class Recipes extends BaseRecipeProvider {
                 "RdR", "qFq", "RdR");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED)
                         .key('K', DimensionalCellSetup.DIMENSIONAL_CELL)
-                        .key('*', Items.DIAMOND)    // @todo 1.14 infused diamond!
+                        .key('*', ModItems.INFUSED_DIAMOND)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "R*R", "*K*", "R*R");
+        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.POWERCELL_CARD)
+                        .key('g', Items.GOLD_NUGGET)
+                        .addCriterion("paper", InventoryChangeTrigger.Instance.forItems(Items.PAPER, Items.REDSTONE)),
+                "rgr", "gpg", "rgr");
     }
 }

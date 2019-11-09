@@ -11,7 +11,7 @@
       "item": "rftoolspower:dimensionalcell"
     },
     "*": {
-      "item": "minecraft:diamond"
+      "item": "rftoolsbase:infused_diamond"
     },
     "R": {
       "item": "minecraft:redstone_block"

@@ -1,3 +1,6 @@
+Upcoming:
+- Added recipe for the powercell card
+
 1.2.8:
 - Updates to the latest McJtyLib
 
