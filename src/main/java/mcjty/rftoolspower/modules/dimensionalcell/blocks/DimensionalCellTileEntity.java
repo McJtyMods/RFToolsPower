@@ -1,13 +1,17 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
+import mcjty.lib.api.container.CapabilityContainerProvider;
+import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
+import mcjty.lib.api.module.CapabilityModuleSupport;
 import mcjty.lib.api.module.DefaultModuleSupport;
 import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
 import mcjty.lib.bindings.DefaultAction;
 import mcjty.lib.bindings.IAction;
+import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.typed.Key;
@@ -23,6 +27,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -46,6 +51,7 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock.*;
+import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellContainer.CONTAINER_FACTORY;
 
 public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
 
@@ -90,8 +96,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
     private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
     private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(this::createItemHandler);
-    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(() -> new NullHandler());
-    private LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(() -> createMachineInfo());
+    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
+    private LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
     private LazyOptional<SidedHandler>[] sidedStorages = new LazyOptional[]{
             LazyOptional.of(() -> new SidedHandler(Direction.DOWN)),
             LazyOptional.of(() -> new SidedHandler(Direction.UP)),
@@ -100,6 +106,9 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             LazyOptional.of(() -> new SidedHandler(Direction.WEST)),
             LazyOptional.of(() -> new SidedHandler(Direction.EAST))
     };
+    private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
+            .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY, getPos(), DimensionalCellTileEntity.this))
+            .itemHandler(itemHandler));
     private LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
@@ -191,8 +200,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    protected void readInfo(CompoundNBT tagCompound) {
+        super.readInfo(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         energy = info.getInt("energy");
         totalInserted = info.getLong("totIns");
@@ -207,8 +216,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        super.write(tagCompound);
+    protected void writeInfo(CompoundNBT tagCompound) {
+        super.writeInfo(tagCompound);
         CompoundNBT info = getOrCreateInfo(tagCompound);
         info.putInt("energy", energy);
         info.putLong("totIns", totalInserted);
@@ -220,14 +229,13 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         info.putByte("m3", (byte) modes[3].ordinal());
         info.putByte("m4", (byte) modes[4].ordinal());
         info.putByte("m5", (byte) modes[5].ordinal());
-        return tagCompound;
     }
 
     public Mode getMode(Direction side) {
         return modes[side.ordinal()];
     }
 
-    private void updateState() {
+    public void updateState() {
         Mode north = getMode(Direction.NORTH);
         Mode south = getMode(Direction.SOUTH);
         Mode west = getMode(Direction.WEST);
@@ -677,6 +685,12 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (capability == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
             return infoHandler.cast();
         }
+        if (capability == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
+            return screenHandler.cast();
+        }
+        if (capability == CapabilityModuleSupport.MODULE_CAPABILITY) {
+            return moduleSupportHandler.cast();
+        }
         return super.getCapability(capability, facing);
     }
 
@@ -751,7 +765,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private NoDirectionItemHander createItemHandler() {
-        return new NoDirectionItemHander(DimensionalCellTileEntity.this, DimensionalCellContainer.CONTAINER_FACTORY) {
+        return new NoDirectionItemHander(DimensionalCellTileEntity.this, CONTAINER_FACTORY) {
 
             @Override
             public boolean isItemValid(int index, @Nonnull ItemStack stack) {

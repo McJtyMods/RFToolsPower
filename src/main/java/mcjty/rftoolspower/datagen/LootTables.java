@@ -20,10 +20,10 @@ public class LootTables extends BaseLootTableProvider {
         lootTables.put(PowerCellSetup.CELL2, createStandardTable("cell2", PowerCellSetup.CELL2));
         lootTables.put(PowerCellSetup.CELL3, createStandardTable("cell3", PowerCellSetup.CELL3));
         lootTables.put(InformationScreenSetup.INFORMATION_SCREEN, createSimpleTable("informationscreen", InformationScreenSetup.INFORMATION_SCREEN));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL, createSimpleTable("dimensionalcell", DimensionalCellSetup.DIMENSIONAL_CELL));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED, createSimpleTable("dimensionalcell_advanced", DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE, createSimpleTable("dimensionalcell_creative", DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE, createSimpleTable("dimensionalcell_simple", DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL, createStandardTable("dimensionalcell", DimensionalCellSetup.DIMENSIONAL_CELL));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED, createStandardTable("dimensionalcell_advanced", DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE, createStandardTable("dimensionalcell_creative", DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE, createStandardTable("dimensionalcell_simple", DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE));
     }
 
     @Override

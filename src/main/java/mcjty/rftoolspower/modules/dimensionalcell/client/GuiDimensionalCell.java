@@ -27,7 +27,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     private static long lastTime = 0;
 
-    private static final ResourceLocation iconLocation = new ResourceLocation(RFToolsPower.MODID, "textures/gui/powercell.png");
+    private static final ResourceLocation iconLocation = new ResourceLocation(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
     public GuiDimensionalCell(DimensionalCellTileEntity te, DimensionalCellContainer container, PlayerInventory inventory) {
         super(RFToolsPower.instance, RFToolsPowerMessages.INSTANCE, te, container, inventory, 0/*@todo 1.14 GuiProxy.GUI_MANUAL_MAIN*/, "powercell");

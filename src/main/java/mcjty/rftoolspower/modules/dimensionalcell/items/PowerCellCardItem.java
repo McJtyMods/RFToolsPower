@@ -4,6 +4,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -16,6 +17,10 @@ public class PowerCellCardItem extends Item {
     public PowerCellCardItem() {
         super(new Properties().group(RFToolsPower.setup.getTab()));
         setRegistryName("powercell_card");
+        addPropertyOverride(new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
+            int id = getId(stack);
+            return id == -1 ? 0 : 1;
+        });
     }
 
     @Override

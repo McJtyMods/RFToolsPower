@@ -1,7 +1,5 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
-import mcjty.lib.api.module.DefaultModuleSupport;
-import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.SmartWrenchMode;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
@@ -10,7 +8,6 @@ import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolsbase.items.SmartWrenchItem;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
-import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -29,7 +26,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,13 +57,6 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         return false;
     }
 
-    private LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
-        @Override
-        public boolean isModule(ItemStack itemStack) {
-             return (itemStack.getItem() instanceof PowerCellCardItem);
-        }
-    });
-
     public DimensionalCellType getType() {
         return type;
     }
@@ -84,16 +74,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 .tileEntitySupplier(supplier)
                 .infusable()
                 .info("message.rftoolspower.dimensional_cell")
-                .infoParameter(stack -> {
-                    return stack.getTag() == null ? "<empty>" : String.valueOf(stack.getTag().getInt("energy"));
-                })
+                .infoParameter(stack -> stack.getTag() == null ? "<empty>" : String.valueOf(getEnergy(stack)))
                 .infoExtended("message.rftoolspower.dimensional_cell_shift")
-                .infoExtendedParameter(stack -> {
-                    return stack.getTag() == null ? "<empty>" : String.valueOf(stack.getTag().getInt("energy"));
-                })
-                .infoExtendedParameter(stack -> {
-                    return String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
-                })
+                .infoExtendedParameter(stack -> stack.getTag() == null ? "<empty>" : String.valueOf(getEnergy(stack)))
+                .infoExtendedParameter(stack -> String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get()))
         );
         this.type = type;
     }
@@ -222,6 +206,32 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         return true;
     }
 
+    private static int getEnergy(ItemStack stack) {
+        CompoundNBT tag = stack.getTag();
+        if (tag == null) {
+            return 0;
+        }
+        if (tag.contains("BlockEntityTag")) {
+            tag = tag.getCompound("BlockEntityTag");
+            if (tag.contains("Info")) {
+                return tag.getCompound("Info").getInt("energy");
+            }
+        }
+        return 0;
+    }
+
+    private static void setEnergy(ItemStack stack, int energy) {
+        CompoundNBT tag = stack.getOrCreateTag();
+        if (!tag.contains("BlockEntityTag")) {
+            tag.put("BlockEntityTag", new CompoundNBT());
+        }
+        tag = tag.getCompound("BlockEntityTag");
+        if (!tag.contains("Info")) {
+            tag.put("Info", new CompoundNBT());
+        }
+        tag.getCompound("Info").putInt("energy", energy);
+    }
+
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
@@ -232,13 +242,17 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 if (networkId == -1) {
                     // No network, energy is already restored to the local block
                 } else {
-                    int energy = stack.getTag().getInt("energy");
+                    int energy = getEnergy(stack);
                     DimensionalCellNetwork dimensionalCellNetwork = DimensionalCellNetwork.get(world);
                     DimensionalCellNetwork.Network network = dimensionalCellNetwork.getChannel(networkId);
                     network.receiveEnergy(energy);
                     Block block = world.getBlockState(pos).getBlock();
                     network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
                     dimensionalCellNetwork.save();
+                    if (!world.isRemote) {
+//                        world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                        dimensionalCellTileEntity.updateState();
+                    }
                 }
             }
         } else if (!stack.hasTag() && !world.isRemote) {
@@ -257,6 +271,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     // @todo 1.14 is this the right way? Perhaps not
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        System.out.println("DimensionalCellBlock.getDrops");
         World world = builder.getWorld();
         BlockPos pos = builder.get(LootParameters.POSITION);
         List<ItemStack> drops = super.getDrops(state, builder);
@@ -266,16 +281,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 DimensionalCellNetwork.Network network = ((DimensionalCellTileEntity) te).getNetwork();
                 if (network != null) {
                     int energy = network.getEnergySingleBlock(getType());
+                    System.out.println("getDrops: energy = " + energy);
                     if (!drops.isEmpty()) {
-                        CompoundNBT tagCompound = drops.get(0).getTag();
-                        if (tagCompound == null) {
-                            tagCompound = new CompoundNBT();
-                            drops.get(0).setTag(tagCompound);
-                        }
-                        if (tagCompound.contains("BlockEntityTag") && tagCompound.getCompound("BlockEntityTag").contains("Info")) {
-                            CompoundNBT info = tagCompound.getCompound("BlockEntityTag").getCompound("Info");
-                            info.putInt("energy", energy);
-                        }
+                        setEnergy(drops.get(0), energy);
                     }
                 }
             }
@@ -306,15 +314,19 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     @Override
     public void onReplaced(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
         if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof DimensionalCellTileEntity) {
-                DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
-                DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
-                if (network != null) {
-                    int a = network.extractEnergySingleBlock(type);
-                    Block block = world.getBlockState(pos).getBlock();
-                    network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
-                    DimensionalCellNetwork.get(world).save();
+            if (state.getBlock() != newstate.getBlock()) {
+                System.out.println("DimensionalCellBlock.onReplaced");
+                TileEntity te = world.getTileEntity(pos);
+                if (te instanceof DimensionalCellTileEntity) {
+                    DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
+                    DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
+                    if (network != null) {
+                        int a = network.extractEnergySingleBlock(type);
+                        System.out.println("a = " + a);
+                        Block block = world.getBlockState(pos).getBlock();
+                        network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
+                        DimensionalCellNetwork.get(world).save();
+                    }
                 }
             }
         }

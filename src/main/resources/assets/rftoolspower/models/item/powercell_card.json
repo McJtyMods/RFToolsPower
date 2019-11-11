@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "rftoolspower:item/powercellcarditem"
+  },
+  "overrides": [
+    { "predicate": { "rftoolspower:linked": 0 }, "model": "rftoolspower:item/powercell_card_unlinked" },
+    { "predicate": { "rftoolspower:linked": 1 }, "model": "rftoolspower:item/powercell_card_linked" }
+  ]
+}

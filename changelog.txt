@@ -1,5 +1,7 @@
 Upcoming:
 - Added recipe for the powercell card
+- A linked powercell card now has a different texture
+- Fixed the dimensional cells to work properly again
 
 1.2.8:
 - Updates to the latest McJtyLib
