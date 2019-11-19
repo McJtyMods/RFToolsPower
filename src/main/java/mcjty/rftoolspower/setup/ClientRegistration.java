@@ -9,7 +9,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.informationscreen.client.InformationScreenRenderer;
-import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
+import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -65,13 +65,14 @@ public class ClientRegistration {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
         PowerCellBakedModel model = new PowerCellBakedModel(DefaultVertexFormats.BLOCK);
-        Lists.newArrayList(PowerCellSetup.CELL1, PowerCellSetup.CELL2, PowerCellSetup.CELL3).stream()
-                .forEach(block -> {
-                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), ""), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=false,upper=false"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=false,upper=true"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=true,upper=false"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(block.getRegistryName(), "lower=true,upper=true"), model);
+        Lists.newArrayList(PowerCellTileEntity.REGNAME1, PowerCellTileEntity.REGNAME2, PowerCellTileEntity.REGNAME3).stream()
+                .forEach(name -> {
+                    ResourceLocation rl = new ResourceLocation(RFToolsPower.MODID, name);
+                    event.getModelRegistry().put(new ModelResourceLocation(rl, ""), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=false,upper=false"), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=false,upper=true"), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=true,upper=false"), model);
+                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=true,upper=true"), model);
                 });
     }
 }
