@@ -66,7 +66,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         }
     };
 
-    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> new NoDirectionItemHander(this, CONTAINER_FACTORY));
+    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> createItemHandler());
     private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
     private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
@@ -262,6 +262,24 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             @Override
             public String getMachineStatus() {
                 return burning > 0 ? "generating power" : "idle";
+            }
+        };
+    }
+
+    private NoDirectionItemHander createItemHandler() {
+        return new NoDirectionItemHander(this, CONTAINER_FACTORY) {
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                if (slot == SLOT_COALINPUT) {
+                    return (stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL || stack.getItem() == Items.COAL_BLOCK);
+                } else {
+                    return EnergyTools.isEnergyItem(stack);
+                }
+            }
+
+            @Override
+            public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
+                return isItemValid(slot, stack);
             }
         };
     }
