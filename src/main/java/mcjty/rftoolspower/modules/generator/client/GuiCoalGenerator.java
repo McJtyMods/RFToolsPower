@@ -18,7 +18,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     private EnergyBar energyBar;
 
     public GuiCoalGenerator(CoalGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, RFToolsPowerMessages.INSTANCE, tileEntity, container, inventory, 0, "coalgen");
+        super(RFToolsPower.instance, tileEntity, container, inventory, 0, "coalgen");
     }
 
     @Override
