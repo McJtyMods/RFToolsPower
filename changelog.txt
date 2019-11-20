@@ -1,6 +1,7 @@
-Upcoming:
+1.2.10:
 - Avoid a rare crash during model registration
 - The coal generator no longer accepts any item for power generation
+- Fixed a serious networking problem which could cause 'invalid discriminator spam' on servers
 
 1.2.9:
 - Added recipe for the powercell card

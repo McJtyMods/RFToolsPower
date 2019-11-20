@@ -28,19 +28,20 @@ public class RFToolsPowerMessages {
         INSTANCE = net;
 
         // Server side
-        net.registerMessage(id(), PacketGetMonitorLog.class, PacketGetMonitorLog::toBytes, PacketGetMonitorLog::new, PacketGetMonitorLog::handle);
+        PacketHandler.debugRegister("RFToolsPower", net, id(), PacketGetMonitorLog.class, PacketGetMonitorLog::toBytes, PacketGetMonitorLog::new, PacketGetMonitorLog::handle);
 
         // Client side
-        net.registerMessage(id(), PacketMonitorLogReady.class, PacketMonitorLogReady::toBytes, PacketMonitorLogReady::new, PacketMonitorLogReady::handle);
+        PacketHandler.debugRegister("RFToolsPower", net, id(), PacketMonitorLogReady.class, PacketMonitorLogReady::toBytes, PacketMonitorLogReady::new, PacketMonitorLogReady::handle);
 
-        net.registerMessage(id(), PacketRequestDataFromServer.class, PacketRequestDataFromServer::toBytes, PacketRequestDataFromServer::new,
+        PacketHandler.debugRegister("RFToolsPower", net, id(), PacketRequestDataFromServer.class, PacketRequestDataFromServer::toBytes, PacketRequestDataFromServer::new,
                 new ChannelBoundHandler<>(net, PacketRequestDataFromServer::handle));
 
-        PacketHandler.registerStandardMessages(net);
+        PacketHandler.registerStandardMessages("RFToolsPower - standard", id(), net);
     }
 
+    private static int packetId = 0;
     private static int id() {
-        return PacketHandler.nextPacketID();
+        return packetId++;
     }
 
     public static void sendToServer(String command, @Nonnull TypedMap.Builder argumentBuilder) {
