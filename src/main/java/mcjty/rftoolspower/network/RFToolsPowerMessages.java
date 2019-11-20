@@ -27,12 +27,8 @@ public class RFToolsPowerMessages {
 
         INSTANCE = net;
 
-        // Server side
         PacketHandler.debugRegister("RFToolsPower", net, id(), PacketGetMonitorLog.class, PacketGetMonitorLog::toBytes, PacketGetMonitorLog::new, PacketGetMonitorLog::handle);
-
-        // Client side
         PacketHandler.debugRegister("RFToolsPower", net, id(), PacketMonitorLogReady.class, PacketMonitorLogReady::toBytes, PacketMonitorLogReady::new, PacketMonitorLogReady::handle);
-
         PacketHandler.debugRegister("RFToolsPower", net, id(), PacketRequestDataFromServer.class, PacketRequestDataFromServer::toBytes, PacketRequestDataFromServer::new,
                 new ChannelBoundHandler<>(net, PacketRequestDataFromServer::handle));
 

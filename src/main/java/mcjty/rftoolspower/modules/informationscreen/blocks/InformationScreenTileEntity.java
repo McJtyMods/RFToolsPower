@@ -113,7 +113,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
         TileEntity te = world.getTileEntity(offset);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
-            return (long) powercell.getRfPerTickPerSide() * 2;
+            return powercell.getRfPerTickPerSide() * 2;
         }
         return -1;
     }

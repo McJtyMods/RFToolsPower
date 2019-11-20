@@ -4,6 +4,8 @@ import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
+import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
+import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
@@ -52,6 +54,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public static final ModelProperty<Tier> TIER = new ModelProperty<>();
 
 
+    private LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
     private LazyOptional<NullHandler> nullStorage = LazyOptional.of(this::createNullHandler);
     private LazyOptional<SidedHandler>[] sidedStorages;
 
@@ -515,6 +518,9 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
                 return sidedStorages[facing.ordinal()].cast();
             }
         }
+        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
+            return infoScreenInfo.cast();
+        }
         return super.getCapability(capability, facing);
     }
 
@@ -555,6 +561,11 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         public boolean canReceive() {
             return true;
         }
+    }
+
+    @Nonnull
+    private IInformationScreenInfo createScreenInfo() {
+        return new PowerCellInformationScreenInfo(this);
     }
 
     private SidedHandler createSidedHandler(Direction facing) {

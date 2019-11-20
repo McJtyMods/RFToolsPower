@@ -1,11 +1,10 @@
 package mcjty.rftoolspower.modules.informationscreen.blocks;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolsbase.modules.informationscreen.InformationScreenSetup;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -15,7 +14,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
@@ -23,9 +24,12 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 public class InformationScreenBlock extends BaseBlock {
 
@@ -38,17 +42,8 @@ public class InformationScreenBlock extends BaseBlock {
     @Override
     public void addInformation(ItemStack itemStack, IBlockReader world, List<ITextComponent> list, ITooltipFlag flag) {
         super.addInformation(itemStack, world, list, flag);
-        if (McJtyLib.proxy.isShiftKeyDown()) {
-            list.add(new StringTextComponent(TextFormatting.WHITE + "Place this block on a powercell"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "to display information about that cell"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "Right click with a wrench to change"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "modes"));
-            list.add(new StringTextComponent(TextFormatting.GRAY + "Bonus: this block can display"));
-            list.add(new StringTextComponent(TextFormatting.GRAY + "power information about any block"));
-            list.add(new StringTextComponent(TextFormatting.GRAY + "that supports RF/FE"));
-        } else {
-            list.add(new StringTextComponent(TextFormatting.WHITE + RFToolsPower.SHIFT_MESSAGE));
-        }
+        list.add(new StringTextComponent(TextFormatting.RED + "Deprecated! Use the information screen"));
+        list.add(new StringTextComponent(TextFormatting.RED + "from RFTools Base instead!"));
     }
 
     public static final VoxelShape BLOCK_NORTH = Block.makeCuboidShape(0.0F, 0.0F, 0.0F, 16.0F, 16.0F, 1F);
@@ -71,6 +66,15 @@ public class InformationScreenBlock extends BaseBlock {
             default:
                 return BLOCK_NORTH;
         }
+    }
+
+    @Override
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+        if (!world.isRemote) {
+            Direction facing = state.get(HORIZONTAL_FACING);
+            world.setBlockState(pos, InformationScreenSetup.INFORMATION_SCREEN.getDefaultState().with(HORIZONTAL_FACING, facing), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+        }
+        return true;
     }
 
     @Override

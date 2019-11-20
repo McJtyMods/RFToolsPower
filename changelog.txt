@@ -1,5 +1,6 @@
 Upcoming:
 - The information screen will now remember the 'mode' when it is broken
+- Information Screen from RFTools Power has been moved to RFTools Base
 
 1.2.10:
 - Avoid a rare crash during model registration
