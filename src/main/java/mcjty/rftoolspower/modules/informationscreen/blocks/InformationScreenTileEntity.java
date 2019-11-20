@@ -12,8 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-
 import static mcjty.rftoolspower.modules.informationscreen.InformationScreenSetup.TYPE_INFORMATION_SCREEN;
 
 public class InformationScreenTileEntity extends GenericTileEntity implements ITickableTileEntity {
@@ -86,16 +84,17 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
-        mode = tagCompound.getByte("mode");
+    protected void readInfo(CompoundNBT tagCompound) {
+        super.readInfo(tagCompound);
+        CompoundNBT info = tagCompound.getCompound("Info");
+        mode = info.getByte("mode");
     }
 
     @Override
-    @Nonnull
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        tagCompound.putByte("mode", (byte) mode);
-        return super.write(tagCompound);
+    protected void writeInfo(CompoundNBT tagCompound) {
+        super.writeInfo(tagCompound);
+        CompoundNBT infoTag = getOrCreateInfo(tagCompound);
+        infoTag.putByte("mode", (byte) mode);
     }
 
     public void setClientPower(EnergyTools.EnergyLevel power, long rfInsertedPerTick, long rfExtractPerTick, long roughMaxRfPerTick) {

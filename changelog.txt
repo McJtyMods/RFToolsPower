@@ -1,3 +1,6 @@
+Upcoming:
+- The information screen will now remember the 'mode' when it is broken
+
 1.2.10:
 - Avoid a rare crash during model registration
 - The coal generator no longer accepts any item for power generation
