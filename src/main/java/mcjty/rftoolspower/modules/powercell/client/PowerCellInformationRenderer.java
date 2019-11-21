@@ -11,9 +11,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static mcjty.rftoolsbase.modules.informationscreen.client.DefaultPowerInformationRenderer.*;
 
 public class PowerCellInformationRenderer {
 
@@ -39,7 +40,6 @@ public class PowerCellInformationRenderer {
         GlStateManager.disableLighting();
 
         if (maxEnergy > 0) {
-//            int mode = infoscreen.getMode();
             GlStateManager.translatef(-0.5F, 0.5F, 0.07F);
             float f3 = 0.0075F;
             GlStateManager.scaled(f3 * scale, -f3 * scale, f3);
@@ -54,11 +54,10 @@ public class PowerCellInformationRenderer {
             }
 
             if (mode == 2) {
-                long roughMax = roughMaxRfPerTick;
-                if (roughMax > 0) {
-                    long pctInserted = Math.max(0, Math.min(100L, rfInsertPerTick * 100 / roughMax));
+                if (roughMaxRfPerTick > 0) {
+                    long pctInserted = Math.max(0, Math.min(100L, rfInsertPerTick * 100 / roughMaxRfPerTick));
                     RenderHelper.drawFlatBox(60, 20, 90, 50, 0xffffffff, 0xff000000 + (int) (pctInserted * 2.5f));
-                    long pctExtracted = Math.max(0, Math.min(100L, rfExtractPerTick * 100 / roughMax));
+                    long pctExtracted = Math.max(0, Math.min(100L, rfExtractPerTick * 100 / roughMaxRfPerTick));
                     int mask = (int) (pctExtracted * 2.5f);
                     RenderHelper.drawFlatBox(60, 54, 90, 84, 0xffffffff, 0xff000000 + (mask << 16) + (mask << 8));
                 }
@@ -104,65 +103,4 @@ public class PowerCellInformationRenderer {
         }
         return list;
     }
-
-    private static DecimalFormat format = new DecimalFormat("#.###");
-
-    private static String formatPower(long l) {
-        if (l < 100000) {
-            return Long.toString(l);
-        } else if (l < 10000000) {
-            Double d = l / 1000.0;
-            return format.format(d) + "K";
-        } else if (l < 10000000000L) {
-            Double d = l / 1000000.0;
-            return format.format(d) + "M";
-        } else {
-            Double d = l / 1000000000.0;
-            return format.format(d) + "G";
-        }
-    }
-
-    private static float getHudAngle(Direction orientation) {
-        float f3 = 0.0f;
-
-        if (orientation != null) {
-            switch (orientation) {
-                case NORTH:
-                    f3 = 180.0F;
-                    break;
-                case WEST:
-                    f3 = 90.0F;
-                    break;
-                case EAST:
-                    f3 = -90.0F;
-                    break;
-                default:
-                    f3 = 0.0f;
-            }
-        }
-        return f3;
-    }
-
-    private static int getPercentageColor(int i) {
-        int col;
-        if (i < 30) {
-            col = 0xff00ff00;
-        } else if (i < 40) {
-            col = 0xff22dd00;
-        } else if (i < 50) {
-            col = 0xff44bb00;
-        } else if (i < 60) {
-            col = 0xff669900;
-        } else if (i < 70) {
-            col = 0xff887700;
-        } else if (i < 80) {
-            col = 0xffaa5500;
-        } else if (i < 90) {
-            col = 0xffcc3300;
-        } else {
-            col = 0xffee1100;
-        }
-        return col;
-    }
-
 }
