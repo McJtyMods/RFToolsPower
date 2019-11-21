@@ -1,5 +1,6 @@
 Upcoming:
 - Information Screen from RFTools Power has been moved to RFTools Base
+- The dimensional cells now also have support for the information screen
 
 1.2.10:
 - Avoid a rare crash during model registration

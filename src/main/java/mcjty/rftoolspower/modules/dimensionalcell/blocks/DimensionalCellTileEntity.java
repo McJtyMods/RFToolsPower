@@ -18,6 +18,8 @@ import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.*;
+import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
+import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
@@ -94,6 +96,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         };
     }
 
+    private LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
     private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
     private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(this::createItemHandler);
     private LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
@@ -691,6 +694,9 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (capability == CapabilityModuleSupport.MODULE_CAPABILITY) {
             return moduleSupportHandler.cast();
         }
+        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
+            return infoScreenInfo.cast();
+        }
         return super.getCapability(capability, facing);
     }
 
@@ -796,6 +802,12 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             }
         };
     }
+
+    @Nonnull
+    private IInformationScreenInfo createScreenInfo() {
+        return new DimensionalCellInformationScreenInfo(this);
+    }
+
 
     private IMachineInformation createMachineInfo() {
         return new IMachineInformation() {
