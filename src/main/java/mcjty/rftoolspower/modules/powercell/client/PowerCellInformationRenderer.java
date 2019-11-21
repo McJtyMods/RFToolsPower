@@ -23,11 +23,11 @@ public class PowerCellInformationRenderer {
             return;
         }
 
-        long energy = data.get(DefaultPowerInformationScreenInfo.ENERGY);
-        long maxEnergy = data.get(DefaultPowerInformationScreenInfo.MAXENERGY);
-        long rfExtractPerTick = data.get(PowerCellInformationScreenInfo.RFEXTRACT_PERTICK);
-        long rfInsertPerTick = data.get(PowerCellInformationScreenInfo.RFINSERT_PERTICK);
-        long roughMaxRfPerTick = data.get(PowerCellInformationScreenInfo.ROUGH_MAXRF_PERTICK);
+        long energy = data.getOptional(DefaultPowerInformationScreenInfo.ENERGY).orElse(0L);
+        long maxEnergy = data.getOptional(DefaultPowerInformationScreenInfo.MAXENERGY).orElse(0L);
+        long rfExtractPerTick = data.getOptional(PowerCellInformationScreenInfo.RFEXTRACT_PERTICK).orElse(0L);
+        long rfInsertPerTick = data.getOptional(PowerCellInformationScreenInfo.RFINSERT_PERTICK).orElse(0L);
+        long roughMaxRfPerTick = data.getOptional(PowerCellInformationScreenInfo.ROUGH_MAXRF_PERTICK).orElse(0L);
 
         GlStateManager.pushMatrix();
         GlStateManager.translatef((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
