@@ -457,7 +457,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             if (old[i] != modes[i]) {
                 ModelDataManager.requestModelDataRefresh(this);
                 BlockState state = world.getBlockState(pos);
-                getWorld().notifyBlockUpdate(getPos(), state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 return;
             }
         }
