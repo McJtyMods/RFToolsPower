@@ -383,7 +383,11 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     }
 
     @Override
-    public void onReplaced(World world, BlockPos pos, BlockState state) {
+    public void onReplaced(World world, BlockPos pos, BlockState state, BlockState newstate) {
+        if (state.getBlock() == newstate.getBlock()) {
+            return;
+        }
+
         if (getNetwork() != null) {
             dismantleNetwork(getNetwork());
         }
