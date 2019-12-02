@@ -11,6 +11,7 @@ import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
 import mcjty.lib.bindings.DefaultAction;
 import mcjty.lib.bindings.IAction;
+import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericTileEntity;
@@ -96,9 +97,12 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         };
     }
 
+    private NoDirectionItemHander items = createItemHandler();
+    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
+    private LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+
     private LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
     private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
-    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(this::createItemHandler);
     private LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
     private LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
     private LazyOptional<SidedHandler>[] sidedStorages = new LazyOptional[]{
@@ -302,19 +306,17 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private void handleChargingItem() {
-        itemHandler.ifPresent(h -> {
-            ItemStack stack = h.getStackInSlot(DimensionalCellContainer.SLOT_CHARGEITEM);
-            if (stack.isEmpty()) {
-                return;
-            }
+        ItemStack stack = items.getStackInSlot(DimensionalCellContainer.SLOT_CHARGEITEM);
+        if (stack.isEmpty()) {
+            return;
+        }
 
-            int rfToGive = Math.min(DimensionalCellConfiguration.CHARGEITEMPERTICK.get(), getEnergyStored());
-            int received = (int) EnergyTools.receiveEnergy(stack, rfToGive);
-            if (received == 0) {
-                return;
-            }
-            extractEnergyInternal(received, false, DimensionalCellConfiguration.CHARGEITEMPERTICK.get());
-        });
+        int rfToGive = Math.min(DimensionalCellConfiguration.CHARGEITEMPERTICK.get(), getEnergyStored());
+        int received = (int) EnergyTools.receiveEnergy(stack, rfToGive);
+        if (received == 0) {
+            return;
+        }
+        extractEnergyInternal(received, false, DimensionalCellConfiguration.CHARGEITEMPERTICK.get());
     }
 
     private void sendOutEnergy() {
@@ -379,25 +381,23 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private void handleCardInsertion() {
-        itemHandler.ifPresent(h -> {
-            ItemStack stack = h.getStackInSlot(DimensionalCellContainer.SLOT_CARD);
-            int id = PowerCellCardItem.getId(stack);
-            if (!world.isRemote) {
-                DimensionalCellNetwork channels = DimensionalCellNetwork.get(world);
-                if (id == -1) {
-                    id = channels.newChannel();
-                    PowerCellCardItem.setId(stack, id);
-                }
-                networkId = id;
-                DimensionalCellNetwork.Network network = getNetwork();
-                network.add(world, getGlobalPos(), getDimensionalCellType());
-                network.receiveEnergy(energy);
-                channels.save();
-            } else {
-                networkId = id;
+        ItemStack stack = items.getStackInSlot(DimensionalCellContainer.SLOT_CARD);
+        int id = PowerCellCardItem.getId(stack);
+        if (!world.isRemote) {
+            DimensionalCellNetwork channels = DimensionalCellNetwork.get(world);
+            if (id == -1) {
+                id = channels.newChannel();
+                PowerCellCardItem.setId(stack, id);
             }
-            markDirty();
-        });
+            networkId = id;
+            DimensionalCellNetwork.Network network = getNetwork();
+            network.add(world, getGlobalPos(), getDimensionalCellType());
+            network.receiveEnergy(energy);
+            channels.save();
+        } else {
+            networkId = id;
+        }
+        markDirty();
     }
 
     private DimensionalCellType getDimensionalCellType() {
@@ -680,7 +680,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             }
         }
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return itemHandler.cast();
+            return automationItemHandler.cast();
         }
         if (capability == CapabilityInfusable.INFUSABLE_CAPABILITY) {
             return infusableHandler.cast();

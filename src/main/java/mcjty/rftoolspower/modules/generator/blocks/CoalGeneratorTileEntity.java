@@ -9,10 +9,7 @@ import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.ContainerFactory;
-import mcjty.lib.container.GenericContainer;
-import mcjty.lib.container.NoDirectionItemHander;
-import mcjty.lib.container.SlotDefinition;
+import mcjty.lib.container.*;
 import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
@@ -66,7 +63,10 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         }
     };
 
-    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> createItemHandler());
+    private NoDirectionItemHander items = createItemHandler();
+    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
+    private LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+
     private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
     private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
@@ -122,30 +122,28 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public void tick() {
         if (!world.isRemote) {
 
-            itemHandler.ifPresent(itemHandler -> {
-                energyHandler.ifPresent(energy -> {
-                    markDirtyQuick();
-                    handleChargingItem(itemHandler, energy);
-                    handleSendingEnergy(energy);
+            energyHandler.ifPresent(energy -> {
+                markDirtyQuick();
+                handleChargingItem(items, energy);
+                handleSendingEnergy(energy);
 
-                    if (!isMachineEnabled()) {
-                        return;
-                    }
+                if (!isMachineEnabled()) {
+                    return;
+                }
 
-                    if (burning > 0) {
-                        burning--;
-                        long rf = getRfPerTick();
-                        energy.produceEnergy(rf);
-                    } else if (!itemHandler.getStackInSlot(SLOT_COALINPUT).isEmpty()) {
-                        ItemStack extracted = itemHandler.extractItem(SLOT_COALINPUT, 1, false);
-                        burning = CoalGeneratorConfig.TICKSPERCOAL.get();
-                        if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
-                            burning *= 9;
-                        }
-                        float factor = infusableHandler.map(inf -> inf.getInfusedFactor()).orElse(0.0f);
-                        burning += (int) (burning * factor / 2.0f);
+                if (burning > 0) {
+                    burning--;
+                    long rf = getRfPerTick();
+                    energy.produceEnergy(rf);
+                } else if (!items.getStackInSlot(SLOT_COALINPUT).isEmpty()) {
+                    ItemStack extracted = items.extractItem(SLOT_COALINPUT, 1, false);
+                    burning = CoalGeneratorConfig.TICKSPERCOAL.get();
+                    if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
+                        burning *= 9;
                     }
-                });
+                    float factor = infusableHandler.map(inf -> inf.getInfusedFactor()).orElse(0.0f);
+                    burning += (int) (burning * factor / 2.0f);
+                }
             });
 
             BlockState state = world.getBlockState(pos);
@@ -288,7 +286,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return itemHandler.cast();
+            return automationItemHandler.cast();
         }
         if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
