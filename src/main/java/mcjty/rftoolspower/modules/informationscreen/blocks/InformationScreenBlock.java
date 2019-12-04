@@ -72,7 +72,7 @@ public class InformationScreenBlock extends BaseBlock {
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (!world.isRemote) {
             Direction facing = state.get(HORIZONTAL_FACING);
-            world.setBlockState(pos, InformationScreenSetup.INFORMATION_SCREEN.getDefaultState().with(HORIZONTAL_FACING, facing), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            world.setBlockState(pos, InformationScreenSetup.INFORMATION_SCREEN.get().getDefaultState().with(HORIZONTAL_FACING, facing), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
         return true;
     }
