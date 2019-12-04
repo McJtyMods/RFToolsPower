@@ -66,11 +66,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
         if (McJtyLib.proxy.isShiftKeyDown()) {
             long totpower = 0;
-            if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL1)) {
+            if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL1.get())) {
                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
-            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL2)) {
+            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL2.get())) {
                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
-            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL3)) {
+            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL3.get())) {
                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
             }
             list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));

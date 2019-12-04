@@ -12,7 +12,7 @@ public class ModSetup extends DefaultModSetup {
     public boolean rftoolsDimensions = false;   // @todo 1.14 support for RFTools Dimensions
 
     public ModSetup() {
-        createTab("rftoolspower", () -> new ItemStack(PowerCellSetup.CELL1));
+        createTab("rftoolspower", () -> new ItemStack(PowerCellSetup.CELL1.get()));
     }
 
     @Override

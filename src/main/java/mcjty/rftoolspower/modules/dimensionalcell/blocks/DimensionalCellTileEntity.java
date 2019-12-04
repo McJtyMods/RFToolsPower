@@ -594,11 +594,11 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 msg = "dimension missing!";
             } else {
                 Block block = w.getBlockState(b.getCoordinate()).getBlock();
-                if (block == DimensionalCellSetup.DIMENSIONAL_CELL) {
+                if (block == DimensionalCellSetup.DIMENSIONAL_CELL.get()) {
                     msg = "normal";
-                } else if (block == DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED) {
+                } else if (block == DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get()) {
                     msg = "advanced";
-                } else if (block == DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE) {
+                } else if (block == DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get()) {
                     msg = "creative";
                 } else {
                     msg = "not a powercell!";
@@ -775,10 +775,10 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
             @Override
             public boolean isItemValid(int index, @Nonnull ItemStack stack) {
-                if (index == DimensionalCellContainer.SLOT_CARD && stack.getItem() != DimensionalCellSetup.POWERCELL_CARD) {
+                if (index == DimensionalCellContainer.SLOT_CARD && stack.getItem() != DimensionalCellSetup.POWERCELL_CARD.get()) {
                     return false;
                 }
-                if (index == DimensionalCellContainer.SLOT_CARDCOPY && stack.getItem() != DimensionalCellSetup.POWERCELL_CARD) {
+                if (index == DimensionalCellContainer.SLOT_CARDCOPY && stack.getItem() != DimensionalCellSetup.POWERCELL_CARD.get()) {
                     return false;
                 }
                 return true;

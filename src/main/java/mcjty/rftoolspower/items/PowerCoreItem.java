@@ -13,9 +13,8 @@ import java.util.List;
 
 public class PowerCoreItem extends Item {
 
-    public PowerCoreItem(String tier) {
+    public PowerCoreItem() {
         super(new Properties().group(RFToolsPower.setup.getTab()));
-        setRegistryName("power_core" + tier);
     }
 
     @Override

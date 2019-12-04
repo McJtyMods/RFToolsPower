@@ -15,15 +15,15 @@ public class LootTables extends BaseLootTableProvider {
 
     @Override
     protected void addTables() {
-        lootTables.put(CoalGeneratorSetup.COALGENERATOR, createStandardTable("coalgenerator", CoalGeneratorSetup.COALGENERATOR));
-        lootTables.put(PowerCellSetup.CELL1, createStandardTable("cell1", PowerCellSetup.CELL1));
-        lootTables.put(PowerCellSetup.CELL2, createStandardTable("cell2", PowerCellSetup.CELL2));
-        lootTables.put(PowerCellSetup.CELL3, createStandardTable("cell3", PowerCellSetup.CELL3));
-        lootTables.put(InformationScreenSetup.INFORMATION_SCREEN, createSimpleTable("informationscreen", InformationScreenSetup.INFORMATION_SCREEN));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL, createStandardTable("dimensionalcell", DimensionalCellSetup.DIMENSIONAL_CELL));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED, createStandardTable("dimensionalcell_advanced", DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE, createStandardTable("dimensionalcell_creative", DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE, createStandardTable("dimensionalcell_simple", DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE));
+        lootTables.put(CoalGeneratorSetup.COALGENERATOR.get(), createStandardTable("coalgenerator", CoalGeneratorSetup.COALGENERATOR.get()));
+        lootTables.put(PowerCellSetup.CELL1.get(), createStandardTable("cell1", PowerCellSetup.CELL1.get()));
+        lootTables.put(PowerCellSetup.CELL2.get(), createStandardTable("cell2", PowerCellSetup.CELL2.get()));
+        lootTables.put(PowerCellSetup.CELL3.get(), createStandardTable("cell3", PowerCellSetup.CELL3.get()));
+        lootTables.put(InformationScreenSetup.INFORMATION_SCREEN.get(), createSimpleTable("informationscreen", InformationScreenSetup.INFORMATION_SCREEN.get()));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL.get(), createStandardTable("dimensionalcell", DimensionalCellSetup.DIMENSIONAL_CELL.get()));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), createStandardTable("dimensionalcell_advanced", DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get()));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), createStandardTable("dimensionalcell_creative", DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get()));
+        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), createStandardTable("dimensionalcell_simple", DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get()));
     }
 
     @Override

@@ -28,50 +28,50 @@ public class Recipes extends BaseRecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(CoalGeneratorSetup.COALGENERATOR)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(CoalGeneratorSetup.COALGENERATOR.get())
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_FRAME, Items.REDSTONE_TORCH)),
                 "cTc", "cFc", "cTc");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(InformationScreenSetup.INFORMATION_SCREEN)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(InformationScreenSetup.INFORMATION_SCREEN.get())
                         .key('-', Tags.Items.GLASS_PANES)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "---", "rAr");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(mcjty.rftoolspower.items.ModItems.POWER_CORE1)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.POWER_CORE1.get())
                         .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.DIAMOND, Items.REDSTONE)),
                 " d ", "rRr", " r ");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(mcjty.rftoolspower.items.ModItems.POWER_CORE2)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.POWER_CORE2.get())
                         .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.EMERALD, Items.REDSTONE, ModItems.DIMENSIONALSHARD)),
                 "ses", "rRr", "srs");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(mcjty.rftoolspower.items.ModItems.POWER_CORE3)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.POWER_CORE3.get())
                         .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.EMERALD, Items.DIAMOND, Items.REDSTONE, ModItems.DIMENSIONALSHARD)),
                 "sds", "rRr", "ses");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.CELL1)
-                        .key('K', mcjty.rftoolspower.items.ModItems.POWER_CORE1)
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_FRAME, mcjty.rftoolspower.items.ModItems.POWER_CORE1)),
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.CELL1.get())
+                        .key('K', PowerCellSetup.POWER_CORE1.get())
+                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_FRAME, PowerCellSetup.POWER_CORE1.get())),
                 "rKr", "KFK", "rKr");
-        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL2)
-                        .key('K', mcjty.rftoolspower.items.ModItems.POWER_CORE2)
-                        .key('P', PowerCellSetup.CELL1)
-                        .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL1)),
+        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL2.get())
+                        .key('K', PowerCellSetup.POWER_CORE2.get())
+                        .key('P', PowerCellSetup.CELL1.get())
+                        .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL1.get())),
                 "rKr", "KPK", "rKr");
-        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL3)
-                        .key('K', mcjty.rftoolspower.items.ModItems.POWER_CORE3)
-                        .key('P', PowerCellSetup.CELL2)
-                        .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL2)),
+        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL3.get())
+                        .key('K', PowerCellSetup.POWER_CORE3.get())
+                        .key('P', PowerCellSetup.CELL2.get())
+                        .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL2.get())),
                 "rKr", "KPK", "rKr");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL.get())
                         .key('P', Items.PRISMARINE_SHARD)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "RdR", "PFP", "ReR");
-        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE)
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get())
                         .key('q', Items.QUARTZ)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "RdR", "qFq", "RdR");
-        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED)
-                        .key('K', DimensionalCellSetup.DIMENSIONAL_CELL)
+        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get())
+                        .key('K', DimensionalCellSetup.DIMENSIONAL_CELL.get())
                         .key('*', ModItems.INFUSED_DIAMOND)
                         .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(ModItems.MACHINE_BASE, Items.REDSTONE)),
                 "R*R", "*K*", "R*R");
-        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.POWERCELL_CARD)
+        build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.POWERCELL_CARD.get())
                         .key('g', Items.GOLD_NUGGET)
                         .addCriterion("paper", InventoryChangeTrigger.Instance.forItems(Items.PAPER, Items.REDSTONE)),
                 "rgr", "gpg", "rgr");

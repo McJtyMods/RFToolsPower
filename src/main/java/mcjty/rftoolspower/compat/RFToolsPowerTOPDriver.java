@@ -32,7 +32,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
         ResourceLocation id = blockState.getBlock().getRegistryName();
         if (!drivers.containsKey(id)) {
-            if (blockState.getBlock() == CoalGeneratorSetup.COALGENERATOR) {
+            if (blockState.getBlock() == CoalGeneratorSetup.COALGENERATOR.get()) {
                 drivers.put(id, new CoalDriver());
             } else if (blockState.getBlock() instanceof PowerCellBlock) {
                 drivers.put(id, new PowerCellDriver());

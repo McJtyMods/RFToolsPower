@@ -34,7 +34,7 @@ import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_FAC
 public class InformationScreenBlock extends BaseBlock {
 
     public InformationScreenBlock() {
-        super(InformationScreenTileEntity.REGNAME, new BlockBuilder()
+        super(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(() -> new InformationScreenTileEntity()));
     }

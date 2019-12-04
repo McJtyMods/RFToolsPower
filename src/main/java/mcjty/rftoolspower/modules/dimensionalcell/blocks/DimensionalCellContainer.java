@@ -23,14 +23,14 @@ public class DimensionalCellContainer extends GenericContainer {
     public static final ContainerFactory CONTAINER_FACTORY = new ContainerFactory(3) {
         @Override
         protected void setup() {
-            slot(specific(new ItemStack(DimensionalCellSetup.POWERCELL_CARD)), CONTAINER_INVENTORY, SLOT_CARD, 28, 8);
-            slot(specific(new ItemStack(DimensionalCellSetup.POWERCELL_CARD)), CONTAINER_INVENTORY, SLOT_CARDCOPY, 64, 30);
+            slot(specific(new ItemStack(DimensionalCellSetup.POWERCELL_CARD.get())), CONTAINER_INVENTORY, SLOT_CARD, 28, 8);
+            slot(specific(new ItemStack(DimensionalCellSetup.POWERCELL_CARD.get())), CONTAINER_INVENTORY, SLOT_CARDCOPY, 64, 30);
             slot(container(), CONTAINER_INVENTORY, SLOT_CHARGEITEM, 64, 8);
             playerSlots(10, 70);
         }
     };
 
     public DimensionalCellContainer(int id, ContainerFactory factory, BlockPos pos, @Nullable GenericTileEntity te) {
-        super(CONTAINER_DIMENSIONAL_CELL, id, factory, pos, te);
+        super(CONTAINER_DIMENSIONAL_CELL.get(), id, factory, pos, te);
     }
 }

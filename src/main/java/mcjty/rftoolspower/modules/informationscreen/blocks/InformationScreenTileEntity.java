@@ -16,8 +16,6 @@ import static mcjty.rftoolspower.modules.informationscreen.InformationScreenSetu
 
 public class InformationScreenTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
-    public static final String REGNAME = "information_screen";
-
     private int mode = 0;
     private int cnt = 0;
     private long lastExtracted = 0;
@@ -32,7 +30,7 @@ public class InformationScreenTileEntity extends GenericTileEntity implements IT
 
 
     public InformationScreenTileEntity() {
-        super(TYPE_INFORMATION_SCREEN);
+        super(TYPE_INFORMATION_SCREEN.get());
     }
 
     public Direction getBlockOrientation() {

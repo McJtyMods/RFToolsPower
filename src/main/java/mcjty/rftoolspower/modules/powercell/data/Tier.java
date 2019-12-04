@@ -23,11 +23,11 @@ public enum Tier implements IStringSerializable {
     public TileEntityType<?> getType() {
         switch (this) {
             case TIER1:
-                return PowerCellSetup.TYPE_CELL1;
+                return PowerCellSetup.TYPE_CELL1.get();
             case TIER2:
-                return PowerCellSetup.TYPE_CELL2;
+                return PowerCellSetup.TYPE_CELL2.get();
             case TIER3:
-                return PowerCellSetup.TYPE_CELL3;
+                return PowerCellSetup.TYPE_CELL3.get();
         }
         throw new IllegalStateException("Unknown powercell tier!");
     }

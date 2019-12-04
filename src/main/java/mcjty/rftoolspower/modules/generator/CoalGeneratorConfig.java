@@ -7,7 +7,6 @@ public class CoalGeneratorConfig {
 
     public static final String SUB_CATEGORY_COALGENERATOR = "coalgenerator";
 
-    public static ForgeConfigSpec.BooleanValue ENABLED;
     public static ForgeConfigSpec.IntValue MAXENERGY; // TODO change these to longs once Configuration supports them
     public static ForgeConfigSpec.IntValue SENDPERTICK;
     public static ForgeConfigSpec.IntValue CHARGEITEMPERTICK;
@@ -16,10 +15,6 @@ public class CoalGeneratorConfig {
 
     public static void setup(ForgeConfigSpec.Builder COMMON_BUILDER) {
         COMMON_BUILDER.comment("Coal generator settings").push(SUB_CATEGORY_COALGENERATOR);
-
-        ENABLED = COMMON_BUILDER
-                .comment("Whether the coal generator should exist")
-                .define("enabled", true);
 
         RFPERTICK = COMMON_BUILDER
                 .comment("Amount of RF generated per tick")

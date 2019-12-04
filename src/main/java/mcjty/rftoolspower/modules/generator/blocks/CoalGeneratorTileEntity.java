@@ -47,7 +47,6 @@ import javax.annotation.Nullable;
 
 public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
-    public static final String REGNAME = "coalgenerator";
     public static final String CMD_RSMODE = "coalgen.setRsMode";
 
     public static final int SLOT_COALINPUT = 0;
@@ -58,7 +57,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         protected void setup() {
             slot(SlotDefinition.specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)),
                     CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24);
-            slot(SlotDefinition.specific(stack -> EnergyTools.isEnergyItem(stack)), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24);
+            slot(SlotDefinition.specific(EnergyTools::isEnergyItem), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24);
             playerSlots(10, 70);
         }
     };
@@ -69,20 +68,20 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
     private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
-            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY, getPos(), CoalGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
     private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
-    private LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(() -> createPowerInfo());
+    private LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(this::createPowerInfo);
 
     private int burning;
 
     public CoalGeneratorTileEntity() {
-        super(CoalGeneratorSetup.TYPE_COALGENERATOR);
+        super(CoalGeneratorSetup.TYPE_COALGENERATOR.get());
     }
 
     public static BaseBlock createBlock() {
-        return new BaseBlock(REGNAME, new BlockBuilder()
+        return new BaseBlock(new BlockBuilder()
                 .tileEntitySupplier(CoalGeneratorTileEntity::new)
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()

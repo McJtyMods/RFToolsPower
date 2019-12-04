@@ -16,7 +16,6 @@ public class PowerCellCardItem extends Item {
 
     public PowerCellCardItem() {
         super(new Properties().group(RFToolsPower.setup.getTab()));
-        setRegistryName("powercell_card");
         addPropertyOverride(new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
             int id = getId(stack);
             return id == -1 ? 0 : 1;

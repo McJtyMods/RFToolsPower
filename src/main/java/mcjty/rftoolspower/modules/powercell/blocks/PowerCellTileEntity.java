@@ -37,10 +37,6 @@ import static mcjty.rftoolspower.modules.powercell.data.SideType.NONE;
 
 public class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
 
-    public static final String REGNAME1 = "cell1";
-    public static final String REGNAME2 = "cell2";
-    public static final String REGNAME3 = "cell3";
-
     private PowerCellNetwork network = null;
     private long localEnergy = 0;
     private final Tier tier;

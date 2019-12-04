@@ -9,7 +9,6 @@ import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.informationscreen.client.InformationScreenRenderer;
-import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -30,8 +29,8 @@ public class ClientRegistration {
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
         InformationScreenRenderer.register();
-        GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR, GuiCoalGenerator::new);
-        GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL, GuiDimensionalCell::new);
+        GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
+        GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
         OBJLoader.INSTANCE.addDomain(RFToolsPower.MODID);
     }
 
@@ -65,7 +64,7 @@ public class ClientRegistration {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
         PowerCellBakedModel model = new PowerCellBakedModel(DefaultVertexFormats.BLOCK);
-        Lists.newArrayList(PowerCellTileEntity.REGNAME1, PowerCellTileEntity.REGNAME2, PowerCellTileEntity.REGNAME3).stream()
+        Lists.newArrayList("cell1", "cell2", "cell3").stream()
                 .forEach(name -> {
                     ResourceLocation rl = new ResourceLocation(RFToolsPower.MODID, name);
                     event.getModelRegistry().put(new ModelResourceLocation(rl, ""), model);

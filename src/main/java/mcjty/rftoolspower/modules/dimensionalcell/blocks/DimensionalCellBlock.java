@@ -69,8 +69,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         }
     }
 
-    public DimensionalCellBlock(String name, DimensionalCellType type, Supplier<TileEntity> supplier) {
-        super(name, new BlockBuilder()
+    public DimensionalCellBlock(DimensionalCellType type, Supplier<TileEntity> supplier) {
+        super(new BlockBuilder()
                 .tileEntitySupplier(supplier)
                 .infusable()
                 .info("message.rftoolspower.dimensional_cell")

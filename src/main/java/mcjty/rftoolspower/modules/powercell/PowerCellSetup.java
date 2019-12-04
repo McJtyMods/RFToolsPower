@@ -1,62 +1,46 @@
 package mcjty.rftoolspower.modules.powercell;
 
-import mcjty.lib.blocks.BaseBlockItem;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.items.PowerCoreItem;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.Block;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import static mcjty.rftoolspower.RFToolsPower.MODID;
 
 public class PowerCellSetup {
 
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
-    public static PowerCellBlock CELL1;
+    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, MODID);
+    public static final DeferredRegister<TileEntityType<?>> TILES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, MODID);
 
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME2)
-    public static PowerCellBlock CELL2;
-
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME3)
-    public static PowerCellBlock CELL3;
-
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME1)
-    public static TileEntityType<?> TYPE_CELL1;
-
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME2)
-    public static TileEntityType<?> TYPE_CELL2;
-
-    @ObjectHolder(RFToolsPower.MODID + ":" + PowerCellTileEntity.REGNAME3)
-    public static TileEntityType<?> TYPE_CELL3;
-
-
-    public static void registerBlocks(final RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new PowerCellBlock(Tier.TIER1));
-        event.getRegistry().register(new PowerCellBlock(Tier.TIER2));
-        event.getRegistry().register(new PowerCellBlock(Tier.TIER3));
+    public static void register() {
+        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
-    public static void registerItems(final RegistryEvent.Register<Item> event) {
-        Item.Properties properties = new Item.Properties().group(RFToolsPower.setup.getTab());
-        event.getRegistry().register(new BaseBlockItem(PowerCellSetup.CELL1, properties));
-        event.getRegistry().register(new BaseBlockItem(PowerCellSetup.CELL2, properties));
-        event.getRegistry().register(new BaseBlockItem(PowerCellSetup.CELL3, properties));
+    public static final RegistryObject<Block> CELL1 = BLOCKS.register("cell1", () -> new PowerCellBlock(Tier.TIER1));
+    public static final RegistryObject<Item> CELL1_ITEM = ITEMS.register("cell1", () -> new BlockItem(CELL1.get(), RFToolsPower.createStandardProperties()));
+    public static final RegistryObject<TileEntityType<?>> TYPE_CELL1 = TILES.register("cell1", () -> TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER1), CELL1.get()).build(null));
 
-        event.getRegistry().register(new PowerCoreItem("1"));
-        event.getRegistry().register(new PowerCoreItem("2"));
-        event.getRegistry().register(new PowerCoreItem("3"));
-    }
+    public static final RegistryObject<Block> CELL2 = BLOCKS.register("cell2", () -> new PowerCellBlock(Tier.TIER2));
+    public static final RegistryObject<Item> CELL2_ITEM = ITEMS.register("cell2", () -> new BlockItem(CELL2.get(), RFToolsPower.createStandardProperties()));
+    public static final RegistryObject<TileEntityType<?>> TYPE_CELL2 = TILES.register("cell2", () -> TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER2), CELL2.get()).build(null));
 
-    public static void registerTiles(final RegistryEvent.Register<TileEntityType<?>> event) {
-        event.getRegistry().register(TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER1), PowerCellSetup.CELL1).build(null).setRegistryName(PowerCellSetup.CELL1.getRegistryName()));
-        event.getRegistry().register(TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER2), PowerCellSetup.CELL2).build(null).setRegistryName(PowerCellSetup.CELL2.getRegistryName()));
-        event.getRegistry().register(TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER3), PowerCellSetup.CELL3).build(null).setRegistryName(PowerCellSetup.CELL3.getRegistryName()));
-    }
+    public static final RegistryObject<Block> CELL3 = BLOCKS.register("cell3", () -> new PowerCellBlock(Tier.TIER3));
+    public static final RegistryObject<Item> CELL3_ITEM = ITEMS.register("cell3", () -> new BlockItem(CELL3.get(), RFToolsPower.createStandardProperties()));
+    public static final RegistryObject<TileEntityType<?>> TYPE_CELL3 = TILES.register("cell3", () -> TileEntityType.Builder.create(() -> new PowerCellTileEntity(Tier.TIER3), CELL3.get()).build(null));
 
-    public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
-    }
+    public static final RegistryObject<Item> POWER_CORE1 = ITEMS.register("power_core1", PowerCoreItem::new);
+    public static final RegistryObject<Item> POWER_CORE2 = ITEMS.register("power_core2", PowerCoreItem::new);
+    public static final RegistryObject<Item> POWER_CORE3 = ITEMS.register("power_core3", PowerCoreItem::new);
 }
