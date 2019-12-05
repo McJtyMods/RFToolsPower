@@ -34,7 +34,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +49,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     }
 
     public PowerCellBlock(Tier tier) {
-        super("cell" + tier.getSuffix(), new BlockBuilder()
+        super(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
     }
