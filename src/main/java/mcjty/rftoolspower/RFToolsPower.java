@@ -1,7 +1,7 @@
 package mcjty.rftoolspower;
 
 import mcjty.lib.base.ModBase;
-import mcjty.rftoolspower.config.Config;
+import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.informationscreen.InformationScreenSetup;

@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.items;
+package mcjty.rftoolspower.modules.powercell.items;
 
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.util.ITooltipFlag;
