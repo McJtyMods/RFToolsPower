@@ -12,7 +12,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellContainer;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
-import mcjty.rftoolspower.network.RFToolsPowerMessages;
+import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 

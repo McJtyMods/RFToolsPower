@@ -3,7 +3,7 @@ package mcjty.rftoolspower.modules.informationscreen.client;
 import mcjty.lib.client.HudRenderHelper;
 import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
 import mcjty.rftoolspower.modules.informationscreen.network.PacketGetMonitorLog;
-import mcjty.rftoolspower.network.RFToolsPowerMessages;
+import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.TextFormatting;

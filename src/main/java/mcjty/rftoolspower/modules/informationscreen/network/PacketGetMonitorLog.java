@@ -2,7 +2,7 @@ package mcjty.rftoolspower.modules.informationscreen.network;
 
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.modules.informationscreen.blocks.InformationScreenTileEntity;
-import mcjty.rftoolspower.network.RFToolsPowerMessages;
+import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
