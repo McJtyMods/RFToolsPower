@@ -10,7 +10,6 @@
     "block.rftoolspower.cell1": "Powercell (Low)",
     "block.rftoolspower.cell2": "Powercell (Medium)",
     "block.rftoolspower.cell3": "Powercell (High)",
-    "block.rftoolspower.information_screen": "Information Screen (Deprecated)",
     "block.rftoolspower.coalgenerator": "Coal Generator",
 
     "itemGroup.rftoolspower": "RFTools Power",

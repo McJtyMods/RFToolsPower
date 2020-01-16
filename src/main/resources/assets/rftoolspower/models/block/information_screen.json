@@ -1,8 +1,0 @@
-{
-  "parent": "rftoolspower:block/flatblock",
-  "textures": {
-    "up": "rftoolspower:block/information_screen",
-    "side": "rftoolspower:block/top",
-    "bottom": "rftoolspower:block/top"
-  }
-}
