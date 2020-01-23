@@ -1,22 +1,26 @@
 package mcjty.rftoolspower.modules.powercell.client;
 
+import com.google.common.collect.ImmutableList;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.modules.powercell.data.SideType;
-import mcjty.rftoolspower.modules.powercell.data.Tier;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
+import mcjty.rftoolspower.modules.powercell.data.SideType;
+import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,20 +39,25 @@ public class PowerCellBakedModel implements IDynamicBakedModel {
 
     private static TextureAtlasSprite getInputMask() {
         if (inputMask == null) {
-            inputMask = Minecraft.getInstance().getTextureMap().getAtlasSprite(RFToolsPower.MODID + ":block/inputmask");
+            inputMask = Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(RFToolsPower.MODID, "block/inputmask"));
         }
         return inputMask;
     }
 
     private static TextureAtlasSprite getOutputMask() {
         if (outputMask == null) {
-            outputMask = Minecraft.getInstance().getTextureMap().getAtlasSprite(RFToolsPower.MODID + ":block/outputmask");
+            outputMask = Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(RFToolsPower.MODID, "block/outputmask"));
         }
         return outputMask;
     }
 
+    @Override
+    public boolean func_230044_c_() {
+        return false;
+    }
+
     private static TextureAtlasSprite getSideTexture(boolean upper, boolean lower, int tier) {
-        String s = RFToolsPower.MODID + ":block/cell";
+        String s = "block/cell";
         if (upper && lower) {
             s += "middle_t";
         } else if (upper) {
@@ -59,23 +68,23 @@ public class PowerCellBakedModel implements IDynamicBakedModel {
             s += "both_t";
         }
         s += tier;
-        return Minecraft.getInstance().getTextureMap().getAtlasSprite(s);
+        return Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(RFToolsPower.MODID, s));
     }
 
     private static TextureAtlasSprite getTopTexture() {
         String name = RFToolsPower.MODID + ":block/cellhoriz_t1";
-        return Minecraft.getInstance().getTextureMap().getAtlasSprite(name);
+        return Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(RFToolsPower.MODID, name));
     }
 
     public PowerCellBakedModel(VertexFormat format) {
         this.format = format;
     }
 
-    private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal,
+    private void putVertex(BakedQuadBuilder builder, Vec3d normal,
                            double x, double y, double z, float u, float v, TextureAtlasSprite sprite, float color) {
-        for (int e = 0; e < format.getElementCount(); e++) {
-            switch (format.getElement(e).getUsage()) {
-
+        ImmutableList<VertexFormatElement> elements = format.func_227894_c_().asList();
+        for (int e = 0; e < elements.size(); e++) {
+            switch (elements.get(e).getUsage()) {
                 case POSITION:
                     builder.put(e, (float)x, (float)y, (float)z, 1.0f);
                     break;
@@ -83,11 +92,18 @@ public class PowerCellBakedModel implements IDynamicBakedModel {
                     builder.put(e, color, color, color, 1.0f);
                     break;
                 case UV:
-                    if (format.getElement(e).getIndex() == 0) {
-                        u = sprite.getInterpolatedU(u);
-                        v = sprite.getInterpolatedV(v);
-                        builder.put(e, u, v, 0f, 1f);
-                        break;
+                    switch (elements.get(e).getIndex()) {
+                        case 0:
+                            float iu = sprite.getInterpolatedU(u);
+                            float iv = sprite.getInterpolatedV(v);
+                            builder.put(e, iu, iv);
+                            break;
+                        case 2:
+                            builder.put(e, 0f, 1f);
+                            break;
+                        default:
+                            builder.put(e);
+                            break;
                     }
                 case NORMAL:
                     builder.put(e, (float) normal.x, (float) normal.y, (float) normal.z, 0f);
@@ -102,8 +118,8 @@ public class PowerCellBakedModel implements IDynamicBakedModel {
     private BakedQuad createQuad(Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite sprite, float hilight) {
         Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
 
-        UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
-        builder.setTexture(sprite);
+        BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
+        builder.setQuadOrientation(Direction.getFacingFromVector(normal.x, normal.y, normal.z));
         putVertex(builder, normal, v1.x, v1.y, v1.z, 0, 0, sprite, hilight);
         putVertex(builder, normal, v2.x, v2.y, v2.z, 0, 16, sprite, hilight);
         putVertex(builder, normal, v3.x, v3.y, v3.z, 16, 16, sprite, hilight);

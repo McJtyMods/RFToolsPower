@@ -33,7 +33,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -95,10 +94,11 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 builder.add(BlockStateProperties.LIT);
             }
 
-            @Override
-            public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-                return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.CUTOUT;
-            }
+            // @todo 1.15
+//            @Override
+//            public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
+//                return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.CUTOUT;
+//            }
         };
     }
 

@@ -29,7 +29,8 @@ public class ClientRegistration {
     public static void init(FMLClientSetupEvent event) {
         GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
         GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
-        OBJLoader.INSTANCE.addDomain(RFToolsPower.MODID);
+        // @todo 1.15
+//        OBJLoader.INSTANCE.addDomain(RFToolsPower.MODID);
     }
 
     @SubscribeEvent
