@@ -35,7 +35,7 @@ public class PowerCellInformationRenderer {
         GlStateManager.translatef(0.0F, -0.2500F, -0.4375F + .9f);
 
         net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-        Minecraft.getInstance().gameRenderer.disableLightmap();
+        Minecraft.getInstance().gameRenderer.getLightTexture().disableLightmap();
         GlStateManager.disableBlend();
         GlStateManager.disableLighting();
 
@@ -64,7 +64,7 @@ public class PowerCellInformationRenderer {
             }
 
         }
-        Minecraft.getInstance().gameRenderer.enableLightmap();
+        Minecraft.getInstance().gameRenderer.getLightTexture().enableLightmap();
 
 //        RenderHelper.enableStandardItemLighting();
         GlStateManager.enableLighting();

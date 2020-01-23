@@ -1,9 +1,10 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellInformationRenderer;
-import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
@@ -60,7 +61,7 @@ public class DimensionalCellInformationScreenInfo implements IInformationScreenI
     }
 
     @Override
-    public void render(int mode, @Nonnull TypedMap data, Direction orientation, double x, double y, double z, double scale) {
+    public void render(int mode, MatrixStack matrixStack, IRenderTypeBuffer buffer, @Nonnull TypedMap data, Direction orientation, double x, double y, double z, double scale) {
         if (mode == MODE_POWER) {
             PowerCellInformationRenderer.renderDefault(data, orientation, x, y, z, scale);
         } else {
