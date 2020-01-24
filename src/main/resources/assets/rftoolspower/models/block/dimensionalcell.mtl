@@ -11,34 +11,34 @@ newmtl None_powercellD.png
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 d 1
-map_Kd rftools:block/dimensionalcell
+map_Kd #down
 
 newmtl None_powercellE.png
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 d 1
-map_Kd rftools:block/dimensionalcell
+map_Kd #east
 
 newmtl None_powercellN.png
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 d 1
-map_Kd rftools:block/dimensionalcell
+map_Kd #north
 
 newmtl None_powercellS.png
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 d 1
-map_Kd rftools:block/dimensionalcell
+map_Kd #south
 
 newmtl None_powercellU.png
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 d 1
-map_Kd rftools:block/dimensionalcell
+map_Kd #up
 
 newmtl None_powercellW.png
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 d 1
-map_Kd rftools:block/dimensionalcell
+map_Kd #west

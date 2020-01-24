@@ -140,14 +140,20 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     private long lastTime = 0;
 
     public enum Mode implements IStringSerializable {
-        MODE_NONE("none"),
-        MODE_INPUT("input"),   // Blue
-        MODE_OUTPUT("output"); // Yellow
+        MODE_NONE("none", "overlay_none"),
+        MODE_INPUT("input", "overlay_in"),   // Blue
+        MODE_OUTPUT("output", "overlay_out"); // Yellow
 
         private final String name;
+        private final String overlayName;
 
-        Mode(String name) {
+        Mode(String name, String overlayName) {
             this.name = name;
+            this.overlayName = overlayName;
+        }
+
+        public String getOverlayName() {
+            return overlayName;
         }
 
         @Override

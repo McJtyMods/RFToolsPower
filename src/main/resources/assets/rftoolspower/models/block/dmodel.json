@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "rftoolspower:sided_texture_model",
+  "base_model": {
+    "parent": "rftoolspower:block/model",
+    "textures": {
+      "overlay_none": "rftoolspower:block/dimensionalcell",
+      "overlay_in": "rftoolspower:block/dimensionalcellin",
+      "overlay_out": "rftoolspower:block/dimensionalcellout"
+    }
+  },
+  "textures": {
+    "particle": "rftoolspower:block/dimensionalcell"
+  }
+}

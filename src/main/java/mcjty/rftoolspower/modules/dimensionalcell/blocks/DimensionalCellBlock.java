@@ -45,12 +45,6 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     private final DimensionalCellType type;
 
-    // @todo 1.15
-//    @Override
-//    public BlockRenderLayer getRenderLayer() {
-//        return BlockRenderLayer.CUTOUT;
-//    }
-
     @Override
     public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
         return false;
@@ -337,11 +331,4 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         super.fillStateContainer(builder);
         builder.add(NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
-
-
-    // @todo 1.15
-//    @Override
-//    public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-//        return layer == BlockRenderLayer.TRANSLUCENT;
-//    }
 }
