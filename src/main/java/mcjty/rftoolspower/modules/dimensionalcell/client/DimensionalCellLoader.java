@@ -1,7 +1,8 @@
-package mcjty.rftoolspower.modules.dimensionalcell.blocks;
+package mcjty.rftoolspower.modules.dimensionalcell.client;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import mcjty.rftoolspower.modules.dimensionalcell.client.DimensionalCellGeometry;
 import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.geometry.IModelGeometry;

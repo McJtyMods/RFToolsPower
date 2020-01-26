@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.modules.dimensionalcell.blocks;
+package mcjty.rftoolspower.modules.dimensionalcell.client;
 
 import mcjty.lib.client.AbstractDynamicBakedModel;
 import mcjty.rftoolspower.RFToolsPower;

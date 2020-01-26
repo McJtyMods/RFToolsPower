@@ -1,6 +1,7 @@
-package mcjty.rftoolspower.modules.dimensionalcell.blocks;
+package mcjty.rftoolspower.modules.dimensionalcell.client;
 
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.dimensionalcell.client.DimensionCellBakedModel;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
