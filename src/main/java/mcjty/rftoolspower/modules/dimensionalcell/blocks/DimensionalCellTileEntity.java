@@ -160,6 +160,12 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         public String getName() {
             return name;
         }
+
+
+        @Override
+        public String toString() {
+            return getName();
+        }
     }
 
     private Mode modes[] = new Mode[]{Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE};

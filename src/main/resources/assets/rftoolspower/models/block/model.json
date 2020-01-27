@@ -1,9 +1,0 @@
-{
-  "parent": "block/block",
-  "loader": "forge:obj",
-  "model": "rftoolspower:block/dimensionalcell.obj",
-  "flip-v": true,
-  "textures": {
-    "particle": "rftoolspower:block/dimensionalcell"
-  }
-}
