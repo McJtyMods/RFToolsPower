@@ -252,7 +252,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     dimensionalCellNetwork.save();
                     if (!world.isRemote) {
 //                        world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-                        dimensionalCellTileEntity.updateState();
+//@todo
+//                        dimensionalCellTileEntity.updateState();
                     }
                 }
             }

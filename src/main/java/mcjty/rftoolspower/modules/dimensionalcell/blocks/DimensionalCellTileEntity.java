@@ -28,13 +28,11 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -168,8 +166,6 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
     }
 
-    private Mode modes[] = new Mode[]{Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE};
-
     public DimensionalCellTileEntity(TileEntityType<?> type) {
         super(type);
     }
@@ -207,18 +203,6 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        Mode[] old = new Mode[]{modes[0], modes[1], modes[2], modes[3], modes[4], modes[5]};
-        super.onDataPacket(net, packet);
-        for (int i = 0; i < 6; i++) {
-            if (old[i] != modes[i]) {
-                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-                return;
-            }
-        }
-    }
-
-    @Override
     protected void readInfo(CompoundNBT tagCompound) {
         super.readInfo(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
@@ -226,12 +210,6 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         totalInserted = info.getLong("totIns");
         totalExtracted = info.getLong("totExt");
         networkId = info.getInt("networkId");
-        modes[0] = Mode.values()[info.getByte("m0")];
-        modes[1] = Mode.values()[info.getByte("m1")];
-        modes[2] = Mode.values()[info.getByte("m2")];
-        modes[3] = Mode.values()[info.getByte("m3")];
-        modes[4] = Mode.values()[info.getByte("m4")];
-        modes[5] = Mode.values()[info.getByte("m5")];
     }
 
     @Override
@@ -242,44 +220,29 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         info.putLong("totIns", totalInserted);
         info.putLong("totExt", totalExtracted);
         info.putInt("networkId", networkId);
-        info.putByte("m0", (byte) modes[0].ordinal());
-        info.putByte("m1", (byte) modes[1].ordinal());
-        info.putByte("m2", (byte) modes[2].ordinal());
-        info.putByte("m3", (byte) modes[3].ordinal());
-        info.putByte("m4", (byte) modes[4].ordinal());
-        info.putByte("m5", (byte) modes[5].ordinal());
     }
+
+    private static final EnumProperty<Mode>[] MODES = new EnumProperty[] {
+            DOWN, UP, NORTH, SOUTH, WEST, EAST
+    };
 
     public Mode getMode(Direction side) {
-        return modes[side.ordinal()];
-    }
-
-    public void updateState() {
-        Mode north = getMode(Direction.NORTH);
-        Mode south = getMode(Direction.SOUTH);
-        Mode west = getMode(Direction.WEST);
-        Mode east = getMode(Direction.EAST);
-        Mode up = getMode(Direction.UP);
-        Mode down = getMode(Direction.DOWN);
-        BlockState state = world.getBlockState(pos);
-        world.setBlockState(pos, state.with(NORTH, north).with(SOUTH, south).with(WEST, west).with(EAST, east).with(UP, up).with(DOWN, down),
-                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-        markDirtyQuick();
+        return getBlockState().get(MODES[side.ordinal()]);
     }
 
     public void toggleMode(Direction side) {
-        switch (modes[side.ordinal()]) {
+        Mode mode = getMode(side);
+        switch (mode) {
             case MODE_NONE:
-                modes[side.ordinal()] = Mode.MODE_INPUT;
+                world.setBlockState(pos, getBlockState().with(MODES[side.ordinal()], Mode.MODE_INPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 break;
             case MODE_INPUT:
-                modes[side.ordinal()] = Mode.MODE_OUTPUT;
+                world.setBlockState(pos, getBlockState().with(MODES[side.ordinal()], Mode.MODE_OUTPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 break;
             case MODE_OUTPUT:
-                modes[side.ordinal()] = Mode.MODE_NONE;
+                world.setBlockState(pos, getBlockState().with(MODES[side.ordinal()], Mode.MODE_NONE), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 break;
         }
-        updateState();
     }
 
     @Override
@@ -335,7 +298,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         int energyStored = getEnergyStored();
 
         for (Direction face : OrientationTools.DIRECTION_VALUES) {
-            if (modes[face.ordinal()] == Mode.MODE_OUTPUT) {
+            if (getMode(face) == Mode.MODE_OUTPUT) {
                 BlockPos pos = getPos().offset(face);
                 TileEntity te = world.getTileEntity(pos);
                 Direction opposite = face.getOpposite();
@@ -449,7 +412,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     public int receiveEnergyFacing(Direction from, int maxReceive, boolean simulate) {
-        if (modes[from.ordinal()] != Mode.MODE_INPUT) {
+        if (getMode(from) != Mode.MODE_INPUT) {
             return 0;
         }
         maxReceive = Math.min(maxReceive, getRfPerTickPerSide());
@@ -570,24 +533,36 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
 
     public void setAllOutput() {
-        for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-            modes[facing.ordinal()] = Mode.MODE_OUTPUT;
-        }
-        updateState();
+        world.setBlockState(pos, getBlockState()
+                        .with(DOWN, Mode.MODE_OUTPUT)
+                        .with(UP, Mode.MODE_OUTPUT)
+                        .with(NORTH, Mode.MODE_OUTPUT)
+                        .with(SOUTH, Mode.MODE_OUTPUT)
+                        .with(WEST, Mode.MODE_OUTPUT)
+                        .with(EAST, Mode.MODE_OUTPUT),
+                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
     private void setAllInput() {
-        for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-            modes[facing.ordinal()] = Mode.MODE_INPUT;
-        }
-        updateState();
+        world.setBlockState(pos, getBlockState()
+                        .with(DOWN, Mode.MODE_INPUT)
+                        .with(UP, Mode.MODE_INPUT)
+                        .with(NORTH, Mode.MODE_INPUT)
+                        .with(SOUTH, Mode.MODE_INPUT)
+                        .with(WEST, Mode.MODE_INPUT)
+                        .with(EAST, Mode.MODE_INPUT),
+                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
     private void setAllNone() {
-        for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-            modes[facing.ordinal()] = Mode.MODE_NONE;
-        }
-        updateState();
+        world.setBlockState(pos, getBlockState()
+                        .with(DOWN, Mode.MODE_NONE)
+                        .with(UP, Mode.MODE_NONE)
+                        .with(NORTH, Mode.MODE_NONE)
+                        .with(SOUTH, Mode.MODE_NONE)
+                        .with(WEST, Mode.MODE_NONE)
+                        .with(EAST, Mode.MODE_NONE),
+                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
     @Override
