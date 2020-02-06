@@ -1,4 +1,7 @@
-Upcoming:
+2.0.1-alpha:
+- Fixed a problem with the powercell crashing on recent forge
+
+2.0.0-alpha:
 - Removed the obsolete information screen (it's now in RFTools Base)
 
 1.2.12:

@@ -62,7 +62,7 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
     }
 
     private static TextureAtlasSprite getTopTexture() {
-        String name = RFToolsPower.MODID + ":block/cellhoriz_t1";
+        String name = "block/cellhoriz_t1";
         return getTexture(new ResourceLocation(RFToolsPower.MODID, name));
     }
 
