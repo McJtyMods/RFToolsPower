@@ -21,34 +21,14 @@ public class BlockStates extends BaseBlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         BlockModelBuilder dimCellFrame = models().getBuilder("block/dimcell/main");
-
-        floatingCube(dimCellFrame, 0f, 0f, 0f, 1f, 16f, 1f);
-        floatingCube(dimCellFrame, 15f, 0f, 0f, 16f, 16f, 1f);
-        floatingCube(dimCellFrame, 0f, 0f, 15f, 1f, 16f, 16f);
-        floatingCube(dimCellFrame, 15f, 0f, 15f, 16f, 16f, 16f);
-
-        floatingCube(dimCellFrame, 1f, 0f, 0f, 15f, 1f, 1f);
-        floatingCube(dimCellFrame, 1f, 15f, 0f, 15f, 16f, 1f);
-        floatingCube(dimCellFrame, 1f, 0f, 15f, 15f, 1f, 16f);
-        floatingCube(dimCellFrame, 1f, 15f, 15f, 15f, 16f, 16f);
-
-        floatingCube(dimCellFrame, 0f, 0f, 1f, 1f, 1f, 15f);
-        floatingCube(dimCellFrame, 15f, 0f, 1f, 16f, 1f, 15f);
-        floatingCube(dimCellFrame, 0f, 15f, 1f, 1f, 16f, 15f);
-        floatingCube(dimCellFrame, 15f, 15f, 1f, 16f, 16f, 15f);
-
-        floatingCube(dimCellFrame, 1f, 1f, 1f, 15f, 15f, 15f);
-
+        createFrame(dimCellFrame, "#window", 1f);
+        innerCube(dimCellFrame, "#window", 1f, 1f, 1f, 15f, 15f, 15f);
         dimCellFrame.texture("window", modLoc("block/dimensionalcellwindows"));
 
         createDimensionalCellModel(DimensionalCellSetup.DIMENSIONAL_CELL.get(), "", dimCellFrame);
         createDimensionalCellModel(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), "simple", dimCellFrame);
         createDimensionalCellModel(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), "advanced", dimCellFrame);
         createDimensionalCellModel(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), "creative", dimCellFrame);
-    }
-
-    private void floatingCube(BlockModelBuilder builder, float fx, float fy, float fz, float tx, float ty, float tz) {
-        builder.element().from(fx, fy, fz).to(tx, ty, tz).allFaces((direction, faceBuilder) -> faceBuilder.texture("#window")).end();
     }
 
     private void createDimensionalCellModel(Block block, String suffix, BlockModelBuilder dimCellFrame) {
