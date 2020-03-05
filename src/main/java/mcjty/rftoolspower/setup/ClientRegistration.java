@@ -31,10 +31,10 @@ public class ClientRegistration {
         GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
         GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
 
-        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), RenderType.getTranslucent());
     }
 
     @SubscribeEvent
@@ -43,7 +43,7 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getBasePath().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
+        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
             return;
         }
 
