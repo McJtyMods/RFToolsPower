@@ -5,7 +5,7 @@ import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
-import mcjty.rftoolsbase.modules.various.SmartWrenchItem;
+import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import net.minecraft.block.Block;
