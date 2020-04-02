@@ -14,7 +14,7 @@
 
     "itemGroup.rftoolspower": "RFTools Power",
 
-    "message.rftoolspower.shiftmessage": "Press Shift",
+    "message.rftoolspower.shiftmessage": "<Press Shift>",
 
     "message.rftoolspower.powercell_card.header": "Use to connect dimensional cells",
     "message.rftoolspower.powercell_card.info": "Link: ",

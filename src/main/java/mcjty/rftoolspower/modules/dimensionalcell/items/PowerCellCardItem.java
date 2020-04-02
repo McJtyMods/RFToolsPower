@@ -40,7 +40,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     @Override
     public void addInformation(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flag) {
         super.addInformation(itemStack, world, list, flag);
-        tooltipBuilder.makeTooltip(getRegistryName(), itemStack, list);
+        tooltipBuilder.makeTooltip(getRegistryName(), itemStack, list, flag);
     }
 
     public static int getId(ItemStack stack) {

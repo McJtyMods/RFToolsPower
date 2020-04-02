@@ -26,6 +26,6 @@ public class PowerCoreItem extends Item implements ITooltipSettings {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltipBuilder.makeTooltip(getRegistryName(), stack, tooltip);
+        tooltipBuilder.makeTooltip(getRegistryName(), stack, tooltip, flagIn);
     }
 }
