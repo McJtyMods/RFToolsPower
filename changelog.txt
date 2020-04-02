@@ -1,3 +1,6 @@
+Upcoming:
+- Item tooltip improvements
+
 2.0.1-alpha:
 - Fixed a problem with the powercell crashing on recent forge
 

@@ -1,18 +1,33 @@
 package mcjty.rftoolspower.modules.dimensionalcell.items;
 
+import mcjty.lib.builder.TooltipBuilder;
+import mcjty.lib.tooltips.ITooltipSettings;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class PowerCellCardItem extends Item {
+import static mcjty.lib.builder.TooltipBuilder.header;
+import static mcjty.lib.builder.TooltipBuilder.parameter;
+
+public class PowerCellCardItem extends Item implements ITooltipSettings {
+
+    private final TooltipBuilder tooltipBuilder = new TooltipBuilder()
+            .info(header(),
+                    parameter("info", stack -> {
+                        int id = getId(stack);
+                        if (id == -1) {
+                            return "<unlinked>";
+                        } else {
+                            return Integer.toString(id);
+                        }
+                    }));
+
 
     public PowerCellCardItem() {
         super(new Properties().group(RFToolsPower.setup.getTab()));
@@ -25,13 +40,7 @@ public class PowerCellCardItem extends Item {
     @Override
     public void addInformation(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flag) {
         super.addInformation(itemStack, world, list, flag);
-        list.add(new StringTextComponent(TextFormatting.WHITE + "Use to connect a powercell multiblock"));
-        int id = getId(itemStack);
-        if (id == -1) {
-            list.add(new StringTextComponent(TextFormatting.YELLOW + "[UNLINKED]"));
-        } else {
-            list.add(new StringTextComponent(TextFormatting.GREEN + "Link id: " + id));
-        }
+        tooltipBuilder.makeTooltip(getRegistryName(), itemStack, list);
     }
 
     public static int getId(ItemStack stack) {

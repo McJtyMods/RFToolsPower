@@ -44,6 +44,8 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static mcjty.lib.builder.TooltipBuilder.*;
+
 public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
     public static final String CMD_RSMODE = "coalgen.setRsMode";
@@ -84,9 +86,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 .tileEntitySupplier(CoalGeneratorTileEntity::new)
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
-                .info("message.rftoolspower.shiftmessage")
-                .infoExtended("message.rftoolspower.coalgenerator")
-                .infoExtendedParameter(stack -> Long.toString(CoalGeneratorConfig.RFPERTICK.get()))
+                .info(key("message.rftoolspower.shiftmessage"))
+                .infoShift(header(), gold(),
+                        parameter("info", stack -> Long.toString(CoalGeneratorConfig.RFPERTICK.get()) + " RF/FE"))
         ) {
             @Override
             protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {

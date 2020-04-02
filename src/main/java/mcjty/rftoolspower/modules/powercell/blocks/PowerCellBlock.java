@@ -1,11 +1,9 @@
 package mcjty.rftoolspower.modules.powercell.blocks;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
@@ -13,11 +11,9 @@ import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
@@ -25,10 +21,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
@@ -36,7 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+
+import static mcjty.lib.builder.TooltipBuilder.*;
 
 public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredient {
 
@@ -51,58 +44,27 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     public PowerCellBlock(Tier tier) {
         super(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .info(key("message.rftoolspower.shiftmessage"))
+                .infoShift(header(),
+                        parameter("info", stack -> {
+                            long power = 0;
+                            CompoundNBT tagCompound = stack.getTag();
+                            if (tagCompound != null) {
+                                power = tagCompound.getLong("Energy");
+                            }
+
+                            long totpower = 0;
+                            if (stack.getItem() == PowerCellSetup.CELL1_ITEM.get()) {
+                                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
+                            } else if (stack.getItem() == PowerCellSetup.CELL2_ITEM.get()) {
+                                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
+                            } else if (stack.getItem() == PowerCellSetup.CELL3_ITEM.get()) {
+                                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
+                            }
+                            return Long.toString(power) + " (max " + Long.toString(totpower) + " RF/FE)";
+                        }))
                 .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
     }
-
-    @Override
-    public void addInformation(ItemStack itemStack, @Nullable IBlockReader player, List<ITextComponent> list, ITooltipFlag flag) {
-        super.addInformation(itemStack, player, list, flag);
-
-        CompoundNBT tagCompound = itemStack.getTag();
-        if (tagCompound != null) {
-            list.add(new StringTextComponent(TextFormatting.BLUE + "Energy: " + TextFormatting.YELLOW + tagCompound.getLong("Energy")));
-        }
-
-        if (McJtyLib.proxy.isShiftKeyDown()) {
-            long totpower = 0;
-            if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL1.get())) {
-                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
-            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL2.get())) {
-                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
-            } else if (itemStack.getItem() == Item.getItemFromBlock(PowerCellSetup.CELL3.get())) {
-                totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
-            }
-            list.add(new StringTextComponent(TextFormatting.WHITE + "This block can store power (" + totpower + " RF)"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "and can be combined with other cells to form a"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "big multiblock"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "Right click with a wrench to toggle"));
-            list.add(new StringTextComponent(TextFormatting.WHITE + "input/output mode for a side"));
-        } else {
-            list.add(new StringTextComponent(TextFormatting.WHITE + RFToolsPower.SHIFT_MESSAGE));
-        }
-    }
-
-
-//    private static long lastTime = 0;
-//
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    @Optional.Method(modid = "waila")
-//    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-//        super.getWailaBody(itemStack, currenttip, accessor, config);
-//        TileEntity tileEntity = accessor.getTileEntity();
-//        if (tileEntity instanceof PowerCellTileEntity) {
-//            PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) tileEntity;
-//            if (System.currentTimeMillis() - lastTime > 250) {
-//                lastTime = System.currentTimeMillis();
-////                RFToolsMessages.INSTANCE.sendToServer(new PacketGetInfoFromServer(RFTools.MODID, new PowerCellInfoPacketServer(powerCellTileEntity)));
-//            }
-////            currenttip.add(TextFormatting.GREEN + "Energy: " + PowerCellInfoPacketClient.tooltipEnergy + "/" + total + " RF (" +
-////                    PowerCellInfoPacketClient.tooltipRfPerTick + " RF/t)");
-//        }
-//        return currenttip;
-//    }
-
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {

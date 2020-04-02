@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static mcjty.lib.builder.TooltipBuilder.*;
+
 
 public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIngredient {
 
@@ -74,11 +76,13 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         super(new BlockBuilder()
                 .tileEntitySupplier(supplier)
                 .infusable()
-                .info("message.rftoolspower.dimensional_cell")
-                .infoParameter(stack -> stack.getTag() == null ? "<empty>" : String.valueOf(getEnergy(stack)))
-                .infoExtended("message.rftoolspower.dimensional_cell_shift")
-                .infoExtendedParameter(stack -> stack.getTag() == null ? "<empty>" : String.valueOf(getEnergy(stack)))
-                .infoExtendedParameter(stack -> String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get()))
+                .info(key("message.rftoolspower.shiftmessage"))
+                .infoShift(header(), gold(),
+                        parameter("info", stack -> {
+                            String energy = stack.getTag() == null ? "0" : String.valueOf(getEnergy(stack));
+                            String max = String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
+                            return energy + " (max " + max + " RF/FE)";
+                        }))
         );
         this.type = type;
     }

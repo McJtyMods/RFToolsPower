@@ -16,7 +16,40 @@
 
     "message.rftoolspower.shiftmessage": "Press Shift",
 
-    "message.rftoolspower.coalgenerator": "@fThis machine produces RF (%s RF/t)\n@ffrom coal or charcoal\n@eInfusing bonus: more power generation\n@eand lasts longer on a single fuel",
-    "message.rftoolspower.dimensional_cell": "@eEnergy: %s\n@fPress Shift",
-    "message.rftoolspower.dimensional_cell_shift": "@eEnergy: %s\n@fThis block can store power (%s RF)\n@fOptionally in a big multi dimensional structure\n@eInfusing bonus: reduced long distance power\n@eextraction cost and increased RF/tick output"
+    "message.rftoolspower.powercell_card.header": "Use to connect dimensional cells",
+    "message.rftoolspower.powercell_card.info": "Link: ",
+
+    "message.rftoolspower.power_core1.header": "This item is a crafting ingredient for powercells",
+    "message.rftoolspower.power_core2.header": "This item is a crafting ingredient for powercells",
+    "message.rftoolspower.power_core3.header": "This item is a crafting ingredient for powercells",
+
+    "message.rftoolspower.cell1.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
+    "message.rftoolspower.cell1.info": "Power: ",
+
+    "message.rftoolspower.cell2.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
+    "message.rftoolspower.cell2.info": "Power: ",
+
+    "message.rftoolspower.cell3.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
+    "message.rftoolspower.cell3.info": "Power: ",
+
+    "message.rftoolspower.coalgenerator.header": "This machine produces RF/FE from coal or charcoal",
+    "message.rftoolspower.coalgenerator.gold": "Infusing bonus: more power generation and lasts longer on a single fuel",
+    "message.rftoolspower.coalgenerator.info": "Producing: ",
+
+    "message.rftoolspower.dimensionalcell.header": "This block can store power. Optionally in a big multi dimensional structure",
+    "message.rftoolspower.dimensionalcell.gold": "Infusing bonus: reduced long distance power extraction cost and increased RF/tick output",
+    "message.rftoolspower.dimensionalcell.info": "Energy: ",
+
+    "message.rftoolspower.dimensionalcell_advanced.header": "This block can store power. Optionally in a big multi dimensional structure",
+    "message.rftoolspower.dimensionalcell_advanced.gold": "Infusing bonus: reduced long distance power extraction cost and increased RF/tick output",
+    "message.rftoolspower.dimensionalcell_advanced.info": "Energy: ",
+
+    "message.rftoolspower.dimensionalcell_simple.header": "This block can store power. Optionally in a big multi dimensional structure",
+    "message.rftoolspower.dimensionalcell_simple.gold": "Infusing bonus: reduced long distance power extraction cost and increased RF/tick output",
+    "message.rftoolspower.dimensionalcell_simple.info": "Energy: ",
+
+    "message.rftoolspower.dimensionalcell_creative.header": "This block can store power. Optionally in a big multi dimensional structure",
+    "message.rftoolspower.dimensionalcell_creative.gold": "Infusing bonus: reduced long distance power extraction cost and increased RF/tick output",
+    "message.rftoolspower.dimensionalcell_creative.info": "Energy: "
+
 }
