@@ -5,7 +5,9 @@ import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
+import mcjty.lib.varia.NBTTools;
 import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
+import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import net.minecraft.block.Block;
@@ -51,7 +53,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     private final static VoxelShape RENDER_SHAPE = VoxelShapes.create(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
     @Override
-    public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
+    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
         return false;
     }
 
@@ -74,6 +76,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     public DimensionalCellBlock(DimensionalCellType type, Supplier<TileEntity> supplier) {
         super(new BlockBuilder()
+                .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(supplier)
                 .infusable()
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -105,85 +108,6 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         return type.isAdvanced() ? (DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()) : DimensionalCellConfiguration.simpleFactor.get();
     }
 
-// @todo 1.14
-//    private static long lastTime = 0;
-//    @Override
-//    @Optional.Method(modid = "theoneprobe")
-//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-//        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
-//        TileEntity te = world.getTileEntity(data.getPos());
-//        if (te instanceof PowerCellTileEntity) {
-//            PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) te;
-//            int id = powerCellTileEntity.getNetworkId();
-//            if (mode == ProbeMode.EXTENDED) {
-//                if (id != -1) {
-//                    probeInfo.text(TextFormatting.GREEN + "ID: " + new DecimalFormat("#.##").format(id));
-//                } else {
-//                    probeInfo.text(TextFormatting.GREEN + "Local storage!");
-//                }
-//            }
-//
-//            float costFactor = powerCellTileEntity.getCostFactor();
-//            int rfPerTick = powerCellTileEntity.getRfPerTickPerSide();
-//
-//            probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
-//            PowerCellTileEntity.Mode powermode = powerCellTileEntity.getMode(data.getSideHit());
-//            if (powermode == PowerCellTileEntity.Mode.MODE_INPUT) {
-//                probeInfo.text(TextFormatting.YELLOW + "Side: input");
-//            } else if (powermode == PowerCellTileEntity.Mode.MODE_OUTPUT) {
-//                int cost = (int) ((costFactor - 1.0f) * 1000.0f);
-//                probeInfo.text(TextFormatting.YELLOW + "Side: output (cost " + cost / 10 + "." + cost % 10 + "%)");
-//            }
-//            if (mode == ProbeMode.EXTENDED) {
-//                int rfPerTickIn = powerCellTileEntity.getLastRfPerTickIn();
-//                int rfPerTickOut = powerCellTileEntity.getLastRfPerTickOut();
-//                probeInfo.text(TextFormatting.GREEN + "In:  " + rfPerTickIn + "RF/t");
-//                probeInfo.text(TextFormatting.GREEN + "Out: " + rfPerTickOut + "RF/t");
-//            }
-//        }
-//    }
-//
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    @Optional.Method(modid = "waila")
-//    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-//        super.getWailaBody(itemStack, currenttip, accessor, config);
-//        TileEntity tileEntity = accessor.getTileEntity();
-//        if (tileEntity instanceof PowerCellTileEntity) {
-//            PowerCellTileEntity powercell = (PowerCellTileEntity) tileEntity;
-//            int id = powercell.getNetworkId();
-//            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-//                if (id != -1) {
-//                    currenttip.add(TextFormatting.GREEN + "ID: " + new DecimalFormat("#.##").format(id));
-//                } else {
-//                    currenttip.add(TextFormatting.GREEN + "Local storage!");
-//                }
-//            }
-//            if (System.currentTimeMillis() - lastTime > 250) {
-//                lastTime = System.currentTimeMillis();
-//                powercell.requestDataFromServer(RFTools.MODID, PowerCellTileEntity.CMD_GET_INFO, TypedMap.EMPTY);
-//            }
-//            long total = (PowerCellTileEntity.tooltipBlocks - PowerCellTileEntity.tooltipAdvancedBlocks - (long) PowerCellTileEntity.tooltipSimpleBlocks) * PowerCellConfiguration.rfPerNormalCell.get();
-//            total += (long) PowerCellTileEntity.tooltipAdvancedBlocks * PowerCellConfiguration.rfPerNormalCell.get() * advancedFactor.get();
-//            total += (long) PowerCellTileEntity.tooltipSimpleBlocks * PowerCellConfiguration.rfPerNormalCell.get() / PowerCellConfiguration.simpleFactor.get();
-//            if (total > Integer.MAX_VALUE) {
-//                total = Integer.MAX_VALUE;
-//            }
-//
-//            currenttip.add(TextFormatting.GREEN + "Energy: " + PowerCellTileEntity.tooltipEnergy + "/" + total + " RF (" +
-//                    PowerCellTileEntity.tooltipRfPerTick + " RF/t)");
-//            PowerCellTileEntity.Mode mode = powercell.getMode(accessor.getSide());
-//            if (mode == PowerCellTileEntity.Mode.MODE_INPUT) {
-//                currenttip.add(TextFormatting.YELLOW + "Side: input");
-//            } else if (mode == PowerCellTileEntity.Mode.MODE_OUTPUT) {
-//                int cost = (int) ((PowerCellTileEntity.tooltipCostFactor - 1.0f) * 1000.0f);
-//                currenttip.add(TextFormatting.YELLOW + "Side: output (cost " + cost / 10 + "." + cost % 10 + "%)");
-//            }
-//        }
-//        return currenttip;
-//    }
-
-
     @Override
     protected boolean wrenchSneakSelect(World world, BlockPos pos, PlayerEntity player) {
         if (!world.isRemote) {
@@ -212,29 +136,11 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     private static int getEnergy(ItemStack stack) {
-        CompoundNBT tag = stack.getTag();
-        if (tag == null) {
-            return 0;
-        }
-        if (tag.contains("BlockEntityTag")) {
-            tag = tag.getCompound("BlockEntityTag");
-            if (tag.contains("Info")) {
-                return tag.getCompound("Info").getInt("energy");
-            }
-        }
-        return 0;
+        return NBTTools.getInfoNBT(stack, CompoundNBT::getInt, "energy", 0);
     }
 
     private static void setEnergy(ItemStack stack, int energy) {
-        CompoundNBT tag = stack.getOrCreateTag();
-        if (!tag.contains("BlockEntityTag")) {
-            tag.put("BlockEntityTag", new CompoundNBT());
-        }
-        tag = tag.getCompound("BlockEntityTag");
-        if (!tag.contains("Info")) {
-            tag.put("Info", new CompoundNBT());
-        }
-        tag.getCompound("Info").putInt("energy", energy);
+        NBTTools.setInfoNBT(stack, CompoundNBT::putInt, "energy", energy);
     }
 
     @Override

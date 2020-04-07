@@ -3,12 +3,14 @@ package mcjty.rftoolspower.compat;
 import mcjty.lib.compat.theoneprobe.McJtyLibTOPDriver;
 import mcjty.lib.compat.theoneprobe.TOPDriver;
 import mcjty.lib.varia.Tools;
+import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
+import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
+import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
-import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -19,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +39,8 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 drivers.put(id, new CoalDriver());
             } else if (blockState.getBlock() instanceof PowerCellBlock) {
                 drivers.put(id, new PowerCellDriver());
+            } else if (blockState.getBlock() instanceof DimensionalCellBlock) {
+                drivers.put(id, new DimensionalCellDriver());
             } else {
                 drivers.put(id, new DefaultDriver());
             }
@@ -91,6 +96,41 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 }
                 if (mode == ProbeMode.EXTENDED) {
                     probeInfo.text(TextStyleClass.LABEL + "Local Energy: " + TextStyleClass.INFO + te.getLocalEnergy());
+                }
+            }, "Bad tile entity!");
+        }
+    }
+
+    private static class DimensionalCellDriver implements TOPDriver {
+        @Override
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+            McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
+            Tools.safeConsume(world.getTileEntity(data.getPos()), (DimensionalCellTileEntity te) -> {
+                int id = te.getNetworkId();
+                if (mode == ProbeMode.EXTENDED) {
+                    if (id != -1) {
+                        probeInfo.text(TextFormatting.GREEN + "ID: " + new DecimalFormat("#.##").format(id));
+                    } else {
+                        probeInfo.text(TextFormatting.GREEN + "Local storage!");
+                    }
+                }
+
+                float costFactor = te.getCostFactor();
+                int rfPerTick = te.getRfPerTickPerSide();
+
+                probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
+                DimensionalCellTileEntity.Mode powermode = te.getMode(data.getSideHit());
+                if (powermode == DimensionalCellTileEntity.Mode.MODE_INPUT) {
+                    probeInfo.text(TextFormatting.YELLOW + "Side: input");
+                } else if (powermode == DimensionalCellTileEntity.Mode.MODE_OUTPUT) {
+                    int cost = (int) ((costFactor - 1.0f) * 1000.0f);
+                    probeInfo.text(TextFormatting.YELLOW + "Side: output (cost " + cost / 10 + "." + cost % 10 + "%)");
+                }
+                if (mode == ProbeMode.EXTENDED) {
+                    int rfPerTickIn = te.getLastRfPerTickIn();
+                    int rfPerTickOut = te.getLastRfPerTickOut();
+                    probeInfo.text(TextFormatting.GREEN + "In:  " + rfPerTickIn + "RF/t");
+                    probeInfo.text(TextFormatting.GREEN + "Out: " + rfPerTickOut + "RF/t");
                 }
             }, "Bad tile entity!");
         }
