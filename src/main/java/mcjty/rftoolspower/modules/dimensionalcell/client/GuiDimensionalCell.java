@@ -2,7 +2,6 @@ package mcjty.rftoolspower.modules.dimensionalcell.client;
 
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
-import mcjty.lib.gui.layout.PositionalLayout;
 import mcjty.lib.gui.widgets.Button;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.Label;
@@ -16,7 +15,7 @@ import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
-import java.awt.*;
+import static mcjty.lib.gui.widgets.Widgets.*;
 
 public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileEntity, DimensionalCellContainer> {
     public static final int POWERCELL_WIDTH = 180;
@@ -40,33 +39,28 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     public void init() {
         super.init();
 
-        energyBar = new EnergyBar(minecraft, this).setVertical().setMaxValue(1000).setLayoutHint(10, 7, 8, 54).setShowText(false);
-        energyBar.setValue(0);
+        energyBar = new EnergyBar().vertical().maxValue(1000).hint(10, 7, 8, 54).showText(false);
+        energyBar.value(0);
 
-        Button allNone = new Button(minecraft, this)
-                .setName("allnone")
-                .setText("None").setTooltips("Set all sides to 'none'")
-                .setLayoutHint(140, 10, 32, 15);
-        Button allInput = new Button(minecraft, this)
-                .setName("allinput")
-                .setText("In").setTooltips("Set all sides to", "accept energy")
-                .setLayoutHint(140, 27, 32, 15);
-        Button allOutput = new Button(minecraft, this)
-                .setName("alloutput")
-                .setText("Out").setTooltips("Set all sides to", "send energy")
-                .setLayoutHint(140, 44, 32, 15);
+        Button allNone = button(140, 10, 32, 15, "None")
+                .name("allnone")
+                .tooltips("Set all sides to 'none'");
+        Button allInput = button(140, 27, 32, 15, "In")
+                .name("allinput")
+                .tooltips("Set all sides to", "accept energy");
+        Button allOutput = button(140, 44, 32, 15, "Out")
+                .name("alloutput")
+                .tooltips("Set all sides to", "send energy");
 
-        stats = new Button(minecraft, this)
-                .setName("clearstats")
-                .setText("Stats").setTooltips("Power statistics. Press to clear:")
-                .setLayoutHint(100, 10, 32, 15);
+        stats = button(100, 10, 32, 15, "Stats")
+                .name("clearstats")
+                .tooltips("Power statistics. Press to clear:");
 
-        Label label = new Label(minecraft, this);
-        label.setText("Link:").setTooltips("Link a powercard to card", "on the left").setLayoutHint(26, 30, 40, 18);
+        Label label = label(26, 30, 40, 18, "Link:").tooltips("Link a powercard to card", "on the left");
 
-        Panel toplevel = new Panel(minecraft, this).setBackground(iconLocation).setLayout(new PositionalLayout())
-                .addChildren(energyBar, allNone, allInput, allOutput, label, stats);
-        toplevel.setBounds(new Rectangle(guiLeft, guiTop, xSize, ySize));
+        Panel toplevel = positional().background(iconLocation)
+                .children(energyBar, allNone, allInput, allOutput, label, stats);
+        toplevel.bounds(guiLeft, guiTop, xSize, ySize);
 
         window = new Window(this, toplevel);
 
@@ -92,12 +86,12 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         requestRF();
 
-        stats.setTooltips("Power statistics. Press to clear:", "Inserted: " + DimensionalCellTileEntity.tooltipInserted, "Extracted: " + DimensionalCellTileEntity.tooltipExtracted);
+        stats.tooltips("Power statistics. Press to clear:", "Inserted: " + DimensionalCellTileEntity.tooltipInserted, "Extracted: " + DimensionalCellTileEntity.tooltipExtracted);
 
         int maxValue = (DimensionalCellTileEntity.tooltipBlocks - DimensionalCellTileEntity.tooltipAdvancedBlocks - DimensionalCellTileEntity.tooltipSimpleBlocks) * DimensionalCellConfiguration.rfPerNormalCell.get();
         maxValue += DimensionalCellTileEntity.tooltipAdvancedBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() * DimensionalCellConfiguration.advancedFactor.get();
         maxValue += DimensionalCellTileEntity.tooltipSimpleBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() / DimensionalCellConfiguration.simpleFactor.get();
-        energyBar.setMaxValue(maxValue);
-        energyBar.setValue(DimensionalCellTileEntity.tooltipEnergy);
+        energyBar.maxValue(maxValue);
+        energyBar.value(DimensionalCellTileEntity.tooltipEnergy);
     }
 }

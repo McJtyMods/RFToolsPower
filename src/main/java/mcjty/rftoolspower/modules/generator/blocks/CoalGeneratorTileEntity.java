@@ -142,7 +142,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                     if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
                         burning *= 9;
                     }
-                    float factor = infusableHandler.map(inf -> inf.getInfusedFactor()).orElse(0.0f);
+                    float factor = infusableHandler.map(IInfusable::getInfusedFactor).orElse(0.0f);
                     burning += (int) (burning * factor / 2.0f);
                 }
             });
@@ -156,7 +156,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     public long getRfPerTick() {
         long rf = CoalGeneratorConfig.RFPERTICK.get();
-        float factor = infusableHandler.map(inf -> inf.getInfusedFactor()).orElse(0.0f);
+        float factor = infusableHandler.map(IInfusable::getInfusedFactor).orElse(0.0f);
         rf += (long) (rf * factor);
         return rf;
     }

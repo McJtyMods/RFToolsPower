@@ -1,10 +1,10 @@
 package mcjty.rftoolspower.modules.powercell;
 
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
+import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;

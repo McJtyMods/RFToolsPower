@@ -335,7 +335,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private Float getInfusedFactor() {
-        return infusableHandler.map(h -> h.getInfusedFactor()).orElse(0.0f);
+        return infusableHandler.map(IInfusable::getInfusedFactor).orElse(0.0f);
     }
 
     public int getRfPerTickPerSide() {
