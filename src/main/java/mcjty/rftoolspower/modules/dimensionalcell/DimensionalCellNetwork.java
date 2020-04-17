@@ -3,6 +3,7 @@ package mcjty.rftoolspower.modules.dimensionalcell;
 import mcjty.lib.varia.GlobalCoordinate;
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.OrientationTools;
+import mcjty.lib.varia.WorldTools;
 import mcjty.lib.worlddata.AbstractWorldData;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
@@ -129,7 +130,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             Iterable<GlobalCoordinate> copy = new HashSet<>(blocks);
             blocks.clear();
             for (GlobalCoordinate c : copy) {
-                World world = mcjty.lib.varia.TeleportationTools.getWorldForDimension(c.getDimension());
+                World world = WorldTools.loadWorld(c.getDimension());
                 BlockState state = world.getBlockState(c.getCoordinate());
                 if (state.getBlock() == DimensionalCellSetup.DIMENSIONAL_CELL.get()) {
                     blocks.add(c);
