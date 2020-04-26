@@ -1,5 +1,6 @@
 Upcoming:
 - Item tooltip improvements
+- Fixed the recipes for the vanilla recipe book
 
 2.0.1-alpha:
 - Fixed a problem with the powercell crashing on recent forge
