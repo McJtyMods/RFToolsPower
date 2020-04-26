@@ -21,7 +21,6 @@ public class Recipes extends BaseRecipeProvider {
         add('F', VariousSetup.MACHINE_FRAME.get());
         add('A', VariousSetup.MACHINE_BASE.get());
         add('s', VariousSetup.DIMENSIONALSHARD.get());
-        group("rftools");
     }
 
     @Override
@@ -45,12 +44,12 @@ public class Recipes extends BaseRecipeProvider {
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL2.get())
                         .key('K', PowerCellSetup.POWER_CORE2.get())
                         .key('P', PowerCellSetup.CELL1.get())
-                        .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL1.get())),
+                        .addCriterion("cell", hasItem(PowerCellSetup.CELL1.get())),
                 "rKr", "KPK", "rKr");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL3.get())
                         .key('K', PowerCellSetup.POWER_CORE3.get())
                         .key('P', PowerCellSetup.CELL2.get())
-                        .addCriterion("cell", InventoryChangeTrigger.Instance.forItems(PowerCellSetup.CELL2.get())),
+                        .addCriterion("cell", hasItem(PowerCellSetup.CELL2.get())),
                 "rKr", "KPK", "rKr");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL.get())
                         .key('P', Items.PRISMARINE_SHARD)
