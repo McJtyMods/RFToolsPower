@@ -45,6 +45,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
+import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
+import static mcjty.lib.container.SlotDefinition.specific;
 
 public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
@@ -53,15 +55,11 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_COALINPUT = 0;
     public static final int SLOT_CHARGEITEM = 1;
 
-    public static final ContainerFactory CONTAINER_FACTORY = new ContainerFactory(2) {
-        @Override
-        protected void setup() {
-            slot(SlotDefinition.specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)),
-                    CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24);
-            slot(SlotDefinition.specific(EnergyTools::isEnergyItem), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24);
-            playerSlots(10, 70);
-        }
-    };
+    public static final ContainerFactory CONTAINER_FACTORY = new ContainerFactory(2)
+            .slot(specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)),
+                    CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24)
+            .slot(specific(EnergyTools::isEnergyItem), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24)
+            .playerSlots(10, 70);
 
     private NoDirectionItemHander items = createItemHandler();
     private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
