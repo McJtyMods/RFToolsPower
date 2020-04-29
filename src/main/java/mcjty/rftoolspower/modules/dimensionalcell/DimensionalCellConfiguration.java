@@ -17,42 +17,42 @@ public class DimensionalCellConfiguration {
 
     public static ForgeConfigSpec.IntValue CHARGEITEMPERTICK;
 
-    public static void setup(ForgeConfigSpec.Builder COMMON_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
-        COMMON_BUILDER.comment("Settings for the powercell").push(CATEGORY_DIMENSIONALCELL);
+    public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+        SERVER_BUILDER.comment("Settings for the powercell").push(CATEGORY_DIMENSIONALCELL);
         CLIENT_BUILDER.comment("Settings for the powercell").push(CATEGORY_DIMENSIONALCELL);
 
-        rfPerTick = COMMON_BUILDER
+        rfPerTick = SERVER_BUILDER
                 .comment("Base amount of RF/tick that can be extracted/inserted in this block")
                 .defineInRange("rfPerTick", 5000, 0, Integer.MAX_VALUE);
-        rfPerNormalCell = COMMON_BUILDER
+        rfPerNormalCell = SERVER_BUILDER
                 .comment("Maximum RF storage that a single cell can hold")
                 .defineInRange("rfPerNormalCell", 1000000, 0, Integer.MAX_VALUE);
 
-        advancedFactor = COMMON_BUILDER
+        advancedFactor = SERVER_BUILDER
                 .comment("How much better is the advanced cell with RF and RF/t")
                 .defineInRange("advancedFactor", 4, 0, Integer.MAX_VALUE);
-        simpleFactor = COMMON_BUILDER
+        simpleFactor = SERVER_BUILDER
                 .comment("How much worse is the simple cell with RF and RF/t")
                 .defineInRange("simpleFactor", 4, 0, Integer.MAX_VALUE);
 
-        powerCellCostFactor = COMMON_BUILDER
+        powerCellCostFactor = SERVER_BUILDER
                 .comment("The maximum cost factor for extracting energy out of a powercell for blocks in other dimensions or farther away then 10000 blocks")
                 .defineInRange("powerCellCostFactor", 1.10, 0, 1000000000.0);
-        powerCellDistanceCap = COMMON_BUILDER
+        powerCellDistanceCap = SERVER_BUILDER
                 .comment("At this distance the cost factor will be maximum. This value is also used when power is extracted from cells in different dimensions")
                 .defineInRange("powerCellDistanceCap", 10000.0, 0, 1000000000.0);
-        powerCellMinDistance = COMMON_BUILDER
+        powerCellMinDistance = SERVER_BUILDER
                 .comment("As soon as powercells are not connected this value will be taken as the minimum distance to base the cost factor from")
                 .defineInRange("powerCellMinDistance", 100.0, 0, 1000000000.0);
-        powerCellRFToolsDimensionAdvantage = COMMON_BUILDER
+        powerCellRFToolsDimensionAdvantage = SERVER_BUILDER
                 .comment("A multiplier for the distance if RFTools dimensions are involved. If both sides are RFTools dimensions then this multiplier is done twice")
                 .defineInRange("powerCellRFToolsDimensionAdvantage", 0.5, 0, 1000000000.0);
 
-        CHARGEITEMPERTICK = COMMON_BUILDER
+        CHARGEITEMPERTICK = SERVER_BUILDER
                 .comment("RF per tick that the powrcell can charge items with")
                 .defineInRange("powercellChargePerTick", 30000, 0, Integer.MAX_VALUE);
 
-        COMMON_BUILDER.pop();
+        SERVER_BUILDER.pop();
         CLIENT_BUILDER.pop();
     }
 }
