@@ -112,7 +112,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             LazyOptional.of(() -> new SidedHandler(Direction.EAST))
     };
     private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
-            .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY, getPos(), DimensionalCellTileEntity.this))
+            .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getPos(), DimensionalCellTileEntity.this))
             .itemHandler(itemHandler));
     private LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
@@ -758,7 +758,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private NoDirectionItemHander createItemHandler() {
-        return new NoDirectionItemHander(DimensionalCellTileEntity.this, CONTAINER_FACTORY) {
+        return new NoDirectionItemHander(DimensionalCellTileEntity.this, CONTAINER_FACTORY.get()) {
 
             @Override
             public boolean isItemValid(int index, @Nonnull ItemStack stack) {
