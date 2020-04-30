@@ -50,9 +50,9 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public static final ModelProperty<Tier> TIER = new ModelProperty<>();
 
 
-    private LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
-    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(this::createNullHandler);
-    private LazyOptional<SidedHandler>[] sidedStorages;
+    private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
+    private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(this::createNullHandler);
+    private final LazyOptional<SidedHandler>[] sidedStorages;
 
     public PowerCellTileEntity(Tier tier) {
         super(tier.getType());

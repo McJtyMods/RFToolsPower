@@ -95,15 +95,15 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         };
     }
 
-    private NoDirectionItemHander items = createItemHandler();
-    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+    private final NoDirectionItemHander items = createItemHandler();
+    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
+    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
-    private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
-    private LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
-    private LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
-    private LazyOptional<SidedHandler>[] sidedStorages = new LazyOptional[]{
+    private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
+    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
+    private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
+    private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
+    private final LazyOptional<SidedHandler>[] sidedStorages = new LazyOptional[]{
             LazyOptional.of(() -> new SidedHandler(Direction.DOWN)),
             LazyOptional.of(() -> new SidedHandler(Direction.UP)),
             LazyOptional.of(() -> new SidedHandler(Direction.NORTH)),
@@ -111,10 +111,10 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             LazyOptional.of(() -> new SidedHandler(Direction.WEST)),
             LazyOptional.of(() -> new SidedHandler(Direction.EAST))
     };
-    private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
             .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getPos(), DimensionalCellTileEntity.this))
             .itemHandler(itemHandler));
-    private LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
+    private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
             return itemStack.getItem() instanceof PowerCellCardItem;

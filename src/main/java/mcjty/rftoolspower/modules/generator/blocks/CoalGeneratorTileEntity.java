@@ -62,17 +62,17 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             .slot(specific(EnergyTools::isEnergyItem), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24)
             .playerSlots(10, 70));
 
-    private NoDirectionItemHander items = createItemHandler();
-    private LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+    private final NoDirectionItemHander items = createItemHandler();
+    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
+    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
-    private LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
-    private LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
-    private LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(this::createPowerInfo);
+    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
+    private final LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(this::createPowerInfo);
 
     private int burning;
 
@@ -94,12 +94,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 super.fillStateContainer(builder);
                 builder.add(BlockStateProperties.LIT);
             }
-
-            // @todo 1.15
-//            @Override
-//            public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
-//                return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.CUTOUT;
-//            }
         };
     }
 
