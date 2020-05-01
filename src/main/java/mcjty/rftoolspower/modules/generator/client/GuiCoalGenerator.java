@@ -2,6 +2,7 @@ package mcjty.rftoolspower.modules.generator.client;
 
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
+import mcjty.lib.gui.ManualEntry;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.ImageChoiceLabel;
@@ -18,7 +19,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     private EnergyBar energyBar;
 
     public GuiCoalGenerator(CoalGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, 0, "coalgen");
+        super(RFToolsPower.instance, tileEntity, container, inventory, ManualEntry.EMPTY);
     }
 
     @Override

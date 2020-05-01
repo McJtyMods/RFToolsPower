@@ -6,7 +6,6 @@ import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.ModSetup;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -40,10 +39,6 @@ public class RFToolsPower implements ModBase {
     @Override
     public String getModId() {
         return MODID;
-    }
-
-    @Override
-    public void openManual(PlayerEntity player, int bookIndex, String page) {
     }
 
     public static Item.Properties createStandardProperties() {
