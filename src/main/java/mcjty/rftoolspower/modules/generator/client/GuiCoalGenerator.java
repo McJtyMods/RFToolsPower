@@ -7,6 +7,7 @@ import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.lib.tileentity.GenericEnergyStorage;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
@@ -19,7 +20,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     private EnergyBar energyBar;
 
     public GuiCoalGenerator(CoalGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, ManualEntry.EMPTY);
+        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/coalgenerator"));
     }
 
     @Override

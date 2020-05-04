@@ -50,6 +50,20 @@
 
     "message.rftoolspower.dimensionalcell_creative.header": "This block can store power. Optionally in a big multi dimensional structure",
     "message.rftoolspower.dimensionalcell_creative.gold": "Infusing bonus: reduced long distance power extraction cost and increased RF/tick output",
-    "message.rftoolspower.dimensionalcell_creative.info": "Energy: "
+    "message.rftoolspower.dimensionalcell_creative.info": "Energy: ",
 
+    "rftoolspower.category.main": "RFTools Power",
+    "rftoolspower.category.main.description": "RFTools Power is a mod about power generation and power storage",
+    "rftoolspower.category.powergeneration": "Power Generation",
+    "rftoolspower.category.powergeneration.description": "Machines that can generate power",
+    "rftoolspower.category.powerstorage": "Power Storage",
+    "rftoolspower.category.powerstorage.description": "Solutions for storing power",
+    "rftoolspower.entry.coalgenerator": "Coal Generator",
+    "rftoolspower.page.coalgenerator0": "The Coal Generator can convert coal and blocks of coal to power",
+    "rftoolspower.entry.powercell": "Power Cell",
+    "rftoolspower.page.powercell0": "The Power Cell can be used to store massive amounts of power. You can combine them to form a big multiblock",
+    "rftoolspower.entry.dimensionalcell": "Dimensional Cell",
+    "rftoolspower.page.dimensionalcell0": "The Dimensional Cell is a multi-dimensional power storage. All linked Dimensional Cells form a distributed multiblock",
+    "rftoolspower.entry.powercell_card": "Powercell Card",
+    "rftoolspower.page.powercell_card0": "This card is used to link Dimensional Cells"
 }

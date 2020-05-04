@@ -1,0 +1,12 @@
+{
+  "name": "rftoolspower.entry.dimensionalcell",
+  "icon": "rftoolspower:dimensionalcell",
+  "category": "rftoolspower:category_rftoolspower_powerstorage",
+  "sortnum": 20,
+  "pages": [
+    {
+      "type": "text",
+      "text": "rftoolspower.page.dimensionalcell0"
+    }
+  ]
+}

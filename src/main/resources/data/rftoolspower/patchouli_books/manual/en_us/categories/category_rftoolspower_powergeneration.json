@@ -1,0 +1,7 @@
+{
+  "name": "rftoolspower.category.powergeneration",
+  "description": "rftoolspower.category.powergeneration.description",
+  "parent": "rftoolspower:category_rftoolspower",
+  "icon": "rftoolspower:coalgenerator",
+  "sortnum": 10
+}

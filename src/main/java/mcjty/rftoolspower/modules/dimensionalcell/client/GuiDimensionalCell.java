@@ -8,6 +8,7 @@ import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.Label;
 import mcjty.lib.gui.widgets.Panel;
 import mcjty.lib.typed.TypedMap;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellContainer;
@@ -30,7 +31,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private static final ResourceLocation iconLocation = new ResourceLocation(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
     public GuiDimensionalCell(DimensionalCellTileEntity te, DimensionalCellContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, te, container, inventory, /*@todo 1.14 GuiProxy.GUI_MANUAL_MAIN*/ ManualEntry.EMPTY);
+        super(RFToolsPower.instance, te, container, inventory, ManualHelper.create("rftoolspower:powerstorage/dimensionalcell"));
 
         xSize = POWERCELL_WIDTH;
         ySize = POWERCELL_HEIGHT;
