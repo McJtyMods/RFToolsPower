@@ -1,4 +1,4 @@
-Upcoming:
+2.1.0-beta:
 - Item tooltip improvements
 - Fixed the recipes for the vanilla recipe book
 - Moved most of the configs from common to server (so that they are saved with the world and synced to the client)
