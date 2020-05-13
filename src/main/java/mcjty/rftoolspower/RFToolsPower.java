@@ -1,12 +1,9 @@
 package mcjty.rftoolspower;
 
 import mcjty.lib.base.ModBase;
-import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
-import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
-import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.ModSetup;
-import net.minecraft.item.Item;
+import mcjty.rftoolspower.setup.Registration;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -29,9 +26,7 @@ public class RFToolsPower implements ModBase {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 
-        CoalGeneratorSetup.register();
-        DimensionalCellSetup.register();
-        PowerCellSetup.register();
+        Registration.register();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> setup.init(event));
     }
@@ -39,9 +34,5 @@ public class RFToolsPower implements ModBase {
     @Override
     public String getModId() {
         return MODID;
-    }
-
-    public static Item.Properties createStandardProperties() {
-        return new Item.Properties().group(setup.getTab());
     }
 }
