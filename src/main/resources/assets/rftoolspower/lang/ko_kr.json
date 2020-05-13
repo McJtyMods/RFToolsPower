@@ -1,0 +1,69 @@
+{
+    "item.rftoolspower.power_core1": "파워 코어 (낮음)",
+    "item.rftoolspower.power_core2": "파워 코어 (중간)",
+    "item.rftoolspower.power_core3": "파워 코어 (높음)",
+
+    "block.rftoolspower.dimensionalcell": "차원 셀",
+    "block.rftoolspower.dimensionalcell_simple": "차원 셀 (기초)",
+    "block.rftoolspower.dimensionalcell_advanced": "차원 셀 (고급)",
+    "block.rftoolspower.dimensionalcell_creative": "차원 셀 (크리에이티브)",
+    "block.rftoolspower.cell1": "파워셀 (낮음)",
+    "block.rftoolspower.cell2": "파워셀 (중간)",
+    "block.rftoolspower.cell3": "파워셀 (높음)",
+    "block.rftoolspower.coalgenerator": "석탄 발전기",
+
+    "itemGroup.rftoolspower": "RF툴즈 파워",
+
+    "message.rftoolspower.shiftmessage": "<Shift 누르기>",
+
+    "message.rftoolspower.powercell_card.header": "차원 셀을 연결하는 데 사용합니다.",
+    "message.rftoolspower.powercell_card.info": "연결: ",
+
+    "message.rftoolspower.power_core1.header": "파워 셀의 조합 성분입니다.",
+    "message.rftoolspower.power_core2.header": "파워 셀의 조합 성분입니다.",
+    "message.rftoolspower.power_core3.header": "파워 셀의 조합 성분입니다.",
+
+    "message.rftoolspower.cell1.header": "이 블록은 전력을 저장할 수 있으며 다른 셀과 결합하여 큰 멀티블록을 형성할 수 있습니다. 렌치로 우클릭하여 측면의 입력/출력 모드를 전환합니다.",
+    "message.rftoolspower.cell1.info": "전력: ",
+
+    "message.rftoolspower.cell2.header": "이 블록은 전력을 저장할 수 있으며 다른 셀과 결합하여 큰 멀티블록을 형성할 수 있습니다. 렌치로 우클릭하여 측면의 입력/출력 모드를 전환합니다.",
+    "message.rftoolspower.cell2.info": "전력: ",
+
+    "message.rftoolspower.cell3.header": "이 블록은 전력을 저장할 수 있으며 다른 셀과 결합하여 큰 멀티블록을 형성할 수 있습니다. 렌치로 우클릭하여 측면의 입력/출력 모드를 전환합니다.",
+    "message.rftoolspower.cell3.info": "전력: ",
+
+    "message.rftoolspower.coalgenerator.header": "이 기계는 석탄이나 목탄에서 RF/FE를 생산합니다.",
+    "message.rftoolspower.coalgenerator.gold": "주입 보너스: 단일 연료로 더 많은 전력을 생산하고 더 오래 지속합니다.",
+    "message.rftoolspower.coalgenerator.info": "생산: ",
+
+    "message.rftoolspower.dimensionalcell.header": "이 블록은 전력을 저장할 수 있습니다. 선택적으로 큰 다차원 구조에서 사용할 수 있습니다.",
+    "message.rftoolspower.dimensionalcell.gold": "주입 보너스: 장거리 전력 추출 비용이 절감되고 RF/눈금 출력이 증가합니다.",
+    "message.rftoolspower.dimensionalcell.info": "에너지: ",
+
+    "message.rftoolspower.dimensionalcell_advanced.header": "이 블록은 전력을 저장할 수 있습니다. 선택적으로 큰 다차원 구조에서 사용할 수 있습니다.",
+    "message.rftoolspower.dimensionalcell_advanced.gold": "주입 보너스: 장거리 전력 추출 비용이 절감되고 RF/눈금 출력이 증가합니다.",
+    "message.rftoolspower.dimensionalcell_advanced.info": "에너지: ",
+
+    "message.rftoolspower.dimensionalcell_simple.header": "이 블록은 전력을 저장할 수 있습니다. 선택적으로 큰 다차원 구조에서 사용할 수 있습니다.",
+    "message.rftoolspower.dimensionalcell_simple.gold": "주입 보너스: 장거리 전력 추출 비용이 절감되고 RF/눈금 출력이 증가합니다.",
+    "message.rftoolspower.dimensionalcell_simple.info": "에너지: ",
+
+    "message.rftoolspower.dimensionalcell_creative.header": "이 블록은 전력을 저장할 수 있습니다. 선택적으로 큰 다차원 구조에서 사용할 수 있습니다.",
+    "message.rftoolspower.dimensionalcell_creative.gold": "주입 보너스: 장거리 전력 추출 비용이 절감되고 RF/눈금 출력이 증가합니다.",
+    "message.rftoolspower.dimensionalcell_creative.info": "에너지: ",
+
+    "rftoolspower.category.main": "RF툴즈 파워",
+    "rftoolspower.category.main.description": "RF툴즈 파워는 발전 및 전력 저장에 대한 모드입니다.",
+    "rftoolspower.category.powergeneration": "전력 발전",
+    "rftoolspower.category.powergeneration.description": "전원을 생성할 수 있는 시스템입니다.",
+    "rftoolspower.category.powerstorage": "전력 저장",
+    "rftoolspower.category.powerstorage.description": "전력 저장을 위한 솔루션입니다.",
+    "rftoolspower.entry.coalgenerator": "석탄 발전기",
+    "rftoolspower.page.coalgenerator0": "석탄 발전기는 석탄과 석탄 블록을 전원으로 변환할 수 있습니다.",
+    "rftoolspower.entry.powercell": "파워셀",
+    "rftoolspower.page.powercell0": "파워 셀은 엄청난 양의 전력을 저장하는 데 사용될 수 있습니다. 이를 결합하여 큰 멀티블록을 구성할 수 있습니다.",
+    "rftoolspower.entry.dimensionalcell": "차원 셀",
+    "rftoolspower.page.dimensionalcell0": "차원 셀은 다차원 전원 스토리지입니다. 연결된 모든 차원 셀이 분산된 멀티블록을 형성합니다.",
+    "rftoolspower.entry.powercell_card": "파워셀 카드",
+    "rftoolspower.page.powercell_card0": "이 카드는 차원 셀을 연결하는 데 사용됩니다."
+}
