@@ -11,6 +11,7 @@
     "block.rftoolspower.cell2": "Powercell (Medium)",
     "block.rftoolspower.cell3": "Powercell (High)",
     "block.rftoolspower.coalgenerator": "Coal Generator",
+    "block.rftoolspower.power_monitor": "Power Monitor",
 
     "itemGroup.rftoolspower": "RFTools Power",
 
@@ -31,6 +32,8 @@
 
     "message.rftoolspower.cell3.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
     "message.rftoolspower.cell3.info": "Power: ",
+
+    "message.rftoolspower.power_monitor.header": "The power monitor can send out a redstone signal depending on the amount of power in the target block",
 
     "message.rftoolspower.coalgenerator.header": "This machine produces RF/FE from coal or charcoal",
     "message.rftoolspower.coalgenerator.gold": "Infusing bonus: more power generation and lasts longer on a single fuel",
@@ -58,6 +61,8 @@
     "rftoolspower.category.powergeneration.description": "Machines that can generate power",
     "rftoolspower.category.powerstorage": "Power Storage",
     "rftoolspower.category.powerstorage.description": "Solutions for storing power",
+    "rftoolspower.category.monitor": "Power Monitoring",
+    "rftoolspower.category.monitor.description": "Solutions for monitoring power",
     "rftoolspower.entry.coalgenerator": "Coal Generator",
     "rftoolspower.page.coalgenerator0": "The Coal Generator can convert coal and blocks of coal to power",
     "rftoolspower.entry.powercell": "Power Cell",
@@ -65,5 +70,7 @@
     "rftoolspower.entry.dimensionalcell": "Dimensional Cell",
     "rftoolspower.page.dimensionalcell0": "The Dimensional Cell is a multi-dimensional power storage. All linked Dimensional Cells form a distributed multiblock",
     "rftoolspower.entry.powercell_card": "Powercell Card",
-    "rftoolspower.page.powercell_card0": "This card is used to link Dimensional Cells"
+    "rftoolspower.page.powercell_card0": "This card is used to link Dimensional Cells",
+    "rftoolspower.entry.powermonitor": "Power Monitor",
+    "rftoolspower.page.powermonitor0": "This logic block can be placed with its input side facing an energy block. It has a gui that you can use to control the power range where it should emit a redstone signal"
 }

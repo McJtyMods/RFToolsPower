@@ -1,0 +1,12 @@
+{
+  "name": "rftoolspower.entry.powermonitor",
+  "icon": "rftoolspower:power_monitor",
+  "category": "rftoolspower:category_rftoolspower_monitor",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "text",
+      "text": "rftoolspower.page.powermonitor0"
+    }
+  ]
+}

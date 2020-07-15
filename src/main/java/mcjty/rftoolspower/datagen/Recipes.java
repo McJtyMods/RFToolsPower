@@ -5,6 +5,7 @@ import mcjty.lib.datagen.BaseRecipeProvider;
 import mcjty.rftoolsbase.modules.various.VariousSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
+import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
@@ -68,5 +69,9 @@ public class Recipes extends BaseRecipeProvider {
                         .key('g', Items.GOLD_NUGGET)
                         .addCriterion("paper", InventoryChangeTrigger.Instance.forItems(Items.PAPER, Items.REDSTONE)),
                 "rgr", "gpg", "rgr");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(MonitorSetup.POWER_MONITOR.get())
+                        .key('P', Items.COMPARATOR)
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
+                " P ", "rAr", " R ");
     }
 }

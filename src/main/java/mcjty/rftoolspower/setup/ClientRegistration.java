@@ -8,6 +8,8 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
+import mcjty.rftoolspower.modules.monitor.MonitorSetup;
+import mcjty.rftoolspower.modules.monitor.client.GuiPowerMonitor;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -30,6 +32,7 @@ public class ClientRegistration {
     public static void init(FMLClientSetupEvent event) {
         GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
         GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
+        GenericGuiContainer.register(MonitorSetup.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
 
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());

@@ -3,6 +3,7 @@ package mcjty.rftoolspower.datagen;
 import mcjty.lib.datagen.BaseLootTableProvider;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
+import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.data.DataGenerator;
 
@@ -14,6 +15,7 @@ public class LootTables extends BaseLootTableProvider {
 
     @Override
     protected void addTables() {
+        lootTables.put(MonitorSetup.POWER_MONITOR.get(), createStandardTable("power_monitor", MonitorSetup.POWER_MONITOR.get()));
         lootTables.put(CoalGeneratorSetup.COALGENERATOR.get(), createStandardTable("coalgenerator", CoalGeneratorSetup.COALGENERATOR.get()));
         lootTables.put(PowerCellSetup.CELL1.get(), createStandardTable("cell1", PowerCellSetup.CELL1.get()));
         lootTables.put(PowerCellSetup.CELL2.get(), createStandardTable("cell2", PowerCellSetup.CELL2.get()));

@@ -4,6 +4,7 @@ package mcjty.rftoolspower.setup;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
+import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -37,6 +38,7 @@ public class Registration {
         CoalGeneratorSetup.register();
         DimensionalCellSetup.register();
         PowerCellSetup.register();
+        MonitorSetup.register();
     }
 
 

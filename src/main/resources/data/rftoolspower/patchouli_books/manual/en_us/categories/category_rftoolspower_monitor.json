@@ -1,0 +1,7 @@
+{
+  "name": "rftoolspower.category.monitor",
+  "description": "rftoolspower.category.monitor.description",
+  "parent": "rftoolspower:category_rftoolspower",
+  "icon": "rftoolspower:power_monitor",
+  "sortnum": 30
+}
