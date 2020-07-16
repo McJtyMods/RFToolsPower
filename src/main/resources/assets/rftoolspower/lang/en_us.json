@@ -13,6 +13,9 @@
     "block.rftoolspower.coalgenerator": "Coal Generator",
     "block.rftoolspower.power_monitor": "Power Monitor",
     "block.rftoolspower.power_level": "Power Level",
+    "block.rftoolspower.endergenic": "Endergenic",
+    "block.rftoolspower.ender_monitor": "Ender Monitor",
+    "block.rftoolspower.pearl_injector": "Pearl Injector",
 
     "itemGroup.rftoolspower": "RFTools Power",
 

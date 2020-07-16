@@ -1,0 +1,81 @@
+package mcjty.rftoolspower.modules.endergenic.client;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+
+public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity> {
+
+    private ResourceLocation halo = new ResourceLocation(RFToolsPower.MODID, "textures/entities/floatingpearl.png");
+    private ResourceLocation whiteflash = new ResourceLocation(RFToolsPower.MODID, "textures/entities/whiteflash.png");
+    private ResourceLocation blackflash = new ResourceLocation(RFToolsPower.MODID, "textures/entities/redflash.png");
+
+    private static final ResourceLocation redglow = new ResourceLocation(RFToolsPower.MODID, "textures/blocks/redglow.png");
+    private static final ResourceLocation blueglow = new ResourceLocation(RFToolsPower.MODID, "textures/blocks/blueglow.png");
+
+    public EndergenicRenderer(TileEntityRendererDispatcher dispatcher) {
+        super(dispatcher);
+    }
+
+    @Override
+    public void render(EndergenicTileEntity tileEntity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BlockPos coord = tileEntity.getPos();
+        // @todo 1.15
+//        if (coord.equals(RFToolsPower.instance.clientInfo.getSelectedTE())) {
+//            bindTexture(redglow);
+//            RenderGlowEffect.renderGlow(tessellator, x, y, z);
+//        } else if (coord.equals(RFToolsPower.instance.clientInfo.getDestinationTE())) {
+//            bindTexture(blueglow);
+//            RenderGlowEffect.renderGlow(tessellator, x, y, z);
+//        }
+//
+//
+//        GlStateManager.depthMask(false);
+//        GlStateManager.enableBlend();
+//        GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
+//        GlStateManager.disableAlpha();
+//
+//        GlStateManager.pushMatrix();
+//        GlStateManager.translate((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
+//        this.bindTexture(halo);
+//        float s = (System.currentTimeMillis() % 1000) / 1000.0f;
+//        if (s > 0.5f) {
+//            s = 1.0f - s;
+//        }
+//        RenderHelper.renderBillboardQuadBright(0.2f + s * 0.3f);// + random.nextFloat() * .05f);
+//
+//        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+//
+//        if (tileEntity.getGoodCounter() > 0) {
+//            this.bindTexture(whiteflash);
+//            RenderHelper.renderBillboardQuadBright(0.8f * (tileEntity.getGoodCounter() / 10.0f));
+//        }
+//        if (tileEntity.getBadCounter() > 0) {
+//            this.bindTexture(blackflash);
+//            RenderHelper.renderBillboardQuadBright(0.8f * (tileEntity.getBadCounter() / 20.0f));
+//        }
+//
+//        GlStateManager.popMatrix();
+//
+//        ItemStack mainHand = Minecraft.getMinecraft().player.getHeldItemMainhand();
+//        ItemStack offHand = Minecraft.getMinecraft().player.getHeldItemOffhand();
+//        boolean showOverlay = (!mainHand.isEmpty() && mainHand.getItem() instanceof SmartWrenchItem) ||
+//                (!offHand.isEmpty() && offHand.getItem() instanceof SmartWrenchItem);
+//        if (showOverlay) {
+//            HudRenderer.renderHud(tileEntity, x, y, z);
+//        }
+    }
+
+    public static void register() {
+        ClientRegistry.bindTileEntityRenderer(EndergenicSetup.TYPE_ENDERGENIC.get(), EndergenicRenderer::new);
+    }
+}

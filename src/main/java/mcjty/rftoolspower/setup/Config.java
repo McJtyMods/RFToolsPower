@@ -3,6 +3,7 @@ package mcjty.rftoolspower.setup;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
+import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -33,6 +34,7 @@ public class Config {
         PowerCellConfig.setup(SERVER_BUILDER);
         CoalGeneratorConfig.setup(SERVER_BUILDER);
         DimensionalCellConfiguration.setup(SERVER_BUILDER, CLIENT_BUILDER);
+        EndergenicConfiguration.setup(SERVER_BUILDER, CLIENT_BUILDER);
 
         SERVER_BUILDER.pop();
         CLIENT_BUILDER.pop();

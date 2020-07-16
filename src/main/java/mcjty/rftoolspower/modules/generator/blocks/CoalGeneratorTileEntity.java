@@ -66,7 +66,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
     private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, true, CoalGeneratorConfig.MAXENERGY.get(), 0));
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0));
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
             .itemHandler(itemHandler)

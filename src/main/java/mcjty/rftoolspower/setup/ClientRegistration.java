@@ -6,6 +6,11 @@ import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.client.EndergenicRenderer;
+import mcjty.rftoolspower.modules.endergenic.client.GuiEnderMonitor;
+import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
+import mcjty.rftoolspower.modules.endergenic.client.GuiPearlInjector;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.monitor.MonitorSetup;
@@ -34,13 +39,20 @@ public class ClientRegistration {
         GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
         GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
         GenericGuiContainer.register(MonitorSetup.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
+        GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDERGENIC.get(), GuiEndergenic::new);
+        GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
+        GenericGuiContainer.register(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
 
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(EndergenicSetup.ENDERGENIC.get(), RenderType.getTranslucent());
 
         PowerLevelRenderer.register();
+        EndergenicRenderer.register();
+
+        ClientCommandHandler.registerCommands();
     }
 
     @SubscribeEvent

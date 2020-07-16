@@ -1,0 +1,144 @@
+package mcjty.rftoolspower.modules.endergenic.blocks;
+
+import mcjty.lib.blocks.LogicSlabBlock;
+import mcjty.lib.builder.BlockBuilder;
+import mcjty.lib.gui.widgets.ChoiceLabel;
+import mcjty.lib.tileentity.LogicTileEntity;
+import mcjty.lib.typed.TypedMap;
+import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
+import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.world.dimension.DimensionType;
+
+import static mcjty.lib.builder.TooltipBuilder.header;
+import static mcjty.lib.builder.TooltipBuilder.key;
+
+public class EnderMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity, TickOrderHandler.ICheckStateServer {
+
+    public static final String CMD_MODE = "endermonitor.setMode";
+
+    private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
+
+    private boolean needpulse = false;
+
+    public static LogicSlabBlock createBlock() {
+        return new LogicSlabBlock(new BlockBuilder()
+                .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .info(key("message.rftoolspower.shiftmessage"))
+                .infoShift(header())
+                .tileEntitySupplier(EnderMonitorTileEntity::new));
+        /*
+                    int mode = tagCompound.getInteger("mode");
+            String smode = EnderMonitorMode.values()[mode].getDescription();
+            list.add(TextFormatting.GREEN + "Mode: " + smode);
+
+         */
+    }
+
+    public EnderMonitorTileEntity() {
+        super(EndergenicSetup.TYPE_ENDER_MONITOR.get());
+    }
+
+    public EnderMonitorMode getMode() {
+        return mode;
+    }
+
+    public void setMode(EnderMonitorMode mode) {
+        this.mode = mode;
+        markDirtyClient();
+    }
+
+    /**
+     * Callback from the endergenic in case something happens.
+     * @param mode is the mode to fire
+     */
+    public void fireFromEndergenic(EnderMonitorMode mode) {
+        if (this.mode != mode) {
+            return; // Not monitoring this mode. We do nothing.
+        }
+
+        needpulse = true;
+        markDirtyQuick();
+    }
+
+    @Override
+    public void tick() {
+        if (!world.isRemote) {
+            TickOrderHandler.queueEnderMonitor(this);
+        }
+    }
+
+    @Override
+    public void checkStateServer() {
+        int newout = 0;
+
+        if (needpulse) {
+            markDirtyQuick();
+            newout = 15;
+            needpulse = false;
+        }
+
+        setRedstoneState(newout);
+    }
+
+    @Override
+    public DimensionType getDimension() {
+        return world.getDimension().getType();
+    }
+
+    @Override
+    public void read(CompoundNBT tagCompound) {
+        super.read(tagCompound);
+        powerOutput = tagCompound.getBoolean("rs") ? 15 : 0;
+        needpulse = tagCompound.getBoolean("needPulse");
+    }
+
+    @Override
+    public void readInfo(CompoundNBT tagCompound) {
+        super.readInfo(tagCompound);
+        CompoundNBT info = tagCompound.getCompound("Info");
+        int m = info.getInt("mode");
+        mode = EnderMonitorMode.values()[m];
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tagCompound) {
+        super.write(tagCompound);
+        tagCompound.putBoolean("rs", powerOutput > 0);
+        tagCompound.putBoolean("needPulse", needpulse);
+        return tagCompound;
+    }
+
+    @Override
+    public void writeInfo(CompoundNBT tagCompound) {
+        super.writeInfo(tagCompound);
+        getOrCreateInfo(tagCompound).putInt("mode", mode.ordinal());
+    }
+
+    @Override
+    public boolean execute(PlayerEntity playerMP, String command, TypedMap params) {
+        boolean rc = super.execute(playerMP, command, params);
+        if (rc) {
+            return true;
+        }
+        if (CMD_MODE.equals(command)) {
+            String m = params.get(ChoiceLabel.PARAM_CHOICE);
+            setMode(EnderMonitorMode.getMode(m));
+            return true;
+        }
+        return false;
+    }
+
+    // @todo 1.15
+//    @Override
+//    @Optional.Method(modid = "theoneprobe")
+//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+//        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
+//        EnderMonitorMode m = getMode();
+//        probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
+//    }
+}
