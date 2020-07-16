@@ -12,6 +12,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Items;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -71,6 +72,10 @@ public class Recipes extends BaseRecipeProvider {
                 "rgr", "gpg", "rgr");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(MonitorSetup.POWER_MONITOR.get())
                         .key('P', Items.COMPARATOR)
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
+                " P ", "rAr", " R ");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(MonitorSetup.POWER_LEVEL.get())
+                        .key('P', Tags.Items.GLASS_PANES)
                         .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
                 " P ", "rAr", " R ");
     }

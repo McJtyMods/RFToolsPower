@@ -10,6 +10,7 @@ import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.monitor.client.GuiPowerMonitor;
+import mcjty.rftoolspower.modules.monitor.client.PowerLevelRenderer;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -38,6 +39,8 @@ public class ClientRegistration {
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), RenderType.getTranslucent());
+
+        PowerLevelRenderer.register();
     }
 
     @SubscribeEvent
@@ -65,6 +68,11 @@ public class ClientRegistration {
         event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t3"));
         event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/inputmask"));
         event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/outputmask"));
+
+        for (ResourceLocation digit : PowerLevelRenderer.DIGITS) {
+            event.addSprite(digit);
+        }
+
     }
 
     @SubscribeEvent

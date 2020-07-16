@@ -46,6 +46,8 @@ public class BlockStates extends BaseBlockStateProvider {
                 state -> models[state.get(PowerMonitorTileEntity.LEVEL)][state.get(LogicSlabBlock.LOGIC_FACING).getRotationStep()],
                 state -> getXRotation(state.get(LogicSlabBlock.LOGIC_FACING).getSide()),
                 state -> getYRotation(state.get(LogicSlabBlock.LOGIC_FACING).getSide()));
+
+        logicSlabBlock(MonitorSetup.POWER_LEVEL.get(), "power_level", modLoc("block/power_level"));
     }
 
     private void createDimensionalCellModel(Block block, String suffix, BlockModelBuilder dimCellFrame) {

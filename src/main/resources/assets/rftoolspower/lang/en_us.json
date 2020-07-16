@@ -12,6 +12,7 @@
     "block.rftoolspower.cell3": "Powercell (High)",
     "block.rftoolspower.coalgenerator": "Coal Generator",
     "block.rftoolspower.power_monitor": "Power Monitor",
+    "block.rftoolspower.power_level": "Power Level",
 
     "itemGroup.rftoolspower": "RFTools Power",
 
@@ -34,6 +35,8 @@
     "message.rftoolspower.cell3.info": "Power: ",
 
     "message.rftoolspower.power_monitor.header": "The power monitor can send out a redstone signal depending on the amount of power in the target block",
+
+    "message.rftoolspower.power_level.header": "The power level block shows a digit representing the amount of power in something. It will also send out a redstone signal with the same amount",
 
     "message.rftoolspower.coalgenerator.header": "This machine produces RF/FE from coal or charcoal",
     "message.rftoolspower.coalgenerator.gold": "Infusing bonus: more power generation and lasts longer on a single fuel",
@@ -72,5 +75,7 @@
     "rftoolspower.entry.powercell_card": "Powercell Card",
     "rftoolspower.page.powercell_card0": "This card is used to link Dimensional Cells",
     "rftoolspower.entry.powermonitor": "Power Monitor",
-    "rftoolspower.page.powermonitor0": "This logic block can be placed with its input side facing an energy block. It has a gui that you can use to control the power range where it should emit a redstone signal"
+    "rftoolspower.page.powermonitor0": "This logic block can be placed with its input side facing an energy block. It has a gui that you can use to control the power range where it should emit a redstone signal",
+    "rftoolspower.entry.powerlevel": "Power Level",
+    "rftoolspower.page.powerlevel0": "This logic block can be placed with its input side facing an energy block. It will show a digit representing the amount of power in that block and it will also emit a redstone signal with that strength"
 }

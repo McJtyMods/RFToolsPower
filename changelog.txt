@@ -1,5 +1,6 @@
 Upcoming:
 - New Power Monitor block (replacement of the old RF Monitor). This is a logic block and is more flexible
+- New Power Level block that shows a digit representation of the amount of power in a machine
 
 2.1.1-beta:
 - Dependency fix

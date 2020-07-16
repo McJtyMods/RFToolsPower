@@ -1,0 +1,12 @@
+{
+  "name": "rftoolspower.entry.powerlevel",
+  "icon": "rftoolspower:power_level",
+  "category": "rftoolspower:category_rftoolspower_monitor",
+  "sortnum": 20,
+  "pages": [
+    {
+      "type": "text",
+      "text": "rftoolspower.page.powerlevel0"
+    }
+  ]
+}
