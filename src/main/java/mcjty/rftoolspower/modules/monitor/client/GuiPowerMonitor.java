@@ -21,7 +21,7 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
     private ScrollableLabel maximumLabel;
 
     public GuiPowerMonitor(PowerMonitorTileEntity te, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, te, container, inventory, ManualHelper.create("rftoolspower:simple/monitor"));
+        super(RFToolsPower.instance, te, container, inventory, ManualHelper.create("rftoolspower:powermonitor/powermonitor"));
 
         xSize = 256;
         ySize = 50;
