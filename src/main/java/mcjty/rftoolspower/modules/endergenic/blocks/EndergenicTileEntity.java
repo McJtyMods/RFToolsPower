@@ -1,10 +1,14 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
+import mcjty.lib.api.container.CapabilityContainerProvider;
+import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.bindings.DefaultValue;
 import mcjty.lib.bindings.IValue;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
+import mcjty.lib.container.EmptyContainer;
+import mcjty.lib.container.GenericContainer;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
@@ -20,7 +24,8 @@ import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.modules.endergenic.*;
+import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
@@ -29,6 +34,7 @@ import mcjty.rftoolspower.setup.ClientCommandHandler;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -43,12 +49,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -78,6 +87,9 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_ENDERGENIC.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EndergenicTileEntity.this)));
 
     @Override
     public IValue<?>[] getValues() {
@@ -831,4 +843,15 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 //        }
 //    }
 
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
+        if (cap == CapabilityEnergy.ENERGY) {
+            return energyHandler.cast();
+        }
+        if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
+            return screenHandler.cast();
+        }
+        return super.getCapability(cap, facing);
+    }
 }

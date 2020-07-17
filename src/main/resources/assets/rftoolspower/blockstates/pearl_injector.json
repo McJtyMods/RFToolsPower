@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rftoolspower:block/pearl_injector",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "rftoolspower:block/pearl_injector",
+      "x": -90
+    },
+    "facing=north": {
+      "model": "rftoolspower:block/pearl_injector"
+    },
+    "facing=south": {
+      "model": "rftoolspower:block/pearl_injector",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "rftoolspower:block/pearl_injector",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "rftoolspower:block/pearl_injector",
+      "y": 90
+    }
+  }
+}

@@ -1,18 +1,29 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
+import mcjty.lib.api.container.CapabilityContainerProvider;
+import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
+import mcjty.lib.container.EmptyContainer;
+import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
@@ -24,6 +35,10 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
 
     private boolean needpulse = false;
+
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_ENDER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EnderMonitorTileEntity.this)));
+
 
     public static LogicSlabBlock createBlock() {
         return new LogicSlabBlock(new BlockBuilder()
@@ -141,4 +156,13 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
 //        EnderMonitorMode m = getMode();
 //        probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
 //    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
+        if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
+            return screenHandler.cast();
+        }
+        return super.getCapability(cap, facing);
+    }
 }

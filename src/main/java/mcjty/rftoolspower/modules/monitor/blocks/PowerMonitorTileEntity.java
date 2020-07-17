@@ -36,7 +36,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 
 public class PowerMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity {
 
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Analog")
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier((windowId,player) -> new GenericContainer(MonitorSetup.CONTAINER_POWER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), PowerMonitorTileEntity.this)));
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);

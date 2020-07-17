@@ -1,6 +1,6 @@
 {
   "textures": {
-    "single": "rftoolspower:block/dimensionalcell"
+    "single": "rftoolspower:block/dimcell/dimensionalcell"
   },
   "elements": [
     {

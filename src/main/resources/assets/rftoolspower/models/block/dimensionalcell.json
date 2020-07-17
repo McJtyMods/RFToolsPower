@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "rftoolspower:block/dimensionalcell"
+    "all": "rftoolspower:block/dimcell/dimensionalcell"
   }
 }

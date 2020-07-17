@@ -1,6 +1,6 @@
 {
   "textures": {
-    "single": "rftoolspower:block/dimensionalcelladvanced"
+    "single": "rftoolspower:block/dimcell/dimensionalcelladvanced"
   },
   "elements": [
     {

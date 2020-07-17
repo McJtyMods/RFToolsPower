@@ -1,6 +1,6 @@
 {
   "textures": {
-    "window": "rftoolspower:block/dimensionalcellwindows"
+    "window": "rftoolspower:block/dimcell/dimensionalcellwindows"
   },
   "elements": [
     {

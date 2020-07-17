@@ -14,12 +14,12 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity> {
 
-    private ResourceLocation halo = new ResourceLocation(RFToolsPower.MODID, "textures/entities/floatingpearl.png");
-    private ResourceLocation whiteflash = new ResourceLocation(RFToolsPower.MODID, "textures/entities/whiteflash.png");
-    private ResourceLocation blackflash = new ResourceLocation(RFToolsPower.MODID, "textures/entities/redflash.png");
+    public static final ResourceLocation HALO = new ResourceLocation(RFToolsPower.MODID, "textures/block/endergenic/floatingpearl.png");
+    public static final ResourceLocation WHITEFLASH = new ResourceLocation(RFToolsPower.MODID, "textures/block/endergenic/whiteflash.png");
+    public static final ResourceLocation BLACKFLASH = new ResourceLocation(RFToolsPower.MODID, "textures/block/endergenic/redflash.png");
 
-    private static final ResourceLocation redglow = new ResourceLocation(RFToolsPower.MODID, "textures/blocks/redglow.png");
-    private static final ResourceLocation blueglow = new ResourceLocation(RFToolsPower.MODID, "textures/blocks/blueglow.png");
+    public static final ResourceLocation REDGLOW = new ResourceLocation(RFToolsPower.MODID, "textures/block/endergenic/redglow.png");
+    public static final ResourceLocation BLUEGLOW = new ResourceLocation(RFToolsPower.MODID, "textures/block/endergenic/blueglow.png");
 
     public EndergenicRenderer(TileEntityRendererDispatcher dispatcher) {
         super(dispatcher);

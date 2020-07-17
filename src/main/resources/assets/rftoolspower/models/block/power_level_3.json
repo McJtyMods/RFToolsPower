@@ -3,7 +3,7 @@
   "textures": {
     "side": "rftoolsbase:block/base/machineside",
     "down": "rftoolsbase:block/base/machinebottom",
-    "up": "rftoolspower:block/power_level"
+    "up": "rftoolspower:block/monitor/power_level"
   },
   "elements": [
     {

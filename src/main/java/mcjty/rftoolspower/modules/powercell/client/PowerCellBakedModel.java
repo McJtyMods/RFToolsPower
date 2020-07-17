@@ -24,8 +24,8 @@ import java.util.Random;
 
 public class PowerCellBakedModel extends AbstractDynamicBakedModel {
 
-    public static final ResourceLocation TEXTURE_INPUTMASK = new ResourceLocation(RFToolsPower.MODID, "block/inputmask");
-    public static final ResourceLocation TEXTURE_OUTPUTMASK = new ResourceLocation(RFToolsPower.MODID, "block/outputmask");
+    public static final ResourceLocation TEXTURE_INPUTMASK = new ResourceLocation(RFToolsPower.MODID, "block/powercell/inputmask");
+    public static final ResourceLocation TEXTURE_OUTPUTMASK = new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask");
 
     private VertexFormat format;
 
@@ -47,7 +47,7 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
     }
 
     private static TextureAtlasSprite getSideTexture(boolean upper, boolean lower, int tier) {
-        String s = "block/cell";
+        String s = "block/powercell/cell";
         if (upper && lower) {
             s += "middle_t";
         } else if (upper) {
@@ -62,7 +62,7 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
     }
 
     private static TextureAtlasSprite getTopTexture() {
-        String name = "block/cellhoriz_t1";
+        String name = "block/powercell/cellhoriz_t1";
         return getTexture(new ResourceLocation(RFToolsPower.MODID, name));
     }
 

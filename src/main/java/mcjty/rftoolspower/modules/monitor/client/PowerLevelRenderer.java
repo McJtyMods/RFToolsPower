@@ -26,16 +26,16 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 public class PowerLevelRenderer extends TileEntityRenderer<PowerLevelTileEntity> {
 
     public static final ResourceLocation[] DIGITS = new ResourceLocation[] {
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_0"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_1"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_2"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_3"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_4"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_5"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_6"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_7"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_8"),
-            new ResourceLocation(RFToolsPower.MODID, "block/powerlevel_9")
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_0"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_1"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_2"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_3"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_4"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_5"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_6"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_7"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_8"),
+            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_9")
     };
 
     public PowerLevelRenderer(TileEntityRendererDispatcher dispatcher) {

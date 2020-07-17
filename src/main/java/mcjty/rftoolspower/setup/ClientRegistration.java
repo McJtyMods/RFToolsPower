@@ -65,26 +65,31 @@ public class ClientRegistration {
             return;
         }
 
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellhoriz_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/celllower_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/celllower_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellboth_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/celllower_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellmiddle_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/cellupper_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/inputmask"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/outputmask"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellhoriz_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t1"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t2"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t3"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/inputmask"));
+        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask"));
 
         for (ResourceLocation digit : PowerLevelRenderer.DIGITS) {
             event.addSprite(digit);
         }
 
+        event.addSprite(EndergenicRenderer.HALO);
+        event.addSprite(EndergenicRenderer.BLACKFLASH);
+        event.addSprite(EndergenicRenderer.WHITEFLASH);
+        event.addSprite(EndergenicRenderer.BLUEGLOW);
+        event.addSprite(EndergenicRenderer.REDGLOW);
     }
 
     @SubscribeEvent

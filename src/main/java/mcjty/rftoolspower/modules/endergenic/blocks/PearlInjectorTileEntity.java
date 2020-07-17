@@ -1,16 +1,17 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
+import mcjty.lib.api.container.CapabilityContainerProvider;
+import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.AutomationFilterItemHander;
-import mcjty.lib.container.ContainerFactory;
-import mcjty.lib.container.NoDirectionItemHander;
+import mcjty.lib.container.*;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
 import net.minecraft.block.BlockState;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,10 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
@@ -43,6 +47,9 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
 
     private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
     private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this)));
 
     // For pulse detection.
     private boolean prevIn = false;
@@ -159,4 +166,15 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
         };
     }
 
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return automationItemHandler.cast();
+        }
+        if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
+            return screenHandler.cast();
+        }
+        return super.getCapability(cap, facing);
+    }
 }
