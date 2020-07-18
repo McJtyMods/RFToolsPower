@@ -2,6 +2,9 @@ package mcjty.rftoolspower.modules.endergenic.blocks;
 
 import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;
+import mcjty.lib.api.infusable.CapabilityInfusable;
+import mcjty.lib.api.infusable.DefaultInfusable;
+import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.bindings.DefaultValue;
 import mcjty.lib.bindings.IValue;
 import mcjty.lib.blocks.BaseBlock;
@@ -21,6 +24,8 @@ import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.api.client.IHudSupport;
+import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
+import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -76,10 +81,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public static Key<Integer> PARAM_STATLAUNCHED = new Key<>("statlaunched", Type.INTEGER);
     public static Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
 
-    private static final String[] TAGS = new String[]{"rftick", "lost", "launched", "opportunities"};
-    private static final String[] TAG_DESCRIPTIONS = new String[]{"Average RF/tick for the last 5 seconds", "Amount of pearls that were lost during the last 5 seconds",
-            "Amount of pearls that were launched during the last 5 seconds", "Number of opportunities for the last 5 seconds"};
-
     public static final int CHARGE_IDLE = 0;
     public static final int CHARGE_HOLDING = -1;
 
@@ -88,6 +89,9 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
 
+    private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
+    private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
+    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
             .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_ENDERGENIC.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EndergenicTileEntity.this)));
 
@@ -344,7 +348,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         if (chargingMode == CHARGE_HOLDING) {
             // Consume energy to keep the endergenic pearl.
             long rf = EndergenicConfiguration.rfToHoldPearl.get();
-            rf = (long) (rf * (3.0f - getInfusedFactor()) / 3.0f);
+            rf = (long) (rf * (3.0f - infusable.getInfusedFactor()) / 3.0f);
 
             long rfStored = storage.getEnergy();
             if (rfStored < rf) {
@@ -368,46 +372,49 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
     }
 
-    private float getInfusedFactor() {
-        // @todo use infusing capability
-        return 0;
-    }
-
     @Override
     public DimensionType getDimension() {
         return world.getDimension().getType();
     }
 
-    // @todo 1.15 MachineInformation
-//    @Override
-//    public int getTagCount() {
-//        return TAGS.length;
-//    }
-//
-//    @Override
-//    public String getTagName(int index) {
-//        return TAGS[index];
-//    }
-//
-//    @Override
-//    public String getTagDescription(int index) {
-//        return TAG_DESCRIPTIONS[index];
-//    }
-//
-//    @Override
-//    public String getData(int index, long millis) {
-//        switch (index) {
-//            case 0:
-//                return Long.toString(lastRfPerTick);
-//            case 1:
-//                return Integer.toString(lastPearlsLost);
-//            case 2:
-//                return Integer.toString(lastPearlsLaunched);
-//            case 3:
-//                return Integer.toString(lastChargeCounter);
-//        }
-//        return null;
-//    }
+    private IMachineInformation createMachineInfo() {
+        return new IMachineInformation() {
+            private final String[] TAGS = new String[]{"rftick", "lost", "launched", "opportunities"};
+            private final String[] TAG_DESCRIPTIONS = new String[]{"Average RF/tick for the last 5 seconds", "Amount of pearls that were lost during the last 5 seconds",
+                    "Amount of pearls that were launched during the last 5 seconds", "Number of opportunities for the last 5 seconds"};
+
+            @Override
+            public int getTagCount() {
+                return TAGS.length;
+            }
+
+            @Override
+            public String getTagName(int index) {
+                return TAGS[index];
+            }
+
+            @Override
+            public String getTagDescription(int index) {
+                return TAG_DESCRIPTIONS[index];
+            }
+
+            @Override
+            public String getData(int index, long millis) {
+                switch (index) {
+                    case 0:
+                        return Long.toString(lastRfPerTick);
+                    case 1:
+                        return Integer.toString(lastPearlsLost);
+                    case 2:
+                        return Integer.toString(lastPearlsLaunched);
+                    case 3:
+                        return Integer.toString(lastChargeCounter);
+                }
+                return null;
+            }
+        };
+    }
+
 
     private void log(String message) {
         /* RFToolsPower.log(world, this, message);*/
@@ -590,7 +597,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
             pearlArrivedAt = chargingMode;
             // Otherwise we get RF and this block goes into holding mode.
             long rf = (long) (rfPerHit[chargingMode] * EndergenicConfiguration.powergenFactor.get());
-            rf = (long) (rf * (getInfusedFactor() + 2.0f) / 2.0f);
+            rf = (long) (rf * (infusable.getInfusedFactor() + 2.0f) / 2.0f);
 
             // Give a bonus for pearls that have been around a bit longer.
             int a = age * 5;
@@ -851,6 +858,12 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
         if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
             return screenHandler.cast();
+        }
+        if (cap == CapabilityInfusable.INFUSABLE_CAPABILITY) {
+            return infusableHandler.cast();
+        }
+        if (cap == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
+            return infoHandler.cast();
         }
         return super.getCapability(cap, facing);
     }
