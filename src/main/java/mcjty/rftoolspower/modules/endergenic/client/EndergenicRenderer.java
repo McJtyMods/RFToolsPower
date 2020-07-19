@@ -1,6 +1,9 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mcjty.lib.client.RenderGlowEffect;
+import mcjty.lib.client.RenderHelper;
+import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
@@ -29,16 +32,12 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
     public void render(EndergenicTileEntity tileEntity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Tessellator tessellator = Tessellator.getInstance();
         BlockPos coord = tileEntity.getPos();
-        // @todo 1.15
-//        if (coord.equals(RFToolsPower.instance.clientInfo.getSelectedTE())) {
-//            bindTexture(redglow);
-//            RenderGlowEffect.renderGlow(tessellator, x, y, z);
-//        } else if (coord.equals(RFToolsPower.instance.clientInfo.getDestinationTE())) {
-//            bindTexture(blueglow);
-//            RenderGlowEffect.renderGlow(tessellator, x, y, z);
-//        }
-//
-//
+        if (coord.equals(RFToolsBase.instance.clientInfo.getSelectedTE())) {
+            RenderGlowEffect.renderGlow(matrixStackIn, bufferIn, 0, 0, 0, REDGLOW);
+        } else if (coord.equals(RFToolsBase.instance.clientInfo.getDestinationTE())) {
+            RenderGlowEffect.renderGlow(matrixStackIn, bufferIn, 0, 0, 0, BLUEGLOW);
+        }
+
 //        GlStateManager.depthMask(false);
 //        GlStateManager.enableBlend();
 //        GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
@@ -47,11 +46,11 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
 //        GlStateManager.pushMatrix();
 //        GlStateManager.translate((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
 //        this.bindTexture(halo);
-//        float s = (System.currentTimeMillis() % 1000) / 1000.0f;
-//        if (s > 0.5f) {
-//            s = 1.0f - s;
-//        }
-//        RenderHelper.renderBillboardQuadBright(0.2f + s * 0.3f);// + random.nextFloat() * .05f);
+        float s = (System.currentTimeMillis() % 1000) / 1000.0f;
+        if (s > 0.5f) {
+            s = 1.0f - s;
+        }
+        RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.2f + s * 0.3f, HALO);// + random.nextFloat() * .05f);
 //
 //        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 //
