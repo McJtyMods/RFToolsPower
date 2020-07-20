@@ -20,7 +20,8 @@ import static mcjty.rftoolsbase.modules.informationscreen.client.DefaultPowerInf
 
 public class PowerCellInformationRenderer {
 
-    public static void renderGraphical(MatrixStack matrixStack, IRenderTypeBuffer buffer, int mode, TypedMap data, Direction orientation, double x, double y, double z, double scale) {
+    // @todo 1.15 port rendering
+    public static void renderGraphical(MatrixStack matrixStack, IRenderTypeBuffer buffer, int mode, TypedMap data, Direction orientation, double scale) {
         if (data == null || data.size() == 0) {
             return;
         }
@@ -32,7 +33,7 @@ public class PowerCellInformationRenderer {
         long roughMaxRfPerTick = data.getOptional(PowerCellInformationScreenInfo.ROUGH_MAXRF_PERTICK).orElse(0L);
 
         GlStateManager.pushMatrix();
-        GlStateManager.translatef((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
+        GlStateManager.translatef(0.5F, 0.75F, 0.5F);
         GlStateManager.rotatef(-getHudAngle(orientation), 0.0F, 1.0F, 0.0F);
         GlStateManager.translatef(0.0F, -0.2500F, -0.4375F + .9f);
 
@@ -76,11 +77,11 @@ public class PowerCellInformationRenderer {
         GlStateManager.popMatrix();
     }
 
-    public static void renderDefault(MatrixStack matrixStack, IRenderTypeBuffer buffer, TypedMap data, Direction orientation, double x, double y, double z, double scale) {
+    public static void renderDefault(MatrixStack matrixStack, IRenderTypeBuffer buffer, TypedMap data, Direction orientation, double scale) {
         List<String> log = getLog(data);
         HudRenderHelper.HudPlacement hudPlacement = HudRenderHelper.HudPlacement.HUD_FRONT;
         HudRenderHelper.HudOrientation hudOrientation = HudRenderHelper.HudOrientation.HUD_SOUTH;
-        HudRenderHelper.renderHud(matrixStack, buffer, log, hudPlacement, hudOrientation, orientation, x - orientation.getXOffset() * .95, y, z - orientation.getZOffset() * .95, (float) (1.0f + scale));
+        HudRenderHelper.renderHud(matrixStack, buffer, log, hudPlacement, hudOrientation, orientation, - orientation.getXOffset() * .95, 0, - orientation.getZOffset() * .95, (float) (1.0f + scale));
     }
 
     private static List<String> getLog(TypedMap data) {

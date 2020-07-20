@@ -2,11 +2,8 @@ package mcjty.rftoolspower.setup;
 
 import mcjty.lib.compat.MainCompatHandler;
 import mcjty.lib.setup.DefaultModSetup;
-import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ModSetup extends DefaultModSetup {
@@ -22,11 +19,6 @@ public class ModSetup extends DefaultModSetup {
         super.init(e);
 
         RFToolsPowerMessages.registerMessages("rftoolspower");
-        MinecraftForge.EVENT_BUS.addListener((TickEvent.WorldTickEvent event) -> {
-            if (!event.world.isRemote) {
-                TickOrderHandler.postWorldTick(event.world.getDimension().getType());
-            }
-        });
     }
 
     @Override

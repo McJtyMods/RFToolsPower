@@ -7,9 +7,9 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.*;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.OrientationTools;
+import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
-import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -28,18 +28,21 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
-public class PearlInjectorTileEntity extends GenericTileEntity implements ITickableTileEntity, TickOrderHandler.ICheckStateServer {
+public class PearlInjectorTileEntity extends GenericTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
 
     public static final int BUFFER_SIZE = (9*2);
     public static final int SLOT_BUFFER = 0;
     public static final int SLOT_PLAYERINV = SLOT_BUFFER + BUFFER_SIZE;
 
-    public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(1)
+    public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
             .box(specific(new ItemStack(Items.ENDER_PEARL)), CONTAINER_CONTAINER, SLOT_BUFFER, 10, 25, 9, 2)
             .playerSlots(10, 70));
 
@@ -88,12 +91,26 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public void tick() {
         if (!world.isRemote) {
-            TickOrderHandler.queuePearlInjector(this);
+            TickOrderHandler.queue(this);
+
+            // Find all connected endergenics in order
+            EndergenicTileEntity endergenic = findEndergenicTileEntity();
+            Set<BlockPos> connectedEndergenics = new HashSet<>();
+            while (endergenic != null && !connectedEndergenics.contains(endergenic)) {
+                TickOrderHandler.queue(endergenic);
+                connectedEndergenics.add(endergenic.getBlockPos());
+                endergenic = endergenic.getDestinationTE();
+            }
         }
     }
 
     @Override
-    public void checkStateServer() {
+    public TickOrderHandler.Rank getRank() {
+        return TickOrderHandler.Rank.RANK_0;
+    }
+
+    @Override
+    public void tickServer() {
         boolean pulse = (powerLevel > 0) && !prevIn;
         if (prevIn == powerLevel > 0) {
             return;

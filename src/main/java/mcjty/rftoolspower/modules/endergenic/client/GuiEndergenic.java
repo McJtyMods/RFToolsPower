@@ -5,6 +5,7 @@ import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.TextField;
+import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
@@ -12,6 +13,7 @@ import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, GenericContainer> {
 
@@ -54,11 +56,6 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i2) {
         drawWindow();
-        // @todo 1.15
-//        long currentRF = GenericEnergyStorageTileEntity.getCurrentRF();
-//        energyBar.setValue(currentRF);
-//        tileEntity.requestRfFromServer(RFToolsPower.MODID);
-
         checkStats();
 
         lastRfPerTick.text(fromServer_lastRfPerTick + " RF/tick");
@@ -74,5 +71,9 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
             timer = 20;
             tileEntity.requestDataFromServer(RFToolsPowerMessages.INSTANCE, EndergenicTileEntity.CMD_GETSTATS, TypedMap.EMPTY);
         }
+        tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
+            energyBar.maxValue(((GenericEnergyStorage)e).getCapacity());
+            energyBar.value(((GenericEnergyStorage)e).getEnergy());
+        });
     }
 }

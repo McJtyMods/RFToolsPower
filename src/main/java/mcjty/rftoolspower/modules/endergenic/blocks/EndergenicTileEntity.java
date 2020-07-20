@@ -27,6 +27,7 @@ import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog;
+import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
@@ -34,7 +35,6 @@ import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
-import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
 import mcjty.rftoolspower.setup.ClientCommandHandler;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,10 +67,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static mcjty.lib.builder.TooltipBuilder.header;
-import static mcjty.lib.builder.TooltipBuilder.key;
+import static mcjty.lib.builder.TooltipBuilder.*;
 
-public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.ICheckStateServer {
+public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.IOrderTicker {
 
     private static Random random = new Random();
 
@@ -162,19 +161,13 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         return new BaseBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .info(key("message.rftoolspower.shiftmessage"))
-                .infoShift(header())
+                .infoShift(header(), gold())
                 .tileEntitySupplier(EndergenicTileEntity::new)) {
             @Override
             public RotationType getRotationType() {
                 return RotationType.NONE;
             }
         };
-        /*
-                    int mode = tagCompound.getInteger("mode");
-            String smode = EnderMonitorMode.values()[mode].getDescription();
-            list.add(TextFormatting.GREEN + "Mode: " + smode);
-
-         */
     }
 
     public EndergenicTileEntity() {
@@ -194,9 +187,15 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
             markDirtyQuick();
         }
 
-        if (!world.isRemote) {
-            TickOrderHandler.queueEndergenic(this);
-        }
+        // The pearl injector will queue endergenics
+//        if (!world.isRemote) {
+//            TickOrderHandler.queueEndergenic(this);
+//        }
+    }
+
+    @Override
+    public TickOrderHandler.Rank getRank() {
+        return TickOrderHandler.Rank.RANK_1;
     }
 
     @Override
@@ -289,7 +288,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     @Override
-    public void checkStateServer() {
+    public void tickServer() {
         tickCounter++;
 
         ticks--;
@@ -663,12 +662,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
     }
 
-    // @todo 1.15
-//    @Override
-//    public boolean shouldRenderInPass(int pass) {
-//        return pass == 1;
-//    }
-
     public int getChargingMode() {
         return chargingMode;
     }
@@ -816,39 +809,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public long getCapacity() {
         return storage.getCapacity();
     }
-
-
-    // @todo 1.15
-//    @Override
-//    @net.minecraftforge.fml.common.Optional.Method(modid = "theoneprobe")
-//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-//        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
-//        if (mode == ProbeMode.EXTENDED) {
-//            IItemStyle style = probeInfo.defaultItemStyle().width(16).height(13);
-//            ILayoutStyle layoutStyle = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
-//            probeInfo.text(TextFormatting.BLUE + "Stats over the last 5 seconds:");
-//            probeInfo.horizontal(layoutStyle)
-//                    .item(new ItemStack(Items.REDSTONE), style)
-//                    .text("Charged " + getLastChargeCounter() + " time(s)");
-//            probeInfo.horizontal(layoutStyle)
-//                    .item(new ItemStack(Items.ENDER_PEARL), style)
-//                    .text("Fired " + getLastPearlsLaunched())
-//                    .text(" / Lost " + getLastPearlsLost());
-//            if (getLastPearlsLost() > 0) {
-//                probeInfo.text(TextFormatting.RED + getLastPearlsLostReason());
-//            }
-//            if (getLastPearlArrivedAt() > -2) {
-//                probeInfo.text("Last pearl arrived at " + getLastPearlArrivedAt());
-//            }
-//            probeInfo.horizontal()
-//                    .text(TextFormatting.GREEN + "RF Gain " + getLastRfGained())
-//                    .text(" / ")
-//                    .text(TextFormatting.RED + "Lost " + getLastRfLost())
-//                    .text(" (RF/t " + getLastRfPerTick() + ")");
-//        } else {
-//            probeInfo.text("(sneak to get statistics)");
-//        }
-//    }
 
     @Nonnull
     @Override

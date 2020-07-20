@@ -41,6 +41,13 @@
 
     "message.rftoolspower.power_level.header": "The power level block shows a digit representing the amount of power in something. It will also send out a redstone signal with the same amount",
 
+    "message.rftoolspower.endergenic.header": "Generate power out of ender pearls. You need at least two generators for this to work and the setup is relatively complicated. Timing is crucial",
+    "message.rftoolspower.endergenic.gold": "Infusing bonus: more power generation and reduced powerloss for holding pearls",
+
+    "message.rftoolspower.ender_monitor.header": "This block can detect various changes in an adjacent endergenic generator and send out a redstone signal based on that",
+
+    "message.rftoolspower.pearl_injector.header": "This will inject an ender pearl in an adjacent endergenic generator when a redstone signal is received",
+
     "message.rftoolspower.coalgenerator.header": "This machine produces RF/FE from coal or charcoal",
     "message.rftoolspower.coalgenerator.gold": "Infusing bonus: more power generation and lasts longer on a single fuel",
     "message.rftoolspower.coalgenerator.info": "Producing: ",

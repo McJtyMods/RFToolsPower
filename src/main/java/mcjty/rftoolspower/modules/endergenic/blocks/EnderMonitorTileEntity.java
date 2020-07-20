@@ -9,10 +9,10 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.TypedMap;
+import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
-import mcjty.rftoolspower.modules.endergenic.data.TickOrderHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
-public class EnderMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity, TickOrderHandler.ICheckStateServer {
+public class EnderMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
 
     public static final String CMD_MODE = "endermonitor.setMode";
 
@@ -46,12 +46,6 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(EnderMonitorTileEntity::new));
-        /*
-                    int mode = tagCompound.getInteger("mode");
-            String smode = EnderMonitorMode.values()[mode].getDescription();
-            list.add(TextFormatting.GREEN + "Mode: " + smode);
-
-         */
     }
 
     public EnderMonitorTileEntity() {
@@ -83,12 +77,17 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     @Override
     public void tick() {
         if (!world.isRemote) {
-            TickOrderHandler.queueEnderMonitor(this);
+            TickOrderHandler.queue(this);
         }
     }
 
     @Override
-    public void checkStateServer() {
+    public TickOrderHandler.Rank getRank() {
+        return TickOrderHandler.Rank.RANK_2;
+    }
+
+    @Override
+    public void tickServer() {
         int newout = 0;
 
         if (needpulse) {
@@ -147,15 +146,6 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
         }
         return false;
     }
-
-    // @todo 1.15
-//    @Override
-//    @Optional.Method(modid = "theoneprobe")
-//    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-//        super.addProbeInfo(mode, probeInfo, player, world, blockState, data);
-//        EnderMonitorMode m = getMode();
-//        probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
-//    }
 
     @Nonnull
     @Override

@@ -5,18 +5,21 @@ import mcjty.lib.compat.theoneprobe.TOPDriver;
 import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
+import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
+import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.api.TextStyleClass;
+import mcjty.theoneprobe.api.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -41,6 +44,10 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 drivers.put(id, new PowerCellDriver());
             } else if (blockState.getBlock() instanceof DimensionalCellBlock) {
                 drivers.put(id, new DimensionalCellDriver());
+            } else if (blockState.getBlock() == EndergenicSetup.ENDERGENIC.get()) {
+                drivers.put(id, new EndergenicDriver());
+            } else if (blockState.getBlock() == EndergenicSetup.ENDER_MONITOR.get()) {
+                drivers.put(id, new EndermonitorDriver());
             } else {
                 drivers.put(id, new DefaultDriver());
             }
@@ -132,6 +139,51 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                     probeInfo.text(TextFormatting.GREEN + "In:  " + rfPerTickIn + "RF/t");
                     probeInfo.text(TextFormatting.GREEN + "Out: " + rfPerTickOut + "RF/t");
                 }
+            }, "Bad tile entity!");
+        }
+    }
+
+    private static class EndergenicDriver implements TOPDriver {
+        @Override
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+            McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
+            Tools.safeConsume(world.getTileEntity(data.getPos()), (EndergenicTileEntity te) -> {
+                if (mode == ProbeMode.EXTENDED) {
+                    IItemStyle style = probeInfo.defaultItemStyle().width(16).height(13);
+                    ILayoutStyle layoutStyle = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
+                    probeInfo.text(TextFormatting.BLUE + "Stats over the last 5 seconds:");
+                    probeInfo.horizontal(layoutStyle)
+                            .item(new ItemStack(Items.REDSTONE), style)
+                            .text("Charged " + te.getLastChargeCounter() + " time(s)");
+                    probeInfo.horizontal(layoutStyle)
+                            .item(new ItemStack(Items.ENDER_PEARL), style)
+                            .text("Fired " + te.getLastPearlsLaunched())
+                            .text(" / Lost " + te.getLastPearlsLost());
+                    if (te.getLastPearlsLost() > 0) {
+                        probeInfo.text(TextFormatting.RED + te.getLastPearlsLostReason());
+                    }
+                    if (te.getLastPearlArrivedAt() > -2) {
+                        probeInfo.text("Last pearl arrived at " + te.getLastPearlArrivedAt());
+                    }
+                    probeInfo.horizontal()
+                            .text(TextFormatting.GREEN + "RF Gain " + te.getLastRfGained())
+                            .text(" / ")
+                            .text(TextFormatting.RED + "Lost " + te.getLastRfLost())
+                            .text(" (RF/t " + te.getLastRfPerTick() + ")");
+                } else {
+                    probeInfo.text("(sneak to get statistics)");
+                }
+            }, "Bad tile entity!");
+        }
+    }
+
+    private static class EndermonitorDriver implements TOPDriver {
+        @Override
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+            McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
+            Tools.safeConsume(world.getTileEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
+                EnderMonitorMode m = te.getMode();
+                probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
             }, "Bad tile entity!");
         }
     }

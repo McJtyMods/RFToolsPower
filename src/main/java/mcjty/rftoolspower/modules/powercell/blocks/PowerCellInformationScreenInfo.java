@@ -78,11 +78,11 @@ public class PowerCellInformationScreenInfo implements IInformationScreenInfo {
     }
 
     @Override
-    public void render(int mode, MatrixStack matrixStack, IRenderTypeBuffer buffer, @Nonnull TypedMap data, Direction orientation, double x, double y, double z, double scale) {
+    public void render(int mode, MatrixStack matrixStack, IRenderTypeBuffer buffer, @Nonnull TypedMap data, Direction orientation, double scale) {
         if (mode == MODE_POWER) {
-            PowerCellInformationRenderer.renderDefault(matrixStack, buffer, data, orientation, x, y, z, scale);
+            PowerCellInformationRenderer.renderDefault(matrixStack, buffer, data, orientation, scale);
         } else {
-            PowerCellInformationRenderer.renderGraphical(matrixStack, buffer, mode, data, orientation, x, y, z, scale);
+            PowerCellInformationRenderer.renderGraphical(matrixStack, buffer, mode, data, orientation, scale);
         }
     }
 }
