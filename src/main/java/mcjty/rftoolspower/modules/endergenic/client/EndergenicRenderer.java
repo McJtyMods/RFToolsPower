@@ -1,8 +1,10 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mcjty.lib.client.CustomRenderTypes;
 import mcjty.lib.client.RenderGlowEffect;
 import mcjty.lib.client.RenderHelper;
+import mcjty.lib.client.RenderSettings;
 import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.modules.hud.client.HudRenderer;
 import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
@@ -27,6 +29,12 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
     public static final ResourceLocation REDGLOW = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/redglow");
     public static final ResourceLocation BLUEGLOW = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/blueglow");
 
+    public static final RenderSettings FLASH_SETTINGS = RenderSettings.builder()
+            .color(255, 255, 255)
+            .alpha(128)
+            .renderType(CustomRenderTypes.TRANSLUCENT_LIGHTNING_NOLIGHTMAPS)
+            .build();
+
     public EndergenicRenderer(TileEntityRendererDispatcher dispatcher) {
         super(dispatcher);
     }
@@ -47,10 +55,10 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
         RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.2f + s * 0.3f, HALO);// + random.nextFloat() * .05f);
 
         if (tileEntity.getGoodCounter() > 0) {
-            RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.8f * (tileEntity.getGoodCounter() / 10.0f), WHITEFLASH);
+            RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.8f * (tileEntity.getGoodCounter() / 10.0f), WHITEFLASH, FLASH_SETTINGS);
         }
         if (tileEntity.getBadCounter() > 0) {
-            RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.8f * (tileEntity.getBadCounter() / 20.0f), BLACKFLASH);
+            RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.8f * (tileEntity.getBadCounter() / 20.0f), BLACKFLASH, FLASH_SETTINGS);
         }
 
         ItemStack mainHand = Minecraft.getInstance().player.getHeldItemMainhand();

@@ -4,7 +4,10 @@ import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.*;
+import mcjty.lib.container.AutomationFilterItemHander;
+import mcjty.lib.container.ContainerFactory;
+import mcjty.lib.container.GenericContainer;
+import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
@@ -27,7 +30,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,12 +49,12 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
-
     private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
     private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this))
+            .itemHandler(itemHandler));
 
     // For pulse detection.
     private boolean prevIn = false;
@@ -91,13 +93,18 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public void tick() {
         if (!world.isRemote) {
+            long ticker = TickOrderHandler.getTicker();
             TickOrderHandler.queue(this);
 
             // Find all connected endergenics in order
             EndergenicTileEntity endergenic = findEndergenicTileEntity();
             Set<BlockPos> connectedEndergenics = new HashSet<>();
-            while (endergenic != null && !connectedEndergenics.contains(endergenic)) {
-                TickOrderHandler.queue(endergenic);
+            while (endergenic != null && !connectedEndergenics.contains(endergenic.getBlockPos())) {
+                // Don't add endergenics that have already been added this tick
+                if (ticker != endergenic.getTicker()) {
+                    endergenic.setTicker(ticker);
+                    TickOrderHandler.queue(endergenic);
+                }
                 connectedEndergenics.add(endergenic.getBlockPos());
                 endergenic = endergenic.getDestinationTE();
             }

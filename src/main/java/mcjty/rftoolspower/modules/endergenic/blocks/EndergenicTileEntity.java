@@ -37,6 +37,9 @@ import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
 import mcjty.rftoolspower.setup.ClientCommandHandler;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -51,6 +54,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -84,6 +89,8 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public static final int CHARGE_HOLDING = -1;
 
     public static final Key<BlockPos> VALUE_DESTINATION = new Key<>("destination", Type.BLOCKPOS);
+
+    public static final VoxelShape SHAPE = VoxelShapes.create(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
     private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
@@ -156,9 +163,12 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     private static long rfPerHit[] = new long[]{0, 100, 150, 200, 400, 800, 1600, 3200, 6400, 8000, 12800, 8000, 6400, 2500, 1000, 100};
 
     private int tickCounter = 0;            // Only used for logging, counts server ticks.
+    private long ticker = -1;       // Used by TickOrderHandler to detect that we've already been added to the queue
+
 
     public static BaseBlock createBlock() {
-        return new BaseBlock(new BlockBuilder()
+        return new BaseBlock(new BlockBuilder().properties(
+                        Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL).notSolid())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
@@ -188,9 +198,14 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
 
         // The pearl injector will queue endergenics
-//        if (!world.isRemote) {
-//            TickOrderHandler.queueEndergenic(this);
-//        }
+    }
+
+    public long getTicker() {
+        return ticker;
+    }
+
+    public void setTicker(long ticker) {
+        this.ticker = ticker;
     }
 
     @Override
