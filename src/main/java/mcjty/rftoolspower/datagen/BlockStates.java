@@ -58,7 +58,7 @@ public class BlockStates extends BaseBlockStateProvider {
         singleTextureBlock(EndergenicSetup.ENDERGENIC.get(), "endergenic", BLOCK_FOLDER + "/endergenic/endergenic");
 
         registerBlazingGenerator();
-        orientedBlock(BlazingSetup.BLAZING_AGITATOR.get(), frontBasedModel("blazing_agitator", modLoc("block/blazing/blazing_agitator")));
+        singleTextureBlock(BlazingSetup.BLAZING_AGITATOR.get(), "blazing_agitator", BLOCK_FOLDER + "/blazing/blazing_agitator");
         orientedBlock(BlazingSetup.BLAZING_INFUSER.get(), frontBasedModel("blazing_infuser", modLoc("block/blazing/blazing_infuser")));
     }
 

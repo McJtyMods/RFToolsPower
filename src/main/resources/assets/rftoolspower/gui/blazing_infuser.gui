@@ -1,0 +1,6 @@
+window {
+    size(180,152)
+    panel('','positional') {
+        bg1('rftoolspower:textures/gui/blazing_infuser.png')
+    }
+}

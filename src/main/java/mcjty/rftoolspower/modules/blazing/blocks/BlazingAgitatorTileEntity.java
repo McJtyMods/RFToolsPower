@@ -6,6 +6,7 @@ import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blocks.BaseBlock;
+import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.ContainerFactory;
@@ -73,7 +74,12 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
                 .infusable()
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
-                .tileEntitySupplier(BlazingAgitatorTileEntity::new));
+                .tileEntitySupplier(BlazingAgitatorTileEntity::new)) {
+            @Override
+            public RotationType getRotationType() {
+                return RotationType.NONE;
+            }
+        };
     }
 
     @Override

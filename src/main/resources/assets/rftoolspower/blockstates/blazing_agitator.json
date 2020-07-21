@@ -1,27 +1,7 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "rftoolspower:block/blazing_agitator",
-      "x": 90
-    },
-    "facing=up": {
-      "model": "rftoolspower:block/blazing_agitator",
-      "x": -90
-    },
-    "facing=north": {
+    "": {
       "model": "rftoolspower:block/blazing_agitator"
-    },
-    "facing=south": {
-      "model": "rftoolspower:block/blazing_agitator",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "rftoolspower:block/blazing_agitator",
-      "y": 270
-    },
-    "facing=east": {
-      "model": "rftoolspower:block/blazing_agitator",
-      "y": 90
     }
   }
 }

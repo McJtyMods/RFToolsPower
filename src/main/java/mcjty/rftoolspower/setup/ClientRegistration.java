@@ -4,6 +4,11 @@ package mcjty.rftoolspower.setup;
 import com.google.common.collect.Lists;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.client.BlazingAgitatorRenderer;
+import mcjty.rftoolspower.modules.blazing.client.GuiBlazingAgitator;
+import mcjty.rftoolspower.modules.blazing.client.GuiBlazingGenerator;
+import mcjty.rftoolspower.modules.blazing.client.GuiBlazingInfuser;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
@@ -42,6 +47,9 @@ public class ClientRegistration {
         GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDERGENIC.get(), GuiEndergenic::new);
         GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
         GenericGuiContainer.register(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+        GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
+        GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_GENERATOR.get(), GuiBlazingGenerator::new);
+        GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
 
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
@@ -51,6 +59,7 @@ public class ClientRegistration {
 
         PowerLevelRenderer.register();
         EndergenicRenderer.register();
+        BlazingAgitatorRenderer.register();
 
         ClientCommandHandler.registerCommands();
     }

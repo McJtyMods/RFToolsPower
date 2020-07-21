@@ -28,7 +28,7 @@ public class BlazingSetup {
 
     public static final RegistryObject<BaseBlock> BLAZING_AGITATOR = BLOCKS.register("blazing_agitator", BlazingAgitatorTileEntity::createBlock);
     public static final RegistryObject<Item> BLAZING_AGITATOR_ITEM = ITEMS.register("blazing_agitator", () -> new BlockItem(BLAZING_AGITATOR.get(), Registration.createStandardProperties()));
-    public static final RegistryObject<TileEntityType<?>> TYPE_BLAZING_AGITATOR = TILES.register("blazing_agitator", () -> TileEntityType.Builder.create(BlazingAgitatorTileEntity::new, BLAZING_AGITATOR.get()).build(null));
+    public static final RegistryObject<TileEntityType<BlazingAgitatorTileEntity>> TYPE_BLAZING_AGITATOR = TILES.register("blazing_agitator", () -> TileEntityType.Builder.create(BlazingAgitatorTileEntity::new, BLAZING_AGITATOR.get()).build(null));
     public static final RegistryObject<ContainerType<GenericContainer>> CONTAINER_BLAZING_AGITATOR = CONTAINERS.register("blazing_agitator", GenericContainer::createContainerType);
 
     public static final RegistryObject<BaseBlock> BLAZING_INFUSER = BLOCKS.register("blazing_infuser", BlazingInfuserTileEntity::createBlock);

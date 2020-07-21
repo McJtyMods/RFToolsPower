@@ -1,11 +1,6 @@
 {
-  "parent": "block/cube",
+  "parent": "block/cube_all",
   "textures": {
-    "down": "rftoolsbase:block/base/machinebottom",
-    "up": "rftoolsbase:block/base/machinetop",
-    "north": "rftoolspower:block/blazing/blazing_agitator",
-    "south": "rftoolsbase:block/base/machineside",
-    "east": "rftoolsbase:block/base/machineside",
-    "west": "rftoolsbase:block/base/machineside"
+    "all": "rftoolspower:block/blazing/blazing_agitator"
   }
 }
