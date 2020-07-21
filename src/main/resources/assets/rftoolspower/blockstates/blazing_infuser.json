@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rftoolspower:block/blazing_infuser",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "rftoolspower:block/blazing_infuser",
+      "x": -90
+    },
+    "facing=north": {
+      "model": "rftoolspower:block/blazing_infuser"
+    },
+    "facing=south": {
+      "model": "rftoolspower:block/blazing_infuser",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "rftoolspower:block/blazing_infuser",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "rftoolspower:block/blazing_infuser",
+      "y": 90
+    }
+  }
+}

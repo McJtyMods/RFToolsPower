@@ -2,6 +2,7 @@
     "item.rftoolspower.power_core1": "Power Core (Low)",
     "item.rftoolspower.power_core2": "Power Core (Medium)",
     "item.rftoolspower.power_core3": "Power Core (High)",
+    "item.rftoolspower.blazing_rod": "Blazing Rod",
 
     "block.rftoolspower.dimensionalcell": "Dimensional Cell",
     "block.rftoolspower.dimensionalcell_simple": "Dimensional Cell (Simple)",
@@ -16,6 +17,9 @@
     "block.rftoolspower.endergenic": "Endergenic",
     "block.rftoolspower.ender_monitor": "Ender Monitor",
     "block.rftoolspower.pearl_injector": "Pearl Injector",
+    "block.rftoolspower.blazing_generator": "Blazing Generator",
+    "block.rftoolspower.blazing_agitator": "Blazing Agitator",
+    "block.rftoolspower.blazing_infuser": "Blazing Infuser",
 
     "itemGroup.rftoolspower": "RFTools Power",
 
@@ -27,6 +31,7 @@
     "message.rftoolspower.power_core1.header": "This item is a crafting ingredient for powercells",
     "message.rftoolspower.power_core2.header": "This item is a crafting ingredient for powercells",
     "message.rftoolspower.power_core3.header": "This item is a crafting ingredient for powercells",
+    "message.rftoolspower.blazing_rod.header": "This item is produced by the Blazing Agitator and used in the Blazing Generator to generate power",
 
     "message.rftoolspower.cell1.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
     "message.rftoolspower.cell1.info": "Power: ",
@@ -40,6 +45,14 @@
     "message.rftoolspower.power_monitor.header": "The power monitor can send out a redstone signal depending on the amount of power in the target block",
 
     "message.rftoolspower.power_level.header": "The power level block shows a digit representing the amount of power in something. It will also send out a redstone signal with the same amount",
+
+    "message.rftoolspower.blazing_generator.header": "Generate power out of blaze rods. These blaze rods have to be 'agitated' first using the Blazing Agitator",
+    "message.rftoolspower.blazing_generator.gold": "Infusing bonus: more power generation",
+
+    "message.rftoolspower.blazing_agitator.header": "This device can 'agitate' blaze rods so that they are usable for the Blazing Generator",
+    "message.rftoolspower.blazing_agitator.gold": "Infusing bonus: better quality blazing rods",
+
+    "message.rftoolspower.blazing_infuser.header": "This device can infuser a blazing rod with dimensional shards, redstone, or glowstone dust. This will improve the power production and/or duration of the power production when used in the Blazing Generator",
 
     "message.rftoolspower.endergenic.header": "Generate power out of ender pearls. You need at least two generators for this to work and the setup is relatively complicated. Timing is crucial",
     "message.rftoolspower.endergenic.gold": "Infusing bonus: more power generation and reduced powerloss for holding pearls",

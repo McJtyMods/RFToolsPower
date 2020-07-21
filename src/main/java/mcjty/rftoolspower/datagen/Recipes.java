@@ -3,11 +3,14 @@ package mcjty.rftoolspower.datagen;
 import mcjty.lib.crafting.CopyNBTRecipeBuilder;
 import mcjty.lib.datagen.BaseRecipeProvider;
 import mcjty.rftoolsbase.modules.various.VariousSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
@@ -78,5 +81,30 @@ public class Recipes extends BaseRecipeProvider {
                         .key('P', Tags.Items.GLASS_PANES)
                         .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
                 " P ", "rAr", " R ");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(EndergenicSetup.ENDER_MONITOR.get())
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
+                " o ", "rAr", "TrT");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(EndergenicSetup.ENDERGENIC.get())
+                        .key('Z', VariousSetup.INFUSED_ENDERPEARL.get())
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                "dod", "ZFZ", "dod");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(EndergenicSetup.PEARL_INJECTOR.get())
+                        .key('C', Tags.Items.CHESTS)
+                        .key('H', Blocks.HOPPER)
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                " C ", "rFr", " H ");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(BlazingSetup.BLAZING_GENERATOR.get())
+                        .key('X', Tags.Items.RODS_BLAZE)
+                        .key('Y', VariousSetup.INFUSED_DIAMOND.get())
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                "XYX", "RFR", "XYX");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(BlazingSetup.BLAZING_AGITATOR.get())
+                        .key('X', Tags.Items.RODS_BLAZE)
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                "XXX", "GFG", "iii");
+        build(consumer, ShapedRecipeBuilder.shapedRecipe(BlazingSetup.BLAZING_INFUSER.get())
+                        .key('X', Tags.Items.RODS_BLAZE)
+                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                "iXi", "sFs", "iXi");
     }
 }

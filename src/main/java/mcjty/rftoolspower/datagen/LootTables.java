@@ -1,7 +1,9 @@
 package mcjty.rftoolspower.datagen;
 
 import mcjty.lib.datagen.BaseLootTableProvider;
+import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
+import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
@@ -25,6 +27,12 @@ public class LootTables extends BaseLootTableProvider {
         lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), createStandardTable("dimensionalcell_advanced", DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get()));
         lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), createStandardTable("dimensionalcell_creative", DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get()));
         lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), createStandardTable("dimensionalcell_simple", DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get()));
+        lootTables.put(EndergenicSetup.ENDERGENIC.get(), createStandardTable("endergenic", EndergenicSetup.ENDERGENIC.get()));
+        lootTables.put(EndergenicSetup.PEARL_INJECTOR.get(), createStandardTable("pearl_injector", EndergenicSetup.PEARL_INJECTOR.get()));
+        lootTables.put(EndergenicSetup.ENDER_MONITOR.get(), createStandardTable("ender_monitor", EndergenicSetup.ENDER_MONITOR.get()));
+        lootTables.put(BlazingSetup.BLAZING_GENERATOR.get(), createStandardTable("blazing_generator", BlazingSetup.BLAZING_GENERATOR.get()));
+        lootTables.put(BlazingSetup.BLAZING_AGITATOR.get(), createStandardTable("blazing_agitator", BlazingSetup.BLAZING_AGITATOR.get()));
+        lootTables.put(BlazingSetup.BLAZING_INFUSER.get(), createStandardTable("blazing_infuser", BlazingSetup.BLAZING_INFUSER.get()));
     }
 
     @Override

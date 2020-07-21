@@ -3,6 +3,8 @@ package mcjty.rftoolspower.compat;
 import mcjty.lib.compat.theoneprobe.McJtyLibTOPDriver;
 import mcjty.lib.compat.theoneprobe.TOPDriver;
 import mcjty.lib.varia.Tools;
+import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
@@ -48,6 +50,10 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 drivers.put(id, new EndergenicDriver());
             } else if (blockState.getBlock() == EndergenicSetup.ENDER_MONITOR.get()) {
                 drivers.put(id, new EndermonitorDriver());
+            } else if (blockState.getBlock() == BlazingSetup.BLAZING_GENERATOR.get()) {
+                drivers.put(id, new BlazingGeneratorDriver());
+            } else if (blockState.getBlock() == BlazingSetup.BLAZING_AGITATOR.get()) {
+                drivers.put(id, new BlazingAgitatorDriver());
             } else {
                 drivers.put(id, new DefaultDriver());
             }
@@ -184,6 +190,26 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             Tools.safeConsume(world.getTileEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
                 EnderMonitorMode m = te.getMode();
                 probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
+            }, "Bad tile entity!");
+        }
+    }
+
+    private static class BlazingGeneratorDriver implements TOPDriver {
+        @Override
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+            McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
+            Tools.safeConsume(world.getTileEntity(data.getPos()), (BlazingGeneratorTileEntity te) -> {
+                // @todo
+            }, "Bad tile entity!");
+        }
+    }
+
+    private static class BlazingAgitatorDriver implements TOPDriver {
+        @Override
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+            McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
+            Tools.safeConsume(world.getTileEntity(data.getPos()), (BlazingAgitatorDriver te) -> {
+                // @todo
             }, "Bad tile entity!");
         }
     }

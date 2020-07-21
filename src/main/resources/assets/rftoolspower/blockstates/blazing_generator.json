@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "facing=down,working=false": {
+      "model": "rftoolspower:block/blazing_generator_idle",
+      "x": 90
+    },
+    "facing=up,working=false": {
+      "model": "rftoolspower:block/blazing_generator_idle",
+      "x": -90
+    },
+    "facing=north,working=false": {
+      "model": "rftoolspower:block/blazing_generator_idle"
+    },
+    "facing=south,working=false": {
+      "model": "rftoolspower:block/blazing_generator_idle",
+      "y": 180
+    },
+    "facing=west,working=false": {
+      "model": "rftoolspower:block/blazing_generator_idle",
+      "y": 270
+    },
+    "facing=east,working=false": {
+      "model": "rftoolspower:block/blazing_generator_idle",
+      "y": 90
+    },
+    "facing=down,working=true": {
+      "model": "rftoolspower:block/blazing_generator_busy",
+      "x": 90
+    },
+    "facing=up,working=true": {
+      "model": "rftoolspower:block/blazing_generator_busy",
+      "x": -90
+    },
+    "facing=north,working=true": {
+      "model": "rftoolspower:block/blazing_generator_busy"
+    },
+    "facing=south,working=true": {
+      "model": "rftoolspower:block/blazing_generator_busy",
+      "y": 180
+    },
+    "facing=west,working=true": {
+      "model": "rftoolspower:block/blazing_generator_busy",
+      "y": 270
+    },
+    "facing=east,working=true": {
+      "model": "rftoolspower:block/blazing_generator_busy",
+      "y": 90
+    }
+  }
+}

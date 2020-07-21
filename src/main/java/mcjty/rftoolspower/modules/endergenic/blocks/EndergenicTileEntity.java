@@ -99,7 +99,8 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_ENDERGENIC.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EndergenicTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_ENDERGENIC.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EndergenicTileEntity.this))
+            .energyHandler(energyHandler));
 
     @Override
     public IValue<?>[] getValues() {
@@ -170,6 +171,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         return new BaseBlock(new BlockBuilder().properties(
                         Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL).notSolid())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .infusable()
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
                 .tileEntitySupplier(EndergenicTileEntity::new)) {

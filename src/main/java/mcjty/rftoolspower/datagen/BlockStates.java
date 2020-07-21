@@ -2,7 +2,10 @@ package mcjty.rftoolspower.datagen;
 
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.datagen.BaseBlockStateProvider;
+import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
@@ -11,11 +14,9 @@ import mcjty.rftoolspower.modules.monitor.MonitorSetup;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.minecraftforge.client.model.generators.*;
 
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
@@ -55,6 +56,22 @@ public class BlockStates extends BaseBlockStateProvider {
 
         orientedBlock(EndergenicSetup.PEARL_INJECTOR.get(), frontBasedModel("pearl_injector", modLoc("block/endergenic/pearl_injector")));
         singleTextureBlock(EndergenicSetup.ENDERGENIC.get(), "endergenic", BLOCK_FOLDER + "/endergenic/endergenic");
+
+        registerBlazingGenerator();
+        orientedBlock(BlazingSetup.BLAZING_AGITATOR.get(), frontBasedModel("blazing_agitator", modLoc("block/blazing/blazing_agitator")));
+        orientedBlock(BlazingSetup.BLAZING_INFUSER.get(), frontBasedModel("blazing_infuser", modLoc("block/blazing/blazing_infuser")));
+    }
+
+    private void registerBlazingGenerator() {
+        ModelFile modelIdle = frontBasedModel("blazing_generator_idle", modLoc("block/blazing/blazing_generator_idle"));
+        ModelFile modelBusy = frontBasedModel("blazing_generator_busy", modLoc("block/blazing/blazing_generator_busy"));
+        VariantBlockStateBuilder builder = getVariantBuilder(BlazingSetup.BLAZING_GENERATOR.get());
+        for (Direction direction : OrientationTools.DIRECTION_VALUES) {
+            applyRotation(builder.partialState().with(BlockStateProperties.FACING, direction).with(BlazingGeneratorTileEntity.WORKING, false)
+                    .modelForState().modelFile(modelIdle), direction);
+            applyRotation(builder.partialState().with(BlockStateProperties.FACING, direction).with(BlazingGeneratorTileEntity.WORKING, true)
+                    .modelForState().modelFile(modelBusy), direction);
+        }
     }
 
     private void createDimensionalCellModel(Block block, String suffix, BlockModelBuilder dimCellFrame) {

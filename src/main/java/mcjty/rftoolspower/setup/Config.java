@@ -2,6 +2,7 @@ package mcjty.rftoolspower.setup;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
@@ -35,6 +36,7 @@ public class Config {
         CoalGeneratorConfig.setup(SERVER_BUILDER);
         DimensionalCellConfiguration.setup(SERVER_BUILDER, CLIENT_BUILDER);
         EndergenicConfiguration.setup(SERVER_BUILDER, CLIENT_BUILDER);
+        BlazingConfiguration.setup(SERVER_BUILDER, CLIENT_BUILDER);
 
         SERVER_BUILDER.pop();
         CLIENT_BUILDER.pop();

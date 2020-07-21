@@ -2,6 +2,7 @@ package mcjty.rftoolspower.setup;
 
 
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
@@ -41,6 +42,7 @@ public class Registration {
         PowerCellSetup.register();
         MonitorSetup.register();
         EndergenicSetup.register();
+        BlazingSetup.register();
     }
 
 
