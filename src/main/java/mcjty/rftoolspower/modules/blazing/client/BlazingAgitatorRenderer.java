@@ -4,9 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -27,7 +25,8 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
             matrixStack.push();
 
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-            BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRendererDispatcher();
+            float s = (System.currentTimeMillis() % 1000) / 1000.0f;
+            s *= 360;
 
             for (int x = 0 ; x < 3 ; x++) {
                 for (int y = 0 ; y < 3 ; y++) {
@@ -35,8 +34,9 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
                     if (!stack.isEmpty()) {
                         matrixStack.push();
                         matrixStack.scale(.3f, .3f, .3f);
-                        matrixStack.translate(x * 1.2f + 0.4f, 1.5f, y * 1.2f + 0.4f);
-                        itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLight, combinedOverlay, matrixStack, buffer);
+                        matrixStack.translate(x * 0.9f + 0.75f, 2.1f, y * 0.9f + 0.75f);
+                        matrixStack.rotate(Vector3f.YP.rotationDegrees(s));
+                        itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, 0xf000f0, combinedOverlay, matrixStack, buffer);
                         matrixStack.pop();
                     }
                 }

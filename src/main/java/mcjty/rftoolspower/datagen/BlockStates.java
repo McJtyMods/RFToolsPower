@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
@@ -58,7 +59,10 @@ public class BlockStates extends BaseBlockStateProvider {
         singleTextureBlock(EndergenicSetup.ENDERGENIC.get(), "endergenic", BLOCK_FOLDER + "/endergenic/endergenic");
 
         registerBlazingGenerator();
-        singleTextureBlock(BlazingSetup.BLAZING_AGITATOR.get(), "blazing_agitator", BLOCK_FOLDER + "/blazing/blazing_agitator");
+        simpleBlock(BlazingSetup.BLAZING_AGITATOR.get(), models().slab("blazing_agitator",
+                modLoc("block/blazing/blazing_agitator_side"),
+                new ResourceLocation("rftoolsbase", "block/base/machinebottom"),
+                new ResourceLocation("rftoolsbase", "block/base/machinetop")));
         orientedBlock(BlazingSetup.BLAZING_INFUSER.get(), frontBasedModel("blazing_infuser", modLoc("block/blazing/blazing_infuser")));
     }
 

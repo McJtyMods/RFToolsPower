@@ -5,14 +5,14 @@ import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
+import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiBlazingGenerator extends GenericGuiContainer<BlazingAgitatorTileEntity, GenericContainer> {
+public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTileEntity, GenericContainer> {
 
-    public GuiBlazingGenerator(BlazingAgitatorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
+    public GuiBlazingGenerator(BlazingGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
         super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:xxx"));   // @todo 1.15 manual
     }
 

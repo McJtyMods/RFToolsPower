@@ -4,6 +4,7 @@ import mcjty.lib.compat.theoneprobe.McJtyLibTOPDriver;
 import mcjty.lib.compat.theoneprobe.TOPDriver;
 import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
@@ -208,7 +209,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (BlazingAgitatorDriver te) -> {
+            Tools.safeConsume(world.getTileEntity(data.getPos()), (BlazingAgitatorTileEntity te) -> {
                 // @todo
             }, "Bad tile entity!");
         }
