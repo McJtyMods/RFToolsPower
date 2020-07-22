@@ -31,7 +31,11 @@
     "message.rftoolspower.power_core1.header": "This item is a crafting ingredient for powercells",
     "message.rftoolspower.power_core2.header": "This item is a crafting ingredient for powercells",
     "message.rftoolspower.power_core3.header": "This item is a crafting ingredient for powercells",
+
     "message.rftoolspower.blazing_rod.header": "This item is produced by the Blazing Agitator and used in the Blazing Generator to generate power",
+    "message.rftoolspower.blazing_rod.time": "Time: ",
+    "message.rftoolspower.blazing_rod.quality": "Quality: ",
+    "message.rftoolspower.blazing_rod.duration": "Duration: ",
 
     "message.rftoolspower.cell1.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
     "message.rftoolspower.cell1.info": "Power: ",
