@@ -9,21 +9,20 @@ import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.*;
-import mcjty.lib.gui.widgets.ImageChoiceLabel;
+import mcjty.lib.container.AutomationFilterItemHander;
+import mcjty.lib.container.ContainerFactory;
+import mcjty.lib.container.GenericContainer;
+import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
-import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.lib.varia.RedstoneMode;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -50,8 +49,6 @@ import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
 public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
-
-    public static final String CMD_RSMODE = "coalgen.setRsMode";
 
     public static final int SLOT_COALINPUT = 0;
     public static final int SLOT_CHARGEITEM = 1;
@@ -202,30 +199,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         infoTag.putInt("burning", burning);
         return tagCompound;
     }
-
-    @Override
-    public boolean execute(PlayerEntity playerMP, String command, TypedMap params) {
-        boolean rc = super.execute(playerMP, command, params);
-        if (rc) {
-            return true;
-        }
-        if (CMD_RSMODE.equals(command)) {
-            setRSMode(RedstoneMode.values()[params.get(ImageChoiceLabel.PARAM_CHOICE_IDX)]);
-            return true;
-        }
-
-        return false;
-    }
-
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    @Optional.Method(modid = "waila")
-//    public void addWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-//        super.addWailaBody(itemStack, currenttip, accessor, config);
-//        if (isWorking()) {
-//            currenttip.add(TextFormatting.GREEN + "Producing " + getRfPerTick() + " RF/t");
-//        }
-//    }
 
     private IPowerInformation createPowerInfo() {
         return new IPowerInformation() {

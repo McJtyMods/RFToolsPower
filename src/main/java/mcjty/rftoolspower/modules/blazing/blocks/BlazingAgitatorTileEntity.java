@@ -22,6 +22,7 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
+import mcjty.rftoolspower.modules.blazing.items.BlazingRodStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -38,6 +39,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -98,6 +100,12 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     public static final Key<Boolean> VALUE_LOCK_21 = new Key<>("lock21", Type.BOOLEAN);
     public static final Key<Boolean> VALUE_LOCK_22 = new Key<>("lock22", Type.BOOLEAN);
 
+    // For the client (renderer): rotation speed and current angle
+    private float[] rotationSpeed = new float[9];
+    private float[] currentAngle = new float[9];
+    // Update on server to notify the client:
+    private int updateSpeedCounter = 10;  // Every 10 ticks we check if we potentially have to update rotation speed on the client
+
     @Override
     public IValue<?>[] getValues() {
         return new IValue[] {
@@ -113,10 +121,12 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         };
     }
 
+    private BlazingAgitatorAlgorithm algorithm;
     private boolean locked[] = new boolean[BUFFER_SIZE];
 
     public BlazingAgitatorTileEntity() {
         super(BlazingSetup.TYPE_BLAZING_AGITATOR.get());
+        algorithm = new BlazingAgitatorAlgorithm(slot -> new BlazingRodStack(items.getStackInSlot(slot)));
     }
 
     public static BaseBlock createBlock() {
@@ -140,6 +150,22 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
+    public void writeClientDataToNBT(CompoundNBT tagCompound) {
+        super.writeClientDataToNBT(tagCompound);
+        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+            tagCompound.putFloat("rs" + i, rotationSpeed[i]);
+        }
+    }
+
+    @Override
+    public void readClientDataFromNBT(CompoundNBT tagCompound) {
+        super.readClientDataFromNBT(tagCompound);
+        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+            rotationSpeed[i] = tagCompound.getFloat("rs" + i);
+        }
+    }
+
+    @Override
     protected boolean needsRedstoneMode() {
         return true;
     }
@@ -147,43 +173,63 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     @Override
     public void tick() {
         if (!world.isRemote) {
+            boolean active = false;
             if (isMachineEnabled()) {
                 if (storage.getEnergy() >= BlazingConfiguration.AGITATOR_USE_PER_TICK.get()) {
                     storage.consumeEnergy(BlazingConfiguration.AGITATOR_USE_PER_TICK.get());
-                    for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-                        ItemStack stack = items.getStackInSlot(i);
-                        if (!stack.isEmpty()) {
-                            if (stack.getItem() == Items.BLAZE_ROD) {
-                                items.setStackInSlot(i, new ItemStack(BlazingSetup.BLAZING_ROD.get()));
-                                markDirtyQuick();
-                            } else {
-                                float timeLeft = BlazingRod.getAgitationTimeLeft(stack);
-                                if (timeLeft > 0) {
-                                    tickBlazingRod(i, stack, timeLeft);
-                                } else if (!locked[i]) {
-                                    moveToOutput(i, stack);
-                                }
-                            }
-                        }
+                    active = true;
+                    tickRods();
+                }
+            }
+
+            updateClientRotationSpeed(active);
+        }
+    }
+
+    private void tickRods() {
+        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+            ItemStack stack = items.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                if (stack.getItem() == Items.BLAZE_ROD) {
+                    items.setStackInSlot(i, new ItemStack(BlazingSetup.BLAZING_ROD.get()));
+                } else {
+                    float timeLeft = BlazingRod.getAgitationTimeLeft(stack);
+                    if (timeLeft > 0) {
+                        algorithm.tickBlazingRod(i, new BlazingRodStack(stack), timeLeft, infusable.getInfusedFactor());
+                    } else if (!locked[i]) {
+                        moveToOutput(i, stack);
                     }
                 }
+                markDirtyQuick();
             }
         }
     }
 
-    private void tickBlazingRod(int i, ItemStack stack, float timeLeft) {
-        float adjacencyFactor = calculateAdjacencyFactor(i);
-        timeLeft -= adjacencyFactor / 5;
-        BlazingRod.setAgitationTimeLeft(stack, timeLeft);
-
-        float powerQuality = BlazingRod.getPowerQuality(stack);
-        powerQuality += adjacencyFactor * 10;
-        BlazingRod.setPowerQuality(stack, powerQuality);
-
-        float powerDuration = BlazingRod.getPowerDuration(stack);
-        powerDuration += adjacencyFactor;
-        BlazingRod.setPowerDuration(stack, powerDuration);
-        markDirtyQuick();
+    private void updateClientRotationSpeed(boolean active) {
+        updateSpeedCounter--;
+        if (updateSpeedCounter < 0) {
+            updateSpeedCounter = 10;
+            boolean changed = false;
+            // Check for current speed
+            for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+                float newspeed = 0;
+                if (active) {
+                    ItemStack stack = items.getStackInSlot(i);
+                    if (!stack.isEmpty()) {
+                        float percentage = BlazingRod.getAgitationTimePercentage(stack);
+                        newspeed = percentage / 50.0f;
+                    }
+                }
+                if (Math.abs(newspeed - rotationSpeed[i]) > 0.01) {
+                    rotationSpeed[i] = newspeed;
+                    changed = true;
+                }
+            }
+            if (changed) {
+                BlockState state = getBlockState();
+                world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NO_RERENDER);
+            }
+        }
     }
 
     private void moveToOutput(int i, ItemStack stack) {
@@ -192,49 +238,21 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             if (items.getStackInSlot(j).isEmpty()) {
                 items.setStackInSlot(i, ItemStack.EMPTY);
                 items.setStackInSlot(j, stack);
-                markDirtyQuick();
                 return;
             }
         }
     }
 
-    /// Calculate the quality factor for this rod alone without looking at neighbours
-    private float calculateQualityFactor(int i) {
-        ItemStack stack = items.getStackInSlot(i);
-        if (!stack.isEmpty()) {
-            float duration = BlazingRod.getPowerDuration(stack) / 10.0f;
-            float quality = BlazingRod.getPowerQuality(stack) / 5000.0f;
-            return (duration + quality) / 2.0f;
-        }
-        return 0;
+    public float getCurrentAngle(int x, int y) {
+        return currentAngle[y*3 + x];
     }
 
-    /// Calculate the difference between the main quality factor and the quality factor for this rod alone and account for empty stack penalty
-    private float calculateQualityFactorDiff(float fThis, int i, int x, int y) {
-        if (x < 0 || y < 0 || x > 2 || y > 2) {
-            return -.03f;      // Penalty for empty slot
-        }
-        ItemStack stack = items.getStackInSlot(i);
-        if (stack.isEmpty()) {
-            return -.03f;      // Penalty for empty slot
-        }
-        return calculateQualityFactor(i) - fThis;
+    public void setCurrentAngle(int x, int y, float currentAngle) {
+        this.currentAngle[y*3 + x] = currentAngle;
     }
 
-    /// Calculate the quality factor for this slot given the adjacent slots
-    private float calculateAdjacencyFactor(int i) {
-        float fThis = calculateQualityFactor(i);
-        int x = i % 3;
-        int y = i / 3;
-        float factor = 1.0f;
-        factor += calculateQualityFactorDiff(fThis, i - 1, x-1, y);    // Index left
-        factor += calculateQualityFactorDiff(fThis, i + 1, x+1, y);    // Index right
-        factor += calculateQualityFactorDiff(fThis, i - 3, x, y-1);    // Index top
-        factor += calculateQualityFactorDiff(fThis, i + 3, x, y+1);    // Index bottom
-        if (factor < 0.01f) {
-            factor = 0.01f;
-        }
-        return factor / 4;
+    public float getRotationSpeed(int x, int y) {
+        return rotationSpeed[y*3 + x];
     }
 
     public boolean isLocked(int x, int y) {
@@ -268,6 +286,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         }
         info.putByteArray("locked", bytes);
     }
+
 
     private NoDirectionItemHander createItemHandler() {
         return new NoDirectionItemHander(this, CONTAINER_FACTORY.get()) {

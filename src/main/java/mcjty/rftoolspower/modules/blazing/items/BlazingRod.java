@@ -15,7 +15,9 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 
 public class BlazingRod extends Item {
 
-    public static final float MAXTIME = 20.0f * 60.0f;
+    public static final float MAXTIME = 20.0f * 30.0f;
+    public static final float START_QUALITY = 40000f;
+    public static final float START_DURATION = 20f;
 
     private final TooltipBuilder tooltipBuilder = new TooltipBuilder()
             .info(key("message.rftoolsbase.shiftmessage"))
@@ -51,7 +53,7 @@ public class BlazingRod extends Item {
 
     // Quality is expressed in RF per 1000 ticks
     public static float getPowerQuality(ItemStack stack) {
-        return NBTTools.getFloat(stack, "quality", 5000f);
+        return NBTTools.getFloat(stack, "quality", START_QUALITY);
     }
 
     public static void setPowerQuality(ItemStack stack, float quality) {
@@ -64,7 +66,7 @@ public class BlazingRod extends Item {
 
     // Duration is expressed in ticks
     public static float getPowerDuration(ItemStack stack) {
-        return NBTTools.getFloat(stack, "duration", 10f);
+        return NBTTools.getFloat(stack, "duration", START_DURATION);
     }
 
     public static void setPowerDuration(ItemStack stack, float duration) {

@@ -1,7 +1,7 @@
 window {
     size(180,152)
 
-    event('redstone','coalgen.setRsMode')
+    event('redstone','mcjtylib.setRsMode')
 
     panel('','positional') {
         bg1('rftoolspower:textures/gui/coalgenerator.png')
