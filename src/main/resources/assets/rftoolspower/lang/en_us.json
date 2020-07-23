@@ -34,7 +34,7 @@
 
     "message.rftoolspower.blazing_rod.header": "This item is produced by the Blazing Agitator and used in the Blazing Generator to generate power",
     "message.rftoolspower.blazing_rod.time": "Time: ",
-    "message.rftoolspower.blazing_rod.quality": "Quality: ",
+    "message.rftoolspower.blazing_rod.power": "Power: ",
     "message.rftoolspower.blazing_rod.duration": "Duration: ",
 
     "message.rftoolspower.cell1.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",

@@ -74,7 +74,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     });
 
 
-    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
+    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
             BlazingConfiguration.AGITATOR_ENERGY_INPUT_PERTICK.get());
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
 
@@ -173,15 +173,15 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     private void tickBlazingRod(int i, ItemStack stack, float timeLeft) {
         float adjacencyFactor = calculateAdjacencyFactor(i);
-        timeLeft -= adjacencyFactor;
+        timeLeft -= adjacencyFactor / 5;
         BlazingRod.setAgitationTimeLeft(stack, timeLeft);
 
         float powerQuality = BlazingRod.getPowerQuality(stack);
-        powerQuality += timeLeft * adjacencyFactor;
+        powerQuality += adjacencyFactor * 10;
         BlazingRod.setPowerQuality(stack, powerQuality);
 
         float powerDuration = BlazingRod.getPowerDuration(stack);
-        powerDuration += timeLeft * adjacencyFactor;
+        powerDuration += adjacencyFactor;
         BlazingRod.setPowerDuration(stack, powerDuration);
         markDirtyQuick();
     }
@@ -202,8 +202,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     private float calculateQualityFactor(int i) {
         ItemStack stack = items.getStackInSlot(i);
         if (!stack.isEmpty()) {
-            float duration = BlazingRod.getPowerDuration(stack);
-            float quality = BlazingRod.getPowerQuality(stack) / 1000.0f;
+            float duration = BlazingRod.getPowerDuration(stack) / 10.0f;
+            float quality = BlazingRod.getPowerQuality(stack) / 5000.0f;
             return (duration + quality) / 2.0f;
         }
         return 0;
@@ -212,13 +212,13 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     /// Calculate the difference between the main quality factor and the quality factor for this rod alone and account for empty stack penalty
     private float calculateQualityFactorDiff(float fThis, int i, int x, int y) {
         if (x < 0 || y < 0 || x > 2 || y > 2) {
-            return -.1f;      // Penalty for empty slot
+            return -.03f;      // Penalty for empty slot
         }
         ItemStack stack = items.getStackInSlot(i);
         if (stack.isEmpty()) {
-            return -.1f;      // Penalty for empty slot
+            return -.03f;      // Penalty for empty slot
         }
-        return fThis - calculateQualityFactor(i);
+        return calculateQualityFactor(i) - fThis;
     }
 
     /// Calculate the quality factor for this slot given the adjacent slots
