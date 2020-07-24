@@ -13,20 +13,25 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -46,7 +51,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
-            .box(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, 0, 10, 25, 3, 3)
+            .box(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, 0, 45, 6, 3, 3)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
@@ -60,7 +65,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
             .containerSupplier((windowId,player) -> new GenericContainer(BlazingSetup.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
@@ -68,6 +73,14 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     public BlazingGeneratorTileEntity() {
         super(BlazingSetup.TYPE_BLAZING_GENERATOR.get());
     }
+
+
+    // Maximum RF/tick for a slot for the given blazing rod
+    private int rfPerTickMax[] = new int[BUFFER_SIZE];
+    // Current RF/tick for a slot
+    private float rfPerTick[] = new float[BUFFER_SIZE];
+    // Ticks remaining until the blazing rod is spent
+    private int ticksRemaining[] = new int[BUFFER_SIZE];
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
@@ -85,9 +98,104 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
         };
     }
 
+
+
+    @Override
+    protected boolean needsRedstoneMode() {
+        return true;
+    }
+
     @Override
     public void tick() {
+        if (!world.isRemote) {
+            handleSendingEnergy();
+            handlePowerGeneration();
+        }
+    }
 
+    @Override
+    public void setPowerInput(int powered) {
+        if (powerLevel != powered) {
+            super.setPowerInput(powered);
+            for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+                updateSlot(i);
+            }
+            BlockState state = world.getBlockState(pos);
+            if (state.get(WORKING) != isMachineEnabled()) {
+                world.setBlockState(pos, state.with(WORKING, isMachineEnabled()), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            }
+        }
+    }
+
+    private void handleSendingEnergy() {
+        long storedPower = storage.getEnergy();
+        EnergyTools.handleSendingEnergy(world, pos, storedPower, BlazingConfiguration.GENERATOR_SENDPERTICK.get(), storage);
+    }
+
+    private void handlePowerGeneration() {
+        int totalRfGenerated = 0;
+        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+            if (rfPerTick[i] > rfPerTickMax[i]) {
+                // We need to bring power down
+                rfPerTick[i] = (rfPerTickMax[i] + rfPerTick[i]) / 2;
+            } else if (rfPerTick[i] < rfPerTickMax[i]) {
+                // We need to bring power up
+                rfPerTick[i] += (((float)rfPerTickMax[i]) - rfPerTick[i]) / 80.0f;
+                if (rfPerTick[i] > rfPerTickMax[i]) {
+                    rfPerTick[i] = rfPerTickMax[i];
+                }
+            }
+            totalRfGenerated += rfPerTick[i];
+            if (isMachineEnabled()) {
+                ticksRemaining[i]--;
+                ItemStack stack = items.getStackInSlot(i);
+                if (ticksRemaining[i] <= 0) {
+                    ticksRemaining[i] = 0;
+                    rfPerTickMax[i] = 0;
+                    if (!stack.isEmpty()) {
+                        items.setStackInSlot(i, ItemStack.EMPTY);
+                    }
+                } else {
+                    if (!stack.isEmpty()) {
+                        BlazingRod.setPowerDuration(stack, ticksRemaining[i]);
+                    }
+                }
+            }
+        }
+        storage.produceEnergy(totalRfGenerated);
+
+        markDirtyQuick();
+    }
+
+    private void updateSlot(int slot) {
+        ItemStack stack = items.getStackInSlot(slot);
+        if (stack.isEmpty() || !isMachineEnabled()) {
+            rfPerTickMax[slot] = 0;
+            ticksRemaining[slot] = 0;
+        } else {
+            rfPerTickMax[slot] = BlazingRod.getRfPerTick(stack);
+            ticksRemaining[slot] = BlazingRod.getTotalTicks(stack);
+        }
+    }
+
+    @Override
+    public void read(CompoundNBT tagCompound) {
+        super.read(tagCompound);
+        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+            rfPerTickMax[i] = tagCompound.getInt("rftMax" + i);
+            rfPerTick[i] = tagCompound.getFloat("rft" + i);
+            ticksRemaining[i] = tagCompound.getInt("ticks" + i);
+        }
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tagCompound) {
+        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+            tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
+            tagCompound.putFloat("rft" + i, rfPerTick[i]);
+            tagCompound.putInt("ticks" + i, ticksRemaining[i]);
+        }
+        return super.write(tagCompound);
     }
 
     private NoDirectionItemHander createItemHandler() {
@@ -100,6 +208,12 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
             @Override
             public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
                 return isItemValid(slot, stack);
+            }
+
+            @Override
+            protected void onUpdate(int index) {
+                updateSlot(index);
+                super.onUpdate(index);
             }
         };
     }

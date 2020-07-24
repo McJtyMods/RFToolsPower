@@ -22,7 +22,7 @@ public class BlazingRod extends Item {
     private final TooltipBuilder tooltipBuilder = new TooltipBuilder()
             .info(key("message.rftoolsbase.shiftmessage"))
             .infoShift(header(),
-                    parameter("time", stack -> getAgitationTimePercentage(stack) + "%"),
+                    parameter("time", BlazingRod::isCharging, stack -> getAgitationTimePercentage(stack) + "%"),
                     parameter("power", stack -> getRfPerTick(stack) + " RF/t"),
                     parameter("duration", stack -> getTotalTicks(stack) + " ticks"));
 
@@ -35,6 +35,11 @@ public class BlazingRod extends Item {
     public void addInformation(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flags) {
         super.addInformation(itemStack, world, list, flags);
         tooltipBuilder.makeTooltip(getRegistryName(), itemStack, list, flags);
+    }
+
+    public static boolean isCharging(ItemStack stack) {
+        float left = getAgitationTimeLeft(stack);
+        return left > 0;
     }
 
     // Get time left (in ticks) before ready

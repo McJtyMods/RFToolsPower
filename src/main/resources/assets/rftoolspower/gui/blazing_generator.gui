@@ -1,6 +1,34 @@
 window {
     size(180,152)
+    event('redstone','mcjtylib.setRsMode')
     panel('','positional') {
         bg1('rftoolspower:textures/gui/blazing_generator.png')
+        energybar('energybar') {
+            hint(10,7,8,38)
+            showtext(false)
+        }
+        imagechoicelabel('redstone') {
+            channel('redstone')
+            hint(6,44,16,16)
+            image('rftoolsbase:textures/gui/guielements.png')
+            dim(32,0,256,256)
+            choices {
+                choice('Ignored') {
+                    uv(0,0)
+                    tooltips('Redstone mode:','Ignored')
+                    image('rftoolsbase:textures/gui/guielements.png')
+                }
+                choice('Off') {
+                    uv(16,0)
+                    tooltips('Redstone mode:','Off to activate')
+                    image('rftoolsbase:textures/gui/guielements.png')
+                }
+                choice('On') {
+                    uv(32,0)
+                    tooltips('Redstone mode:','On to activate')
+                    image('rftoolsbase:textures/gui/guielements.png')
+                }
+            }
+        }
     }
 }

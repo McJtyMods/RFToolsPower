@@ -16,7 +16,6 @@ import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
@@ -31,10 +30,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -63,12 +61,16 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
     private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0));
+    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
-    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(CoalGeneratorTileEntity.this));
+
+    private final IInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);
+    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
     private final LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(this::createPowerInfo);
 
     private int burning;
@@ -113,40 +115,42 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public void tick() {
         if (!world.isRemote) {
 
-            energyHandler.ifPresent(energy -> {
-                markDirtyQuick();
-                handleChargingItem(items, energy);
-                handleSendingEnergy(energy);
+            markDirtyQuick();
+            handleChargingItem(items);
+            handleSendingEnergy();
 
-                if (!isMachineEnabled()) {
-                    return;
-                }
-
-                if (burning > 0) {
-                    burning--;
-                    long rf = getRfPerTick();
-                    energy.produceEnergy(rf);
-                } else if (!items.getStackInSlot(SLOT_COALINPUT).isEmpty()) {
-                    ItemStack extracted = items.extractItem(SLOT_COALINPUT, 1, false);
-                    burning = CoalGeneratorConfig.TICKSPERCOAL.get();
-                    if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
-                        burning *= 9;
-                    }
-                    float factor = infusableHandler.map(IInfusable::getInfusedFactor).orElse(0.0f);
-                    burning += (int) (burning * factor / 2.0f);
-                }
-            });
-
-            BlockState state = world.getBlockState(pos);
-            if (state.get(BlockStateProperties.LIT) != isWorking()) {
-                world.setBlockState(pos, state.with(BlockStateProperties.LIT, isWorking()), 3);
+            if (!isMachineEnabled()) {
+                return;
             }
+
+            handlePowerGeneration();
+        }
+    }
+
+    private void handlePowerGeneration() {
+        if (burning > 0) {
+            burning--;
+            long rf = getRfPerTick();
+            storage.produceEnergy(rf);
+        } else if (!items.getStackInSlot(SLOT_COALINPUT).isEmpty()) {
+            ItemStack extracted = items.extractItem(SLOT_COALINPUT, 1, false);
+            burning = CoalGeneratorConfig.TICKSPERCOAL.get();
+            if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
+                burning *= 9;
+            }
+            float factor = infusable.getInfusedFactor();
+            burning += (int) (burning * factor / 2.0f);
+        }
+
+        BlockState state = world.getBlockState(pos);
+        if (state.get(BlockStateProperties.LIT) != isWorking()) {
+            world.setBlockState(pos, state.with(BlockStateProperties.LIT, isWorking()), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
     }
 
     public long getRfPerTick() {
         long rf = CoalGeneratorConfig.RFPERTICK.get();
-        float factor = infusableHandler.map(IInfusable::getInfusedFactor).orElse(0.0f);
+        float factor = infusable.getInfusedFactor();
         rf += (long) (rf * factor);
         return rf;
     }
@@ -155,7 +159,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         return burning > 0 && isMachineEnabled();
     }
 
-    private void handleChargingItem(IItemHandler handler, GenericEnergyStorage storage) {
+    private void handleChargingItem(IItemHandler handler) {
         ItemStack stack = handler.getStackInSlot(SLOT_CHARGEITEM);
         if (!stack.isEmpty()) {
             long storedPower = storage.getEnergy();
@@ -165,23 +169,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         }
     }
 
-    private void handleSendingEnergy(GenericEnergyStorage storage) {
+    private void handleSendingEnergy() {
         long storedPower = storage.getEnergy();
-
-        for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-            BlockPos p = pos.offset(facing);
-            TileEntity te = world.getTileEntity(p);
-            Direction opposite = facing.getOpposite();
-            if (EnergyTools.isEnergyTE(te, opposite)) {
-                long rfToGive = Math.min(CoalGeneratorConfig.SENDPERTICK.get(), storedPower);
-                long received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
-                storage.consumeEnergy(received);
-                storedPower = storage.getEnergy();
-                if (storedPower <= 0) {
-                    break;
-                }
-            }
-        }
+        EnergyTools.handleSendingEnergy(world, pos, storedPower, CoalGeneratorConfig.SENDPERTICK.get(), storage);
     }
     
     @Override

@@ -14,9 +14,9 @@ public class EndergenicConfiguration {
     public static ForgeConfigSpec.IntValue rfToHoldPearl;
     // This value indicates how much RF will be kept in the internal buffer (not given to conduits and machines next to it) as
     // a reserve to be able to hold pearls.
-    public static ForgeConfigSpec.IntValue keepRfInBuffer;
+    public static ForgeConfigSpec.IntValue ENDERGENIC_KEEPRF;
     // This value indicates how much RF/tick this block can send out to neighbours
-    public static ForgeConfigSpec.IntValue rfOutput;
+    public static ForgeConfigSpec.IntValue ENDERGENIC_SENDPERTICK;
     public static ForgeConfigSpec.IntValue goodParticleCount;
     public static ForgeConfigSpec.IntValue badParticleCount;
 
@@ -35,12 +35,12 @@ public class EndergenicConfiguration {
         rfToHoldPearl = SERVER_BUILDER
                 .comment("The amount of RF that is consumed every tick to hold the endergenic pearl")
                 .defineInRange("endergenicRfHolding", 500, 0, Integer.MAX_VALUE);
-        keepRfInBuffer = SERVER_BUILDER
+        ENDERGENIC_KEEPRF = SERVER_BUILDER
                 .comment("The amount of RF that every endergenic will keep itself (so that it can hold pearls)")
                 .defineInRange("endergenicKeepRf", 2000, 0, Integer.MAX_VALUE);
-        rfOutput = SERVER_BUILDER
+        ENDERGENIC_SENDPERTICK = SERVER_BUILDER
                 .comment("The amount of RF per tick that this generator can give from its internal buffer to adjacent blocks")
-                .defineInRange("endergenicRfOutput", 20000, 0, Integer.MAX_VALUE);
+                .defineInRange("endergenicSendPerTick", 20000, 0, Integer.MAX_VALUE);
         goodParticleCount = SERVER_BUILDER
                 .comment("The amount of particles to spawn whenever energy is generated (use 0 to disable)")
                 .defineInRange("endergenicGoodParticles", 10, 0, 1000);

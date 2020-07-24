@@ -6,6 +6,7 @@ public class BlazingConfiguration {
     public static final String CATEGORY_BLAZING = "blazing";
 
     public static ForgeConfigSpec.IntValue GENERATOR_MAXENERGY;
+    public static ForgeConfigSpec.IntValue GENERATOR_SENDPERTICK;
     public static ForgeConfigSpec.IntValue AGITATOR_MAXENERGY;
     public static ForgeConfigSpec.IntValue AGITATOR_ENERGY_INPUT_PERTICK;
     public static ForgeConfigSpec.IntValue AGITATOR_USE_PER_TICK;
@@ -17,6 +18,9 @@ public class BlazingConfiguration {
         GENERATOR_MAXENERGY = SERVER_BUILDER
                 .comment("Maximum amount of power the blazing generator can store")
                 .defineInRange("blazingGeneratorMaxPower", 1000000, 0, Integer.MAX_VALUE);
+        GENERATOR_SENDPERTICK = SERVER_BUILDER
+                .comment("Maximum amount of power the blazing generator give to adjacent machines per side and per tick")
+                .defineInRange("blazingGeneratorSendPerTick", 20000, 0, Integer.MAX_VALUE);
         AGITATOR_MAXENERGY = SERVER_BUILDER
                 .comment("Maximum amount of power the blazing agitator can store")
                 .defineInRange("blazingAgitatorMaxPower", 50000, 0, Integer.MAX_VALUE);

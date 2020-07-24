@@ -471,24 +471,11 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     private void handleSendingEnergy() {
-        long energyAvailable = storage.getEnergy() - EndergenicConfiguration.keepRfInBuffer.get();
-        if (energyAvailable <= 0) {
+        long storedPower = storage.getEnergy() - EndergenicConfiguration.ENDERGENIC_KEEPRF.get();
+        if (storedPower <= 0) {
             return;
         }
-
-        for (Direction dir : OrientationTools.DIRECTION_VALUES) {
-            BlockPos o = getPos().offset(dir);
-            TileEntity te = world.getTileEntity(o);
-            Direction opposite = dir.getOpposite();
-            if (EnergyTools.isEnergyTE(te, opposite)) {
-                long rfToGive = Math.min(EndergenicConfiguration.rfOutput.get(), energyAvailable);
-                long received = EnergyTools.receiveEnergy(te, opposite, rfToGive);
-                energyAvailable -= storage.extractEnergy((int)received, false);
-                if (energyAvailable <= 0) {
-                    break;
-                }
-            }
-        }
+        EnergyTools.handleSendingEnergy(world, pos, storedPower, EndergenicConfiguration.ENDERGENIC_SENDPERTICK.get(), storage);
     }
 
     // Handle all pearls that are currently in transit.
