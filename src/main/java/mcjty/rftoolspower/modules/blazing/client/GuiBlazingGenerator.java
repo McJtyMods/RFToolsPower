@@ -5,21 +5,21 @@ import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.ImageChoiceLabel;
-import mcjty.lib.tileentity.GenericEnergyStorage;
+import mcjty.lib.gui.widgets.Label;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.energy.CapabilityEnergy;
 
 public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTileEntity, GenericContainer> {
 
     private EnergyBar energyBar;
+    private Label[] labels = new Label[4];
 
     public GuiBlazingGenerator(BlazingGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:xxx"));   // @todo 1.15 manual
+        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"));
     }
 
     @Override
@@ -32,15 +32,18 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     private void initializeFields() {
         ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(tileEntity.getRSMode().ordinal());
         energyBar = window.findChild("energybar");
+        for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
+            labels[i] = window.findChild("gen" + i);
+        }
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         drawWindow();
+        updateEnergyBar(energyBar);
 
-        tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
-            energyBar.maxValue(((GenericEnergyStorage)e).getCapacity());
-            energyBar.value(((GenericEnergyStorage)e).getEnergy());
-        });
+        for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
+            labels[i].text(String.valueOf((int) tileEntity.getRfPerTick(i)));
+        }
     }
 }

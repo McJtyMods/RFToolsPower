@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.modules.blazing.blocks;
+package mcjty.rftoolspower.modules.blazing.logic;
 
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.IBlazingRod;
@@ -17,9 +17,9 @@ public class BlazingAgitatorAlgorithm {
     private float calculateQualityFactor(int i) {
         IBlazingRod stack = items.apply(i);
         if (stack.isValid()) {
-            float duration = stack.getPowerDuration() * BlazingRod.START_DURATION / 30000.0f;
+            float duration = stack.getPowerDuration() * BlazingRod.START_DURATION / 10000.0f;
             float quality = stack.getPowerQuality() * BlazingRod.START_QUALITY / 150000000.0f;
-            return (duration + quality) / 2.0f;
+            return Math.min((duration + quality) / 2.0f, 40.0f);
         }
         return 0;
     }
@@ -33,7 +33,11 @@ public class BlazingAgitatorAlgorithm {
         if (!stack.isValid()) {
             return -.03f;      // Penalty for empty slot
         }
-        return Math.max(-.03f, calculateQualityFactor(i) - fThis);
+        float max = calculateQualityFactor(i) - fThis;
+//        if (max > 2) {
+//            System.out.println("max = " + max);
+//        }
+        return Math.max(-.03f, max);
     }
 
     /// Calculate the quality factor for this slot given the adjacent slots

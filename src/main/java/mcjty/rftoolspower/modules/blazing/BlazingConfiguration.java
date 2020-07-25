@@ -7,9 +7,14 @@ public class BlazingConfiguration {
 
     public static ForgeConfigSpec.IntValue GENERATOR_MAXENERGY;
     public static ForgeConfigSpec.IntValue GENERATOR_SENDPERTICK;
+
     public static ForgeConfigSpec.IntValue AGITATOR_MAXENERGY;
     public static ForgeConfigSpec.IntValue AGITATOR_ENERGY_INPUT_PERTICK;
     public static ForgeConfigSpec.IntValue AGITATOR_USE_PER_TICK;
+
+    public static ForgeConfigSpec.IntValue INFUSER_MAXENERGY;
+    public static ForgeConfigSpec.IntValue INFUSER_ENERGY_INPUT_PERTICK;
+    public static ForgeConfigSpec.IntValue INFUSER_USE_PER_TICK;
 
     public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
         SERVER_BUILDER.comment("Settings for the blazing generator").push(CATEGORY_BLAZING);
@@ -30,6 +35,15 @@ public class BlazingConfiguration {
         AGITATOR_USE_PER_TICK = SERVER_BUILDER
                 .comment("Amount of RF per tick the agitator uses while operating")
                 .defineInRange("blazingAgitatorUsePerTick", 10, 0, Integer.MAX_VALUE);
+        INFUSER_MAXENERGY = SERVER_BUILDER
+                .comment("Maximum amount of power the blazing infuser can store")
+                .defineInRange("blazingInfuserMaxPower", 50000, 0, Integer.MAX_VALUE);
+        INFUSER_ENERGY_INPUT_PERTICK = SERVER_BUILDER
+                .comment("Amount of RF per tick input (per side) for the infuser")
+                .defineInRange("blazingInfuserRFPerTick", 100, 0, Integer.MAX_VALUE);
+        INFUSER_USE_PER_TICK = SERVER_BUILDER
+                .comment("Amount of RF per tick the infuser uses while operating")
+                .defineInRange("blazingInfuserUsePerTick", 10, 0, Integer.MAX_VALUE);
 
         SERVER_BUILDER.pop();
         CLIENT_BUILDER.pop();

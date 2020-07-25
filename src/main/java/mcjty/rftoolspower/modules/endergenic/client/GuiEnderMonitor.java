@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity, GenericContainer> {
 
     public GuiEnderMonitor(EnderMonitorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:varia/ender_monitor"));    // @todo 1.15 manual
+        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/endergenic"));
     }
 
     @Override

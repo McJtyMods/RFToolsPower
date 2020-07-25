@@ -16,13 +16,15 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 public class BlazingRod extends Item {
 
     public static final float MAXTIME = 20.0f * 30.0f;
-    public static final float START_QUALITY = 40000f;
+    public static final float START_QUALITY = 60000f;
     public static final float START_DURATION = 20f;
+    public static final int MAX_INFUSION_STEPS = 64;
 
     private final TooltipBuilder tooltipBuilder = new TooltipBuilder()
             .info(key("message.rftoolsbase.shiftmessage"))
             .infoShift(header(),
                     parameter("time", BlazingRod::isCharging, stack -> getAgitationTimePercentage(stack) + "%"),
+                    parameter("infused", BlazingRod::isInfused, stack -> getInfusionPercentage(stack) + "%"),
                     parameter("power", stack -> getRfPerTick(stack) + " RF/t"),
                     parameter("duration", stack -> getTotalTicks(stack) + " ticks"));
 
@@ -40,6 +42,25 @@ public class BlazingRod extends Item {
     public static boolean isCharging(ItemStack stack) {
         float left = getAgitationTimeLeft(stack);
         return left > 0;
+    }
+
+    public static boolean isInfused(ItemStack stack) {
+        int left = getInfusionStepsLeft(stack);
+        return left < MAX_INFUSION_STEPS;
+    }
+
+    public static int getInfusionPercentage(ItemStack stack) {
+        int left = getInfusionStepsLeft(stack);
+        return (MAX_INFUSION_STEPS - left) * 100 / MAX_INFUSION_STEPS;
+    }
+
+    // Get the number of infusing steps that are still possible
+    public static int getInfusionStepsLeft(ItemStack stack) {
+        return NBTTools.getInt(stack, "infSteps", MAX_INFUSION_STEPS);
+    }
+
+    public static void setInfusionStepsLeft(ItemStack stack, int steps) {
+        stack.getOrCreateTag().putInt("infSteps", steps);
     }
 
     // Get time left (in ticks) before ready

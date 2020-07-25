@@ -17,6 +17,16 @@ public class BlazingRodStack implements IBlazingRod {
     }
 
     @Override
+    public int getInfusionStepsLeft() {
+        return BlazingRod.getInfusionStepsLeft(stack);
+    }
+
+    @Override
+    public void setInfusionStepsLeft(int steps) {
+        BlazingRod.setInfusionStepsLeft(stack, steps);
+    }
+
+    @Override
     public float getAgitationTimeLeft() {
         return BlazingRod.getAgitationTimeLeft(stack);
     }

@@ -4,12 +4,28 @@ window {
     panel('','positional') {
         bg1('rftoolspower:textures/gui/blazing_generator.png')
         energybar('energybar') {
-            hint(10,7,8,38)
+            hint(165,7,8,38)
             showtext(false)
+        }
+        label('gen0') {
+            hint(30,7,50,18)
+            horizalign('ALIGN_LEFT')
+        }
+        label('gen1') {
+            hint(102,7,50,18)
+            horizalign('ALIGN_LEFT')
+        }
+        label('gen2') {
+            hint(30,43,50,18)
+            horizalign('ALIGN_LEFT')
+        }
+        label('gen3') {
+            hint(102,43,50,18)
+            horizalign('ALIGN_LEFT')
         }
         imagechoicelabel('redstone') {
             channel('redstone')
-            hint(6,44,16,16)
+            hint(155,44,16,16)
             image('rftoolsbase:textures/gui/guielements.png')
             dim(32,0,256,256)
             choices {

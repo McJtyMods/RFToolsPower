@@ -36,6 +36,7 @@
     "message.rftoolspower.blazing_rod.time": "Time: ",
     "message.rftoolspower.blazing_rod.power": "Power: ",
     "message.rftoolspower.blazing_rod.duration": "Duration: ",
+    "message.rftoolspower.blazing_rod.infused": "Infused: ",
 
     "message.rftoolspower.cell1.header": "This block can store power and can be combined with other cells to form a big multiblock. Right click with a wrench to toggle input/output mode for a side",
     "message.rftoolspower.cell1.info": "Power: ",
@@ -95,6 +96,10 @@
     "rftoolspower.category.monitor.description": "Solutions for monitoring power",
     "rftoolspower.entry.coalgenerator": "Coal Generator",
     "rftoolspower.page.coalgenerator0": "The Coal Generator can convert coal and blocks of coal to power",
+    "rftoolspower.entry.endergenic": "Endergenic Generator",
+    "rftoolspower.page.endergenic0": "The Endergenic Generator is a more complicated power generation that can produce a lot of power given a constant stream of ender pearls, todo ... more information",
+    "rftoolspower.entry.blazinggenerator": "Blazing Generator",
+    "rftoolspower.page.blazinggenerator0": "The Blazing Generator can generate power out of Blaze Rods, todo ... more information",
     "rftoolspower.entry.powercell": "Power Cell",
     "rftoolspower.page.powercell0": "The Power Cell can be used to store massive amounts of power. You can combine them to form a big multiblock",
     "rftoolspower.entry.dimensionalcell": "Dimensional Cell",

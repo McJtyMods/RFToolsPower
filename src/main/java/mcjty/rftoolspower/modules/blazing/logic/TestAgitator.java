@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.modules.blazing.blocks;
+package mcjty.rftoolspower.modules.blazing.logic;
 
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.IBlazingRod;
@@ -13,6 +13,7 @@ public class TestAgitator {
         private float time = BlazingRod.MAXTIME;
         private float quality = BlazingRod.START_QUALITY;
         private float duration = BlazingRod.START_DURATION;
+        private int infusionSteps = BlazingRod.MAX_INFUSION_STEPS;
 
         public static IBlazingRod EMPTY = new DummyBlazingRod() {
             @Override
@@ -34,11 +35,22 @@ public class TestAgitator {
             this.time = other.getAgitationTimeLeft();
             this.quality = other.getPowerQuality();
             this.duration = other.getPowerDuration();
+            this.infusionSteps = other.getInfusionStepsLeft();
         }
 
         @Override
         public boolean isValid() {
             return true;
+        }
+
+        @Override
+        public int getInfusionStepsLeft() {
+            return infusionSteps;
+        }
+
+        @Override
+        public void setInfusionStepsLeft(int steps) {
+            infusionSteps = steps;
         }
 
         @Override
@@ -106,7 +118,7 @@ public class TestAgitator {
         stacks[slot] = stack;
     }
 
-    private static IBlazingRod doTest(String header, Consumer<TestAgitator> setup) {
+    private static IBlazingRod doTest(String header, boolean silent, Consumer<TestAgitator> setup) {
         TestAgitator agitator = new TestAgitator();
         setup.accept(agitator);
         IBlazingRod rod = agitator.tick();
@@ -115,28 +127,68 @@ public class TestAgitator {
             rod = agitator.tick();
             ticks++;
         }
-        System.out.println("=== " + header + " ===");
-        System.out.println("    ticks = " + ticks + ", seconds = " + (ticks / 20) + ", minutes = " + (ticks / 20 / 60));
-        System.out.println("    timeLeft = " + rod.getAgitationTimeLeft());
-        System.out.println("    quality = " + rod.getPowerQuality() + " (from " + BlazingRod.START_QUALITY + ")");
-        System.out.println("    duration = " + rod.getPowerDuration() + " (from " + BlazingRod.START_DURATION + ")    -> total " + (rod.getPowerQuality() / 1000 * rod.getPowerDuration()) + " RF (" + (60*600) + " RF coalgen)");
+        if (!silent) {
+            System.out.println("=== " + header + " ===");
+            System.out.println("    ticks = " + ticks + ", seconds = " + (ticks / 20) + ", minutes = " + (ticks / 20 / 60) + ", timeLeft = " + rod.getAgitationTimeLeft());
+            dumpRod(rod, null);
+        }
         return rod;
     }
 
+    private static void dumpRod(IBlazingRod rod, String message) {
+        if (message != null) {
+            System.out.print("=== " + message + " ===");
+        }
+        System.out.println("    qual/dur = " + rod.getPowerQuality() + " (" + BlazingRod.START_QUALITY + "), "  + rod.getPowerDuration() + " (" + BlazingRod.START_DURATION + ")    -> total " + (rod.getPowerQuality() / 1000 * rod.getPowerDuration()) + " RF (" + (60*600) + " RF coalgen)");
+    }
+
+    private static void improveDuration(IBlazingRod stack, float factor) {
+        float duration = stack.getPowerDuration();
+        duration += duration * factor / (100 * BlazingRod.MAX_INFUSION_STEPS);
+        stack.setPowerDuration(duration);
+    }
+
+    private static void improveQuality(IBlazingRod stack, float factor) {
+        float quality = stack.getPowerQuality();
+        quality += quality * factor / (100 * BlazingRod.MAX_INFUSION_STEPS);
+        stack.setPowerQuality(quality);
+    }
+
+    private static void infuse(IBlazingRod input, int steps, float powerFactor, float durationFactor) {
+        for (int i = 0 ; i < steps ; i++) {
+            improveQuality(input, powerFactor);
+            improveDuration(input, durationFactor);
+        }
+    }
+
     public static void main(String[] args) {
-        IBlazingRod fullTestRod = doTest("Full Test", a -> {
-            for (int i = 0 ; i < BUFFER_SIZE ; i++) {
+        IBlazingRod fullTestRod = doTest("Full Test", true, a -> {
+            for (int i = 0; i < BUFFER_SIZE; i++) {
                 a.setStack(i, new DummyBlazingRod());
             }
         });
 
-
-        IBlazingRod rod = doTest("Rod Phase 1", a -> {
+        IBlazingRod rod = doTest("Rod Phase 1", true, a -> {
             a.setStack(4, new DummyBlazingRod());
         });
-        for (int i = 2 ; i < 15 ; i++) {
+        dumpRod(rod, "First phase");
+
+        IBlazingRod previousRod = rod;
+        for (int steps = 5 ; steps < 40 ; steps += 5) {
+            rod = iterationTest(steps);
+            System.out.println("=== DIFF      ===    " + (rod.getPowerQuality() - previousRod.getPowerQuality()) + ", " + (rod.getPowerDuration() - previousRod.getPowerDuration()));
+            previousRod = rod;
+        }
+    }
+
+    private static IBlazingRod iterationTest(int steps) {
+        System.out.println("#################### ITERATION TEST " + steps + " ###################");
+        IBlazingRod rod = doTest("Rod Phase 1", true, a -> {
+            a.setStack(4, new DummyBlazingRod());
+        });
+        for (int i = 2; i < steps; i++) {
             IBlazingRod finalRod = rod;
-            IBlazingRod rodNew = doTest("Rod Phase " + i, a -> {
+            IBlazingRod rodNew = doTest("Rod Phase " + i, true, a -> {
                 a.setStack(4, new DummyBlazingRod());
                 a.setStack(1, new DummyBlazingRod(finalRod));
                 a.setStack(3, new DummyBlazingRod(finalRod));
@@ -145,6 +197,11 @@ public class TestAgitator {
             });
             rod = rodNew;
         }
+
+        dumpRod(rod, "Iteration");
+        infuse(rod, 64, 120, 120);
+        dumpRod(rod, "Infused  ");
+        return rod;
     }
 
 }

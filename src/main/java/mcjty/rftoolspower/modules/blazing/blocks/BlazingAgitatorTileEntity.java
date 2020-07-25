@@ -23,6 +23,7 @@ import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRodStack;
+import mcjty.rftoolspower.modules.blazing.logic.BlazingAgitatorAlgorithm;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -57,7 +58,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     public static int BUFFER_SIZE = 9;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE * 2)
-            .box(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get()), new ItemStack(Items.BLAZE_ROD)), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
+            .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
             .box(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
             .playerSlots(10, 70));
 
@@ -147,6 +148,18 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
                 return SLAB;
             }
         };
+    }
+
+    // Return true if this blaze rod or blazing rod is valid on the left side. This means
+    // it must be either a normal blaze rod, or else it must be a non-infused blazing rod
+    private static boolean isValidBlazingRod(ItemStack stack) {
+        if (stack.getItem() == Items.BLAZE_ROD) {
+            return true;
+        }
+        if (stack.getItem() == BlazingSetup.BLAZING_ROD.get()) {
+            return BlazingRod.getInfusionStepsLeft(stack) >= BlazingRod.MAX_INFUSION_STEPS;
+        }
+        return false;
     }
 
     @Override
@@ -292,7 +305,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         return new NoDirectionItemHander(this, CONTAINER_FACTORY.get()) {
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == BlazingSetup.BLAZING_ROD.get() || stack.getItem() == Items.BLAZE_ROD;
+                return isValidBlazingRod(stack);
             }
 
             @Override

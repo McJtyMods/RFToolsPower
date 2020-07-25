@@ -1,0 +1,12 @@
+{
+  "name": "rftoolspower.entry.endergenic",
+  "icon": "rftoolspower:endergenic",
+  "category": "rftoolspower:category_rftoolspower_powergeneration",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic0"
+    }
+  ]
+}

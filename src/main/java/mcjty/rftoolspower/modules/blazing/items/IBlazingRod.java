@@ -4,6 +4,9 @@ public interface IBlazingRod {
 
     boolean isValid();
 
+    int getInfusionStepsLeft();
+    void setInfusionStepsLeft(int steps);
+
     float getAgitationTimeLeft();
     void setAgitationTimeLeft(float time);
 
