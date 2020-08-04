@@ -63,7 +63,6 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
     private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-
     private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
 
@@ -212,7 +211,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
             rfPerTickMax[slot] = 0;
             ticksRemaining[slot] = 0;
         } else {
-            rfPerTickMax[slot] = BlazingRod.getRfPerTick(stack);
+            rfPerTickMax[slot] = (int) (BlazingRod.getRfPerTick(stack) * (infusable.getInfusedFactor() * 0.1f + 1.0f));
             ticksRemaining[slot] = BlazingRod.getTotalTicks(stack);
         }
     }
