@@ -2,11 +2,41 @@
   "name": "rftoolspower.entry.endergenic",
   "icon": "rftoolspower:endergenic",
   "category": "rftoolspower:category_rftoolspower_powergeneration",
-  "sortnum": 10,
+  "sortnum": 30,
   "pages": [
     {
       "type": "text",
       "text": "rftoolspower.page.endergenic0"
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic1"
+    },
+    {
+      "type": "image",
+      "images": [
+        "rftoolspower:textures/manual/endergenic.png"
+      ]
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic2"
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic3"
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic4"
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic5"
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.endergenic6"
     }
   ]
 }
