@@ -94,10 +94,13 @@
     "rftoolspower.category.powerstorage.description": "Solutions for storing power",
     "rftoolspower.category.monitor": "Power Monitoring",
     "rftoolspower.category.monitor.description": "Solutions for monitoring power",
+
     "rftoolspower.entry.coalgenerator": "Coal Generator",
     "rftoolspower.page.coalgenerator0": "The Coal Generator can convert coal and blocks of coal to power",
+
     "rftoolspower.entry.pearlinjector": "Pearl Injector",
-    "rftoolspower.page.pearlinjector0": "This block has to be placed facing an Endergenic Generator or else directly below it. This machine provides the only way to inject an ender pearl into the power system. When it receives a redstone signal it will convert the ender pearl to an endergenic pearl and immediately insert it into the adjacent Endergenic Generator. If that generator was already holding a pearl then nothing happens and the pearl is lost",
+    "rftoolspower.page.pearlinjector0": "This block has to be placed facing an $(l:rftoolspower:powergeneration/endergenic)Endergenic Generator$(/l) or else directly below it. This machine provides the only way to inject an ender pearl into the power system. When it receives a redstone signal it will convert the ender pearl to an endergenic pearl and immediately insert it into the adjacent Endergenic Generator. If that generator was already holding a pearl then nothing happens and the pearl is lost",
+
     "rftoolspower.entry.endergenic": "Endergenic Generator",
     "rftoolspower.page.endergenic0": "Scientists working in The End have discovered an interesting property of ender pearls. When a pearl is thrown in some controlled manner the mystic properties that occur on arrival can be harnessed and converted to RF. If done at exactly the right moment this can produce a lot of power. A pearl thrown this way is called an $(o)Endergenic Pearl$()",
     "rftoolspower.page.endergenic1": "In addition it appears that pearls 'remember' that they have been captured this way. If a pearl is captured and then thrown again as soon as possible its internal power capacity increases which can give big benefits for producing RF  this. However, this means that the pearl has to be fired again as soon as possible, as trying to restrain a pearl from firing is very costly on energy",
@@ -106,12 +109,24 @@
     "rftoolspower.page.endergenic4": "On receiving a pearl charging mode ends and the machine goes into holding where it will consume RF every tick. So don't hold for too long as you will then end up consuming more RF then you gained. If generator does not have enough power to hold the pearl then it will be lost. Also each tick there is a small chance that the pearl will be lost in any case.$(br2)Use a wrench to control the destination of each generator. Otherwise pearls will be automatically lost",
     "rftoolspower.page.endergenic5": "Using a wrench you can pair generators. Pay attention to the message you get when you do this as it tells you the distance (in ticks) between the generators. This can help you to time the rest of the system exactly right. Note that the maximum distance is 4 ticks.$(br2)This mechanic of charging, holding and firing endergenic pearls at specific times implies precise timing and cooperation. You will need at least two generators to be able to produce power",
     "rftoolspower.page.endergenic6": "If you have plenty of ender pearls and don't care too much about less then optimal generation you can just throw in as many pearls as you want from one generator and capture them in another. Then it that other generator you just fire them away immediately without caring about a destination. You will quickly consume lots of ender pearls this way so this might not be the best way to proceed",
+
     "rftoolspower.entry.blazinggenerator": "Blazing Generator",
-    "rftoolspower.page.blazinggenerator0": "The Blazing Generator can generate power out of Blaze Rods, todo ... more information",
+    "rftoolspower.page.blazinggenerator0": "The Blazing Generator can generate power out of blaze rods. But before you can do that the rods have to be processed by the $(l:rftoolspower:powergeneration/blazingagitator)Blazing Agitator$(/l). Note the blazing generator can generate power from up to four blazing rods and works best if it can generate power contstantly. Powering up a generator requires time before it can fully use the full potential of a blazing rod",
+
+    "rftoolspower.entry.blazingagitator": "Blazing Agitator",
+    "rftoolspower.page.blazingagitator0": "Blaze rods have to be processed by the blazing agitator before they can be used in the $(l:rftoolspower:powergeneration/blazinggenerator)Blazing Generator$(/l). Using a little bit of power the agitator will slowly build up the potenty of blaze rods that are placed in the input area. Note that blaze rods adjacent to other blaze rods will improve the quality and speed at which this happens",
+    "rftoolspower.page.blazingagitator1": "It is worthwhile to spend some time improving blazing rods until you have top-quality rods that you can use to improve the quality of other blazing rods procued by this agitator. For that reason there are 9 buttons that you can use to prevent fully processed blazing rods from going to the output area",
+
+    "rftoolspower.entry.blazinginfuser": "Blazing Infuser",
+    "rftoolspower.page.blazinginfuser0": "Blazing rods as produced by the $(l:rftoolspower:powergeneration/blazingagitator)Blazing Agitator$(/l) can be improved even further by infusing them with a stack of certain catalyst items. Note that once infused, a blazing rod can no longer be used in the blazing agitator to help improve other rods",
+    "rftoolspower.page.blazinginfuser1": "Catalysts (power/time benefit for a full stack):$(br2)$(li)$(item)redstone$() 40%% more power$(li)$(item)glowstone$() 10%% more power, 30%% more time$(li)$(item)quartz$() 40%% more time$(li)$(item)dimensional shards$() 60%% more power, 60%% more time$(li)$(item)nether star$() 120%% more power, 120%% more time$(li)$(item)ghast tear$() 80%% more power, 80%% more time",
+
     "rftoolspower.entry.powercell": "Power Cell",
     "rftoolspower.page.powercell0": "The Power Cell can be used to store massive amounts of power. You can combine them to form a big multiblock",
+
     "rftoolspower.entry.dimensionalcell": "Dimensional Cell",
     "rftoolspower.page.dimensionalcell0": "The Dimensional Cell is a multi-dimensional power storage. All linked Dimensional Cells form a distributed multiblock",
+
     "rftoolspower.entry.powercell_card": "Powercell Card",
     "rftoolspower.page.powercell_card0": "This card is used to link Dimensional Cells",
     "rftoolspower.entry.powermonitor": "Power Monitor",

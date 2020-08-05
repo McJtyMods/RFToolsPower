@@ -1,0 +1,16 @@
+{
+  "name": "rftoolspower.entry.blazinginfuser",
+  "icon": "rftoolspower:blazing_infuser",
+  "category": "rftoolspower:category_rftoolspower_powergeneration",
+  "sortnum": 26,
+  "pages": [
+    {
+      "type": "text",
+      "text": "rftoolspower.page.blazinginfuser0"
+    },
+    {
+      "type": "text",
+      "text": "rftoolspower.page.blazinginfuser1"
+    }
+  ]
+}

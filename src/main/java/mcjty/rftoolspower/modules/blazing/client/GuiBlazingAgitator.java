@@ -17,7 +17,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
     private EnergyBar energyBar;
 
     public GuiBlazingAgitator(BlazingAgitatorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"));
+        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/blazingagitator"));
     }
 
     @Override

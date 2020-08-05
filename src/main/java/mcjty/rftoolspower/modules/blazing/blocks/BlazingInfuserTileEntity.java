@@ -40,9 +40,9 @@ import static mcjty.lib.container.SlotDefinition.specific;
 
 public class BlazingInfuserTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
-    private final static int SLOT_INPUT = 0;
-    private final static int SLOT_OUTPUT = 1;
-    private final static int SLOT_CATALYST = 2;
+    private static final int SLOT_INPUT = 0;
+    private static final int SLOT_OUTPUT = 1;
+    private static final int SLOT_CATALYST = 2;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(3)
             .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_INPUT, 46, 7)

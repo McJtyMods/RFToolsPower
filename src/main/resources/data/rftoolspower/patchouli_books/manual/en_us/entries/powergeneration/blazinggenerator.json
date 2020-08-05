@@ -1,6 +1,6 @@
 {
   "name": "rftoolspower.entry.blazinggenerator",
-  "icon": "rftoolspower:blazing_agitator",
+  "icon": "rftoolspower:blazing_generator",
   "category": "rftoolspower:category_rftoolspower_powergeneration",
   "sortnum": 20,
   "pages": [
