@@ -53,7 +53,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
@@ -677,7 +677,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
      * @return is the distance in ticks
      */
     public int calculateDistance(BlockPos destination) {
-        double d = new Vec3d(destination).distanceTo(new Vec3d(getPos()));
+        double d = new Vector3d(destination).distanceTo(new Vector3d(getPos()));
         return (int) (d / 3.0f) + 1;
     }
 
