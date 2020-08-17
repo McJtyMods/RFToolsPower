@@ -1,4 +1,4 @@
-Upcoming:
+2.2.1:
 - Fully infusing a Blazing Generator will now give a 10% power production bonus
 - Updated the Endergenic and Blazing Generator manuals
 
