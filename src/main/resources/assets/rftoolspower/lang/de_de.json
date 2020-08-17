@@ -1,0 +1,12 @@
+item.rftoolspower.power_core1.name=Kraftkern (Niedrig)
+item.rftoolspower.power_core2.name=Kraftkern (Mittel)
+item.rftoolspower.power_core3.name=Kraftkern (Hoch)
+
+tile.rftoolspower.cell1.name=Kraftzelle (Niedrig)
+tile.rftoolspower.cell2.name=Kraftzelle (Mittel)
+tile.rftoolspower.cell3.name=Kraftzelle (Hoch)
+tile.rftoolspower.information_screen.name=Informationsbildschirm
+
+itemGroup.RFToolsPower=RFTools Power
+
+message.shiftMessage=Drücke Shift
