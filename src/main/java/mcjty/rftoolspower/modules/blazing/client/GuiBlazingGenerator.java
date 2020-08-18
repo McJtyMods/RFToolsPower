@@ -39,7 +39,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        drawWindow();
+        drawWindow(xxx);
         updateEnergyBar(energyBar);
 
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {

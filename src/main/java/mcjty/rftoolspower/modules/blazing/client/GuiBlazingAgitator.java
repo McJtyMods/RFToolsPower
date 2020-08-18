@@ -45,7 +45,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        drawWindow();
+        drawWindow(xxx);
         updateEnergyBar(energyBar);
     }
 }

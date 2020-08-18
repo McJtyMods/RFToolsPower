@@ -9,6 +9,7 @@ import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.varia.DimensionId;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -128,11 +129,6 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
             injectPearl();
         }
         markDirty();
-    }
-
-    @Override
-    public DimensionType getDimension() {
-        return world.getDimension().getType();
     }
 
     private boolean takePearl() {

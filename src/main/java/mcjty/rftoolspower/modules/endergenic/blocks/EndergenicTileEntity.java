@@ -18,10 +18,7 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
-import mcjty.lib.varia.BlockPosTools;
-import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Logging;
-import mcjty.lib.varia.OrientationTools;
+import mcjty.lib.varia.*;
 import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
@@ -386,11 +383,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
             log("Server Tick: charging mode ends -> idle");
             chargingMode = CHARGE_IDLE;
         }
-    }
-
-    @Override
-    public DimensionType getDimension() {
-        return world.getDimension().getType();
     }
 
     private IMachineInformation createMachineInfo() {

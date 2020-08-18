@@ -9,6 +9,7 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.TypedMap;
+import mcjty.lib.varia.DimensionId;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
@@ -97,11 +98,6 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
         }
 
         setRedstoneState(newout);
-    }
-
-    @Override
-    public DimensionType getDimension() {
-        return world.getDimension().getType();
     }
 
     @Override

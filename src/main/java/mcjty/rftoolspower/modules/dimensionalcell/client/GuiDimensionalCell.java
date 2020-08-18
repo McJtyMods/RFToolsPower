@@ -1,7 +1,6 @@
 package mcjty.rftoolspower.modules.dimensionalcell.client;
 
 import mcjty.lib.gui.GenericGuiContainer;
-import mcjty.lib.gui.ManualEntry;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.Button;
 import mcjty.lib.gui.widgets.EnergyBar;
@@ -84,7 +83,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i2) {
-        drawWindow();
+        drawWindow(xxx);
 
         requestRF();
 

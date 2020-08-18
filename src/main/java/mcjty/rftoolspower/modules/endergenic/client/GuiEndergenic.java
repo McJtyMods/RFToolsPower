@@ -53,7 +53,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float v, int i, int i2) {
-        drawWindow();
+        drawWindow(xxx);
         checkStats();
 
         lastRfPerTick.text(fromServer_lastRfPerTick + " RF/tick");
