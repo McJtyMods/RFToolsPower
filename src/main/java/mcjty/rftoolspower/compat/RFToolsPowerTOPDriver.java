@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -79,7 +80,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             Tools.safeConsume(world.getTileEntity(data.getPos()), (CoalGeneratorTileEntity te) -> {
                 Boolean working = te.isWorking();
                 if (working) {
-                    probeInfo.text(TextFormatting.GREEN + "Producing " + te.getRfPerTick() + " RF/t");
+                    probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "Producing " + te.getRfPerTick() + " RF/t")); // @todo 1.16
                 }
             }, "Bad tile entity!");
         }
@@ -93,23 +94,23 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 long rfPerTick = te.getRfPerTickReal();
 
                 if (te.getNetwork().isValid()) {
-                    probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
+                    probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t")); // @todo 1.16
                     SideType powermode = te.getMode(data.getSideHit());
                     if (powermode == SideType.INPUT) {
-                        probeInfo.text(TextFormatting.YELLOW + "Side: input");
+                        probeInfo.text(new StringTextComponent(TextFormatting.YELLOW + "Side: input")); // @todo 1.16
                     } else if (powermode == SideType.OUTPUT) {
-                        probeInfo.text(TextFormatting.YELLOW + "Side: output");
+                        probeInfo.text(new StringTextComponent(TextFormatting.YELLOW + "Side: output"));    // @todo 1.16
                     }
                 } else {
-                    probeInfo.text(TextStyleClass.ERROR + "Too many blocks in network (max " + PowerCellConfig.NETWORK_MAX.get() + ")!");
+                    probeInfo.text(new StringTextComponent(TextStyleClass.ERROR + "Too many blocks in network (max " + PowerCellConfig.NETWORK_MAX.get() + ")!"));  // @todo 1.16
                 }
 
                 int networkId = te.getNetwork().getNetworkId();
                 if (mode == ProbeMode.DEBUG) {
-                    probeInfo.text(TextStyleClass.LABEL + "Network ID: " + TextStyleClass.INFO + networkId);
+                    probeInfo.text(new StringTextComponent(TextStyleClass.LABEL + "Network ID: " + TextStyleClass.INFO + networkId));   // @todo 1.16
                 }
                 if (mode == ProbeMode.EXTENDED) {
-                    probeInfo.text(TextStyleClass.LABEL + "Local Energy: " + TextStyleClass.INFO + te.getLocalEnergy());
+                    probeInfo.text(new StringTextComponent(TextStyleClass.LABEL + "Local Energy: " + TextStyleClass.INFO + te.getLocalEnergy()));   // @todo 1.16
                 }
             }, "Bad tile entity!");
         }
@@ -123,28 +124,28 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 int id = te.getNetworkId();
                 if (mode == ProbeMode.EXTENDED) {
                     if (id != -1) {
-                        probeInfo.text(TextFormatting.GREEN + "ID: " + new DecimalFormat("#.##").format(id));
+                        probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "ID: " + new DecimalFormat("#.##").format(id)));  // @todo 1.16
                     } else {
-                        probeInfo.text(TextFormatting.GREEN + "Local storage!");
+                        probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "Local storage!"));   // @todo 1.16
                     }
                 }
 
                 float costFactor = te.getCostFactor();
                 int rfPerTick = te.getRfPerTickPerSide();
 
-                probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
+                probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t")); // @todo 1.16
                 DimensionalCellTileEntity.Mode powermode = te.getMode(data.getSideHit());
                 if (powermode == DimensionalCellTileEntity.Mode.MODE_INPUT) {
-                    probeInfo.text(TextFormatting.YELLOW + "Side: input");
+                    probeInfo.text(new StringTextComponent(TextFormatting.YELLOW + "Side: input")); // @todo 1.16
                 } else if (powermode == DimensionalCellTileEntity.Mode.MODE_OUTPUT) {
                     int cost = (int) ((costFactor - 1.0f) * 1000.0f);
-                    probeInfo.text(TextFormatting.YELLOW + "Side: output (cost " + cost / 10 + "." + cost % 10 + "%)");
+                    probeInfo.text(new StringTextComponent(TextFormatting.YELLOW + "Side: output (cost " + cost / 10 + "." + cost % 10 + "%)"));    // @todo 1.16
                 }
                 if (mode == ProbeMode.EXTENDED) {
                     int rfPerTickIn = te.getLastRfPerTickIn();
                     int rfPerTickOut = te.getLastRfPerTickOut();
-                    probeInfo.text(TextFormatting.GREEN + "In:  " + rfPerTickIn + "RF/t");
-                    probeInfo.text(TextFormatting.GREEN + "Out: " + rfPerTickOut + "RF/t");
+                    probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "In:  " + rfPerTickIn + "RF/t")); // @todo 1.16
+                    probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "Out: " + rfPerTickOut + "RF/t"));    // @todo 1.16
                 }
             }, "Bad tile entity!");
         }
@@ -158,27 +159,27 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 if (mode == ProbeMode.EXTENDED) {
                     IItemStyle style = probeInfo.defaultItemStyle().width(16).height(13);
                     ILayoutStyle layoutStyle = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
-                    probeInfo.text(TextFormatting.BLUE + "Stats over the last 5 seconds:");
+                    probeInfo.text(new StringTextComponent(TextFormatting.BLUE + "Stats over the last 5 seconds:"));    // @todo 1.16
                     probeInfo.horizontal(layoutStyle)
                             .item(new ItemStack(Items.REDSTONE), style)
-                            .text("Charged " + te.getLastChargeCounter() + " time(s)");
+                            .text(new StringTextComponent("Charged " + te.getLastChargeCounter() + " time(s)"));    // @todo 1.16
                     probeInfo.horizontal(layoutStyle)
                             .item(new ItemStack(Items.ENDER_PEARL), style)
-                            .text("Fired " + te.getLastPearlsLaunched())
-                            .text(" / Lost " + te.getLastPearlsLost());
+                            .text(new StringTextComponent("Fired " + te.getLastPearlsLaunched()))   // @todo 1.16
+                            .text(new StringTextComponent(" / Lost " + te.getLastPearlsLost()));    // @todo 1.16
                     if (te.getLastPearlsLost() > 0) {
-                        probeInfo.text(TextFormatting.RED + te.getLastPearlsLostReason());
+                        probeInfo.text(new StringTextComponent(TextFormatting.RED + te.getLastPearlsLostReason())); // @todo 1.16
                     }
                     if (te.getLastPearlArrivedAt() > -2) {
-                        probeInfo.text("Last pearl arrived at " + te.getLastPearlArrivedAt());
+                        probeInfo.text(new StringTextComponent("Last pearl arrived at " + te.getLastPearlArrivedAt())); // @todo 1.16
                     }
                     probeInfo.horizontal()
-                            .text(TextFormatting.GREEN + "RF Gain " + te.getLastRfGained())
-                            .text(" / ")
-                            .text(TextFormatting.RED + "Lost " + te.getLastRfLost())
-                            .text(" (RF/t " + te.getLastRfPerTick() + ")");
+                            .text(new StringTextComponent(TextFormatting.GREEN + "RF Gain " + te.getLastRfGained()))    // @todo 1.16
+                            .text(new StringTextComponent(" / "))   // @todo 1.16
+                            .text(new StringTextComponent(TextFormatting.RED + "Lost " + te.getLastRfLost()))   // @todo 1.16
+                            .text(new StringTextComponent(" (RF/t " + te.getLastRfPerTick() + ")"));    // @todo 1.16
                 } else {
-                    probeInfo.text("(sneak to get statistics)");
+                    probeInfo.text(new StringTextComponent("(sneak to get statistics)"));   // @todo 1.16
                 }
             }, "Bad tile entity!");
         }
@@ -190,7 +191,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getTileEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
                 EnderMonitorMode m = te.getMode();
-                probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
+                probeInfo.text(new StringTextComponent(TextFormatting.GREEN + "Mode: " + m.getDescription()));  // @todo 1.16
             }, "Bad tile entity!");
         }
     }

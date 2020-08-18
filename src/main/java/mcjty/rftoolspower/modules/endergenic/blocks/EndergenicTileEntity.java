@@ -55,7 +55,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -669,7 +668,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
      * @return is the distance in ticks
      */
     public int calculateDistance(BlockPos destination) {
-        double d = new Vector3d(destination).distanceTo(new Vector3d(getPos()));
+        double d = new Vector3d(destination.getX(), destination.getY(), destination.getZ()).distanceTo(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
         return (int) (d / 3.0f) + 1;
     }
 

@@ -5,6 +5,7 @@ import mcjty.lib.tooltips.ITooltipSettings;
 import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -31,7 +32,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
 
     public PowerCellCardItem() {
         super(new Properties().group(RFToolsPower.setup.getTab()));
-        addPropertyOverride(new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
+        ItemModelsProperties.func_239418_a_(this, new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
             int id = getId(stack);
             return id == -1 ? 0 : 1;
         });

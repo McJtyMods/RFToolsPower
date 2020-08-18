@@ -2,6 +2,7 @@ package mcjty.rftoolspower.modules.powercell.blocks;
 
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.varia.DimensionId;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
@@ -418,7 +419,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             if (network.contains(pos)) {
                 if (powercell.network != network) {
                     if (!alreadyReportedBad.contains(pos)) {
-                        System.out.println("Bad network at pos = " + pos + " (dimension " + world.getDimension().getType() + ")");
+                        System.out.println("Bad network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getRegistryName().getPath() + ")");
                         alreadyReportedBad.add(pos);
                     }
                 }
@@ -427,7 +428,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
             if (powercell.network == network) {
                 if (!alreadyReportedUnexpected.contains(pos)) {
-                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + world.getDimension().getType() + ")");
+                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getRegistryName().getPath() + ")");
                     alreadyReportedUnexpected.add(pos);
                 }
                 return;

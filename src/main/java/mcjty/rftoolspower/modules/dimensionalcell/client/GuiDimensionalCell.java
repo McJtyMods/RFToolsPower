@@ -1,5 +1,6 @@
 package mcjty.rftoolspower.modules.dimensionalcell.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.Button;
@@ -82,8 +83,8 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float v, int i, int i2) {
-        drawWindow(xxx);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float v, int i, int i2) {
+        drawWindow(matrixStack);
 
         requestRF();
 

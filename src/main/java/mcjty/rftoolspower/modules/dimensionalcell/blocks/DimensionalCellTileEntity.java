@@ -155,14 +155,14 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
 
         @Override
-        public String getName() {
+        public String getString() {
             return name;
         }
 
 
         @Override
         public String toString() {
-            return getName();
+            return getString();
         }
     }
 
@@ -392,7 +392,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     public GlobalCoordinate getGlobalPos() {
-        return new GlobalCoordinate(getPos(), world.getDimension().getType());
+        return new GlobalCoordinate(getPos(), DimensionId.fromWorld(world));
     }
 
     public long getTotalExtracted() {

@@ -1,5 +1,6 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -44,8 +45,8 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        drawWindow(xxx);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        drawWindow(matrixStack);
         updateEnergyBar(energyBar);
     }
 }

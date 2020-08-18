@@ -15,6 +15,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -24,11 +26,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,10 +53,11 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     private final DimensionalCellType type;
     private final static VoxelShape RENDER_SHAPE = VoxelShapes.create(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
-        return false;
-    }
+    // @todo 1.16
+//    @Override
+//    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
+//        return false;
+//    }
 
     public DimensionalCellType getType() {
         return type;
@@ -185,10 +187,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         System.out.println("DimensionalCellBlock.getDrops");
         World world = builder.getWorld();
-        BlockPos pos = builder.get(LootParameters.POSITION);
+        Vector3d pos = builder.get(LootParameters.field_237457_g_);
         List<ItemStack> drops = super.getDrops(state, builder);
         if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getTileEntity(new BlockPos(pos.x, pos.y, pos.z));
             if (te instanceof DimensionalCellTileEntity) {
                 DimensionalCellNetwork.Network network = ((DimensionalCellTileEntity) te).getNetwork();
                 if (network != null) {
