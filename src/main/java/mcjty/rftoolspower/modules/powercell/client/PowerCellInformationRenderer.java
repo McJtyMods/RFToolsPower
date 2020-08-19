@@ -53,16 +53,16 @@ public class PowerCellInformationRenderer {
 
             for (int i = 0; i < 100; i += 5) {
                 int col = i < pct ? getPercentageColor(i) : 0xff111111;
-                RenderHelper.drawFlatBox(16, (int) (100 - i * .8 - 13), mode == 1 ? 88 : 44, (int) (100 - i * .8 + 3 - 13), col, col);
+                RenderHelper.drawFlatBox(matrixStack, 16, (int) (100 - i * .8 - 13), mode == 1 ? 88 : 44, (int) (100 - i * .8 + 3 - 13), col, col);
             }
 
             if (mode == 2) {
                 if (roughMaxRfPerTick > 0) {
                     long pctInserted = Math.max(0, Math.min(100L, rfInsertPerTick * 100 / roughMaxRfPerTick));
-                    RenderHelper.drawFlatBox(60, 20, 90, 50, 0xffffffff, 0xff000000 + (int) (pctInserted * 2.5f));
+                    RenderHelper.drawFlatBox(matrixStack, 60, 20, 90, 50, 0xffffffff, 0xff000000 + (int) (pctInserted * 2.5f));
                     long pctExtracted = Math.max(0, Math.min(100L, rfExtractPerTick * 100 / roughMaxRfPerTick));
                     int mask = (int) (pctExtracted * 2.5f);
-                    RenderHelper.drawFlatBox(60, 54, 90, 84, 0xffffffff, 0xff000000 + (mask << 16) + (mask << 8));
+                    RenderHelper.drawFlatBox(matrixStack, 60, 54, 90, 84, 0xffffffff, 0xff000000 + (mask << 16) + (mask << 8));
                 }
             }
 
