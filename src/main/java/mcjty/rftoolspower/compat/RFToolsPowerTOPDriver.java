@@ -24,12 +24,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+
+import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class RFToolsPowerTOPDriver implements TOPDriver {
 
@@ -79,7 +80,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             Tools.safeConsume(world.getTileEntity(data.getPos()), (CoalGeneratorTileEntity te) -> {
                 Boolean working = te.isWorking();
                 if (working) {
-                    probeInfo.text(TextFormatting.GREEN + "Producing " + te.getRfPerTick() + " RF/t");
+                    probeInfo.text(CompoundText.createLabelInfo("Producing ", + te.getRfPerTick() + " RF/t"));
                 }
             }, "Bad tile entity!");
         }
@@ -93,23 +94,23 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 long rfPerTick = te.getRfPerTickReal();
 
                 if (te.getNetwork().isValid()) {
-                    probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
+                    probeInfo.text(CompoundText.createLabelInfo("Input/Output: ", rfPerTick + " RF/t"));
                     SideType powermode = te.getMode(data.getSideHit());
                     if (powermode == SideType.INPUT) {
-                        probeInfo.text(TextFormatting.YELLOW + "Side: input");
+                        probeInfo.text(CompoundText.create().style(HIGHLIGHTED).text("Side: input"));
                     } else if (powermode == SideType.OUTPUT) {
-                        probeInfo.text(TextFormatting.YELLOW + "Side: output");
+                        probeInfo.text(CompoundText.create().style(HIGHLIGHTED).text("Side: output"));
                     }
                 } else {
-                    probeInfo.text(TextStyleClass.ERROR + "Too many blocks in network (max " + PowerCellConfig.NETWORK_MAX.get() + ")!");
+                    probeInfo.text(CompoundText.create().style(ERROR).text("Too many blocks in network (max " + PowerCellConfig.NETWORK_MAX.get() + ")!"));
                 }
 
                 int networkId = te.getNetwork().getNetworkId();
                 if (mode == ProbeMode.DEBUG) {
-                    probeInfo.text(TextStyleClass.LABEL + "Network ID: " + TextStyleClass.INFO + networkId);
+                    probeInfo.text(CompoundText.createLabelInfo("Network ID: ", networkId));
                 }
                 if (mode == ProbeMode.EXTENDED) {
-                    probeInfo.text(TextStyleClass.LABEL + "Local Energy: " + TextStyleClass.INFO + te.getLocalEnergy());
+                    probeInfo.text(CompoundText.createLabelInfo("Local Energy: ", te.getLocalEnergy()));
                 }
             }, "Bad tile entity!");
         }
@@ -123,28 +124,28 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 int id = te.getNetworkId();
                 if (mode == ProbeMode.EXTENDED) {
                     if (id != -1) {
-                        probeInfo.text(TextFormatting.GREEN + "ID: " + new DecimalFormat("#.##").format(id));
+                        probeInfo.text(CompoundText.createLabelInfo("ID: ", new DecimalFormat("#.##").format(id)));
                     } else {
-                        probeInfo.text(TextFormatting.GREEN + "Local storage!");
+                        probeInfo.text(CompoundText.create().style(TextStyleClass.INFO).text("Local storage!"));
                     }
                 }
 
                 float costFactor = te.getCostFactor();
                 int rfPerTick = te.getRfPerTickPerSide();
 
-                probeInfo.text(TextFormatting.GREEN + "Input/Output: " + rfPerTick + " RF/t");
+                probeInfo.text(CompoundText.createLabelInfo( "Input/Output: ",+ rfPerTick + " RF/t"));
                 DimensionalCellTileEntity.Mode powermode = te.getMode(data.getSideHit());
                 if (powermode == DimensionalCellTileEntity.Mode.MODE_INPUT) {
-                    probeInfo.text(TextFormatting.YELLOW + "Side: input");
+                    probeInfo.text(CompoundText.create().style(HIGHLIGHTED).text("Side: input"));
                 } else if (powermode == DimensionalCellTileEntity.Mode.MODE_OUTPUT) {
                     int cost = (int) ((costFactor - 1.0f) * 1000.0f);
-                    probeInfo.text(TextFormatting.YELLOW + "Side: output (cost " + cost / 10 + "." + cost % 10 + "%)");
+                    probeInfo.text(CompoundText.create().style(HIGHLIGHTED).text("Side: output (cost " + cost / 10 + "." + cost % 10 + "%)"));
                 }
                 if (mode == ProbeMode.EXTENDED) {
                     int rfPerTickIn = te.getLastRfPerTickIn();
                     int rfPerTickOut = te.getLastRfPerTickOut();
-                    probeInfo.text(TextFormatting.GREEN + "In:  " + rfPerTickIn + "RF/t");
-                    probeInfo.text(TextFormatting.GREEN + "Out: " + rfPerTickOut + "RF/t");
+                    probeInfo.text(CompoundText.createLabelInfo("In:  ",rfPerTickIn + "RF/t"));
+                    probeInfo.text(CompoundText.createLabelInfo("Out: ",rfPerTickOut + "RF/t"));
                 }
             }, "Bad tile entity!");
         }
@@ -158,27 +159,27 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 if (mode == ProbeMode.EXTENDED) {
                     IItemStyle style = probeInfo.defaultItemStyle().width(16).height(13);
                     ILayoutStyle layoutStyle = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
-                    probeInfo.text(TextFormatting.BLUE + "Stats over the last 5 seconds:");
+                    probeInfo.text(CompoundText.create().style(INFO).text("Stats over the last 5 seconds:"));
                     probeInfo.horizontal(layoutStyle)
                             .item(new ItemStack(Items.REDSTONE), style)
-                            .text("Charged " + te.getLastChargeCounter() + " time(s)");
+                            .text(CompoundText.createLabelInfo("Charged ", te.getLastChargeCounter() + " time(s)"));
                     probeInfo.horizontal(layoutStyle)
                             .item(new ItemStack(Items.ENDER_PEARL), style)
-                            .text("Fired " + te.getLastPearlsLaunched())
-                            .text(" / Lost " + te.getLastPearlsLost());
+                            .text(CompoundText.createLabelInfo("Fired ", te.getLastPearlsLaunched()))
+                            .text(CompoundText.createLabelInfo(" / Lost ", te.getLastPearlsLost()));
                     if (te.getLastPearlsLost() > 0) {
-                        probeInfo.text(TextFormatting.RED + te.getLastPearlsLostReason());
+                        probeInfo.text(CompoundText.create().style(ERROR).text(te.getLastPearlsLostReason()));
                     }
                     if (te.getLastPearlArrivedAt() > -2) {
-                        probeInfo.text("Last pearl arrived at " + te.getLastPearlArrivedAt());
+                        probeInfo.text(CompoundText.createLabelInfo("Last pearl arrived at ", te.getLastPearlArrivedAt()));
                     }
                     probeInfo.horizontal()
-                            .text(TextFormatting.GREEN + "RF Gain " + te.getLastRfGained())
-                            .text(" / ")
-                            .text(TextFormatting.RED + "Lost " + te.getLastRfLost())
-                            .text(" (RF/t " + te.getLastRfPerTick() + ")");
+                            .text(CompoundText.create().style(OK).text("RF Gain " + te.getLastRfGained()))
+                            .text(CompoundText.create().text(" / "))
+                            .text(CompoundText.create().style(ERROR).text("Lost " + te.getLastRfLost()))
+                            .text(CompoundText.create().text(" (RF/t " + te.getLastRfPerTick() + ")"));
                 } else {
-                    probeInfo.text("(sneak to get statistics)");
+                    probeInfo.text(CompoundText.create().text("(sneak to get statistics)"));
                 }
             }, "Bad tile entity!");
         }
@@ -190,7 +191,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getTileEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
                 EnderMonitorMode m = te.getMode();
-                probeInfo.text(TextFormatting.GREEN + "Mode: " + m.getDescription());
+                probeInfo.text(CompoundText.createLabelInfo("Mode: ", m.getDescription()));
             }, "Bad tile entity!");
         }
     }
