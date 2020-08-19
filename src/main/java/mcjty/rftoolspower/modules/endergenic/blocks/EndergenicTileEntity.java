@@ -18,10 +18,7 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
-import mcjty.lib.varia.BlockPosTools;
-import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Logging;
-import mcjty.lib.varia.OrientationTools;
+import mcjty.lib.varia.*;
 import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
@@ -58,7 +55,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -389,8 +385,8 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     @Override
-    public DimensionType getDimension() {
-        return world.getDimension().getType();
+    public DimensionId getDimension() {
+        return DimensionId.fromWorld(world);
     }
 
     private IMachineInformation createMachineInfo() {
