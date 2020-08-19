@@ -419,7 +419,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             if (network.contains(pos)) {
                 if (powercell.network != network) {
                     if (!alreadyReportedBad.contains(pos)) {
-                        System.out.println("Bad network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getRegistryName().getPath() + ")");
+                        System.out.println("Bad network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getName() + ")");
                         alreadyReportedBad.add(pos);
                     }
                 }
@@ -428,7 +428,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
             if (powercell.network == network) {
                 if (!alreadyReportedUnexpected.contains(pos)) {
-                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getRegistryName().getPath() + ")");
+                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getName() + ")");
                     alreadyReportedUnexpected.add(pos);
                 }
                 return;
