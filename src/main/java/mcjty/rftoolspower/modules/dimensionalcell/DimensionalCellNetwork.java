@@ -1,9 +1,6 @@
 package mcjty.rftoolspower.modules.dimensionalcell;
 
-import mcjty.lib.varia.GlobalCoordinate;
-import mcjty.lib.varia.Logging;
-import mcjty.lib.varia.OrientationTools;
-import mcjty.lib.varia.WorldTools;
+import mcjty.lib.varia.*;
 import mcjty.lib.worlddata.AbstractWorldData;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
@@ -16,7 +13,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
@@ -342,7 +338,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             for (int i = 0 ; i < list.size() ; i++) {
                 CompoundNBT tag = list.getCompound(i);
                 ResourceLocation id = new ResourceLocation(tag.getString("dim"));
-                DimensionType type = DimensionType.byName(id);
+                DimensionId type = DimensionId.fromResourceLocation(id);
                 if (type == null) {
                     // Something went wrong!
                     Logging.logError("Unknown dimension '" + id.toString() + "'!");
