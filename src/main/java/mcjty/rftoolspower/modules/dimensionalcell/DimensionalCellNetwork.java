@@ -176,8 +176,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             GlobalCoordinate c2 = blob2.iterator().next();
 
             // @todo 1.14 rftools dimensions!
-            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, c1.getDimension().getWorld());
-            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, c2.getDimension().getWorld());
+            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, c1.getDimension().loadWorld());
+            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, c2.getDimension().loadWorld());
             double rftoolsdimMult = 1.0;
             if (dim1rftools) {
                 rftoolsdimMult *= DimensionalCellConfiguration.powerCellRFToolsDimensionAdvantage.get();
