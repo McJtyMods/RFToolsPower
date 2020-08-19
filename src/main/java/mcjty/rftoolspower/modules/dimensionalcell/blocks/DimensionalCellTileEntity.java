@@ -392,7 +392,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     public GlobalCoordinate getGlobalPos() {
-        return new GlobalCoordinate(getPos(), world.getDimension().getType());
+        return new GlobalCoordinate(getPos(), world);
     }
 
     public long getTotalExtracted() {
