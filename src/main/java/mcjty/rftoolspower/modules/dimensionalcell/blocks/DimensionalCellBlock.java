@@ -12,6 +12,8 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -53,12 +55,6 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     private final DimensionalCellType type;
     private final static VoxelShape RENDER_SHAPE = VoxelShapes.create(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
-    // @todo 1.16
-//    @Override
-//    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
-//        return false;
-//    }
-
     public DimensionalCellType getType() {
         return type;
     }
@@ -78,6 +74,11 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     public DimensionalCellBlock(DimensionalCellType type, Supplier<TileEntity> supplier) {
         super(new BlockBuilder()
+                .properties(Block.Properties.create(Material.IRON)
+                        .hardnessAndResistance(2.0f)
+                        .sound(SoundType.METAL)
+                        .setOpaque((state, world, pos) -> false)
+                )
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(supplier)
                 .infusable()
