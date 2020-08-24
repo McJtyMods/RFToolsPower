@@ -11,6 +11,7 @@ import mcjty.rftoolspower.modules.blazing.client.GuiBlazingGenerator;
 import mcjty.rftoolspower.modules.blazing.client.GuiBlazingInfuser;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
+import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
 import mcjty.rftoolspower.modules.endergenic.client.EndergenicRenderer;
 import mcjty.rftoolspower.modules.endergenic.client.GuiEnderMonitor;
@@ -33,6 +34,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -62,6 +64,10 @@ public class ClientRegistration {
         BlazingAgitatorRenderer.register();
 
         ClientCommandHandler.registerCommands();
+
+        DeferredWorkQueue.runLater(() -> {
+            PowerCellCardItem.initOverrides(DimensionalCellSetup.POWERCELL_CARD.get());
+        });
     }
 
     @SubscribeEvent
