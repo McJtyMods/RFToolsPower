@@ -1,5 +1,11 @@
+3.0.1-beta:
+- Fixed a potential exploit which could be used to attack a server
+
 3.0.0-beta:
 - First port to 1.16.2
+
+2.2.2:
+- Fixed a potential exploit which could be used to attack a server
 
 2.2.1:
 - Fully infusing a Blazing Generator will now give a 10% power production bonus
