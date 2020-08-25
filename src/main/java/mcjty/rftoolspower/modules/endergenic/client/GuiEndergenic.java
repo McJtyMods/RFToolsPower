@@ -30,7 +30,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     private int timer = 10;
 
     public GuiEndergenic(EndergenicTileEntity endergenicTileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, endergenicTileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/endergenic"));    // @todo 1.15 manual
+        super(endergenicTileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/endergenic"));    // @todo 1.15 manual
     }
 
     @Override

@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
 
     public GuiPearlInjector(PearlInjectorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/pearlinjector"));
+        super(tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/pearlinjector"));
     }
 
     @Override
