@@ -43,15 +43,20 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
-        GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
-        GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
-        GenericGuiContainer.register(MonitorSetup.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
-        GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDERGENIC.get(), GuiEndergenic::new);
-        GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
-        GenericGuiContainer.register(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
-        GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
-        GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_GENERATOR.get(), GuiBlazingGenerator::new);
-        GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
+        DeferredWorkQueue.runLater(() -> {
+            GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
+            GenericGuiContainer.register(DimensionalCellSetup.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
+            GenericGuiContainer.register(MonitorSetup.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
+            GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDERGENIC.get(), GuiEndergenic::new);
+            GenericGuiContainer.register(EndergenicSetup.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
+            GenericGuiContainer.register(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+            GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
+            GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_GENERATOR.get(), GuiBlazingGenerator::new);
+            GenericGuiContainer.register(BlazingSetup.CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
+
+            ClientCommandHandler.registerCommands();
+            PowerCellCardItem.initOverrides(DimensionalCellSetup.POWERCELL_CARD.get());
+        });
 
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
@@ -62,12 +67,6 @@ public class ClientRegistration {
         PowerLevelRenderer.register();
         EndergenicRenderer.register();
         BlazingAgitatorRenderer.register();
-
-        ClientCommandHandler.registerCommands();
-
-        DeferredWorkQueue.runLater(() -> {
-            PowerCellCardItem.initOverrides(DimensionalCellSetup.POWERCELL_CARD.get());
-        });
     }
 
     @SubscribeEvent
