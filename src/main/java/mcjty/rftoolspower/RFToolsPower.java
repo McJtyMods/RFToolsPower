@@ -1,12 +1,12 @@
 package mcjty.rftoolspower;
 
+import mcjty.rftoolspower.setup.ClientSetup;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.ModSetup;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(RFToolsPower.MODID)
@@ -27,6 +27,9 @@ public class RFToolsPower {
 
         Registration.register();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> setup.init(event));
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(setup::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onModelBake);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onTextureStitch);
     }
 }

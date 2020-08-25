@@ -28,20 +28,13 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = RFToolsPower.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ClientRegistration {
+public class ClientSetup {
 
-    @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
         DeferredWorkQueue.runLater(() -> {
             GenericGuiContainer.register(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
@@ -69,11 +62,6 @@ public class ClientRegistration {
         BlazingAgitatorRenderer.register();
     }
 
-    @SubscribeEvent
-    public static void registerSounds(RegistryEvent.Register<SoundEvent> sounds) {
-    }
-
-    @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
         if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
             return;
@@ -106,7 +94,6 @@ public class ClientRegistration {
         event.addSprite(EndergenicRenderer.REDGLOW);
     }
 
-    @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
         PowerCellBakedModel model = new PowerCellBakedModel();
         Lists.newArrayList("cell1", "cell2", "cell3").stream()
