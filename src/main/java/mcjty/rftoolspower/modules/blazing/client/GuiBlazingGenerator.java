@@ -20,7 +20,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     private Label[] labels = new Label[4];
 
     public GuiBlazingGenerator(BlazingGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"));
+        super(tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"));
     }
 
     @Override

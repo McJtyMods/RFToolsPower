@@ -31,7 +31,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private static final ResourceLocation iconLocation = new ResourceLocation(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
     public GuiDimensionalCell(DimensionalCellTileEntity te, DimensionalCellContainer container, PlayerInventory inventory) {
-        super(RFToolsPower.instance, te, container, inventory, ManualHelper.create("rftoolspower:powerstorage/dimensionalcell"));
+        super(te, container, inventory, ManualHelper.create("rftoolspower:powerstorage/dimensionalcell"));
 
         xSize = POWERCELL_WIDTH;
         ySize = POWERCELL_HEIGHT;
