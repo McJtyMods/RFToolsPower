@@ -2,7 +2,7 @@ package mcjty.rftoolspower.datagen;
 
 import mcjty.lib.crafting.CopyNBTRecipeBuilder;
 import mcjty.lib.datagen.BaseRecipeProvider;
-import mcjty.rftoolsbase.modules.various.VariousSetup;
+import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
 import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
@@ -23,28 +23,28 @@ public class Recipes extends BaseRecipeProvider {
 
     public Recipes(DataGenerator generatorIn) {
         super(generatorIn);
-        add('F', VariousSetup.MACHINE_FRAME.get());
-        add('A', VariousSetup.MACHINE_BASE.get());
-        add('s', VariousSetup.DIMENSIONALSHARD.get());
+        add('F', VariousModule.MACHINE_FRAME.get());
+        add('A', VariousModule.MACHINE_BASE.get());
+        add('s', VariousModule.DIMENSIONALSHARD.get());
     }
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         build(consumer, ShapedRecipeBuilder.shapedRecipe(CoalGeneratorSetup.COALGENERATOR.get())
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousSetup.MACHINE_FRAME.get(), Items.REDSTONE_TORCH)),
+                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousModule.MACHINE_FRAME.get(), Items.REDSTONE_TORCH)),
                 "cTc", "cFc", "cTc");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.POWER_CORE1.get())
                         .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.DIAMOND, Items.REDSTONE)),
                 " d ", "rRr", " r ");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.POWER_CORE2.get())
-                        .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.EMERALD, Items.REDSTONE, VariousSetup.DIMENSIONALSHARD.get())),
+                        .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.EMERALD, Items.REDSTONE, VariousModule.DIMENSIONALSHARD.get())),
                 "ses", "rRr", "srs");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.POWER_CORE3.get())
-                        .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.EMERALD, Items.DIAMOND, Items.REDSTONE, VariousSetup.DIMENSIONALSHARD.get())),
+                        .addCriterion("core", InventoryChangeTrigger.Instance.forItems(Items.EMERALD, Items.DIAMOND, Items.REDSTONE, VariousModule.DIMENSIONALSHARD.get())),
                 "sds", "rRr", "ses");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(PowerCellSetup.CELL1.get())
                         .key('K', PowerCellSetup.POWER_CORE1.get())
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousSetup.MACHINE_FRAME.get(), PowerCellSetup.POWER_CORE1.get())),
+                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousModule.MACHINE_FRAME.get(), PowerCellSetup.POWER_CORE1.get())),
                 "rKr", "KFK", "rKr");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellSetup.CELL2.get())
                         .key('K', PowerCellSetup.POWER_CORE2.get())
@@ -58,16 +58,16 @@ public class Recipes extends BaseRecipeProvider {
                 "rKr", "KPK", "rKr");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL.get())
                         .key('P', Items.PRISMARINE_SHARD)
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousSetup.MACHINE_BASE.get(), Items.REDSTONE)),
+                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                 "RdR", "PFP", "ReR");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get())
                         .key('q', Items.QUARTZ)
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousSetup.MACHINE_BASE.get(), Items.REDSTONE)),
+                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                 "RdR", "qFq", "RdR");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get())
                         .key('K', DimensionalCellSetup.DIMENSIONAL_CELL.get())
-                        .key('*', VariousSetup.INFUSED_DIAMOND.get())
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousSetup.MACHINE_BASE.get(), Items.REDSTONE)),
+                        .key('*', VariousModule.INFUSED_DIAMOND.get())
+                        .addCriterion("frame", InventoryChangeTrigger.Instance.forItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                 "R*R", "*K*", "R*R");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellSetup.POWERCELL_CARD.get())
                         .key('g', Items.GOLD_NUGGET)
@@ -75,36 +75,36 @@ public class Recipes extends BaseRecipeProvider {
                 "rgr", "gpg", "rgr");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(MonitorSetup.POWER_MONITOR.get())
                         .key('P', Items.COMPARATOR)
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_BASE.get())),
                 " P ", "rAr", " R ");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(MonitorSetup.POWER_LEVEL.get())
                         .key('P', Tags.Items.GLASS_PANES)
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_BASE.get())),
                 " P ", "rAr", " R ");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(EndergenicSetup.ENDER_MONITOR.get())
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_BASE.get())),
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_BASE.get())),
                 " o ", "rAr", "TrT");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(EndergenicSetup.ENDERGENIC.get())
-                        .key('Z', VariousSetup.INFUSED_ENDERPEARL.get())
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                        .key('Z', VariousModule.INFUSED_ENDERPEARL.get())
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_FRAME.get())),
                 "dod", "ZFZ", "dod");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(EndergenicSetup.PEARL_INJECTOR.get())
                         .key('C', Tags.Items.CHESTS)
                         .key('H', Blocks.HOPPER)
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_FRAME.get())),
                 " C ", "rFr", " H ");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(BlazingSetup.BLAZING_GENERATOR.get())
                         .key('X', Tags.Items.RODS_BLAZE)
-                        .key('Y', VariousSetup.INFUSED_DIAMOND.get())
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                        .key('Y', VariousModule.INFUSED_DIAMOND.get())
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_FRAME.get())),
                 "XYX", "RFR", "XYX");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(BlazingSetup.BLAZING_AGITATOR.get())
                         .key('X', Tags.Items.RODS_BLAZE)
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_FRAME.get())),
                 "XXX", "GFG", "iii");
         build(consumer, ShapedRecipeBuilder.shapedRecipe(BlazingSetup.BLAZING_INFUSER.get())
                         .key('X', Tags.Items.RODS_BLAZE)
-                        .addCriterion("frame", hasItem(VariousSetup.MACHINE_FRAME.get())),
+                        .addCriterion("frame", hasItem(VariousModule.MACHINE_FRAME.get())),
                 "iXi", "sFs", "iXi");
     }
 }

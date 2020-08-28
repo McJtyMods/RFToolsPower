@@ -10,7 +10,7 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
-import mcjty.rftoolsbase.modules.various.VariousSetup;
+import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingSetup;
@@ -131,7 +131,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
             return Pair.of(10.0f, 30.0f);
         } else if (stack.getItem() == Items.QUARTZ) {
             return Pair.of(0.0f, 40.0f);
-        } else if (stack.getItem() == VariousSetup.DIMENSIONALSHARD.get()) {
+        } else if (stack.getItem() == VariousModule.DIMENSIONALSHARD.get()) {
             return Pair.of(60.0f, 60.0f);
         } else if (stack.getItem() == Items.NETHER_STAR) {
             return Pair.of(120.0f, 120.0f);
