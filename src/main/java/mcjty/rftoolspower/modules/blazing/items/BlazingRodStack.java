@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.blazing.items;
 
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import net.minecraft.item.ItemStack;
 
 public class BlazingRodStack implements IBlazingRod {
@@ -9,7 +9,7 @@ public class BlazingRodStack implements IBlazingRod {
 
     @Override
     public boolean isValid() {
-        return stack.getItem() == BlazingSetup.BLAZING_ROD.get();
+        return stack.getItem() == BlazingModule.BLAZING_ROD.get();
     }
 
     public BlazingRodStack(ItemStack stack) {

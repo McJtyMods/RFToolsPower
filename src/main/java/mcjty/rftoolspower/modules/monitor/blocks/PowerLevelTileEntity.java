@@ -6,7 +6,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.modules.monitor.MonitorSetup;
+import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -24,7 +24,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 public class PowerLevelTileEntity extends LogicTileEntity implements ITickableTileEntity {
 
     public PowerLevelTileEntity() {
-        super(MonitorSetup.TYPE_POWER_LEVEL.get());
+        super(MonitorModule.TYPE_POWER_LEVEL.get());
     }
 
     private int counter = 20;

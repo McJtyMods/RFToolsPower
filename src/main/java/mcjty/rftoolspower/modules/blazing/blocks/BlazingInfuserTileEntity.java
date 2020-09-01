@@ -13,7 +13,7 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -45,8 +45,8 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     private static final int SLOT_CATALYST = 2;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(3)
-            .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_INPUT, 46, 7)
-            .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_OUTPUT, 100, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_INPUT, 46, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_OUTPUT, 100, 7)
             .slot(specific(stack -> getCatalystImprovement(stack) != null), CONTAINER_CONTAINER, SLOT_CATALYST, 46, 25)
             .playerSlots(10, 70));
 
@@ -69,12 +69,12 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     });
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuserr")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingSetup.CONTAINER_BLAZING_INFUSER.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingInfuserTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingInfuserTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
 
     public BlazingInfuserTileEntity() {
-        super(BlazingSetup.TYPE_BLAZING_INFUSER.get());
+        super(BlazingModule.TYPE_BLAZING_INFUSER.get());
     }
 
     private int counter = 10;
@@ -95,7 +95,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
             if (counter < 0) {
                 counter = 10;
                 ItemStack stack = items.getStackInSlot(SLOT_INPUT);
-                if (stack.getItem() == BlazingSetup.BLAZING_ROD.get()) {
+                if (stack.getItem() == BlazingModule.BLAZING_ROD.get()) {
                     int steps = BlazingRod.getInfusionStepsLeft(stack);
                     if (steps > 0) {
                         ItemStack catalyst = items.getStackInSlot(SLOT_CATALYST);
@@ -169,7 +169,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
                 switch (slot) {
                     case SLOT_INPUT:
                     case SLOT_OUTPUT:
-                        return stack.getItem() == BlazingSetup.BLAZING_ROD.get();
+                        return stack.getItem() == BlazingModule.BLAZING_ROD.get();
                     case SLOT_CATALYST:
                         return getCatalystImprovement(stack) != null;
                     default:

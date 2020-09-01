@@ -17,7 +17,7 @@ import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.RedstoneMode;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IntReferenceHolder;
@@ -53,10 +52,10 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
-            .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, 0, 10, 7)
-            .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, 1, 10+18*4, 7)
-            .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, 2, 10, 7+18*2)
-            .slot(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, 3, 10+18*4, 7+18*2)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 0, 10, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 1, 10+18*4, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 2, 10, 7+18*2)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 3, 10+18*4, 7+18*2)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
@@ -70,7 +69,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingSetup.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler)
             .shortListener(getRfPerTickHolder(0))
@@ -94,7 +93,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     }
 
     public BlazingGeneratorTileEntity() {
-        super(BlazingSetup.TYPE_BLAZING_GENERATOR.get());
+        super(BlazingModule.TYPE_BLAZING_GENERATOR.get());
     }
 
     // Maximum RF/tick for a slot for the given blazing rod
@@ -240,7 +239,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
         return new NoDirectionItemHander(this, CONTAINER_FACTORY.get()) {
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == BlazingSetup.BLAZING_ROD.get();
+                return stack.getItem() == BlazingModule.BLAZING_ROD.get();
             }
 
             @Override

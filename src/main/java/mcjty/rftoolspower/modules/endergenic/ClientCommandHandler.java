@@ -1,4 +1,4 @@
-package mcjty.rftoolspower.setup;
+package mcjty.rftoolspower.modules.endergenic;
 
 import mcjty.lib.McJtyLib;
 import mcjty.lib.typed.Key;

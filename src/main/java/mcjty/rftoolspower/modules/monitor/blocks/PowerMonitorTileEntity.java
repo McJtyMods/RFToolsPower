@@ -13,7 +13,7 @@ import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.modules.monitor.MonitorSetup;
+import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -37,7 +37,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 public class PowerMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity {
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(MonitorSetup.CONTAINER_POWER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), PowerMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), PowerMonitorTileEntity.this)));
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
@@ -54,7 +54,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     private int counter = 20;
 
     public PowerMonitorTileEntity() {
-        super(MonitorSetup.TYPE_POWER_MONITOR.get());
+        super(MonitorModule.TYPE_POWER_MONITOR.get());
     }
 
     public static LogicSlabBlock createBlock() {

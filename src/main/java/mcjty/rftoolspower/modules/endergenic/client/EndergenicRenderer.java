@@ -9,7 +9,7 @@ import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.modules.hud.client.HudRenderer;
 import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -71,6 +71,6 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
     }
 
     public static void register() {
-        ClientRegistry.bindTileEntityRenderer(EndergenicSetup.TYPE_ENDERGENIC.get(), EndergenicRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(EndergenicModule.TYPE_ENDERGENIC.get(), EndergenicRenderer::new);
     }
 }

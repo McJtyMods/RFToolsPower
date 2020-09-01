@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -54,7 +54,7 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
     }
 
     public static void register() {
-        ClientRegistry.bindTileEntityRenderer(BlazingSetup.TYPE_BLAZING_AGITATOR.get(), BlazingAgitatorRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(BlazingModule.TYPE_BLAZING_AGITATOR.get(), BlazingAgitatorRenderer::new);
     }
 
 }

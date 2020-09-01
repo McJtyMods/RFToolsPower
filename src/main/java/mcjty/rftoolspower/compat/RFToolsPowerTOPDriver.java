@@ -3,16 +3,16 @@ package mcjty.rftoolspower.compat;
 import mcjty.lib.compat.theoneprobe.McJtyLibTOPDriver;
 import mcjty.lib.compat.theoneprobe.TOPDriver;
 import mcjty.lib.varia.Tools;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
-import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
-import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
@@ -44,19 +44,19 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
         ResourceLocation id = blockState.getBlock().getRegistryName();
         if (!drivers.containsKey(id)) {
-            if (blockState.getBlock() == CoalGeneratorSetup.COALGENERATOR.get()) {
+            if (blockState.getBlock() == CoalGeneratorModule.COALGENERATOR.get()) {
                 drivers.put(id, new CoalDriver());
             } else if (blockState.getBlock() instanceof PowerCellBlock) {
                 drivers.put(id, new PowerCellDriver());
             } else if (blockState.getBlock() instanceof DimensionalCellBlock) {
                 drivers.put(id, new DimensionalCellDriver());
-            } else if (blockState.getBlock() == EndergenicSetup.ENDERGENIC.get()) {
+            } else if (blockState.getBlock() == EndergenicModule.ENDERGENIC.get()) {
                 drivers.put(id, new EndergenicDriver());
-            } else if (blockState.getBlock() == EndergenicSetup.ENDER_MONITOR.get()) {
+            } else if (blockState.getBlock() == EndergenicModule.ENDER_MONITOR.get()) {
                 drivers.put(id, new EndermonitorDriver());
-            } else if (blockState.getBlock() == BlazingSetup.BLAZING_GENERATOR.get()) {
+            } else if (blockState.getBlock() == BlazingModule.BLAZING_GENERATOR.get()) {
                 drivers.put(id, new BlazingGeneratorDriver());
-            } else if (blockState.getBlock() == BlazingSetup.BLAZING_AGITATOR.get()) {
+            } else if (blockState.getBlock() == BlazingModule.BLAZING_AGITATOR.get()) {
                 drivers.put(id, new BlazingAgitatorDriver());
             } else {
                 drivers.put(id, new DefaultDriver());

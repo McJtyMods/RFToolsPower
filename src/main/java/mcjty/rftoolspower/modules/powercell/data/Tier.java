@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.powercell.data;
 
-import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
+import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 
@@ -23,11 +23,11 @@ public enum Tier implements IStringSerializable {
     public TileEntityType<?> getType() {
         switch (this) {
             case TIER1:
-                return PowerCellSetup.TYPE_CELL1.get();
+                return PowerCellModule.TYPE_CELL1.get();
             case TIER2:
-                return PowerCellSetup.TYPE_CELL2.get();
+                return PowerCellModule.TYPE_CELL2.get();
             case TIER3:
-                return PowerCellSetup.TYPE_CELL3.get();
+                return PowerCellModule.TYPE_CELL3.get();
         }
         throw new IllegalStateException("Unknown powercell tier!");
     }
