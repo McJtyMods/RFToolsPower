@@ -6,7 +6,7 @@ import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.client.RenderHelper;
 import mcjty.lib.varia.LogicFacing;
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.modules.monitor.MonitorSetup;
+import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerLevelTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -73,7 +73,7 @@ public class PowerLevelRenderer extends TileEntityRenderer<PowerLevelTileEntity>
     }
 
     public static void register() {
-        ClientRegistry.bindTileEntityRenderer(MonitorSetup.TYPE_POWER_LEVEL.get(), PowerLevelRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(MonitorModule.TYPE_POWER_LEVEL.get(), PowerLevelRenderer::new);
     }
 
 }

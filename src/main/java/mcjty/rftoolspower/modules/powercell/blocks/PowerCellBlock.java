@@ -6,7 +6,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
-import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
+import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -54,11 +54,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                             }
 
                             long totpower = 0;
-                            if (stack.getItem() == PowerCellSetup.CELL1_ITEM.get()) {
+                            if (stack.getItem() == PowerCellModule.CELL1_ITEM.get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
-                            } else if (stack.getItem() == PowerCellSetup.CELL2_ITEM.get()) {
+                            } else if (stack.getItem() == PowerCellModule.CELL2_ITEM.get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
-                            } else if (stack.getItem() == PowerCellSetup.CELL3_ITEM.get()) {
+                            } else if (stack.getItem() == PowerCellModule.CELL3_ITEM.get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
                             }
                             return Long.toString(power) + " (max " + Long.toString(totpower) + " RF/FE)";

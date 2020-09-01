@@ -1,12 +1,12 @@
 package mcjty.rftoolspower.datagen;
 
 import mcjty.lib.datagen.BaseLootTableProvider;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
-import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
-import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
-import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
-import mcjty.rftoolspower.modules.monitor.MonitorSetup;
-import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
+import mcjty.rftoolspower.modules.monitor.MonitorModule;
+import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import net.minecraft.data.DataGenerator;
 
 public class LootTables extends BaseLootTableProvider {
@@ -17,22 +17,22 @@ public class LootTables extends BaseLootTableProvider {
 
     @Override
     protected void addTables() {
-        lootTables.put(MonitorSetup.POWER_MONITOR.get(), createStandardTable("power_monitor", MonitorSetup.POWER_MONITOR.get()));
-        lootTables.put(MonitorSetup.POWER_LEVEL.get(), createSimpleTable("power_level", MonitorSetup.POWER_LEVEL.get()));
-        lootTables.put(CoalGeneratorSetup.COALGENERATOR.get(), createStandardTable("coalgenerator", CoalGeneratorSetup.COALGENERATOR.get()));
-        lootTables.put(PowerCellSetup.CELL1.get(), createStandardTable("cell1", PowerCellSetup.CELL1.get()));
-        lootTables.put(PowerCellSetup.CELL2.get(), createStandardTable("cell2", PowerCellSetup.CELL2.get()));
-        lootTables.put(PowerCellSetup.CELL3.get(), createStandardTable("cell3", PowerCellSetup.CELL3.get()));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL.get(), createStandardTable("dimensionalcell", DimensionalCellSetup.DIMENSIONAL_CELL.get()));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get(), createStandardTable("dimensionalcell_advanced", DimensionalCellSetup.DIMENSIONAL_CELL_ADVANCED.get()));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get(), createStandardTable("dimensionalcell_creative", DimensionalCellSetup.DIMENSIONAL_CELL_CREATIVE.get()));
-        lootTables.put(DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get(), createStandardTable("dimensionalcell_simple", DimensionalCellSetup.DIMENSIONAL_CELL_SIMPLE.get()));
-        lootTables.put(EndergenicSetup.ENDERGENIC.get(), createStandardTable("endergenic", EndergenicSetup.ENDERGENIC.get()));
-        lootTables.put(EndergenicSetup.PEARL_INJECTOR.get(), createStandardTable("pearl_injector", EndergenicSetup.PEARL_INJECTOR.get()));
-        lootTables.put(EndergenicSetup.ENDER_MONITOR.get(), createStandardTable("ender_monitor", EndergenicSetup.ENDER_MONITOR.get()));
-        lootTables.put(BlazingSetup.BLAZING_GENERATOR.get(), createStandardTable("blazing_generator", BlazingSetup.BLAZING_GENERATOR.get()));
-        lootTables.put(BlazingSetup.BLAZING_AGITATOR.get(), createStandardTable("blazing_agitator", BlazingSetup.BLAZING_AGITATOR.get()));
-        lootTables.put(BlazingSetup.BLAZING_INFUSER.get(), createStandardTable("blazing_infuser", BlazingSetup.BLAZING_INFUSER.get()));
+        lootTables.put(MonitorModule.POWER_MONITOR.get(), createStandardTable("power_monitor", MonitorModule.POWER_MONITOR.get()));
+        lootTables.put(MonitorModule.POWER_LEVEL.get(), createSimpleTable("power_level", MonitorModule.POWER_LEVEL.get()));
+        lootTables.put(CoalGeneratorModule.COALGENERATOR.get(), createStandardTable("coalgenerator", CoalGeneratorModule.COALGENERATOR.get()));
+        lootTables.put(PowerCellModule.CELL1.get(), createStandardTable("cell1", PowerCellModule.CELL1.get()));
+        lootTables.put(PowerCellModule.CELL2.get(), createStandardTable("cell2", PowerCellModule.CELL2.get()));
+        lootTables.put(PowerCellModule.CELL3.get(), createStandardTable("cell3", PowerCellModule.CELL3.get()));
+        lootTables.put(DimensionalCellModule.DIMENSIONAL_CELL.get(), createStandardTable("dimensionalcell", DimensionalCellModule.DIMENSIONAL_CELL.get()));
+        lootTables.put(DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get(), createStandardTable("dimensionalcell_advanced", DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get()));
+        lootTables.put(DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.get(), createStandardTable("dimensionalcell_creative", DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.get()));
+        lootTables.put(DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.get(), createStandardTable("dimensionalcell_simple", DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.get()));
+        lootTables.put(EndergenicModule.ENDERGENIC.get(), createStandardTable("endergenic", EndergenicModule.ENDERGENIC.get()));
+        lootTables.put(EndergenicModule.PEARL_INJECTOR.get(), createStandardTable("pearl_injector", EndergenicModule.PEARL_INJECTOR.get()));
+        lootTables.put(EndergenicModule.ENDER_MONITOR.get(), createStandardTable("ender_monitor", EndergenicModule.ENDER_MONITOR.get()));
+        lootTables.put(BlazingModule.BLAZING_GENERATOR.get(), createStandardTable("blazing_generator", BlazingModule.BLAZING_GENERATOR.get()));
+        lootTables.put(BlazingModule.BLAZING_AGITATOR.get(), createStandardTable("blazing_agitator", BlazingModule.BLAZING_AGITATOR.get()));
+        lootTables.put(BlazingModule.BLAZING_INFUSER.get(), createStandardTable("blazing_infuser", BlazingModule.BLAZING_INFUSER.get()));
     }
 
     @Override

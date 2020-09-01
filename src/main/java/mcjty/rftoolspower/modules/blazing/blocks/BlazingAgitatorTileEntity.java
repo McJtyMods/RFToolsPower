@@ -20,7 +20,7 @@ import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRodStack;
 import mcjty.rftoolspower.modules.blazing.logic.BlazingAgitatorAlgorithm;
@@ -59,7 +59,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE * 2)
             .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
-            .box(specific(new ItemStack(BlazingSetup.BLAZING_ROD.get())), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
+            .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
@@ -85,7 +85,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingSetup.CONTAINER_BLAZING_AGITATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingAgitatorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingAgitatorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
 
@@ -126,7 +126,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     private boolean locked[] = new boolean[BUFFER_SIZE];
 
     public BlazingAgitatorTileEntity() {
-        super(BlazingSetup.TYPE_BLAZING_AGITATOR.get());
+        super(BlazingModule.TYPE_BLAZING_AGITATOR.get());
         algorithm = new BlazingAgitatorAlgorithm(slot -> new BlazingRodStack(items.getStackInSlot(slot)));
     }
 
@@ -156,7 +156,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         if (stack.getItem() == Items.BLAZE_ROD) {
             return true;
         }
-        if (stack.getItem() == BlazingSetup.BLAZING_ROD.get()) {
+        if (stack.getItem() == BlazingModule.BLAZING_ROD.get()) {
             return BlazingRod.getInfusionStepsLeft(stack) >= BlazingRod.MAX_INFUSION_STEPS;
         }
         return false;
@@ -204,7 +204,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             ItemStack stack = items.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() == Items.BLAZE_ROD) {
-                    items.setStackInSlot(i, new ItemStack(BlazingSetup.BLAZING_ROD.get()));
+                    items.setStackInSlot(i, new ItemStack(BlazingModule.BLAZING_ROD.get()));
                 } else {
                     float timeLeft = BlazingRod.getAgitationTimeLeft(stack);
                     if (timeLeft > 0) {

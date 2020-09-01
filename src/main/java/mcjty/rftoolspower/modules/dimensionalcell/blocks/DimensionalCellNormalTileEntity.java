@@ -1,10 +1,10 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
-import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 
 public class DimensionalCellNormalTileEntity extends DimensionalCellTileEntity {
 
     public DimensionalCellNormalTileEntity() {
-        super(DimensionalCellSetup.TYPE_DIMENSIONAL_CELL.get());
+        super(DimensionalCellModule.TYPE_DIMENSIONAL_CELL.get());
     }
 }

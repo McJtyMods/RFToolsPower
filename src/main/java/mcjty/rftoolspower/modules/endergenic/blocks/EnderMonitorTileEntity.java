@@ -12,7 +12,7 @@ import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.DimensionId;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -37,7 +37,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     private boolean needpulse = false;
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_ENDER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EnderMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EnderMonitorTileEntity.this)));
 
 
     public static LogicSlabBlock createBlock() {
@@ -49,7 +49,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     public EnderMonitorTileEntity() {
-        super(EndergenicSetup.TYPE_ENDER_MONITOR.get());
+        super(EndergenicModule.TYPE_ENDER_MONITOR.get());
     }
 
     public EnderMonitorMode getMode() {

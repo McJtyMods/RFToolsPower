@@ -2,12 +2,6 @@ package mcjty.rftoolspower.setup;
 
 
 import mcjty.rftoolspower.RFToolsPower;
-import mcjty.rftoolspower.modules.blazing.BlazingSetup;
-import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellSetup;
-import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
-import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
-import mcjty.rftoolspower.modules.monitor.MonitorSetup;
-import mcjty.rftoolspower.modules.powercell.PowerCellSetup;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
@@ -36,13 +30,6 @@ public class Registration {
         CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        CoalGeneratorSetup.register();
-        DimensionalCellSetup.register();
-        PowerCellSetup.register();
-        MonitorSetup.register();
-        EndergenicSetup.register();
-        BlazingSetup.register();
     }
 
 

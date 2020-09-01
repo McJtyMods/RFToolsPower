@@ -18,7 +18,7 @@ import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
-import mcjty.rftoolspower.modules.generator.CoalGeneratorSetup;
+import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -65,7 +65,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
-            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorSetup.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
             .itemHandler(itemHandler)
             .energyHandler(energyHandler));
 
@@ -76,7 +76,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private int burning;
 
     public CoalGeneratorTileEntity() {
-        super(CoalGeneratorSetup.TYPE_COALGENERATOR.get());
+        super(CoalGeneratorModule.TYPE_COALGENERATOR.get());
     }
 
     public static BaseBlock createBlock() {

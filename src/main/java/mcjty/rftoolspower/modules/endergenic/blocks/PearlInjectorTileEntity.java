@@ -13,7 +13,7 @@ import mcjty.lib.varia.DimensionId;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
-import mcjty.rftoolspower.modules.endergenic.EndergenicSetup;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -53,7 +53,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicSetup.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this))
             .itemHandler(itemHandler));
 
     // For pulse detection.
@@ -68,7 +68,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
     public PearlInjectorTileEntity() {
-        super(EndergenicSetup.TYPE_PEARL_INJECTOR.get());
+        super(EndergenicModule.TYPE_PEARL_INJECTOR.get());
     }
 
     public EndergenicTileEntity findEndergenicTileEntity() {
