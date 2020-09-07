@@ -12,6 +12,7 @@ import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.varia.EnergyTools;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.block.Block;
@@ -60,6 +61,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     public static LogicSlabBlock createBlock() {
         return new LogicSlabBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .manualEntry(ManualHelper.create("rftoolspower:powermonitor/powermonitor"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(PowerMonitorTileEntity::new)) {

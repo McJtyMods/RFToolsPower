@@ -1,5 +1,6 @@
 package mcjty.rftoolspower.modules.generator;
 
+import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.modules.IModule;
@@ -21,7 +22,7 @@ import static mcjty.rftoolspower.setup.Registration.*;
 
 public class CoalGeneratorModule implements IModule {
 
-    public static final RegistryObject<Block> COALGENERATOR = BLOCKS.register("coalgenerator", CoalGeneratorTileEntity::createBlock);
+    public static final RegistryObject<BaseBlock> COALGENERATOR = BLOCKS.register("coalgenerator", CoalGeneratorTileEntity::createBlock);
     public static final RegistryObject<Item> COALGENERATOR_ITEM = ITEMS.register("coalgenerator", () -> new BlockItem(COALGENERATOR.get(), Registration.createStandardProperties()));
     public static final RegistryObject<TileEntityType<?>> TYPE_COALGENERATOR = TILES.register("coalgenerator", () -> TileEntityType.Builder.create(CoalGeneratorTileEntity::new, COALGENERATOR.get()).build(null));
     public static final RegistryObject<ContainerType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);

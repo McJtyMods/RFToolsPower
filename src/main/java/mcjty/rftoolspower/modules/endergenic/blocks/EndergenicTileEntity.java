@@ -24,6 +24,7 @@ import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -168,6 +169,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                         Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL).notSolid())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
+                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/endergenic"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
                 .tileEntitySupplier(EndergenicTileEntity::new)) {

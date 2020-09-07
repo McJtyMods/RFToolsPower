@@ -7,7 +7,7 @@ import mcjty.lib.gui.widgets.Panel;
 import mcjty.lib.gui.widgets.ScrollableLabel;
 import mcjty.lib.gui.widgets.Slider;
 import mcjty.lib.gui.widgets.Widgets;
-import mcjty.rftoolsbase.tools.ManualHelper;
+import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,7 +20,7 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
     private ScrollableLabel maximumLabel;
 
     public GuiPowerMonitor(PowerMonitorTileEntity te, GenericContainer container, PlayerInventory inventory) {
-        super(te, container, inventory, ManualHelper.create("rftoolspower:powermonitor/powermonitor"));
+        super(te, container, inventory, MonitorModule.POWER_MONITOR.get().getManualEntry());
 
         xSize = 256;
         ySize = 50;

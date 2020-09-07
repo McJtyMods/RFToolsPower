@@ -18,6 +18,7 @@ import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
@@ -135,6 +136,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
                 Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
+                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazingagitator"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
                 .tileEntitySupplier(BlazingAgitatorTileEntity::new)) {

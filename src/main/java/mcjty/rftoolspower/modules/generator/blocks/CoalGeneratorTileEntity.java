@@ -13,9 +13,11 @@ import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
+import mcjty.lib.gui.ManualEntry;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
@@ -84,6 +86,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 .tileEntitySupplier(CoalGeneratorTileEntity::new)
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
+                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/coalgenerator"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
                         parameter("info", stack -> Long.toString(CoalGeneratorConfig.RFPERTICK.get()) + " RF/FE"))
