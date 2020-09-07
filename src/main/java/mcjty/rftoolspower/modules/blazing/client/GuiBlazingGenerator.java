@@ -6,8 +6,8 @@ import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.lib.gui.widgets.Label;
-import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,7 +19,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     private Label[] labels = new Label[4];
 
     public GuiBlazingGenerator(BlazingGeneratorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(tileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"));
+        super(tileEntity, container, inventory, BlazingModule.BLAZING_GENERATOR.get().getManualEntry());
     }
 
     @Override

@@ -6,8 +6,8 @@ import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.TextField;
 import mcjty.lib.typed.TypedMap;
-import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,7 +30,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     private int timer = 10;
 
     public GuiEndergenic(EndergenicTileEntity endergenicTileEntity, GenericContainer container, PlayerInventory inventory) {
-        super(endergenicTileEntity, container, inventory, ManualHelper.create("rftoolspower:powergeneration/endergenic"));    // @todo 1.15 manual
+        super(endergenicTileEntity, container, inventory, EndergenicModule.ENDERGENIC.get().getManualEntry());
     }
 
     @Override

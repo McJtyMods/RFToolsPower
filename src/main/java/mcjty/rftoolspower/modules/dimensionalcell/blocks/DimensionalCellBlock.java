@@ -7,6 +7,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.lib.varia.NBTTools;
 import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
@@ -79,6 +80,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(supplier)
                 .infusable()
+                .manualEntry(ManualHelper.create("rftoolspower:powerstorage/dimensionalcell"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
                         parameter("info", stack -> {

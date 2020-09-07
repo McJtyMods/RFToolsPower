@@ -11,6 +11,7 @@ import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.DimensionId;
 import mcjty.lib.varia.OrientationTools;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
@@ -62,6 +63,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/pearlinjector"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(PearlInjectorTileEntity::new));

@@ -15,6 +15,7 @@ import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.RedstoneMode;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
@@ -108,6 +109,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
                 Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
+                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
                 .tileEntitySupplier(BlazingGeneratorTileEntity::new)) {

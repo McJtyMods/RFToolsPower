@@ -11,6 +11,7 @@ import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.rftoolsbase.modules.various.VariousModule;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
@@ -83,6 +84,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
         return new BaseBlock(new BlockBuilder().properties(
                 Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinginfuser"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(BlazingInfuserTileEntity::new));
