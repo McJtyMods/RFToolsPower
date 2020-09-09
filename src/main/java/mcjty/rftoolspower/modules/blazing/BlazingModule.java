@@ -2,7 +2,6 @@ package mcjty.rftoolspower.modules.blazing;
 
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
@@ -52,9 +51,9 @@ public class BlazingModule implements IModule {
     @Override
     public void initClient(FMLClientSetupEvent event) {
         DeferredWorkQueue.runLater(() -> {
-            GenericGuiContainer.register(CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
-            GenericGuiContainer.register(CONTAINER_BLAZING_GENERATOR.get(), GuiBlazingGenerator::new);
-            GenericGuiContainer.register(CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
+            GuiBlazingAgitator.register();
+            GuiBlazingGenerator.register();
+            GuiBlazingInfuser.register();
         });
 
         BlazingAgitatorRenderer.register();

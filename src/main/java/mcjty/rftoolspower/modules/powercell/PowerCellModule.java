@@ -1,25 +1,18 @@
 package mcjty.rftoolspower.modules.powercell;
 
-import com.google.common.collect.Lists;
 import mcjty.lib.modules.IModule;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
-import mcjty.rftoolspower.modules.powercell.client.PowerCellBakedModel;
+import mcjty.rftoolspower.modules.powercell.client.ClientSetup;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -48,8 +41,8 @@ public class PowerCellModule implements IModule {
 
     public PowerCellModule() {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(PowerCellModule::onModelBake);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(PowerCellModule::onTextureStitch);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onModelBake);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onTextureStitch);
         });
     }
 
@@ -68,38 +61,4 @@ public class PowerCellModule implements IModule {
         PowerCellConfig.setup(Config.SERVER_BUILDER);
     }
 
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-            return;
-        }
-
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellhoriz_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/inputmask"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask"));
-    }
-
-    public static void onModelBake(ModelBakeEvent event) {
-        PowerCellBakedModel model = new PowerCellBakedModel();
-        Lists.newArrayList("cell1", "cell2", "cell3").stream()
-                .forEach(name -> {
-                    ResourceLocation rl = new ResourceLocation(RFToolsPower.MODID, name);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, ""), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=false,upper=false"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=false,upper=true"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=true,upper=false"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=true,upper=true"), model);
-                });
-    }
 }

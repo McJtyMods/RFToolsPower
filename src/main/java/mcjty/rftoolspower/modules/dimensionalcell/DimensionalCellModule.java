@@ -1,16 +1,13 @@
 package mcjty.rftoolspower.modules.dimensionalcell;
 
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.*;
+import mcjty.rftoolspower.modules.dimensionalcell.client.ClientSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -52,13 +49,10 @@ public class DimensionalCellModule implements IModule {
     @Override
     public void initClient(FMLClientSetupEvent event) {
         DeferredWorkQueue.runLater(() -> {
-            GenericGuiContainer.register(CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
+            GuiDimensionalCell.register();
         });
 
-        RenderTypeLookup.setRenderLayer(DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(DIMENSIONAL_CELL_CREATIVE.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(DIMENSIONAL_CELL_SIMPLE.get(), RenderType.getTranslucent());
+        ClientSetup.initClient();
     }
 
     @Override

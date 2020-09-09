@@ -34,6 +34,10 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         super(endergenicTileEntity, container, inventory, EndergenicModule.ENDERGENIC.get().getManualEntry());
     }
 
+    public static void register() {
+        register(EndergenicModule.CONTAINER_ENDERGENIC.get(), GuiEndergenic::new);
+    }
+
     @Override
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/endergenic.gui"));

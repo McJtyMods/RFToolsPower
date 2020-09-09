@@ -16,6 +16,10 @@ public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntit
         super(tileEntity, container, inventory, EndergenicModule.PEARL_INJECTOR.get().getManualEntry());
     }
 
+    public static void register() {
+        register(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+    }
+
     @Override
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/pearl_injector.gui"));

@@ -17,6 +17,10 @@ public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity,
         super(tileEntity, container, inventory, EndergenicModule.ENDER_MONITOR.get().getManualEntry());
     }
 
+    public static void register() {
+        register(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
+    }
+
     @Override
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/endermonitor.gui"));

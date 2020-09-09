@@ -37,6 +37,10 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
         ySize = POWERCELL_HEIGHT;
     }
 
+    public static void register() {
+        register(DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
+    }
+
     @Override
     public void init() {
         super.init();

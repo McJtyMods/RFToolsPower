@@ -3,26 +3,18 @@ package mcjty.rftoolspower.modules.endergenic;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
-import mcjty.rftoolspower.modules.endergenic.client.EndergenicRenderer;
-import mcjty.rftoolspower.modules.endergenic.client.GuiEnderMonitor;
-import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
-import mcjty.rftoolspower.modules.endergenic.client.GuiPearlInjector;
+import mcjty.rftoolspower.modules.endergenic.client.*;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.RegistryObject;
@@ -51,7 +43,7 @@ public class EndergenicModule implements IModule {
 
     public EndergenicModule() {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(EndergenicModule::onTextureStitch);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onTextureStitch);
         });
     }
 
@@ -63,32 +55,19 @@ public class EndergenicModule implements IModule {
     @Override
     public void initClient(FMLClientSetupEvent event) {
         DeferredWorkQueue.runLater(() -> {
-            GenericGuiContainer.register(CONTAINER_ENDERGENIC.get(), GuiEndergenic::new);
-            GenericGuiContainer.register(CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
-            GenericGuiContainer.register(CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+            GuiEndergenic.register();
+            GuiEnderMonitor.register();
+            GuiPearlInjector.register();
             ClientCommandHandler.registerCommands();
         });
 
-        RenderTypeLookup.setRenderLayer(ENDERGENIC.get(), RenderType.getTranslucent());
-
+        ClientSetup.initClient();
         EndergenicRenderer.register();
     }
 
     @Override
     public void initConfig() {
         EndergenicConfiguration.setup(Config.SERVER_BUILDER, Config.CLIENT_BUILDER);
-    }
-
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-            return;
-        }
-
-        event.addSprite(EndergenicRenderer.HALO);
-        event.addSprite(EndergenicRenderer.BLACKFLASH);
-        event.addSprite(EndergenicRenderer.WHITEFLASH);
-        event.addSprite(EndergenicRenderer.BLUEGLOW);
-        event.addSprite(EndergenicRenderer.REDGLOW);
     }
 
 }
