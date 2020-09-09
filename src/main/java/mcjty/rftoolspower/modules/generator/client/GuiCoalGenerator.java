@@ -20,6 +20,10 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
         super(tileEntity, container, inventory, CoalGeneratorModule.COALGENERATOR.get().getManualEntry());
     }
 
+    public static void register() {
+        register(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
+    }
+
     @Override
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/coalgenerator.gui"));

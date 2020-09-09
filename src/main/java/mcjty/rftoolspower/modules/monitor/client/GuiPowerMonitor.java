@@ -26,6 +26,10 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         ySize = 50;
     }
 
+    public static void register() {
+        register(MonitorModule.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
+    }
+
     @Override
     public void init() {
         super.init();

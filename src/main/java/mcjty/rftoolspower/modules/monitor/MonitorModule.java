@@ -2,7 +2,6 @@ package mcjty.rftoolspower.modules.monitor;
 
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerLevelTileEntity;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
@@ -51,7 +50,7 @@ public class MonitorModule implements IModule {
     @Override
     public void initClient(FMLClientSetupEvent event) {
         DeferredWorkQueue.runLater(() -> {
-            GenericGuiContainer.register(CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
+            GuiPowerMonitor.register();
         });
 
         PowerLevelRenderer.register();

@@ -19,6 +19,10 @@ public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEnt
         super(tileEntity, container, inventory, BlazingModule.BLAZING_INFUSER.get().getManualEntry());
     }
 
+    public static void register() {
+        register(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
+    }
+
     @Override
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_infuser.gui"));

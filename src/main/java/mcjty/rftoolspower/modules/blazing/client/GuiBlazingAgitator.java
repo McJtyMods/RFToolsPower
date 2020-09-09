@@ -20,6 +20,10 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
         super(tileEntity, container, inventory, BlazingModule.BLAZING_AGITATOR.get().getManualEntry());
     }
 
+    public static void register() {
+        register(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
+    }
+
     @Override
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
