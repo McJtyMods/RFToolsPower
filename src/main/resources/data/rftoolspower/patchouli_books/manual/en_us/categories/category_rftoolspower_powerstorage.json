@@ -1,6 +1,6 @@
 {
-  "name": "rftoolspower.category.powerstorage",
-  "description": "rftoolspower.category.powerstorage.description",
+  "name": "Power Storage",
+  "description": "Solutions for storing power",
   "parent": "rftoolspower:category_rftoolspower",
   "icon": "rftoolspower:dimensionalcell",
   "sortnum": 20

@@ -1,12 +1,12 @@
 {
-  "name": "rftoolspower.entry.blazinggenerator",
+  "name": "Blazing Generator",
   "icon": "rftoolspower:blazing_generator",
   "category": "rftoolspower:category_rftoolspower_powergeneration",
   "sortnum": 20,
   "pages": [
     {
       "type": "text",
-      "text": "rftoolspower.page.blazinggenerator0"
+      "text": "The Blazing Generator can generate power out of blaze rods. But before you can do that the rods have to be processed by the $(l:rftoolspower:powergeneration/blazingagitator)Blazing Agitator$(/l). Note the blazing generator can generate power from up to four blazing rods and works best if it can generate power contstantly. Powering up a generator requires time before it can fully use the full potential of a blazing rod"
     }
   ]
 }

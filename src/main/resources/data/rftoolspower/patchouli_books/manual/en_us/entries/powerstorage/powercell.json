@@ -1,12 +1,12 @@
 {
-  "name": "rftoolspower.entry.powercell",
+  "name": "Power Cell",
   "icon": "rftoolspower:cell1",
   "category": "rftoolspower:category_rftoolspower_powerstorage",
   "sortnum": 10,
   "pages": [
     {
       "type": "text",
-      "text": "rftoolspower.page.powercell0"
+      "text": "The Power Cell can be used to store massive amounts of power. You can combine them to form a big multiblock"
     }
   ]
 }

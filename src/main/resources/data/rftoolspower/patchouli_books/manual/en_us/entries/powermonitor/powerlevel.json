@@ -1,12 +1,12 @@
 {
-  "name": "rftoolspower.entry.powerlevel",
+  "name": "Power Level",
   "icon": "rftoolspower:power_level",
   "category": "rftoolspower:category_rftoolspower_monitor",
   "sortnum": 20,
   "pages": [
     {
       "type": "text",
-      "text": "rftoolspower.page.powerlevel0"
+      "text": "This logic block can be placed with its input side facing an energy block. It will show a digit representing the amount of power in that block and it will also emit a redstone signal with that strength"
     }
   ]
 }

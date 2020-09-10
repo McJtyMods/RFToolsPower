@@ -1,16 +1,16 @@
 {
-  "name": "rftoolspower.entry.blazingagitator",
+  "name": "Blazing Agitator",
   "icon": "rftoolspower:blazing_agitator",
   "category": "rftoolspower:category_rftoolspower_powergeneration",
   "sortnum": 23,
   "pages": [
     {
       "type": "text",
-      "text": "rftoolspower.page.blazingagitator0"
+      "text": "Blaze rods have to be processed by the blazing agitator before they can be used in the $(l:rftoolspower:powergeneration/blazinggenerator)Blazing Generator$(/l). Using a little bit of power the agitator will slowly build up the potenty of blaze rods that are placed in the input area. Note that blaze rods adjacent to other blaze rods will improve the quality and speed at which this happens"
     },
     {
       "type": "text",
-      "text": "rftoolspower.page.blazingagitator1"
+      "text": "It is worthwhile to spend some time improving blazing rods until you have top-quality rods that you can use to improve the quality of other blazing rods procued by this agitator. For that reason there are 9 buttons that you can use to prevent fully processed blazing rods from going to the output area"
     }
   ]
 }
