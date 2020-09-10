@@ -1,6 +1,6 @@
 {
-  "name": "rftoolspower.category.powergeneration",
-  "description": "rftoolspower.category.powergeneration.description",
+  "name": "Power Generation",
+  "description": "Machines that can generate power",
   "parent": "rftoolspower:category_rftoolspower",
   "icon": "rftoolspower:coalgenerator",
   "sortnum": 10

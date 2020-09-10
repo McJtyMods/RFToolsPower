@@ -1,12 +1,12 @@
 {
-  "name": "rftoolspower.entry.pearlinjector",
+  "name": "Pearl Injector",
   "icon": "rftoolspower:pearl_injector",
   "category": "rftoolspower:category_rftoolspower_powergeneration",
   "sortnum": 40,
   "pages": [
     {
       "type": "text",
-      "text": "rftoolspower.page.pearlinjector0"
+      "text": "This block has to be placed facing an $(l:rftoolspower:powergeneration/endergenic)Endergenic Generator$(/l) or else directly below it. This machine provides the only way to inject an ender pearl into the power system. When it receives a redstone signal it will convert the ender pearl to an endergenic pearl and immediately insert it into the adjacent Endergenic Generator. If that generator was already holding a pearl then nothing happens and the pearl is lost"
     }
   ]
 }
