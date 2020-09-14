@@ -6,7 +6,7 @@ import mcjty.lib.bindings.DefaultValue;
 import mcjty.lib.bindings.IValue;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.EmptyContainer;
+import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.Key;
@@ -38,7 +38,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 public class PowerMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity {
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), PowerMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), PowerMonitorTileEntity.this)));
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
