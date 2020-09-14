@@ -4,7 +4,7 @@ import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.EmptyContainer;
+import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.LogicTileEntity;
@@ -38,7 +38,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     private boolean needpulse = false;
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EnderMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), EnderMonitorTileEntity.this)));
 
 
     public static LogicSlabBlock createBlock() {

@@ -10,7 +10,7 @@ import mcjty.lib.bindings.IValue;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.EmptyContainer;
+import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.tileentity.GenericEnergyStorage;
@@ -28,12 +28,12 @@ import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
+import mcjty.rftoolspower.modules.endergenic.ClientCommandHandler;
 import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
-import mcjty.rftoolspower.modules.endergenic.ClientCommandHandler;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -96,7 +96,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, EmptyContainer.CONTAINER_FACTORY.get(), getPos(), EndergenicTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), EndergenicTileEntity.this))
             .energyHandler(energyHandler));
 
     @Override
