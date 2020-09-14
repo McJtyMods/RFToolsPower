@@ -46,16 +46,15 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_PLAYERINV = SLOT_BUFFER + BUFFER_SIZE;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
-            .box(specific(new ItemStack(Items.ENDER_PEARL)), CONTAINER_CONTAINER, SLOT_BUFFER, 10, 25, 9, 2)
+            .box(specific(new ItemStack(Items.ENDER_PEARL)).in(), CONTAINER_CONTAINER, SLOT_BUFFER, 10, 25, 9, 2)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
-    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
             .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this))
-            .itemHandler(itemHandler));
+            .itemHandler(() -> items));
 
     // For pulse detection.
     private boolean prevIn = false;
@@ -191,7 +190,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return automationItemHandler.cast();
+            return itemHandler.cast();
         }
         if (cap == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
             return screenHandler.cast();

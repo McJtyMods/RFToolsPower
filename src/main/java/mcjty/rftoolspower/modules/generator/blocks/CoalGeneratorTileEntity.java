@@ -13,7 +13,6 @@ import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
-import mcjty.lib.gui.ManualEntry;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
@@ -54,22 +53,21 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_CHARGEITEM = 1;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(2)
-            .slot(specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)),
+            .slot(specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)).in(),
                     CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24)
-            .slot(specific(EnergyTools::isEnergyItem), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24)
+            .slot(specific(EnergyTools::isEnergyItem).in().out(), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
-    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
-            .itemHandler(itemHandler)
-            .energyHandler(energyHandler));
+            .itemHandler(() -> items)
+            .energyHandler(() -> energyStorage));
 
     private final IInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
@@ -134,7 +132,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         if (burning > 0) {
             burning--;
             long rf = getRfPerTick();
-            storage.produceEnergy(rf);
+            energyStorage.produceEnergy(rf);
         } else if (!items.getStackInSlot(SLOT_COALINPUT).isEmpty()) {
             ItemStack extracted = items.extractItem(SLOT_COALINPUT, 1, false);
             burning = CoalGeneratorConfig.TICKSPERCOAL.get();
@@ -165,16 +163,16 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private void handleChargingItem(IItemHandler handler) {
         ItemStack stack = handler.getStackInSlot(SLOT_CHARGEITEM);
         if (!stack.isEmpty()) {
-            long storedPower = storage.getEnergy();
+            long storedPower = energyStorage.getEnergy();
             long rfToGive = Math.min(CoalGeneratorConfig.CHARGEITEMPERTICK.get(), storedPower);
             long received = EnergyTools.receiveEnergy(stack, rfToGive);
-            storage.consumeEnergy(received);
+            energyStorage.consumeEnergy(received);
         }
     }
 
     private void handleSendingEnergy() {
-        long storedPower = storage.getEnergy();
-        EnergyTools.handleSendingEnergy(world, pos, storedPower, CoalGeneratorConfig.SENDPERTICK.get(), storage);
+        long storedPower = energyStorage.getEnergy();
+        EnergyTools.handleSendingEnergy(world, pos, storedPower, CoalGeneratorConfig.SENDPERTICK.get(), energyStorage);
     }
     
     @Override
@@ -246,7 +244,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return automationItemHandler.cast();
+            return itemHandler.cast();
         }
         if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();

@@ -59,36 +59,24 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     public static int BUFFER_SIZE = 9;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE * 2)
-            .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
-            .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
+            .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod).in(), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
+            .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
-    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items) {
-        @Override
-        public boolean canAutomationInsert(int slot) {
-            return slot < BUFFER_SIZE;
-        }
+    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-        @Override
-        public boolean canAutomationExtract(int slot) {
-            return slot >= BUFFER_SIZE;
-        }
-    });
-
-
-    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
             BlazingConfiguration.AGITATOR_ENERGY_INPUT_PERTICK.get());
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final IInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
             .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingAgitatorTileEntity.this))
-            .itemHandler(itemHandler)
-            .energyHandler(energyHandler));
+            .itemHandler(() -> items)
+            .energyHandler(() -> energyStorage));
 
     public static VoxelShape SLAB = VoxelShapes.create(0f, 0f, 0f, 1f, 0.5f, 1f);
 
@@ -190,8 +178,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         if (!world.isRemote) {
             boolean active = false;
             if (isMachineEnabled()) {
-                if (storage.getEnergy() >= BlazingConfiguration.AGITATOR_USE_PER_TICK.get()) {
-                    storage.consumeEnergy(BlazingConfiguration.AGITATOR_USE_PER_TICK.get());
+                if (energyStorage.getEnergy() >= BlazingConfiguration.AGITATOR_USE_PER_TICK.get()) {
+                    energyStorage.consumeEnergy(BlazingConfiguration.AGITATOR_USE_PER_TICK.get());
                     active = true;
                     tickRods();
                 }
@@ -322,7 +310,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return automationItemHandler.cast();
+            return itemHandler.cast();
         }
         if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
