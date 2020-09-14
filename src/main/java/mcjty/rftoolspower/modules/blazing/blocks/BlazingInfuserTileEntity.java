@@ -46,33 +46,22 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     private static final int SLOT_CATALYST = 2;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(3)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_INPUT, 46, 7)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, SLOT_OUTPUT, 100, 7)
-            .slot(specific(stack -> getCatalystImprovement(stack) != null), CONTAINER_CONTAINER, SLOT_CATALYST, 46, 25)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, SLOT_INPUT, 46, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), CONTAINER_CONTAINER, SLOT_OUTPUT, 100, 7)
+            .slot(specific(stack -> getCatalystImprovement(stack) != null).in(), CONTAINER_CONTAINER, SLOT_CATALYST, 46, 25)
             .playerSlots(10, 70));
 
-    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, true, BlazingConfiguration.INFUSER_MAXENERGY.get(),
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.INFUSER_MAXENERGY.get(),
             BlazingConfiguration.INFUSER_ENERGY_INPUT_PERTICK.get());
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final NoDirectionItemHander items = createItemHandler();
-    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items) {
-        @Override
-        public boolean canAutomationInsert(int slot) {
-            return slot == SLOT_INPUT || slot == SLOT_CATALYST;
-        }
-
-        @Override
-        public boolean canAutomationExtract(int slot) {
-            return slot == SLOT_OUTPUT;
-        }
-    });
+    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuserr")
             .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingInfuserTileEntity.this))
-            .itemHandler(itemHandler)
-            .energyHandler(energyHandler));
+            .itemHandler(() -> items)
+            .energyHandler(() -> energyStorage));
 
     public BlazingInfuserTileEntity() {
         super(BlazingModule.TYPE_BLAZING_INFUSER.get());
@@ -102,8 +91,8 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
                     if (steps > 0) {
                         ItemStack catalyst = items.getStackInSlot(SLOT_CATALYST);
                         if (!catalyst.isEmpty()) {
-                            if (storage.getEnergy() >= BlazingConfiguration.INFUSER_USE_PER_TICK.get()) {
-                                storage.consumeEnergy(BlazingConfiguration.INFUSER_USE_PER_TICK.get());
+                            if (energyStorage.getEnergy() >= BlazingConfiguration.INFUSER_USE_PER_TICK.get()) {
+                                energyStorage.consumeEnergy(BlazingConfiguration.INFUSER_USE_PER_TICK.get());
                                 steps--;
                                 BlazingRod.setInfusionStepsLeft(stack, steps);
                                 items.extractItem(SLOT_CATALYST, 1, false);
@@ -197,7 +186,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return automationItemHandler.cast();
+            return itemHandler.cast();
         }
         if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();

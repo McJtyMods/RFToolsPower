@@ -96,8 +96,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private final NoDirectionItemHander items = createItemHandler();
-    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
@@ -113,7 +112,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     };
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
             .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getPos(), DimensionalCellTileEntity.this))
-            .itemHandler(itemHandler));
+            .itemHandler(() -> items));
     private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
@@ -667,7 +666,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             }
         }
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return automationItemHandler.cast();
+            return itemHandler.cast();
         }
         if (capability == CapabilityInfusable.INFUSABLE_CAPABILITY) {
             return infusableHandler.cast();

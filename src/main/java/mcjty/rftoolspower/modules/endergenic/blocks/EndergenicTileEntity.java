@@ -89,15 +89,15 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     public static final VoxelShape SHAPE = VoxelShapes.create(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
-    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
             .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), EndergenicTileEntity.this))
-            .energyHandler(energyHandler));
+            .energyHandler(() -> energyStorage));
 
     @Override
     public IValue<?>[] getValues() {
@@ -364,13 +364,13 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
             long rf = EndergenicConfiguration.rfToHoldPearl.get();
             rf = (long) (rf * (3.0f - infusable.getInfusedFactor()) / 3.0f);
 
-            long rfStored = storage.getEnergy();
+            long rfStored = energyStorage.getEnergy();
             if (rfStored < rf) {
                 // Not enough energy. Pearl is lost.
                 log("Server Tick: insufficient energy to hold pearl (" + rfStored + " vs " + rf + ")");
                 discardPearl("Not enough energy to hold pearl");
             } else {
-                long rfExtracted = storage.extractEnergy((int)rf, false);
+                long rfExtracted = energyStorage.extractEnergy((int)rf, false);
                 log("Server Tick: holding pearl, consume " + rfExtracted + " RF");
                 rfLost += rfExtracted;
             }
@@ -435,15 +435,15 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     public void modifyEnergyStored(long e) {
-        long capacity = storage.getCapacity();
-        long energy = storage.getEnergy();
+        long capacity = energyStorage.getCapacity();
+        long energy = energyStorage.getEnergy();
         if (e > capacity - energy) {
             e = capacity - energy;
         } else if (e < -energy) {
             e = -energy;
         }
         energy += e;
-        storage.setEnergy(energy);
+        energyStorage.setEnergy(energy);
     }
 
     public static final Direction[] HORIZ_DIRECTIONS = {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
@@ -469,11 +469,11 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     private void handleSendingEnergy() {
-        long storedPower = storage.getEnergy() - EndergenicConfiguration.ENDERGENIC_KEEPRF.get();
+        long storedPower = energyStorage.getEnergy() - EndergenicConfiguration.ENDERGENIC_KEEPRF.get();
         if (storedPower <= 0) {
             return;
         }
-        EnergyTools.handleSendingEnergy(world, pos, storedPower, EndergenicConfiguration.ENDERGENIC_SENDPERTICK.get(), storage);
+        EnergyTools.handleSendingEnergy(world, pos, storedPower, EndergenicConfiguration.ENDERGENIC_SENDPERTICK.get(), energyStorage);
     }
 
     // Handle all pearls that are currently in transit.
@@ -809,7 +809,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     public long getCapacity() {
-        return storage.getCapacity();
+        return energyStorage.getCapacity();
     }
 
     @Nonnull

@@ -53,26 +53,25 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 0, 10, 7)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 1, 10+18*4, 7)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 2, 10, 7+18*2)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())), CONTAINER_CONTAINER, 3, 10+18*4, 7+18*2)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 0, 10, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 1, 10+18*4, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 2, 10, 7+18*2)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 3, 10+18*4, 7+18*2)
             .playerSlots(10, 70));
 
     private final NoDirectionItemHander items = createItemHandler();
-    private final LazyOptional<NoDirectionItemHander> itemHandler = LazyOptional.of(() -> items);
-    private final LazyOptional<AutomationFilterItemHander> automationItemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
+    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private final GenericEnergyStorage storage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> storage);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
+    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
             .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingGeneratorTileEntity.this))
-            .itemHandler(itemHandler)
-            .energyHandler(energyHandler)
+            .itemHandler(() -> items)
+            .energyHandler(() -> energyStorage)
             .shortListener(getRfPerTickHolder(0))
             .shortListener(getRfPerTickHolder(1))
             .shortListener(getRfPerTickHolder(2))
@@ -158,8 +157,8 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     }
 
     private void handleSendingEnergy() {
-        long storedPower = storage.getEnergy();
-        EnergyTools.handleSendingEnergy(world, pos, storedPower, BlazingConfiguration.GENERATOR_SENDPERTICK.get(), storage);
+        long storedPower = energyStorage.getEnergy();
+        EnergyTools.handleSendingEnergy(world, pos, storedPower, BlazingConfiguration.GENERATOR_SENDPERTICK.get(), energyStorage);
     }
 
     private void handlePowerGeneration() {
@@ -195,7 +194,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
                 }
             }
         }
-        storage.produceEnergy(totalRfGenerated);
+        energyStorage.produceEnergy(totalRfGenerated);
 
         boolean generating = totalRfGenerated > 0;
         BlockState state = world.getBlockState(pos);
@@ -267,7 +266,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return automationItemHandler.cast();
+            return itemHandler.cast();
         }
         if (cap == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
