@@ -1,5 +1,6 @@
-Upcoming:
+1.16-3.0.6:
 - Fixed a problem with missing loot tables
+- Update to latest McJtyLib
 
 1.16-3.0.5-beta:
 - Update to latest McJtyLib
