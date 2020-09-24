@@ -35,7 +35,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     }
 
     public static void initOverrides(PowerCellCardItem item) {
-        ItemModelsProperties.func_239418_a_(item, new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
+        ItemModelsProperties.registerProperty(item, new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
             int id = getId(stack);
             return id == -1 ? 0 : 1;
         });
