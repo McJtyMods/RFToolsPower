@@ -52,9 +52,7 @@ public class PowerCellModule implements IModule {
     }
 
     @Override
-    public void initClient(FMLClientSetupEvent event) {
-
-    }
+    public void initClient(FMLClientSetupEvent event) { }
 
     @Override
     public void initConfig() {

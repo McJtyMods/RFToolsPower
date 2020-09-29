@@ -49,6 +49,7 @@ public class DimensionalCellModule implements IModule {
     public void initClient(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             GuiDimensionalCell.register();
+            PowerCellCardItem.initOverrides(POWERCELL_CARD.get());
         });
 
         ClientSetup.initClient();
