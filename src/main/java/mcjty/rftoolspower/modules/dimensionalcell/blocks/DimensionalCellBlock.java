@@ -103,7 +103,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     @Override
     public Collection<String> getTagsToPreserve() {
-        return Collections.singleton("Info");
+        return Collections.singleton("BlockEntityTag");
     }
 
     private static int getPowerFactor(DimensionalCellType type) {

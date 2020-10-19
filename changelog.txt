@@ -1,3 +1,6 @@
+Upcoming:
+- When the powercells or dimensional cells are upgraded they will keep their current settings
+
 1.16-3.0.7:
 - Fixed the powercell link icon no longer working
 
