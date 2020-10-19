@@ -1,3 +1,6 @@
+Upcoming:
+- When the powercells or dimensional cells are upgraded they will keep their current settings
+
 1.15-2.2.5:
 - Update to latest McJtyLib
 
