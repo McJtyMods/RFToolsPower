@@ -232,7 +232,6 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public void onReplaced(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
         if (!world.isRemote) {
             if (state.getBlock() != newstate.getBlock()) {
-                System.out.println("DimensionalCellBlock.onReplaced");
                 TileEntity te = world.getTileEntity(pos);
                 if (te instanceof DimensionalCellTileEntity) {
                     DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
