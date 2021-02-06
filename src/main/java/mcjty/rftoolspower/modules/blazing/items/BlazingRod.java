@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Lazy;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class BlazingRod extends Item {
     public static final float START_DURATION = 20f;
     public static final int MAX_INFUSION_STEPS = 64;
 
-    private final TooltipBuilder tooltipBuilder = new TooltipBuilder()
+    private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
             .info(key("message.rftoolsbase.shiftmessage"))
             .infoShift(header(),
                     parameter("time", BlazingRod::isCharging, stack -> getAgitationTimePercentage(stack) + "%"),
@@ -36,7 +37,7 @@ public class BlazingRod extends Item {
     @Override
     public void addInformation(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flags) {
         super.addInformation(itemStack, world, list, flags);
-        tooltipBuilder.makeTooltip(getRegistryName(), itemStack, list, flags);
+        tooltipBuilder.get().makeTooltip(getRegistryName(), itemStack, list, flags);
     }
 
     public static boolean isCharging(ItemStack stack) {
