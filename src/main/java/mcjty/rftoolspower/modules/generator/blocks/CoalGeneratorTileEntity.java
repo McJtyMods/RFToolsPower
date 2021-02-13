@@ -136,7 +136,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         } else if (!items.getStackInSlot(SLOT_COALINPUT).isEmpty()) {
             ItemStack extracted = items.extractItem(SLOT_COALINPUT, 1, false);
             burning = CoalGeneratorConfig.TICKSPERCOAL.get();
-            if (extracted.getItem() == Item.getItemFromBlock(Blocks.COAL_BLOCK)) {
+            if (extracted.getItem() == Blocks.COAL_BLOCK.asItem()) {
                 burning *= 9;
             }
             float factor = infusable.getInfusedFactor();
