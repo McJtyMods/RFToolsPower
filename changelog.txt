@@ -1,3 +1,7 @@
+Upcoming:
+- Fixed a problem with the crafting grids on the modular storage and storage scanner. They would not allow storing recipes anymore
+- Fixed crafting in the modular storage or storage scanner with recipes that don't take up the full 3x3 grid
+
 1.16-3.0.8:
 - When the powercells or dimensional cells are upgraded they will keep their current settings
 
