@@ -190,7 +190,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         System.out.println("DimensionalCellBlock.getDrops");
         World world = builder.getWorld();
-        Vector3d pos = builder.get(LootParameters.field_237457_g_);
+        Vector3d pos = builder.get(LootParameters.ORIGIN);
         List<ItemStack> drops = super.getDrops(state, builder);
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(new BlockPos(pos.x, pos.y, pos.z));
