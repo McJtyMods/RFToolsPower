@@ -17,6 +17,8 @@ import java.util.List;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.parameter;
 
+import net.minecraft.item.Item.Properties;
+
 public class PowerCellCardItem extends Item implements ITooltipSettings {
 
     private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
@@ -32,19 +34,19 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
 
 
     public PowerCellCardItem() {
-        super(new Properties().group(RFToolsPower.setup.getTab()));
+        super(new Properties().tab(RFToolsPower.setup.getTab()));
     }
 
     public static void initOverrides(PowerCellCardItem item) {
-        ItemModelsProperties.registerProperty(item, new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
+        ItemModelsProperties.register(item, new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity) -> {
             int id = getId(stack);
             return id == -1 ? 0 : 1;
         });
     }
 
     @Override
-    public void addInformation(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flag) {
-        super.addInformation(itemStack, world, list, flag);
+    public void appendHoverText(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flag) {
+        super.appendHoverText(itemStack, world, list, flag);
         tooltipBuilder.get().makeTooltip(getRegistryName(), itemStack, list, flag);
     }
 

@@ -71,6 +71,8 @@ import java.util.Random;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
 
+import net.minecraft.block.AbstractBlock;
+
 public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.IOrderTicker {
 
     private static Random random = new Random();
@@ -87,7 +89,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     public static final Key<BlockPos> VALUE_DESTINATION = new Key<>("destination", Type.BLOCKPOS);
 
-    public static final VoxelShape SHAPE = VoxelShapes.create(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
+    public static final VoxelShape SHAPE = VoxelShapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
@@ -96,7 +98,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), EndergenicTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EndergenicTileEntity.this))
             .energyHandler(() -> energyStorage));
 
     @Override
@@ -166,7 +168,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                        Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL).notSolid())
+                        AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL).noOcclusion())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/endergenic"))
@@ -220,7 +222,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     @Override
     public boolean isBlockAboveAir() {
-        return world.isAirBlock(pos.up());
+        return level.isEmptyBlock(worldPosition.above());
     }
 
     public List<String> getHudLog() {
@@ -244,7 +246,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     @Override
     public BlockPos getBlockPos() {
-        return getPos();
+        return getBlockPos();
     }
 
     @Override
@@ -449,13 +451,13 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
      * @param mode is the new mode
      */
     private void fireMonitors(EnderMonitorMode mode) {
-        BlockPos pos = getPos();
+        BlockPos pos = getBlockPos();
         for (Direction dir : OrientationTools.DIRECTION_VALUES) {
-            BlockPos c = pos.offset(dir);
-            TileEntity te = world.getTileEntity(c);
+            BlockPos c = pos.relative(dir);
+            TileEntity te = level.getBlockEntity(c);
             if (te instanceof EnderMonitorTileEntity) {
                 EnderMonitorTileEntity enderMonitorTileEntity = (EnderMonitorTileEntity) te;
-                Direction inputSide = enderMonitorTileEntity.getFacing(world.getBlockState(c)).getInputSide();
+                Direction inputSide = enderMonitorTileEntity.getFacing(level.getBlockState(c)).getInputSide();
                 if (inputSide == dir.getOpposite()) {
                     enderMonitorTileEntity.fireFromEndergenic(mode);
                 }
@@ -468,7 +470,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         if (storedPower <= 0) {
             return;
         }
-        EnergyTools.handleSendingEnergy(world, pos, storedPower, EndergenicConfiguration.ENDERGENIC_SENDPERTICK.get(), energyStorage);
+        EnergyTools.handleSendingEnergy(level, worldPosition, storedPower, EndergenicConfiguration.ENDERGENIC_SENDPERTICK.get(), energyStorage);
     }
 
     // Handle all pearls that are currently in transit.
@@ -479,7 +481,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         List<EndergenicPearl> newlist = new ArrayList<>();
         for (EndergenicPearl pearl : pearls) {
             log("Pearls: age=" + pearl.getAge() + ", ticks left=" + pearl.getTicksLeft());
-            if (!pearl.handleTick(world)) {
+            if (!pearl.handleTick(level)) {
                 // Keep the pearl. It has not arrived yet.
                 newlist.add(pearl);
             }
@@ -490,19 +492,19 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     private void markDirtyClientNoRender() {
-        markDirty();
-        if (world != null) {
-            world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos).grow(32),
-                    p -> pos.distanceSq(p.getPosX(), p.getPosY(), p.getPosZ(), true) < 32 * 32)
+        setChanged();
+        if (level != null) {
+            level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(worldPosition).inflate(32),
+                    p -> worldPosition.distSqr(p.getX(), p.getY(), p.getZ(), true) < 32 * 32)
                     .stream()
                     .forEach(p -> RFToolsPowerMessages.INSTANCE.sendTo(
                             new PacketSendClientCommand(RFToolsPower.MODID, ClientCommandHandler.CMD_FLASH_ENDERGENIC,
                                     TypedMap.builder()
-                                            .put(ClientCommandHandler.PARAM_POS, getPos())
+                                            .put(ClientCommandHandler.PARAM_POS, getBlockPos())
                                             .put(ClientCommandHandler.PARAM_GOODCOUNTER, goodCounter)
                                             .put(ClientCommandHandler.PARAM_BADCOUNTER, badCounter)
                                             .build()),
-                            ((ServerPlayerEntity)p).connection.netManager, NetworkDirection.PLAY_TO_CLIENT));
+                            ((ServerPlayerEntity)p).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
         }
     }
 
@@ -530,7 +532,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         if (destination == null) {
             return null;
         }
-        TileEntity te = world.getTileEntity(destination);
+        TileEntity te = level.getBlockEntity(destination);
         if (te instanceof EndergenicTileEntity) {
             return (EndergenicTileEntity) te;
         } else {
@@ -621,11 +623,11 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     // Called from client side when a wrench is used.
     public void useWrench(PlayerEntity player) {
-        BlockPos thisCoord = getPos();
+        BlockPos thisCoord = getBlockPos();
         BlockPos coord = RFToolsBase.instance.clientInfo.getSelectedTE();
         TileEntity tileEntity = null;
         if (coord != null) {
-            tileEntity = world.getTileEntity(coord);
+            tileEntity = level.getBlockEntity(coord);
         }
 
         if (!(tileEntity instanceof EndergenicTileEntity)) {
@@ -636,7 +638,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                 RFToolsBase.instance.clientInfo.setDestinationTE(null);
                 Logging.message(player, "Select another endergenic generator as destination");
             } else {
-                RFToolsBase.instance.clientInfo.setDestinationTE(destinationTE.getPos());
+                RFToolsBase.instance.clientInfo.setDestinationTE(destinationTE.getBlockPos());
                 int distance = getDistanceInTicks();
                 Logging.message(player, "Select another endergenic generator as destination (current distance " + distance + ")");
             }
@@ -670,7 +672,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
      * @return is the distance in ticks
      */
     public int calculateDistance(BlockPos destination) {
-        double d = new Vector3d(destination.getX(), destination.getY(), destination.getZ()).distanceTo(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+        double d = new Vector3d(destination.getX(), destination.getY(), destination.getZ()).distanceTo(new Vector3d(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()));
         return (int) (d / 3.0f) + 1;
     }
 
@@ -684,7 +686,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         this.destination = destination;
         distance = calculateDistance(destination);
 
-        if (world.isRemote) {
+        if (level.isClientSide) {
             // We're on the client. Send change to server.
             valueToServer(RFToolsPowerMessages.INSTANCE, VALUE_DESTINATION, destination);
         }
@@ -715,8 +717,8 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        super.write(tagCompound);
+    public CompoundNBT save(CompoundNBT tagCompound) {
+        super.save(tagCompound);
 
         tagCompound.putInt("charging", chargingMode);
         tagCompound.putInt("age", currentAge);
@@ -795,7 +797,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     @Override
     public boolean wrenchUse(World world, BlockPos pos, Direction side, PlayerEntity player) {
-        if (world.isRemote) {
+        if (world.isClientSide) {
             SoundEvent pling = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note.pling"));
             world.playSound(player, pos, pling, SoundCategory.BLOCKS, 1.0f, 1.0f);
             useWrench(player);

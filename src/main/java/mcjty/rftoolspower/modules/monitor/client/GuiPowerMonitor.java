@@ -22,8 +22,8 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
     public GuiPowerMonitor(PowerMonitorTileEntity te, GenericContainer container, PlayerInventory inventory) {
         super(te, container, inventory, MonitorModule.POWER_MONITOR.get().getManualEntry());
 
-        xSize = 256;
-        ySize = 50;
+        imageWidth = 256;
+        imageHeight = 50;
     }
 
     public static void register() {
@@ -45,7 +45,7 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         Panel maximumPanel = Widgets.horizontal().children(Widgets.label("Max:").desiredWidth(30), maximumSlider, maximumLabel).desiredHeight(20);
 
         Panel toplevel = Widgets.vertical().filledRectThickness(2).children(minimumPanel, maximumPanel);
-        toplevel.setBounds(new Rectangle(guiLeft, guiTop, xSize, ySize));
+        toplevel.setBounds(new Rectangle(leftPos, topPos, imageWidth, imageHeight));
         window = new Window(this, toplevel);
 
         window.bind(RFToolsPowerMessages.INSTANCE, "minimum", tileEntity, PowerMonitorTileEntity.VALUE_MINIMUM.getName());

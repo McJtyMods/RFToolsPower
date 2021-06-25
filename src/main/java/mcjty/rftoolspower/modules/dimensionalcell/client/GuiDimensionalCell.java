@@ -33,8 +33,8 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     public GuiDimensionalCell(DimensionalCellTileEntity te, DimensionalCellContainer container, PlayerInventory inventory) {
         super(te, container, inventory, DimensionalCellModule.DIMENSIONAL_CELL.get().getManualEntry());
 
-        xSize = POWERCELL_WIDTH;
-        ySize = POWERCELL_HEIGHT;
+        imageWidth = POWERCELL_WIDTH;
+        imageHeight = POWERCELL_HEIGHT;
     }
 
     public static void register() {
@@ -66,7 +66,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         Panel toplevel = positional().background(iconLocation)
                 .children(energyBar, allNone, allInput, allOutput, label, stats);
-        toplevel.bounds(guiLeft, guiTop, xSize, ySize);
+        toplevel.bounds(leftPos, topPos, imageWidth, imageHeight);
 
         window = new Window(this, toplevel);
 
@@ -87,7 +87,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(MatrixStack matrixStack, float v, int i, int i2) {
         drawWindow(matrixStack);
 
         requestRF();

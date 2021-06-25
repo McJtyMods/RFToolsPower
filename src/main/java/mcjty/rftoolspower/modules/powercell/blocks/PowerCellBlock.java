@@ -67,11 +67,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
-        if (!world.isRemote) {
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(world, pos, state, placer, stack);
+        if (!world.isClientSide) {
 
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 long energy = stack.hasTag() ? stack.getTag().getLong("energy") : 0;
@@ -104,8 +104,8 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
     @Override
     protected boolean wrenchUse(World world, BlockPos pos, Direction side, PlayerEntity player) {
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
+        if (!world.isClientSide) {
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) te;
                 powerCellTileEntity.toggleMode(side);
@@ -118,19 +118,19 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         BlockState state = super.getStateForPlacement(context);
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        return state.with(UPPER, world.getBlockState(pos.up()).getBlock() == this)
-                .with(LOWER, world.getBlockState(pos.down()).getBlock() == this);
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        return state.setValue(UPPER, world.getBlockState(pos.above()).getBlock() == this)
+                .setValue(LOWER, world.getBlockState(pos.below()).getBlock() == this);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
         if (facing == Direction.UP) {
-            return stateIn.with(UPPER, facingState.getBlock() == this);
+            return stateIn.setValue(UPPER, facingState.getBlock() == this);
         }
         if (facing == Direction.DOWN) {
-            return stateIn.with(LOWER, facingState.getBlock() == this);
+            return stateIn.setValue(LOWER, facingState.getBlock() == this);
         }
         return stateIn;
     }
@@ -142,14 +142,14 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 //    }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(UPPER, LOWER);
     }
 
     @Override
     @Nonnull
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 

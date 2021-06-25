@@ -38,7 +38,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     private boolean needpulse = false;
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), EnderMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EnderMonitorTileEntity.this)));
 
 
     public static LogicSlabBlock createBlock() {
@@ -78,7 +78,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             TickOrderHandler.queue(this);
         }
     }
@@ -117,8 +117,8 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        super.write(tagCompound);
+    public CompoundNBT save(CompoundNBT tagCompound) {
+        super.save(tagCompound);
         tagCompound.putBoolean("rs", powerOutput > 0);
         tagCompound.putBoolean("needPulse", needpulse);
         return tagCompound;

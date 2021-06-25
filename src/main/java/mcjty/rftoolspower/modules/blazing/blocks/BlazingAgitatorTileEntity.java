@@ -54,6 +54,8 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
     public static int BUFFER_SIZE = 9;
@@ -74,11 +76,11 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingAgitatorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingAgitatorTileEntity.this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage));
 
-    public static VoxelShape SLAB = VoxelShapes.create(0f, 0f, 0f, 1f, 0.5f, 1f);
+    public static VoxelShape SLAB = VoxelShapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
 
     public static final Key<Boolean> VALUE_LOCK_00 = new Key<>("lock00", Type.BOOLEAN);
     public static final Key<Boolean> VALUE_LOCK_01 = new Key<>("lock01", Type.BOOLEAN);
@@ -121,7 +123,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL))
+                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazingagitator"))
@@ -175,7 +177,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             boolean active = false;
             if (isMachineEnabled()) {
                 if (energyStorage.getEnergy() >= BlazingConfiguration.AGITATOR_USE_PER_TICK.get()) {
@@ -230,7 +232,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             }
             if (changed) {
                 BlockState state = getBlockState();
-                world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NO_RERENDER);
+                level.sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NO_RERENDER);
             }
         }
     }

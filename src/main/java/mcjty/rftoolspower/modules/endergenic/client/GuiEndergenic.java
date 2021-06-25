@@ -57,7 +57,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(MatrixStack matrixStack, float v, int i, int i2) {
         drawWindow(matrixStack);
         checkStats();
 

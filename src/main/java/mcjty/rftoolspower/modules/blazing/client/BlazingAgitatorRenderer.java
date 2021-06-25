@@ -23,7 +23,7 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
     public void render(BlazingAgitatorTileEntity te, float v, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 
         te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-            matrixStack.push();
+            matrixStack.pushPose();
 
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
@@ -32,7 +32,7 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
                 for (int y = 0 ; y < 3 ; y++) {
                     ItemStack stack = h.getStackInSlot(y * 3 + x);
                     if (!stack.isEmpty()) {
-                        matrixStack.push();
+                        matrixStack.pushPose();
                         matrixStack.scale(.3f, .3f, .3f);
                         matrixStack.translate(x * 0.9f + 0.75f, 2.1f, y * 0.9f + 0.75f);
                         float rotationSpeed = te.getRotationSpeed(x, y);
@@ -42,14 +42,14 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
                             angle -= 360;
                         }
                         te.setCurrentAngle(x, y, angle);
-                        matrixStack.rotate(Vector3f.YP.rotationDegrees(angle));
-                        itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, 0xf000f0, combinedOverlay, matrixStack, buffer);
-                        matrixStack.pop();
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
+                        itemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, 0xf000f0, combinedOverlay, matrixStack, buffer);
+                        matrixStack.popPose();
                     }
                 }
             }
 
-            matrixStack.pop();
+            matrixStack.popPose();
         });
     }
 

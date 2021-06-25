@@ -90,7 +90,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 new DefaultAction(ACTION_CLEARSTATS, () -> {
                     this.totalExtracted = 0;
                     this.totalInserted = 0;
-                    this.markDirty();
+                    this.setChanged();
                 }),
         };
     }
@@ -111,7 +111,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             LazyOptional.of(() -> new SidedHandler(Direction.EAST))
     };
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
-            .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getPos(), DimensionalCellTileEntity.this))
+            .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
             .itemHandler(() -> items));
     private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
@@ -154,14 +154,14 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
 
         @Override
-        public String getString() {
+        public String getSerializedName() {
             return name;
         }
 
 
         @Override
         public String toString() {
-            return getString();
+            return getSerializedName();
         }
     }
 
@@ -183,12 +183,12 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
     public void setNetworkId(int networkId) {
         this.networkId = networkId;
-        markDirty();
+        setChanged();
     }
 
     @Nullable
     public DimensionalCellNetwork.Network getNetwork() {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             // Safety
             return null;
         }
@@ -197,7 +197,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (networkId == -1) {
             return null;
         }
-        DimensionalCellNetwork generatorNetwork = DimensionalCellNetwork.get(world);
+        DimensionalCellNetwork generatorNetwork = DimensionalCellNetwork.get(level);
         return generatorNetwork.getOrCreateNetwork(networkId);
     }
 
@@ -226,28 +226,28 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     };
 
     public Mode getMode(Direction side) {
-        return getBlockState().get(MODES[side.ordinal()]);
+        return getBlockState().getValue(MODES[side.ordinal()]);
     }
 
     public void toggleMode(Direction side) {
         Mode mode = getMode(side);
         switch (mode) {
             case MODE_NONE:
-                world.setBlockState(pos, getBlockState().with(MODES[side.ordinal()], Mode.MODE_INPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_INPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 break;
             case MODE_INPUT:
-                world.setBlockState(pos, getBlockState().with(MODES[side.ordinal()], Mode.MODE_OUTPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_OUTPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 break;
             case MODE_OUTPUT:
-                world.setBlockState(pos, getBlockState().with(MODES[side.ordinal()], Mode.MODE_NONE), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_NONE), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 break;
         }
     }
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
-            long time = world.getGameTime();
+        if (!level.isClientSide) {
+            long time = level.getGameTime();
             if (lastTime == 0) {
                 lastTime = time;
             } else if (time > lastTime + 40) {
@@ -298,8 +298,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
         for (Direction face : OrientationTools.DIRECTION_VALUES) {
             if (getMode(face) == Mode.MODE_OUTPUT) {
-                BlockPos pos = getPos().offset(face);
-                TileEntity te = world.getTileEntity(pos);
+                BlockPos pos = getBlockPos().relative(face);
+                TileEntity te = level.getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (EnergyTools.isEnergyTE(te, opposite)) {
                     // If the adjacent block is also a powercell then we only send energy if this cell is local or the other cell has a different id
@@ -327,7 +327,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (getNetworkId() == -1) {
             factor = 1.0f; // Local energy
         } else {
-            factor = getNetwork().calculateCostFactor(world, getGlobalPos());
+            factor = getNetwork().calculateCostFactor(level, getGlobalPos());
             factor = (factor - 1) * (1 - infusedFactor / 2) + 1;
         }
         return factor;
@@ -342,40 +342,40 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private void handleCardRemoval() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             DimensionalCellNetwork.Network network = getNetwork();
             if (network != null) {
                 energy = network.extractEnergySingleBlock(getDimensionalCellType());
-                network.remove(world, getGlobalPos(), getDimensionalCellType());
-                DimensionalCellNetwork.get(world).save();
+                network.remove(level, getGlobalPos(), getDimensionalCellType());
+                DimensionalCellNetwork.get(level).save();
             }
         }
         networkId = -1;
-        markDirty();
+        setChanged();
     }
 
     private void handleCardInsertion() {
         ItemStack stack = items.getStackInSlot(DimensionalCellContainer.SLOT_CARD);
         int id = PowerCellCardItem.getId(stack);
-        if (!world.isRemote) {
-            DimensionalCellNetwork channels = DimensionalCellNetwork.get(world);
+        if (!level.isClientSide) {
+            DimensionalCellNetwork channels = DimensionalCellNetwork.get(level);
             if (id == -1) {
                 id = channels.newChannel();
                 PowerCellCardItem.setId(stack, id);
             }
             networkId = id;
             DimensionalCellNetwork.Network network = getNetwork();
-            network.add(world, getGlobalPos(), getDimensionalCellType());
+            network.add(level, getGlobalPos(), getDimensionalCellType());
             network.receiveEnergy(energy);
             channels.save();
         } else {
             networkId = id;
         }
-        markDirty();
+        setChanged();
     }
 
     private DimensionalCellType getDimensionalCellType() {
-        return DimensionalCellBlock.getType(world.getBlockState(pos).getBlock());
+        return DimensionalCellBlock.getType(level.getBlockState(worldPosition).getBlock());
     }
 
     // Get the power factor relative to the simple powercell
@@ -391,7 +391,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     public GlobalCoordinate getGlobalPos() {
-        return new GlobalCoordinate(getPos(), world);
+        return new GlobalCoordinate(getBlockPos(), level);
     }
 
     public long getTotalExtracted() {
@@ -425,13 +425,13 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (!simulate) {
             totalInserted += received;
             powerIn += received;
-            markDirty();
+            setChanged();
         }
         return received;
     }
 
     private int receiveEnergyMulti(int maxReceive, boolean simulate) {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return 0;   // Safety
         }
         DimensionalCellNetwork.Network network = getNetwork();
@@ -441,7 +441,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (maxInsert > 0) {
             if (!simulate) {
                 maxInsert = network.receiveEnergy(maxInsert);
-                DimensionalCellNetwork.get(world).save();
+                DimensionalCellNetwork.get(level).save();
             }
         }
         return getDimensionalCellType().isCreative() ? maxReceive : maxInsert;
@@ -454,7 +454,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (maxInsert > 0) {
             if (!simulate) {
                 energy += maxInsert;
-                markDirty();
+                setChanged();
             }
         }
         return getDimensionalCellType().isCreative() ? maxReceive : maxInsert;
@@ -471,13 +471,13 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         if (!simulate) {
             totalExtracted += extracted;
             powerOut += extracted;
-            markDirty();
+            setChanged();
         }
         return extracted;
     }
 
     private int extractEnergyMulti(int maxExtract, boolean simulate, int maximum) {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return 0; // Safety
         }
         DimensionalCellNetwork.Network network = getNetwork();
@@ -486,7 +486,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
         if (!simulate) {
             maxExtract = network.extractEnergy(maxExtract);
-            DimensionalCellNetwork.get(world).save();
+            DimensionalCellNetwork.get(level).save();
         }
         return maxExtract;
     }
@@ -501,13 +501,13 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
         if (!simulate) {
             energy -= maxExtract;
-            markDirty();
+            setChanged();
         }
         return maxExtract;
     }
 
     public int getEnergyStored() {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return 0;
         }
         int networkId = getNetworkId();
@@ -519,7 +519,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     public int getMaxEnergyStored() {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return 0;
         }
         int networkId = getNetworkId();
@@ -532,35 +532,35 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
 
     public void setAllOutput() {
-        world.setBlockState(pos, getBlockState()
-                        .with(DOWN, Mode.MODE_OUTPUT)
-                        .with(UP, Mode.MODE_OUTPUT)
-                        .with(NORTH, Mode.MODE_OUTPUT)
-                        .with(SOUTH, Mode.MODE_OUTPUT)
-                        .with(WEST, Mode.MODE_OUTPUT)
-                        .with(EAST, Mode.MODE_OUTPUT),
+        level.setBlock(worldPosition, getBlockState()
+                        .setValue(DOWN, Mode.MODE_OUTPUT)
+                        .setValue(UP, Mode.MODE_OUTPUT)
+                        .setValue(NORTH, Mode.MODE_OUTPUT)
+                        .setValue(SOUTH, Mode.MODE_OUTPUT)
+                        .setValue(WEST, Mode.MODE_OUTPUT)
+                        .setValue(EAST, Mode.MODE_OUTPUT),
                 Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
     private void setAllInput() {
-        world.setBlockState(pos, getBlockState()
-                        .with(DOWN, Mode.MODE_INPUT)
-                        .with(UP, Mode.MODE_INPUT)
-                        .with(NORTH, Mode.MODE_INPUT)
-                        .with(SOUTH, Mode.MODE_INPUT)
-                        .with(WEST, Mode.MODE_INPUT)
-                        .with(EAST, Mode.MODE_INPUT),
+        level.setBlock(worldPosition, getBlockState()
+                        .setValue(DOWN, Mode.MODE_INPUT)
+                        .setValue(UP, Mode.MODE_INPUT)
+                        .setValue(NORTH, Mode.MODE_INPUT)
+                        .setValue(SOUTH, Mode.MODE_INPUT)
+                        .setValue(WEST, Mode.MODE_INPUT)
+                        .setValue(EAST, Mode.MODE_INPUT),
                 Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
     private void setAllNone() {
-        world.setBlockState(pos, getBlockState()
-                        .with(DOWN, Mode.MODE_NONE)
-                        .with(UP, Mode.MODE_NONE)
-                        .with(NORTH, Mode.MODE_NONE)
-                        .with(SOUTH, Mode.MODE_NONE)
-                        .with(WEST, Mode.MODE_NONE)
-                        .with(EAST, Mode.MODE_NONE),
+        level.setBlock(worldPosition, getBlockState()
+                        .setValue(DOWN, Mode.MODE_NONE)
+                        .setValue(UP, Mode.MODE_NONE)
+                        .setValue(NORTH, Mode.MODE_NONE)
+                        .setValue(SOUTH, Mode.MODE_NONE)
+                        .setValue(WEST, Mode.MODE_NONE)
+                        .setValue(EAST, Mode.MODE_NONE),
                 Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
@@ -589,7 +589,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 } else {
                     msg = "not a powercell!";
                 }
-                TileEntity te = w.getTileEntity(b.getCoordinate());
+                TileEntity te = w.getBlockEntity(b.getCoordinate());
                 if (te instanceof DimensionalCellTileEntity) {
                     DimensionalCellTileEntity power = (DimensionalCellTileEntity) te;
                     msg += " (+:" + power.getTotalInserted() + ", -:" + power.getTotalExtracted() + ")";

@@ -42,7 +42,7 @@ public class EndergenicPearl {
         ticksLeft--;
         if (ticksLeft <= 0) {
             // We arrived. Check that the destination is still there.
-            TileEntity te = world.getTileEntity(destination);
+            TileEntity te = world.getBlockEntity(destination);
             if (te instanceof EndergenicTileEntity) {
                 EndergenicTileEntity endergenicTileEntity = (EndergenicTileEntity) te;
                 endergenicTileEntity.receivePearl(age);

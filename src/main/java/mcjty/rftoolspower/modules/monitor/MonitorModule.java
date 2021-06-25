@@ -28,12 +28,12 @@ public class MonitorModule implements IModule {
 
     public static final RegistryObject<LogicSlabBlock> POWER_MONITOR = BLOCKS.register("power_monitor", PowerMonitorTileEntity::createBlock);
     public static final RegistryObject<Item> POWER_MONITOR_ITEM = ITEMS.register("power_monitor", () -> new BlockItem(POWER_MONITOR.get(), Registration.createStandardProperties()));
-    public static final RegistryObject<TileEntityType<?>> TYPE_POWER_MONITOR = TILES.register("power_monitor", () -> TileEntityType.Builder.create(PowerMonitorTileEntity::new, POWER_MONITOR.get()).build(null));
+    public static final RegistryObject<TileEntityType<?>> TYPE_POWER_MONITOR = TILES.register("power_monitor", () -> TileEntityType.Builder.of(PowerMonitorTileEntity::new, POWER_MONITOR.get()).build(null));
     public static final RegistryObject<ContainerType<GenericContainer>> CONTAINER_POWER_MONITOR = CONTAINERS.register("power_monitor", GenericContainer::createContainerType);
 
     public static final RegistryObject<LogicSlabBlock> POWER_LEVEL = BLOCKS.register("power_level", PowerLevelTileEntity::createBlock);
     public static final RegistryObject<Item> POWER_LEVEL_ITEM = ITEMS.register("power_level", () -> new BlockItem(POWER_LEVEL.get(), Registration.createStandardProperties()));
-    public static final RegistryObject<TileEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> TileEntityType.Builder.create(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
+    public static final RegistryObject<TileEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> TileEntityType.Builder.of(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
 
     public MonitorModule() {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -61,7 +61,7 @@ public class MonitorModule implements IModule {
     }
 
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
+        if (!event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
             return;
         }
 

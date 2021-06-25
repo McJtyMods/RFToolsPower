@@ -49,9 +49,9 @@ public class BlockStates extends BaseBlockStateProvider {
                 getLogicSlabModels("power_monitor5", modLoc("block/monitor/power_monitor5"))
         };
         variantBlock(MonitorModule.POWER_MONITOR.get(),
-                state -> models[state.get(PowerMonitorTileEntity.LEVEL)][state.get(LogicSlabBlock.LOGIC_FACING).getRotationStep()],
-                state -> getXRotation(state.get(LogicSlabBlock.LOGIC_FACING).getSide()),
-                state -> getYRotation(state.get(LogicSlabBlock.LOGIC_FACING).getSide()));
+                state -> models[state.getValue(PowerMonitorTileEntity.LEVEL)][state.getValue(LogicSlabBlock.LOGIC_FACING).getRotationStep()],
+                state -> getXRotation(state.getValue(LogicSlabBlock.LOGIC_FACING).getSide()),
+                state -> getYRotation(state.getValue(LogicSlabBlock.LOGIC_FACING).getSide()));
 
         logicSlabBlock(MonitorModule.POWER_LEVEL.get(), "power_level", modLoc("block/monitor/power_level"));
         logicSlabBlock(EndergenicModule.ENDER_MONITOR.get(), "ender_monitor", modLoc("block/endergenic/ender_monitor"));

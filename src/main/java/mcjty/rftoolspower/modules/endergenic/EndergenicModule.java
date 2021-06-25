@@ -27,17 +27,17 @@ public class EndergenicModule implements IModule {
 
     public static final RegistryObject<LogicSlabBlock> ENDER_MONITOR = BLOCKS.register("ender_monitor", EnderMonitorTileEntity::createBlock);
     public static final RegistryObject<Item> ENDER_MONITOR_ITEM = ITEMS.register("ender_monitor", () -> new BlockItem(ENDER_MONITOR.get(), Registration.createStandardProperties()));
-    public static final RegistryObject<TileEntityType<?>> TYPE_ENDER_MONITOR = TILES.register("ender_monitor", () -> TileEntityType.Builder.create(EnderMonitorTileEntity::new, ENDER_MONITOR.get()).build(null));
+    public static final RegistryObject<TileEntityType<?>> TYPE_ENDER_MONITOR = TILES.register("ender_monitor", () -> TileEntityType.Builder.of(EnderMonitorTileEntity::new, ENDER_MONITOR.get()).build(null));
     public static final RegistryObject<ContainerType<GenericContainer>> CONTAINER_ENDER_MONITOR = CONTAINERS.register("ender_monitor", GenericContainer::createContainerType);
 
     public static final RegistryObject<BaseBlock> PEARL_INJECTOR = BLOCKS.register("pearl_injector", PearlInjectorTileEntity::createBlock);
     public static final RegistryObject<Item> PEARL_INJECTOR_ITEM = ITEMS.register("pearl_injector", () -> new BlockItem(PEARL_INJECTOR.get(), Registration.createStandardProperties()));
-    public static final RegistryObject<TileEntityType<?>> TYPE_PEARL_INJECTOR = TILES.register("pearl_injector", () -> TileEntityType.Builder.create(PearlInjectorTileEntity::new, PEARL_INJECTOR.get()).build(null));
+    public static final RegistryObject<TileEntityType<?>> TYPE_PEARL_INJECTOR = TILES.register("pearl_injector", () -> TileEntityType.Builder.of(PearlInjectorTileEntity::new, PEARL_INJECTOR.get()).build(null));
     public static final RegistryObject<ContainerType<GenericContainer>> CONTAINER_PEARL_INJECTOR = CONTAINERS.register("pearl_injector", GenericContainer::createContainerType);
 
     public static final RegistryObject<BaseBlock> ENDERGENIC = BLOCKS.register("endergenic", EndergenicTileEntity::createBlock);
     public static final RegistryObject<Item> ENDERGENIC_ITEM = ITEMS.register("endergenic", () -> new BlockItem(ENDERGENIC.get(), Registration.createStandardProperties()));
-    public static final RegistryObject<TileEntityType<EndergenicTileEntity>> TYPE_ENDERGENIC = TILES.register("endergenic", () -> TileEntityType.Builder.create(EndergenicTileEntity::new, ENDERGENIC.get()).build(null));
+    public static final RegistryObject<TileEntityType<EndergenicTileEntity>> TYPE_ENDERGENIC = TILES.register("endergenic", () -> TileEntityType.Builder.of(EndergenicTileEntity::new, ENDERGENIC.get()).build(null));
     public static final RegistryObject<ContainerType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 
     public EndergenicModule() {

@@ -41,7 +41,7 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
 
     @Override
     public void render(EndergenicTileEntity tileEntity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        BlockPos coord = tileEntity.getPos();
+        BlockPos coord = tileEntity.getBlockPos();
         if (coord.equals(RFToolsBase.instance.clientInfo.getSelectedTE())) {
             RenderGlowEffect.renderGlow(matrixStackIn, bufferIn, REDGLOW);
         } else if (coord.equals(RFToolsBase.instance.clientInfo.getDestinationTE())) {
@@ -61,8 +61,8 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
             RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.8f * (tileEntity.getBadCounter() / 20.0f), BLACKFLASH, FLASH_SETTINGS);
         }
 
-        ItemStack mainHand = Minecraft.getInstance().player.getHeldItemMainhand();
-        ItemStack offHand = Minecraft.getInstance().player.getHeldItemOffhand();
+        ItemStack mainHand = Minecraft.getInstance().player.getMainHandItem();
+        ItemStack offHand = Minecraft.getInstance().player.getOffhandItem();
         boolean showOverlay = (!mainHand.isEmpty() && mainHand.getItem() instanceof SmartWrenchItem) ||
                 (!offHand.isEmpty() && offHand.getItem() instanceof SmartWrenchItem);
         if (showOverlay) {

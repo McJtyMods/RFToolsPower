@@ -49,7 +49,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         drawWindow(matrixStack);
         updateEnergyBar(energyBar);
     }

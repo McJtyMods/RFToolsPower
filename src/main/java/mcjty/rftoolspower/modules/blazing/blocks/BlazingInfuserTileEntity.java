@@ -39,6 +39,8 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlazingInfuserTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
     private static final int SLOT_INPUT = 0;
@@ -59,7 +61,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuserr")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingInfuserTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingInfuserTileEntity.this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage));
 
@@ -71,7 +73,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL))
+                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinginfuser"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -81,7 +83,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             counter--;
             if (counter < 0) {
                 counter = 10;

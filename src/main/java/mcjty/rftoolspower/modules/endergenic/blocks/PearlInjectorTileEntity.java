@@ -53,7 +53,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), PearlInjectorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), PearlInjectorTileEntity.this))
             .itemHandler(() -> items));
 
     // For pulse detection.
@@ -73,7 +73,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
     public EndergenicTileEntity findEndergenicTileEntity() {
-        BlockState state = world.getBlockState(getPos());
+        BlockState state = level.getBlockState(getBlockPos());
         Direction k = OrientationTools.getOrientation(state);
         EndergenicTileEntity te = getEndergenicGeneratorAt(k.getOpposite());
         if (te != null) {
@@ -83,8 +83,8 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
     private EndergenicTileEntity getEndergenicGeneratorAt(Direction k) {
-        BlockPos o = getPos().offset(k);
-        TileEntity te = world.getTileEntity(o);
+        BlockPos o = getBlockPos().relative(k);
+        TileEntity te = level.getBlockEntity(o);
         if (te instanceof EndergenicTileEntity) {
             return (EndergenicTileEntity) te;
         }
@@ -93,7 +93,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             long ticker = TickOrderHandler.getTicker();
             TickOrderHandler.queue(this);
 
@@ -128,7 +128,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
         if (pulse) {
             injectPearl();
         }
-        markDirty();
+        setChanged();
     }
 
     private boolean takePearl() {
@@ -165,8 +165,8 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        super.write(tagCompound);
+    public CompoundNBT save(CompoundNBT tagCompound) {
+        super.save(tagCompound);
         tagCompound.putBoolean("prevIn", prevIn);
         return tagCompound;
     }

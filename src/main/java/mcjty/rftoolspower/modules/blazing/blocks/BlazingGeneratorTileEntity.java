@@ -46,6 +46,8 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
     public static int BUFFER_SIZE = 4;
@@ -69,7 +71,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), BlazingGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingGeneratorTileEntity.this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .shortListener(getRfPerTickHolder(0))
@@ -105,7 +107,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f).sound(SoundType.METAL))
+                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"))
@@ -113,8 +115,8 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
                 .infoShift(header(), gold())
                 .tileEntitySupplier(BlazingGeneratorTileEntity::new)) {
             @Override
-            protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-                super.fillStateContainer(builder);
+            protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+                super.createBlockStateDefinition(builder);
                 builder.add(WORKING);
             }
         };
@@ -127,7 +129,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             handleSendingEnergy();
             handlePowerGeneration();
         }
@@ -158,7 +160,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
 
     private void handleSendingEnergy() {
         long storedPower = energyStorage.getEnergy();
-        EnergyTools.handleSendingEnergy(world, pos, storedPower, BlazingConfiguration.GENERATOR_SENDPERTICK.get(), energyStorage);
+        EnergyTools.handleSendingEnergy(level, worldPosition, storedPower, BlazingConfiguration.GENERATOR_SENDPERTICK.get(), energyStorage);
     }
 
     private void handlePowerGeneration() {
@@ -197,9 +199,9 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
         energyStorage.produceEnergy(totalRfGenerated);
 
         boolean generating = totalRfGenerated > 0;
-        BlockState state = world.getBlockState(pos);
-        if (state.get(WORKING) != generating) {
-            world.setBlockState(pos, state.with(WORKING, generating), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+        BlockState state = level.getBlockState(worldPosition);
+        if (state.getValue(WORKING) != generating) {
+            level.setBlock(worldPosition, state.setValue(WORKING, generating), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
 
         markDirtyQuick();
@@ -227,13 +229,13 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
+    public CompoundNBT save(CompoundNBT tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
             tagCompound.putFloat("rft" + i, rfPerTick[i]);
             tagCompound.putInt("ticks" + i, ticksRemaining[i]);
         }
-        return super.write(tagCompound);
+        return super.save(tagCompound);
     }
 
     private NoDirectionItemHander createItemHandler() {

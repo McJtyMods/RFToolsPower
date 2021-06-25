@@ -176,8 +176,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         long totReceived = received;
         if (maxReceive > 0) {
             for (Long l : network.getPositions()) {
-                BlockPos p = BlockPos.fromLong(l);
-                TileEntity te = world.getTileEntity(p);
+                BlockPos p = BlockPos.of(l);
+                TileEntity te = level.getBlockEntity(p);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                     received = powercell.receiveEnergyLocal(maxReceive, simulate);
@@ -217,7 +217,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             if (outputCount > 0) {
                 PowerCellNetwork network = getNetwork();
                 if (network != null && network.isValid()) {
@@ -240,8 +240,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         final long[] energy = {0, 0, 0};  // For each tier
         final int[] count = {0, 0, 0};
         network.getPositions().stream().forEach(l -> {
-            BlockPos p = BlockPos.fromLong(l);
-            TileEntity te = world.getTileEntity(p);
+            BlockPos p = BlockPos.of(l);
+            TileEntity te = level.getBlockEntity(p);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 int t = powercell.getTier().ordinal();
@@ -254,8 +254,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
                 long energyPerBlock = energy[tier.ordinal()] / count[tier.ordinal()];
                 final long[] energyToSet = {energyPerBlock + energy[tier.ordinal()] % count[tier.ordinal()]};   // First block gets more (remainder)
                 network.getPositions().stream().forEach(l -> {
-                    BlockPos p = BlockPos.fromLong(l);
-                    TileEntity te = world.getTileEntity(p);
+                    BlockPos p = BlockPos.of(l);
+                    TileEntity te = level.getBlockEntity(p);
                     if (te instanceof PowerCellTileEntity) {
                         PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                         if (powercell.getTier() == tier) {
@@ -273,8 +273,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         final long[] energy = {0};
         final long[] maxEnergy = {0};
         getNetwork().getPositions().stream().forEach(l -> {
-            BlockPos p = BlockPos.fromLong(l);
-            TileEntity te = world.getTileEntity(p);
+            BlockPos p = BlockPos.of(l);
+            TileEntity te = level.getBlockEntity(p);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 energy[0] += powercell.getLocalEnergy();
@@ -300,8 +300,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
         for (Direction face : Direction.values()) {
             if (modes[face.ordinal()] == SideType.OUTPUT) {
-                BlockPos pos = getPos().offset(face);
-                TileEntity te = getWorld().getTileEntity(pos);
+                BlockPos pos = getBlockPos().relative(face);
+                TileEntity te = getLevel().getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (te != null) {
                     // @todo tesla
@@ -341,8 +341,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         // If we still have energy to extract go find another block in the network
         if (energyExtracted > 0) {
             for (Long l : network.getPositions()) {
-                BlockPos p = BlockPos.fromLong(l);
-                TileEntity te = world.getTileEntity(p);
+                BlockPos p = BlockPos.of(l);
+                TileEntity te = level.getBlockEntity(p);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                     toExtractLocal = Math.min(energyExtracted, powercell.localEnergy);
@@ -370,7 +370,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     public PowerCellNetwork getNetwork() {
         if (network == null) {
             // This block has no network. Create one and distribute to all connected powercells
-            buildNetwork(new PowerCellNetwork(), pos);
+            buildNetwork(new PowerCellNetwork(), worldPosition);
         }
         return network;
     }
@@ -388,19 +388,19 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         if (getNetwork() != null) {
             dismantleNetwork(getNetwork());
         }
-        BlockState stateUp = world.getBlockState(pos.up());
+        BlockState stateUp = world.getBlockState(pos.above());
         if (stateUp.getBlock() instanceof PowerCellBlock) {
-            world.notifyBlockUpdate(pos.up(), stateUp, stateUp, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            world.sendBlockUpdated(pos.above(), stateUp, stateUp, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
-        BlockState stateDown = world.getBlockState(pos.down());
+        BlockState stateDown = world.getBlockState(pos.below());
         if (stateDown.getBlock() instanceof PowerCellBlock) {
-            world.notifyBlockUpdate(pos.down(), stateDown, stateDown, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            world.sendBlockUpdated(pos.below(), stateDown, stateDown, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
     }
 
     public void dismantleNetwork(PowerCellNetwork network) {
-        network.getPositions().stream().map(BlockPos::fromLong).forEach(pos -> {
-            TileEntity te = world.getTileEntity(pos);
+        network.getPositions().stream().map(BlockPos::of).forEach(pos -> {
+            TileEntity te = level.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 powercell.setNetwork(null);
@@ -412,14 +412,14 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     private static Set<BlockPos> alreadyReportedUnexpected = new HashSet<>();
 
     private void buildNetwork(PowerCellNetwork network, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = level.getBlockEntity(pos);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
 
             if (network.contains(pos)) {
                 if (powercell.network != network) {
                     if (!alreadyReportedBad.contains(pos)) {
-                        System.out.println("Bad network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getName() + ")");
+                        System.out.println("Bad network at pos = " + pos + " (dimension " + DimensionId.fromWorld(level).getName() + ")");
                         alreadyReportedBad.add(pos);
                     }
                 }
@@ -428,7 +428,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
             if (powercell.network == network) {
                 if (!alreadyReportedUnexpected.contains(pos)) {
-                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + DimensionId.fromWorld(world).getName() + ")");
+                    System.out.println("Unexpected network at pos = " + pos + " (dimension " + DimensionId.fromWorld(level).getName() + ")");
                     alreadyReportedUnexpected.add(pos);
                 }
                 return;
@@ -445,7 +445,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             network.setMaxEnergy(network.getMaxEnergy() + powercell.getLocalMaxEnergy());
 
             for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-                buildNetwork(network, pos.offset(facing));
+                buildNetwork(network, pos.relative(facing));
             }
         }
     }
@@ -457,8 +457,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         for (int i = 0 ; i < 6 ; i++) {
             if (old[i] != modes[i]) {
                 ModelDataManager.requestModelDataRefresh(this);
-                BlockState state = world.getBlockState(pos);
-                world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                BlockState state = level.getBlockState(worldPosition);
+                level.sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 return;
             }
         }
@@ -496,7 +496,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
     @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
+    public CompoundNBT save(CompoundNBT tagCompound) {
         String mode = "";
         for (int i = 0 ; i < 6 ; i++) {
             mode += modes[i].ordinal();
@@ -504,7 +504,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         CompoundNBT info = getOrCreateInfo(tagCompound);
         info.putString("mode", mode);
         info.putLong("energy", localEnergy);
-        return super.write(tagCompound);
+        return super.save(tagCompound);
     }
 
 

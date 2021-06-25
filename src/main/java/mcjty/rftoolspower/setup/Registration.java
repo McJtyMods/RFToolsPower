@@ -34,6 +34,6 @@ public class Registration {
 
 
     public static Item.Properties createStandardProperties() {
-        return new Item.Properties().group(RFToolsPower.setup.getTab());
+        return new Item.Properties().tab(RFToolsPower.setup.getTab());
     }
 }

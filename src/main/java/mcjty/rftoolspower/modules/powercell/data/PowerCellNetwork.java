@@ -33,11 +33,11 @@ public class PowerCellNetwork {
     }
 
     public boolean contains(BlockPos pos) {
-        return positions.contains(pos.toLong());
+        return positions.contains(pos.asLong());
     }
 
     public void add(BlockPos pos) {
-        positions.add(pos.toLong());
+        positions.add(pos.asLong());
     }
 
     public Set<Long> getPositions() {

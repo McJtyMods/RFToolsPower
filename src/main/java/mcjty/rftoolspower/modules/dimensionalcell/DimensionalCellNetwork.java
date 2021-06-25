@@ -56,7 +56,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
+    public void load(CompoundNBT tagCompound) {
         networks.clear();
         ListNBT lst = tagCompound.getList("networks", Constants.NBT.TAG_COMPOUND);
         for (int i = 0 ; i < lst.size() ; i++) {
@@ -70,7 +70,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
+    public CompoundNBT save(CompoundNBT tagCompound) {
         ListNBT lst = new ListNBT();
         for (Map.Entry<Integer, Network> entry : networks.entrySet()) {
             CompoundNBT tc = new CompoundNBT();
@@ -189,7 +189,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             if (c1.getDimension() != c2.getDimension()) {
                 return DimensionalCellConfiguration.powerCellDistanceCap .get()* rftoolsdimMult;
             }
-            double dist = Math.sqrt(c1.getCoordinate().distanceSq(c2.getCoordinate()));
+            double dist = Math.sqrt(c1.getCoordinate().distSqr(c2.getCoordinate()));
             if (dist > DimensionalCellConfiguration.powerCellDistanceCap.get()) {
                 dist = DimensionalCellConfiguration.powerCellDistanceCap.get();
             } else if (dist < DimensionalCellConfiguration.powerCellMinDistance.get()) {
@@ -242,7 +242,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
         private void getBlob(Set<GlobalCoordinate> todo, Set<GlobalCoordinate> blob, GlobalCoordinate coordinate) {
             blob.add(coordinate);
             for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-                GlobalCoordinate offset = new GlobalCoordinate(coordinate.getCoordinate().offset(facing), coordinate.getDimension());
+                GlobalCoordinate offset = new GlobalCoordinate(coordinate.getCoordinate().relative(facing), coordinate.getDimension());
                 if (todo.contains(offset)) {
                     todo.remove(offset);
                     getBlob(todo, blob, offset);

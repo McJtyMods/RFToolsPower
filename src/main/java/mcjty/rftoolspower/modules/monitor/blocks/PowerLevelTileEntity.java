@@ -53,17 +53,17 @@ public class PowerLevelTileEntity extends LogicTileEntity implements ITickableTi
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+        handleUpdateTag(getBlockState(), pkt.getTag());
     }
 
     @Override
     public void tick() {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
 
@@ -73,9 +73,9 @@ public class PowerLevelTileEntity extends LogicTileEntity implements ITickableTi
         }
         counter = 20;
 
-        Direction inputSide = getFacing(world.getBlockState(getPos())).getInputSide();
-        BlockPos inputPos = getPos().offset(inputSide);
-        TileEntity tileEntity = world.getTileEntity(inputPos);
+        Direction inputSide = getFacing(level.getBlockState(getBlockPos())).getInputSide();
+        BlockPos inputPos = getBlockPos().relative(inputSide);
+        TileEntity tileEntity = level.getBlockEntity(inputPos);
         if (!EnergyTools.isEnergyTE(tileEntity, null)) {
             setRedstoneState(0);
             return;

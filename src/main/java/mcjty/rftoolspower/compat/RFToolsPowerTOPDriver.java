@@ -79,7 +79,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (CoalGeneratorTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (CoalGeneratorTileEntity te) -> {
                 Boolean working = te.isWorking();
                 if (working) {
                     probeInfo.text(CompoundText.createLabelInfo("Producing ", + te.getRfPerTick() + " RF/t"));
@@ -92,7 +92,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (PowerCellTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (PowerCellTileEntity te) -> {
                 long rfPerTick = te.getRfPerTickReal();
 
                 if (te.getNetwork().isValid()) {
@@ -122,7 +122,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (DimensionalCellTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (DimensionalCellTileEntity te) -> {
                 int id = te.getNetworkId();
                 if (mode == ProbeMode.EXTENDED) {
                     if (id != -1) {
@@ -157,7 +157,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (EndergenicTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (EndergenicTileEntity te) -> {
                 if (mode == ProbeMode.EXTENDED) {
                     IItemStyle style = probeInfo.defaultItemStyle().width(16).height(13);
                     ILayoutStyle layoutStyle = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
@@ -191,7 +191,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
                 EnderMonitorMode m = te.getMode();
                 probeInfo.text(CompoundText.createLabelInfo("Mode: ", m.getDescription()));
             }, "Bad tile entity!");
@@ -202,7 +202,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (BlazingGeneratorTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (BlazingGeneratorTileEntity te) -> {
                 // @todo
             }, "Bad tile entity!");
         }
@@ -212,7 +212,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
         @Override
         public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
-            Tools.safeConsume(world.getTileEntity(data.getPos()), (BlazingAgitatorTileEntity te) -> {
+            Tools.safeConsume(world.getBlockEntity(data.getPos()), (BlazingAgitatorTileEntity te) -> {
                 // @todo
             }, "Bad tile entity!");
         }

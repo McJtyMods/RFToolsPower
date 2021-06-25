@@ -73,8 +73,8 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
             return Collections.emptyList();
         }
 
-        boolean upper = Boolean.TRUE.equals(state.get(PowerCellBlock.UPPER));
-        boolean lower = Boolean.TRUE.equals(state.get(PowerCellBlock.LOWER));
+        boolean upper = Boolean.TRUE.equals(state.getValue(PowerCellBlock.UPPER));
+        boolean lower = Boolean.TRUE.equals(state.getValue(PowerCellBlock.LOWER));
 
         SideType north = data.getData(PowerCellTileEntity.NORTH);
         SideType south = data.getData(PowerCellTileEntity.SOUTH);
@@ -153,7 +153,7 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
+    public TextureAtlasSprite getParticleIcon() {
         return getSideTexture(false, false, 1);
     }
 }

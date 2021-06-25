@@ -8,11 +8,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class ClientSetup {
     public static void initClient() {
-        RenderTypeLookup.setRenderLayer(EndergenicModule.ENDERGENIC.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(EndergenicModule.ENDERGENIC.get(), RenderType.translucent());
     }
 
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
+        if (!event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
             return;
         }
 

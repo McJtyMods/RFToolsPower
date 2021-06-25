@@ -15,18 +15,20 @@ import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
 
+import net.minecraft.item.Item.Properties;
+
 public class PowerCoreItem extends Item implements ITooltipSettings {
 
     private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
             .info(header());
 
     public PowerCoreItem() {
-        super(new Properties().group(RFToolsPower.setup.getTab()));
+        super(new Properties().tab(RFToolsPower.setup.getTab()));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         tooltipBuilder.get().makeTooltip(getRegistryName(), stack, tooltip, flagIn);
     }
 }

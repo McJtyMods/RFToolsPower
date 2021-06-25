@@ -38,7 +38,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 public class PowerMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity {
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getPos(), PowerMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this)));
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
@@ -66,8 +66,8 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
                 .infoShift(header())
                 .tileEntitySupplier(PowerMonitorTileEntity::new)) {
             @Override
-            protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-                super.fillStateContainer(builder);
+            protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+                super.createBlockStateDefinition(builder);
                 builder.add(LEVEL);
             }
         };
@@ -106,7 +106,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Override
     public void tick() {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
 
@@ -116,9 +116,9 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
         }
         counter = 20;
 
-        Direction inputSide = getFacing(world.getBlockState(getPos())).getInputSide();
-        BlockPos inputPos = getPos().offset(inputSide);
-        TileEntity tileEntity = world.getTileEntity(inputPos);
+        Direction inputSide = getFacing(level.getBlockState(getBlockPos())).getInputSide();
+        BlockPos inputPos = getBlockPos().relative(inputSide);
+        TileEntity tileEntity = level.getBlockEntity(inputPos);
         if (!EnergyTools.isEnergyTE(tileEntity, null)) {
             setInvalid();
             return;
@@ -147,15 +147,15 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
         if (alarm != inAlarm) {
             inAlarm = alarm;
             setRedstoneState(inAlarm ? 15 : 0);
-            markDirty();
+            setChanged();
         }
     }
 
     private void changeRfLevel(int newRfLevel) {
         if (newRfLevel != rflevel) {
             rflevel = newRfLevel;
-            world.setBlockState(pos, world.getBlockState(pos).with(LEVEL, rflevel), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-            markDirty();
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, rflevel), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            setChanged();
         }
     }
 
@@ -176,8 +176,8 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        super.write(tagCompound);
+    public CompoundNBT save(CompoundNBT tagCompound) {
+        super.save(tagCompound);
         tagCompound.putBoolean("rs", powerOutput > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
         return tagCompound;

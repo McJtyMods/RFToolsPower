@@ -65,7 +65,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
-            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getPos(), CoalGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), CoalGeneratorTileEntity.this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage));
 
@@ -90,8 +90,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                         parameter("info", stack -> Long.toString(CoalGeneratorConfig.RFPERTICK.get()) + " RF/FE"))
         ) {
             @Override
-            protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-                super.fillStateContainer(builder);
+            protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+                super.createBlockStateDefinition(builder);
                 builder.add(BlockStateProperties.LIT);
             }
         };
@@ -114,7 +114,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
 
             markDirtyQuick();
             handleChargingItem(items);
@@ -143,9 +143,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             burning += (int) (burning * factor / 2.0f);
         }
 
-        BlockState state = world.getBlockState(pos);
-        if (state.get(BlockStateProperties.LIT) != isWorking()) {
-            world.setBlockState(pos, state.with(BlockStateProperties.LIT, isWorking()), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+        BlockState state = level.getBlockState(worldPosition);
+        if (state.getValue(BlockStateProperties.LIT) != isWorking()) {
+            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, isWorking()), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
     }
 
@@ -172,7 +172,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     private void handleSendingEnergy() {
         long storedPower = energyStorage.getEnergy();
-        EnergyTools.handleSendingEnergy(world, pos, storedPower, CoalGeneratorConfig.SENDPERTICK.get(), energyStorage);
+        EnergyTools.handleSendingEnergy(level, worldPosition, storedPower, CoalGeneratorConfig.SENDPERTICK.get(), energyStorage);
     }
     
     @Override
@@ -184,8 +184,8 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     @Override
     @Nonnull
-    public CompoundNBT write(CompoundNBT tagCompound) {
-        super.write(tagCompound);
+    public CompoundNBT save(CompoundNBT tagCompound) {
+        super.save(tagCompound);
         CompoundNBT infoTag = getOrCreateInfo(tagCompound);
         infoTag.putInt("burning", burning);
         return tagCompound;

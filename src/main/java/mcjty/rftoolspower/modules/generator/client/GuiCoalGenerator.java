@@ -39,7 +39,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         drawWindow(matrixStack);
         updateEnergyBar(energyBar);
     }

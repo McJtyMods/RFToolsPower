@@ -6,9 +6,9 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 
 public class ClientSetup {
     public static void initClient() {
-        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.get(), RenderType.translucent());
     }
 }

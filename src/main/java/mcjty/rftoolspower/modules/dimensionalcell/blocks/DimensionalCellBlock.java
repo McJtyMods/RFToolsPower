@@ -44,6 +44,8 @@ import java.util.function.Supplier;
 import static mcjty.lib.builder.TooltipBuilder.*;
 
 
+import net.minecraft.block.AbstractBlock;
+
 public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIngredient {
 
     public static final EnumProperty<DimensionalCellTileEntity.Mode> NORTH = EnumProperty.create("north", DimensionalCellTileEntity.Mode.class);
@@ -54,14 +56,14 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public static final EnumProperty<DimensionalCellTileEntity.Mode> DOWN = EnumProperty.create("down", DimensionalCellTileEntity.Mode.class);
 
     private final DimensionalCellType type;
-    private final static VoxelShape RENDER_SHAPE = VoxelShapes.create(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
+    private final static VoxelShape RENDER_SHAPE = VoxelShapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
     public DimensionalCellType getType() {
         return type;
     }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader reader, BlockPos pos) {
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader reader, BlockPos pos) {
         return RENDER_SHAPE;
     }
 
@@ -75,10 +77,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     public DimensionalCellBlock(DimensionalCellType type, Supplier<TileEntity> supplier) {
         super(new BlockBuilder()
-                .properties(Block.Properties.create(Material.IRON)
-                        .hardnessAndResistance(2.0f)
+                .properties(AbstractBlock.Properties.of(Material.METAL)
+                        .strength(2.0f)
                         .sound(SoundType.METAL)
-                        .setOpaque((state, world, pos) -> false)
+                        .isRedstoneConductor((state, world, pos) -> false)
                 )
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(supplier)
@@ -115,10 +117,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     @Override
     protected boolean wrenchSneakSelect(World world, BlockPos pos, PlayerEntity player) {
-        if (!world.isRemote) {
-            SmartWrenchMode currentMode = SmartWrenchItem.getCurrentMode(player.getHeldItem(Hand.MAIN_HAND));
+        if (!world.isClientSide) {
+            SmartWrenchMode currentMode = SmartWrenchItem.getCurrentMode(player.getItemInHand(Hand.MAIN_HAND));
             if (currentMode == SmartWrenchMode.MODE_SELECT) {
-                TileEntity te = world.getTileEntity(pos);
+                TileEntity te = world.getBlockEntity(pos);
                 if (te instanceof DimensionalCellTileEntity) {
                     DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) te;
                     DimensionalCellTileEntity.dumpNetwork(player, dimensionalCellTileEntity);
@@ -130,8 +132,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     @Override
     protected boolean wrenchUse(World world, BlockPos pos, Direction side, PlayerEntity player) {
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
+        if (!world.isClientSide) {
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof DimensionalCellTileEntity) {
                 DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) te;
                 dimensionalCellTileEntity.toggleMode(side);
@@ -149,10 +151,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
-        if (stack.hasTag() && !world.isRemote) {
-            DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getTileEntity(pos);
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(world, pos, state, placer, stack);
+        if (stack.hasTag() && !world.isClientSide) {
+            DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
             if (dimensionalCellTileEntity != null) {
                 int networkId = dimensionalCellTileEntity.getNetworkId();
                 if (networkId == -1) {
@@ -165,15 +167,15 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     Block block = world.getBlockState(pos).getBlock();
                     network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
                     dimensionalCellNetwork.save();
-                    if (!world.isRemote) {
+                    if (!world.isClientSide) {
 //                        world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
 //@todo
 //                        dimensionalCellTileEntity.updateState();
                     }
                 }
             }
-        } else if (!stack.hasTag() && !world.isRemote) {
-            DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getTileEntity(pos);
+        } else if (!stack.hasTag() && !world.isClientSide) {
+            DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
             if (dimensionalCellTileEntity != null && type.isCreative()) {
                 dimensionalCellTileEntity.setAllOutput();
             }
@@ -189,11 +191,11 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         System.out.println("DimensionalCellBlock.getDrops");
-        World world = builder.getWorld();
-        Vector3d pos = builder.get(LootParameters.ORIGIN);
+        World world = builder.getLevel();
+        Vector3d pos = builder.getOptionalParameter(LootParameters.ORIGIN);
         List<ItemStack> drops = super.getDrops(state, builder);
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(new BlockPos(pos.x, pos.y, pos.z));
+        if (!world.isClientSide) {
+            TileEntity te = world.getBlockEntity(new BlockPos(pos.x, pos.y, pos.z));
             if (te instanceof DimensionalCellTileEntity) {
                 DimensionalCellNetwork.Network network = ((DimensionalCellTileEntity) te).getNetwork();
                 if (network != null) {
@@ -210,9 +212,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
 
     @Override
-    public void onExplosionDestroy(World world, BlockPos pos, Explosion explosion) {
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
+    public void wasExploded(World world, BlockPos pos, Explosion explosion) {
+        if (!world.isClientSide) {
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof DimensionalCellTileEntity) {
                 DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
                 DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
@@ -225,14 +227,14 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 }
             }
         }
-        super.onExplosionDestroy(world, pos, explosion);
+        super.wasExploded(world, pos, explosion);
     }
 
     @Override
-    public void onReplaced(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
-        if (!world.isRemote) {
+    public void onRemove(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
+        if (!world.isClientSide) {
             if (state.getBlock() != newstate.getBlock()) {
-                TileEntity te = world.getTileEntity(pos);
+                TileEntity te = world.getBlockEntity(pos);
                 if (te instanceof DimensionalCellTileEntity) {
                     DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
                     DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
@@ -246,12 +248,12 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 }
             }
         }
-        super.onReplaced(state, world, pos, newstate, isMoving);
+        super.onRemove(state, world, pos, newstate, isMoving);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
 }
