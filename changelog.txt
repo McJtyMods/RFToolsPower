@@ -1,3 +1,6 @@
+Upcoming:
+- Small fix for mojang mappings
+
 1.16-3.0.8:
 - When the powercells or dimensional cells are upgraded they will keep their current settings
 
