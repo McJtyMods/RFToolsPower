@@ -47,14 +47,14 @@ public class Recipes extends BaseRecipeProvider {
                         .unlockedBy("frame", InventoryChangeTrigger.Instance.hasItems(VariousModule.MACHINE_FRAME.get(), PowerCellModule.POWER_CORE1.get())),
                 "rKr", "KFK", "rKr");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellModule.CELL2.get())
-                        .key('K', PowerCellModule.POWER_CORE2.get())
-                        .key('P', PowerCellModule.CELL1.get())
-                        .addCriterion("cell", has(PowerCellModule.CELL1.get())),
+                        .define('K', PowerCellModule.POWER_CORE2.get())
+                        .define('P', PowerCellModule.CELL1.get())
+                        .unlockedBy("cell", has(PowerCellModule.CELL1.get())),
                 "rKr", "KPK", "rKr");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(PowerCellModule.CELL3.get())
-                        .key('K', PowerCellModule.POWER_CORE3.get())
-                        .key('P', PowerCellModule.CELL2.get())
-                        .addCriterion("cell", has(PowerCellModule.CELL2.get())),
+                        .define('K', PowerCellModule.POWER_CORE3.get())
+                        .define('P', PowerCellModule.CELL2.get())
+                        .unlockedBy("cell", has(PowerCellModule.CELL2.get())),
                 "rKr", "KPK", "rKr");
         build(consumer, ShapedRecipeBuilder.shaped(DimensionalCellModule.DIMENSIONAL_CELL.get())
                         .define('P', Items.PRISMARINE_SHARD)
@@ -65,13 +65,13 @@ public class Recipes extends BaseRecipeProvider {
                         .unlockedBy("frame", InventoryChangeTrigger.Instance.hasItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                 "RdR", "qFq", "RdR");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get())
-                        .key('K', DimensionalCellModule.DIMENSIONAL_CELL.get())
-                        .key('*', VariousModule.INFUSED_DIAMOND.get())
-                        .addCriterion("frame", InventoryChangeTrigger.Instance.hasItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
+                        .define('K', DimensionalCellModule.DIMENSIONAL_CELL.get())
+                        .define('*', VariousModule.INFUSED_DIAMOND.get())
+                        .unlockedBy("frame", InventoryChangeTrigger.Instance.hasItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                 "R*R", "*K*", "R*R");
         build(consumer, CopyNBTRecipeBuilder.shapedRecipe(DimensionalCellModule.POWERCELL_CARD.get())
-                        .key('g', Items.GOLD_NUGGET)
-                        .addCriterion("paper", InventoryChangeTrigger.Instance.hasItems(Items.PAPER, Items.REDSTONE)),
+                        .define('g', Items.GOLD_NUGGET)
+                        .unlockedBy("paper", InventoryChangeTrigger.Instance.hasItems(Items.PAPER, Items.REDSTONE)),
                 "rgr", "gpg", "rgr");
         build(consumer, ShapedRecipeBuilder.shaped(MonitorModule.POWER_MONITOR.get())
                         .define('P', Items.COMPARATOR)
