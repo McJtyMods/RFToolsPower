@@ -1,6 +1,7 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import net.minecraft.client.Minecraft;
@@ -43,7 +44,7 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
                         }
                         te.setCurrentAngle(x, y, angle);
                         matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
-                        itemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, 0xf000f0, combinedOverlay, matrixStack, buffer);
+                        itemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer);
                         matrixStack.popPose();
                     }
                 }
