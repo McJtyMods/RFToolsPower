@@ -15,11 +15,13 @@ import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.RedstoneMode;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -31,7 +33,6 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IntReferenceHolder;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
@@ -45,8 +46,6 @@ import javax.annotation.Nullable;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
-
-import net.minecraft.block.AbstractBlock;
 
 public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
@@ -70,40 +69,26 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
 
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingGeneratorTileEntity.this))
-            .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage)
-            .shortListener(getRfPerTickHolder(0))
-            .shortListener(getRfPerTickHolder(1))
-            .shortListener(getRfPerTickHolder(2))
-            .shortListener(getRfPerTickHolder(3)));
-
-    private IntReferenceHolder getRfPerTickHolder(int slot) {
-        return new IntReferenceHolder() {
-            @Override
-            public int get() {
-                return (int) rfPerTick[slot];
-            }
-
-            @Override
-            public void set(int value) {
-                // Client side value
-                rfPerTick[slot] = value;
-            }
-        };
-    }
-
-    public BlazingGeneratorTileEntity() {
-        super(BlazingModule.TYPE_BLAZING_GENERATOR.get());
-    }
-
     // Maximum RF/tick for a slot for the given blazing rod
     private int rfPerTickMax[] = new int[BUFFER_SIZE];
     // Current RF/tick for a slot
     private float rfPerTick[] = new float[BUFFER_SIZE];
     // Ticks remaining until the blazing rod is spent
     private int ticksRemaining[] = new int[BUFFER_SIZE];
+
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingGeneratorTileEntity.this))
+            .itemHandler(() -> items)
+            .energyHandler(() -> energyStorage)
+            .shortListener(Tools.holder(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
+            .shortListener(Tools.holder(() -> (int) rfPerTick[1], v1 -> rfPerTick[1] = v1))
+            .shortListener(Tools.holder(() -> (int) rfPerTick[2], v2 -> rfPerTick[2] = v2))
+            .shortListener(Tools.holder(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3)));
+
+    public BlazingGeneratorTileEntity() {
+        super(BlazingModule.TYPE_BLAZING_GENERATOR.get());
+    }
+
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
