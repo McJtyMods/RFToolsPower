@@ -1,6 +1,8 @@
 package mcjty.rftoolspower.modules.dimensionalcell;
 
-import mcjty.lib.varia.*;
+import mcjty.lib.varia.Logging;
+import mcjty.lib.varia.OrientationTools;
+import mcjty.lib.varia.WorldTools;
 import mcjty.lib.worlddata.AbstractWorldData;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
@@ -10,8 +12,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -85,16 +90,16 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
     public static class Network {
         private int energy = 0;
-        private Set<GlobalCoordinate> blocks = new HashSet<>();
+        private Set<GlobalPos> blocks = new HashSet<>();
         private int simpleBlocks = 0;
         private int advancedBlocks = 0;
 
         // Connectivity information that calculates the cost of extracting energy depending
         // on distance factors. Is recalculated automatically if it is null.
-        private Map<GlobalCoordinate, Float> costFactor = null;
+        private Map<GlobalPos, Float> costFactor = null;
 
         // Be careful with this! Don't modify the set
-        public Set<GlobalCoordinate> getBlocks() {
+        public Set<GlobalPos> getBlocks() {
             return blocks;
         }
 
@@ -123,11 +128,11 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
         public void updateNetwork(World w) {
             advancedBlocks = 0;
             simpleBlocks = 0;
-            Iterable<GlobalCoordinate> copy = new HashSet<>(blocks);
+            Iterable<GlobalPos> copy = new HashSet<>(blocks);
             blocks.clear();
-            for (GlobalCoordinate c : copy) {
-                World world = WorldTools.loadWorld(c.getDimension());
-                BlockState state = world.getBlockState(c.getCoordinate());
+            for (GlobalPos c : copy) {
+                World world = WorldTools.loadWorld(c.dimension());
+                BlockState state = world.getBlockState(c.pos());
                 if (state.getBlock() == DimensionalCellModule.DIMENSIONAL_CELL.get()) {
                     blocks.add(c);
                 } else if (DimensionalCellBlock.getType(state.getBlock()).isAdvanced()) {
@@ -143,7 +148,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
         }
 
-        public void add(World world, GlobalCoordinate g, DimensionalCellType type) {
+        public void add(World world, GlobalPos g, DimensionalCellType type) {
             if (!blocks.contains(g)) {
                 blocks.add(g);
                 costFactor = null;
@@ -157,7 +162,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             }
         }
 
-        public void remove(World world, GlobalCoordinate g, DimensionalCellType type) {
+        public void remove(World world, GlobalPos g, DimensionalCellType type) {
             if (blocks.contains(g)) {
                 blocks.remove(g);
                 costFactor = null;
@@ -171,13 +176,13 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             }
         }
 
-        private double calculateBlobDistance(World world, Set<GlobalCoordinate> blob1, Set<GlobalCoordinate> blob2) {
-            GlobalCoordinate c1 = blob1.iterator().next();
-            GlobalCoordinate c2 = blob2.iterator().next();
+        private double calculateBlobDistance(World world, Set<GlobalPos> blob1, Set<GlobalPos> blob2) {
+            GlobalPos c1 = blob1.iterator().next();
+            GlobalPos c2 = blob2.iterator().next();
 
             // @todo 1.14 rftools dimensions!
-            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, c1.getDimension().loadWorld());
-            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, c2.getDimension().loadWorld());
+            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getWorld(c1.dimension()));
+            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getWorld(c2.dimension()));
             double rftoolsdimMult = 1.0;
             if (dim1rftools) {
                 rftoolsdimMult *= DimensionalCellConfiguration.powerCellRFToolsDimensionAdvantage.get();
@@ -186,10 +191,10 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
                 rftoolsdimMult *= DimensionalCellConfiguration.powerCellRFToolsDimensionAdvantage.get();
             }
 
-            if (c1.getDimension() != c2.getDimension()) {
+            if (!c1.dimension().equals(c2.dimension())) {
                 return DimensionalCellConfiguration.powerCellDistanceCap .get()* rftoolsdimMult;
             }
-            double dist = Math.sqrt(c1.getCoordinate().distSqr(c2.getCoordinate()));
+            double dist = Math.sqrt(c1.pos().distSqr(c2.pos()));
             if (dist > DimensionalCellConfiguration.powerCellDistanceCap.get()) {
                 dist = DimensionalCellConfiguration.powerCellDistanceCap.get();
             } else if (dist < DimensionalCellConfiguration.powerCellMinDistance.get()) {
@@ -202,16 +207,16 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             if (costFactor == null) {
                 costFactor = new HashMap<>();
                 // Here we calculate the different blobs of powercells (all connected cells)
-                List<Set<GlobalCoordinate>> blobs = new ArrayList<>();
+                List<Set<GlobalPos>> blobs = new ArrayList<>();
                 getBlobs(blobs);
 
                 // For every blob we calculate it's 'strength' relative to the other blobs.
-                for (Set<GlobalCoordinate> blob : blobs) {
+                for (Set<GlobalPos> blob : blobs) {
 
                     double totalfactor = 1.0f;
 
                     // Scan all blobs different from this one
-                    for (Set<GlobalCoordinate> blob2 : blobs) {
+                    for (Set<GlobalPos> blob2 : blobs) {
                         if (blob2 != blob) {
                             // The distance between the local blob and the other blob:
                             double dist = calculateBlobDistance(world, blob, blob2);
@@ -233,16 +238,16 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
                     totalfactor /= blobs.size();
 
                     // Set this to the coordinates of this blob
-                    for (GlobalCoordinate coordinate : blob) {
+                    for (GlobalPos coordinate : blob) {
                         costFactor.put(coordinate, (float) totalfactor);
                     }
                 }
             }
         }
-        private void getBlob(Set<GlobalCoordinate> todo, Set<GlobalCoordinate> blob, GlobalCoordinate coordinate) {
+        private void getBlob(Set<GlobalPos> todo, Set<GlobalPos> blob, GlobalPos coordinate) {
             blob.add(coordinate);
             for (Direction facing : OrientationTools.DIRECTION_VALUES) {
-                GlobalCoordinate offset = new GlobalCoordinate(coordinate.getCoordinate().relative(facing), coordinate.getDimension());
+                GlobalPos offset = GlobalPos.of(coordinate.dimension(), coordinate.pos().relative(facing));
                 if (todo.contains(offset)) {
                     todo.remove(offset);
                     getBlob(todo, blob, offset);
@@ -251,18 +256,18 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
         }
 
         // Get all sets of cells that are connected to each other.
-        private void getBlobs(List<Set<GlobalCoordinate>> blobs) {
-            Set<GlobalCoordinate> todo = new HashSet<>(blocks);
+        private void getBlobs(List<Set<GlobalPos>> blobs) {
+            Set<GlobalPos> todo = new HashSet<>(blocks);
             while (!todo.isEmpty()) {
-                GlobalCoordinate coordinate = todo.iterator().next();
+                GlobalPos coordinate = todo.iterator().next();
                 todo.remove(coordinate);
-                Set<GlobalCoordinate> blob = new HashSet<>();
+                Set<GlobalPos> blob = new HashSet<>();
                 getBlob(todo, blob, coordinate);
                 blobs.add(blob);
             }
         }
 
-        public float calculateCostFactor(World world, GlobalCoordinate g) {
+        public float calculateCostFactor(World world, GlobalPos g) {
             updateCostFactor(world);
             Float f = costFactor.get(g);
             return f == null ? 1.0f : f;
@@ -317,12 +322,12 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             tagCompound.putInt("advanced", advancedBlocks);
             tagCompound.putInt("simple", simpleBlocks);
             ListNBT list = new ListNBT();
-            for (GlobalCoordinate block : blocks) {
+            for (GlobalPos block : blocks) {
                 CompoundNBT tag = new CompoundNBT();
-                tag.putString("dim", block.getDimension().getRegistryName().toString());
-                tag.putInt("x", block.getCoordinate().getX());
-                tag.putInt("y", block.getCoordinate().getY());
-                tag.putInt("z", block.getCoordinate().getZ());
+                tag.putString("dim", block.dimension().location().toString());
+                tag.putInt("x", block.pos().getX());
+                tag.putInt("y", block.pos().getY());
+                tag.putInt("z", block.pos().getZ());
                 list.add(tag);
             }
 
@@ -338,12 +343,13 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             for (int i = 0 ; i < list.size() ; i++) {
                 CompoundNBT tag = list.getCompound(i);
                 ResourceLocation id = new ResourceLocation(tag.getString("dim"));
-                DimensionId type = DimensionId.fromResourceLocation(id);
+                RegistryKey<World> type = RegistryKey.create(Registry.DIMENSION_REGISTRY, id);
                 if (type == null) {
                     // Something went wrong!
                     Logging.logError("Unknown dimension '" + id.toString() + "'!");
                 } else {
-                    blocks.add(new GlobalCoordinate(new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z")), type));
+                    BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
+                    blocks.add(GlobalPos.of(type, pos));
                 }
             }
         }

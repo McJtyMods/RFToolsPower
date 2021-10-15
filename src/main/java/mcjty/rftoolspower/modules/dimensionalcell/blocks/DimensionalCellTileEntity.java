@@ -24,8 +24,8 @@ import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
-import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,6 +39,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -390,8 +391,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         return energy;
     }
 
-    public GlobalCoordinate getGlobalPos() {
-        return new GlobalCoordinate(getBlockPos(), level);
+    public GlobalPos getGlobalPos() {
+        return GlobalPos.of(level.dimension(), getBlockPos());
     }
 
     public long getTotalExtracted() {
@@ -571,15 +572,15 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
     public static void dumpNetwork(PlayerEntity player, DimensionalCellTileEntity dimensionalCellTileEntity) {
         DimensionalCellNetwork.Network network = dimensionalCellTileEntity.getNetwork();
-        Set<GlobalCoordinate> blocks = network.getBlocks();
+        Set<GlobalPos> blocks = network.getBlocks();
 //        System.out.println("blocks.size() = " + blocks.size());
         blocks.forEach(b -> {
             String msg;
-            World w = WorldTools.loadWorld(b.getDimension());
+            World w = WorldTools.loadWorld(b.dimension());
             if (w == null) {
                 msg = "dimension missing!";
             } else {
-                Block block = w.getBlockState(b.getCoordinate()).getBlock();
+                Block block = w.getBlockState(b.pos()).getBlock();
                 if (block == DimensionalCellModule.DIMENSIONAL_CELL.get()) {
                     msg = "normal";
                 } else if (block == DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get()) {
@@ -589,14 +590,14 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 } else {
                     msg = "not a powercell!";
                 }
-                TileEntity te = w.getBlockEntity(b.getCoordinate());
+                TileEntity te = w.getBlockEntity(b.pos());
                 if (te instanceof DimensionalCellTileEntity) {
                     DimensionalCellTileEntity power = (DimensionalCellTileEntity) te;
                     msg += " (+:" + power.getTotalInserted() + ", -:" + power.getTotalExtracted() + ")";
                 }
             }
 
-            Logging.message(player, "Block: " + BlockPosTools.toString(b.getCoordinate()) + " (" + b.getDimension() + "): " + msg);
+            Logging.message(player, "Block: " + BlockPosTools.toString(b.pos()) + " (" + b.dimension().location().getPath() + "): " + msg);
         });
     }
 
