@@ -6,7 +6,12 @@
   "pages": [
     {
       "type": "text",
-      "text": "This logic block can be placed with its input side facing an energy block. It will show a digit representing the amount of power in that block and it will also emit a redstone signal with that strength"
+      "text": "This logic block can be placed with its input side facing an $(thing)energy block$(). It will show a digit representing the amount of power in that block, and it will also emit a redstone signal with that strength, ranging from 0 to 9."
+    },
+    {
+      "type": "crafting",
+      "heading": "Power Monitor",
+      "recipe": "rftoolspower:power_level"
     }
   ]
 }

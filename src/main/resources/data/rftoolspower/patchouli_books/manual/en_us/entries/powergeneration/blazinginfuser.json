@@ -10,7 +10,7 @@
     },
     {
       "type": "text",
-      "text": "Catalysts (power/time benefit for a full stack):$(br2)$(li)$(item)redstone$() 40%% more power$(li)$(item)glowstone$() 10%% more power, 30%% more time$(li)$(item)quartz$() 40%% more time$(li)$(item)dimensional shards$() 60%% more power, 60%% more time$(li)$(item)nether star$() 120%% more power, 120%% more time$(li)$(item)ghast tear$() 80%% more power, 80%% more time"
+      "text": "Catalysts (power/time benefit for a full stack):$(br2)$(li)$(item)redstone$() 40% more power$(li)$(item)glowstone$() 10% more power, 30% more time$(li)$(item)quartz$() 40% more time$(li)$(item)dimensional shards$() 60% more power, 60% more time$(li)$(item)nether star$() 120% more power, 120% more time$(li)$(item)ghast tear$() 80% more power, 80% more time"
     }
   ]
 }

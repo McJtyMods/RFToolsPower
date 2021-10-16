@@ -6,7 +6,12 @@
   "pages": [
     {
       "type": "text",
-      "text": "This logic block can be placed with its input side facing an energy block. It has a gui that you can use to control the power range where it should emit a redstone signal"
+      "text": "This logic block can be placed with its input side facing an $(thing)energy block$(). It has a GUI that you can use to control the power range where it should emit a $(thing)redstone signal$(). $(br2)Redstone is emitted when the power level is above the minimum percentage and below the maximum percentage. "
+    },
+    {
+      "type": "crafting",
+      "heading": "Power Monitor",
+      "recipe": "rftoolspower:power_monitor"
     }
   ]
 }
