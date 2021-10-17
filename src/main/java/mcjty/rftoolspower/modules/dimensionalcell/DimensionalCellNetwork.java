@@ -2,7 +2,7 @@ package mcjty.rftoolspower.modules.dimensionalcell;
 
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.lib.varia.WorldTools;
+import mcjty.lib.varia.LevelTools;
 import mcjty.lib.worlddata.AbstractWorldData;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
@@ -130,7 +130,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             Iterable<GlobalPos> copy = new HashSet<>(blocks);
             blocks.clear();
             for (GlobalPos c : copy) {
-                World world = WorldTools.getLevel(c.dimension());
+                World world = LevelTools.getLevel(c.dimension());
                 BlockState state = world.getBlockState(c.pos());
                 if (state.getBlock() == DimensionalCellModule.DIMENSIONAL_CELL.get()) {
                     blocks.add(c);
@@ -180,8 +180,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             GlobalPos c2 = blob2.iterator().next();
 
             // @todo 1.14 rftools dimensions!
-            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getLevel(c1.dimension()));
-            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getLevel(c2.dimension()));
+            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, LevelTools.getLevel(c1.dimension()));
+            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, LevelTools.getLevel(c2.dimension()));
             double rftoolsdimMult = 1.0;
             if (dim1rftools) {
                 rftoolsdimMult *= DimensionalCellConfiguration.powerCellRFToolsDimensionAdvantage.get();
@@ -342,7 +342,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             for (int i = 0 ; i < list.size() ; i++) {
                 CompoundNBT tag = list.getCompound(i);
                 ResourceLocation id = new ResourceLocation(tag.getString("dim"));
-                RegistryKey<World> type = WorldTools.getId(id);
+                RegistryKey<World> type = LevelTools.getId(id);
                 if (type == null) {
                     // Something went wrong!
                     Logging.logError("Unknown dimension '" + id.toString() + "'!");
