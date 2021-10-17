@@ -16,7 +16,6 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -131,7 +130,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             Iterable<GlobalPos> copy = new HashSet<>(blocks);
             blocks.clear();
             for (GlobalPos c : copy) {
-                World world = WorldTools.loadWorld(c.dimension());
+                World world = WorldTools.getLevel(c.dimension());
                 BlockState state = world.getBlockState(c.pos());
                 if (state.getBlock() == DimensionalCellModule.DIMENSIONAL_CELL.get()) {
                     blocks.add(c);
@@ -181,8 +180,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             GlobalPos c2 = blob2.iterator().next();
 
             // @todo 1.14 rftools dimensions!
-            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getWorld(c1.dimension()));
-            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getWorld(c2.dimension()));
+            boolean dim1rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getLevel(c1.dimension()));
+            boolean dim2rftools = RFToolsPower.setup.rftoolsDimensions && RFToolsDimensionChecker.isRFToolsDimension(world, WorldTools.getLevel(c2.dimension()));
             double rftoolsdimMult = 1.0;
             if (dim1rftools) {
                 rftoolsdimMult *= DimensionalCellConfiguration.powerCellRFToolsDimensionAdvantage.get();
@@ -343,7 +342,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             for (int i = 0 ; i < list.size() ; i++) {
                 CompoundNBT tag = list.getCompound(i);
                 ResourceLocation id = new ResourceLocation(tag.getString("dim"));
-                RegistryKey<World> type = RegistryKey.create(Registry.DIMENSION_REGISTRY, id);
+                RegistryKey<World> type = WorldTools.getId(id);
                 if (type == null) {
                     // Something went wrong!
                     Logging.logError("Unknown dimension '" + id.toString() + "'!");

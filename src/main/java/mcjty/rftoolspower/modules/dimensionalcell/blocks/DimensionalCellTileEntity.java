@@ -576,7 +576,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 //        System.out.println("blocks.size() = " + blocks.size());
         blocks.forEach(b -> {
             String msg;
-            World w = WorldTools.loadWorld(b.dimension());
+            World w = WorldTools.getLevel(b.dimension());
             if (w == null) {
                 msg = "dimension missing!";
             } else {
