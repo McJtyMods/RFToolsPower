@@ -2,11 +2,45 @@
   "name": "Dimensional Cell",
   "icon": "rftoolspower:dimensionalcell",
   "category": "rftoolspower:category_rftoolspower_powerstorage",
+  "extra_recipe_mappings":[
+    ["rftoolspower:dimensionalcell_creative",0]
+  ],
   "sortnum": 20,
   "pages": [
     {
       "type": "text",
-      "text": "The Dimensional Cell is a multi-dimensional power storage. All linked Dimensional Cells form a distributed multiblock"
+      "text": "The Dimensional Cell is a multi-dimensional power storage. Similarly to the $(l:rftoolspower:powerstorage/powercell)Powercell$(), they can store and transmit vast amounts of power. However, unlike powercells, they do not have to be next to one another to share their RF. Instead, Dimensional Cells are $(thing)Linked$() by a $(l:rftoolspower:powerstorage/powercell)Powercell Card$()."
+    },
+    {
+      "type": "text",
+      "text": "[TODO: screenshot of gui goes here]"
+    },
+    {
+      "type": "text",
+      "text": "The Cell's GUI has 3 slots. The top left slot is used for creating a new $(thing)link$(), the bottom slot is for programming a new Powercell Card to the Dimensional Cell's current link, and the top-right slot is for inserting items to be charged with RF, such as a Charged Porter. $(br2)On the far left is a bar showing how full the entire network of Dimensional Cells is, while on the right we have four buttons."
+    },
+    {
+      "type": "text",
+      "text": "$(thing)Stats$(), when moused over, shows how much RF has been inserted or extracted from this block. $(thing)None$(), $(thing)In$() and $(thing)Out$() will set all sides of the block to ignore, transmit, receive RF, respectively. $(br2)The individual sides of the Dimensional Cell can also be configured with a $(l:rftoolsbase:tools/smartwrench)smart wrench$() in $(thing)Wrench Mode$(). Blue is input, Yellow is output, and a blank side is neither."
+    },
+    {
+      "type": "text",
+      "text": "There is a drawback to Dimensional Cells, however; when set to $(thing)Output Mode$(), there is a small cost to drawing RF from remote cells. It's not a lot, usually just a few percent, but it adds up. Luckily, Dimensional Cells can be $(l:rftoolsbase:machines/infusing)Infused$() to reduce this cost."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:dimensionalcell_simple",
+      "text": "The lowest tier of Dimensional Cell holds 250,000 RF, and can input or output up to 1,250 RF/Tick. This speed can be boosted via $(l:rftoolsbase:machines/infusing)Infusion$()."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:dimensionalcell",
+      "text": "The medium tier of Dimensional Cell holds 1,000,000 RF, and can input or output up to 5,000 RF/Tick. This speed can be boosted via $(l:rftoolsbase:machines/infusing)Infusion$()."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:dimensionalcell_advanced",
+      "text": "The top tier of Dimensional Cell holds 4,000,000 RF, and can input or output up to 20,000 RF/Tick. This speed can be boosted via $(l:rftoolsbase:machines/infusing)Infusion$()."
     }
   ]
 }

@@ -6,7 +6,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "This card is used to link Dimensional Cells"
+      "text": "This card is used to link $(l:rftoolspower:powerstorage/dimensionalcell)Dimensional Cells$() together. When crafted, it will be $(thing)Unlinked.$() Insert it into a Power Cell to Link it. If the cell is not currently Linked, this will create a new Link. if there is already a card in the leftmost slot, then the new card will be reprogrammed to the same Link."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:powercell_card"
     }
   ]
 }

@@ -1,12 +1,43 @@
 {
-  "name": "Power Cell",
+  "name": "Powercell",
   "icon": "rftoolspower:cell1",
   "category": "rftoolspower:category_rftoolspower_powerstorage",
   "sortnum": 10,
   "pages": [
     {
       "type": "text",
-      "text": "The Power Cell can be used to store massive amounts of power. You can combine them to form a big multiblock"
+      "text": "$(item)Powercells$() store massive amounts of power. They can be placed either individually, or they can be placed next to one another to form a multiblock structure. Powercells will automatically distribute RF between themselves and their neighbors, and will join up into a multiblock regardless of tier."
+    },
+    {
+      "type": "text",
+      "text": "Powercells have no UI, but can be configured to input, output, or ignore power by hitting the desired side with a $(l:rftoolsbase:tools/smartwrench)smart wrench$() in $(thing)Wrench Mode$(). Blue is input, Yellow is output, and a blank side is neither."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:power_core1",
+      "recipe2": "rftoolspower:cell1"
+    },
+    {
+      "type": "text",
+      "text": "By default, the $(item)Powercell (low)$() can hold 500,000RF each."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:power_core2",
+      "recipe2": "rftoolspower:cell2"
+    },
+    {
+      "type": "text",
+      "text": "By default, the $(item)Powercell (Medium)$() can hold 4,000,000RF each."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:power_core3",
+      "recipe2": "rftoolspower:cell3"
+    },
+    {
+      "type": "text",
+      "text": "By default, the $(item)Powercell (high)$() can hold 20,000,000RF each. That's a lot of RF!"
     }
   ]
 }

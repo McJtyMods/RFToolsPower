@@ -1,6 +1,6 @@
 {
   "name": "Power Storage",
-  "description": "Solutions for storing power",
+  "description": "Solutions for storing power, both locally and interdimensionally.",
   "parent": "rftoolspower:category_rftoolspower",
   "icon": "rftoolspower:dimensionalcell",
   "sortnum": 20
