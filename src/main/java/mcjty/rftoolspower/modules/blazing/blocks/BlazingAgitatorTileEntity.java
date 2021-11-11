@@ -156,7 +156,6 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     @Override
     public void writeClientDataToNBT(CompoundNBT tagCompound) {
-        super.writeClientDataToNBT(tagCompound);
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putFloat("rs" + i, rotationSpeed[i]);
         }
