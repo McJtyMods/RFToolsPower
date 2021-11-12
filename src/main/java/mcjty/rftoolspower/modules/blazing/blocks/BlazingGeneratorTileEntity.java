@@ -15,7 +15,7 @@ import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.RedstoneMode;
-import mcjty.lib.varia.Tools;
+import mcjty.lib.varia.Sync;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
@@ -80,10 +80,10 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
             .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingGeneratorTileEntity.this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
-            .shortListener(Tools.holder(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
-            .shortListener(Tools.holder(() -> (int) rfPerTick[1], v1 -> rfPerTick[1] = v1))
-            .shortListener(Tools.holder(() -> (int) rfPerTick[2], v2 -> rfPerTick[2] = v2))
-            .shortListener(Tools.holder(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3)));
+            .shortListener(Sync.integer(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
+            .shortListener(Sync.integer(() -> (int) rfPerTick[1], v1 -> rfPerTick[1] = v1))
+            .shortListener(Sync.integer(() -> (int) rfPerTick[2], v2 -> rfPerTick[2] = v2))
+            .shortListener(Sync.integer(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3)));
 
     public BlazingGeneratorTileEntity() {
         super(BlazingModule.TYPE_BLAZING_GENERATOR.get());

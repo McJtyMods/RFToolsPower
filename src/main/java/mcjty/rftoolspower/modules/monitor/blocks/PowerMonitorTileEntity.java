@@ -12,7 +12,7 @@ import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Tools;
+import mcjty.lib.varia.Sync;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -42,7 +42,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier((windowId, player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this))
-            .dataListener(Tools.values(new ResourceLocation(RFToolsPower.MODID, "data"), this)));
+            .dataListener(Sync.values(new ResourceLocation(RFToolsPower.MODID, "data"), this)));
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 

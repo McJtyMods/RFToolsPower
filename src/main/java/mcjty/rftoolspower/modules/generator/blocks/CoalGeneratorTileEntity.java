@@ -18,7 +18,7 @@ import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Tools;
+import mcjty.lib.varia.Sync;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -70,7 +70,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), CoalGeneratorTileEntity.this))
-            .dataListener(Tools.values(new ResourceLocation(RFToolsPower.MODID, "data"), this))
+            .dataListener(Sync.values(new ResourceLocation(RFToolsPower.MODID, "data"), this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage));
 
