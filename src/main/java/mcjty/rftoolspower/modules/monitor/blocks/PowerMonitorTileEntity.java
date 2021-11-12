@@ -12,7 +12,9 @@ import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.varia.EnergyTools;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolsbase.tools.ManualHelper;
+import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.block.Block;
@@ -24,6 +26,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -38,7 +41,8 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 public class PowerMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity {
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this)));
+            .containerSupplier((windowId, player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this))
+            .dataListener(Tools.values(new ResourceLocation(RFToolsPower.MODID, "data"), this)));
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
@@ -75,7 +79,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Override
     public IValue<?>[] getValues() {
-        return new IValue[] {
+        return new IValue[]{
                 new DefaultValue<>(VALUE_MINIMUM, this::getMinimum, this::setMinimum),
                 new DefaultValue<>(VALUE_MAXIMUM, this::getMaximum, this::setMaximum)
         };
@@ -87,7 +91,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public void setMinimum(int minimum) {
         this.minimum = minimum;
-        markDirtyClient();
+        setChanged();
     }
 
     public int getMaximum() {
@@ -96,7 +100,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public void setMaximum(int maximum) {
         this.maximum = maximum;
-        markDirtyClient();
+        setChanged();
     }
 
     public void setInvalid() {
@@ -142,7 +146,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
         if (rflevel != ratio) {
             changeRfLevel(ratio);
-            markDirtyClient();
+            setChanged();
         }
         if (alarm != inAlarm) {
             inAlarm = alarm;
@@ -154,7 +158,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     private void changeRfLevel(int newRfLevel) {
         if (newRfLevel != rflevel) {
             rflevel = newRfLevel;
-            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, rflevel), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, rflevel), Constants.BlockFlags.DEFAULT_AND_RERENDER);
             setChanged();
         }
     }
@@ -192,7 +196,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
         info.putByte("maximum", (byte) maximum);
     }
 
-//    @Override
+    //    @Override
 //    public void checkRedstone(World world, BlockPos pos) {
 //        super.checkRedstone(world, pos);
 //        tick();

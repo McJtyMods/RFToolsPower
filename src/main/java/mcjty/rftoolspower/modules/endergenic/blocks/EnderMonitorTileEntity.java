@@ -9,6 +9,7 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.TypedMap;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -37,6 +38,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     private boolean needpulse = false;
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
+            .shortListener(Tools.holder(() -> mode.ordinal(), v -> mode = EnderMonitorMode.values()[v]))
             .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EnderMonitorTileEntity.this)));
 
 
@@ -59,7 +61,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public void setMode(EnderMonitorMode mode) {
         this.mode = mode;
-        markDirtyClient();
+        setChanged();
     }
 
     /**

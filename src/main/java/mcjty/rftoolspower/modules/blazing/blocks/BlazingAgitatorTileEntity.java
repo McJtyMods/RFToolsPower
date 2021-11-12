@@ -159,6 +159,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putFloat("rs" + i, rotationSpeed[i]);
         }
+        writeItemHandlerCap(tagCompound);
     }
 
     @Override
@@ -265,7 +266,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     public void setLocked(int x, int y, boolean v) {
         locked[y*3 + x] = v;
-        markDirtyClient();
+        setChanged();
     }
 
     @Override

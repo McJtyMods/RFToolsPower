@@ -85,7 +85,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
                 break;
         }
         updateOutputCount();
-        markDirtyClient();
+        markDirtyClient();  // In world render change. So this is needed
     }
 
     private void updateOutputCount() {
@@ -496,16 +496,21 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     @Nonnull
     @Override
     public CompoundNBT save(CompoundNBT tagCompound) {
-        String mode = "";
-        for (int i = 0 ; i < 6 ; i++) {
-            mode += modes[i].ordinal();
-        }
         CompoundNBT info = getOrCreateInfo(tagCompound);
-        info.putString("mode", mode);
+        writeClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
         return super.save(tagCompound);
     }
 
+    @Override
+    public void writeClientDataToNBT(CompoundNBT tagCompound) {
+        CompoundNBT info = getOrCreateInfo(tagCompound);
+        String mode = "";
+        for (int i = 0 ; i < 6 ; i++) {
+            mode += modes[i].ordinal();
+        }
+        info.putString("mode", mode);
+    }
 
     @Override
     @Nonnull
