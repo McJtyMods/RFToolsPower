@@ -7,9 +7,9 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
+import mcjty.lib.sync.GuiSync;
 import mcjty.lib.tileentity.LogicTileEntity;
 import mcjty.lib.typed.TypedMap;
-import mcjty.lib.varia.Sync;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -33,13 +33,14 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public static final String CMD_MODE = "endermonitor.setMode";
 
+    @GuiSync
     private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
 
     private boolean needpulse = false;
 
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .shortListener(Sync.enumeration(() -> mode, v -> mode = v, EnderMonitorMode.values()))
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EnderMonitorTileEntity.this)));
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EnderMonitorTileEntity.this))
+            .setupSync(this));
 
 
     public static LogicSlabBlock createBlock() {
