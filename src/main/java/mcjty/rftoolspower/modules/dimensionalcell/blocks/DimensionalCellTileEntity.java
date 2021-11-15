@@ -1,11 +1,8 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
-import mcjty.lib.api.container.CapabilityContainerProvider;
 import mcjty.lib.api.container.DefaultContainerProvider;
-import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
-import mcjty.lib.api.module.CapabilityModuleSupport;
 import mcjty.lib.api.module.DefaultModuleSupport;
 import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
@@ -14,6 +11,8 @@ import mcjty.lib.bindings.IAction;
 import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
+import mcjty.lib.tileentity.Cap;
+import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
@@ -46,7 +45,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -97,9 +95,11 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private final NoDirectionItemHander items = createItemHandler();
+    @Cap(type = CapType.ITEMS)
     private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
+    @Cap(type = CapType.INFUSABLE)
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
     private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
     private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
@@ -111,9 +111,11 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             LazyOptional.of(() -> new SidedHandler(Direction.WEST)),
             LazyOptional.of(() -> new SidedHandler(Direction.EAST))
     };
+    @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
             .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
             .itemHandler(() -> items));
+    @Cap(type = CapType.MODULE)
     private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
@@ -666,20 +668,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 return sidedStorages[facing.ordinal()].cast();
             }
         }
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return itemHandler.cast();
-        }
-        if (capability == CapabilityInfusable.INFUSABLE_CAPABILITY) {
-            return infusableHandler.cast();
-        }
         if (capability == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
             return infoHandler.cast();
-        }
-        if (capability == CapabilityContainerProvider.CONTAINER_PROVIDER_CAPABILITY) {
-            return screenHandler.cast();
-        }
-        if (capability == CapabilityModuleSupport.MODULE_CAPABILITY) {
-            return moduleSupportHandler.cast();
         }
         if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
             return infoScreenInfo.cast();

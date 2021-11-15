@@ -515,7 +515,6 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     @Override
     @Nonnull
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        // @todo tesla support
         if (capability == CapabilityEnergy.ENERGY) {
             if (facing == null) {
                 return nullStorage.cast();
