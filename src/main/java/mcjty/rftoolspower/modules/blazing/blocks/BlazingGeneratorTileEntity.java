@@ -59,13 +59,11 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     @Cap(type = CapType.ITEMS)
     private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
     @Cap(type = CapType.ENERGY)
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
 
-    private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
-    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
+    private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
 
     // Maximum RF/tick for a slot for the given blazing rod
     private int rfPerTickMax[] = new int[BUFFER_SIZE];

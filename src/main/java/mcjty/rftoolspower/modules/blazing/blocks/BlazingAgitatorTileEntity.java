@@ -62,14 +62,12 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     @Cap(type = CapType.ITEMS)
     private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
+    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
             BlazingConfiguration.AGITATOR_ENERGY_INPUT_PERTICK.get());
-    @Cap(type = CapType.ENERGY)
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
-    private final IInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
-    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
+    private final IInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")

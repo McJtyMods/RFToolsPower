@@ -99,8 +99,10 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
+
     @Cap(type = CapType.INFUSABLE)
     private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
+
     private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
     private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
     private final LazyOptional<SidedHandler>[] sidedStorages = new LazyOptional[]{

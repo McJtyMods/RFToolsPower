@@ -91,14 +91,14 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     public static final VoxelShape SHAPE = VoxelShapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
     @Cap(type = CapType.ENERGY)
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
 
     private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
-    private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
+
     @Cap(type = CapType.INFUSABLE)
-    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> infusable);
+    private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
+
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
             .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EndergenicTileEntity.this))

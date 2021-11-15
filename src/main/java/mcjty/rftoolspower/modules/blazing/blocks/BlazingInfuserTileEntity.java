@@ -48,10 +48,9 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
             .slot(specific(stack -> getCatalystImprovement(stack) != null).in(), CONTAINER_CONTAINER, SLOT_CATALYST, 46, 25)
             .playerSlots(10, 70));
 
+    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.INFUSER_MAXENERGY.get(),
             BlazingConfiguration.INFUSER_ENERGY_INPUT_PERTICK.get());
-    @Cap(type = CapType.ENERGY)
-    private final LazyOptional<GenericEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     private final NoDirectionItemHander items = createItemHandler();
     @Cap(type = CapType.ITEMS)
