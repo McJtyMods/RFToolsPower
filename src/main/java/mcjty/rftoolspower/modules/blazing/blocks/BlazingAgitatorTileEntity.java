@@ -8,7 +8,6 @@ import mcjty.lib.bindings.IValue;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
@@ -58,9 +57,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
             .playerSlots(10, 70));
 
+    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final NoDirectionItemHander items = createItemHandler();
-    @Cap(type = CapType.ITEMS)
-    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),

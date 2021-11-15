@@ -8,7 +8,6 @@ import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
 import mcjty.lib.bindings.DefaultAction;
 import mcjty.lib.bindings.IAction;
-import mcjty.lib.container.AutomationFilterItemHander;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.Cap;
@@ -94,9 +93,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         };
     }
 
+    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final NoDirectionItemHander items = createItemHandler();
-    @Cap(type = CapType.ITEMS)
-    private final LazyOptional<AutomationFilterItemHander> itemHandler = LazyOptional.of(() -> new AutomationFilterItemHander(items));
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
 
