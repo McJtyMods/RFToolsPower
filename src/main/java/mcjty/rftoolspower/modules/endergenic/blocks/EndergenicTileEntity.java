@@ -1,10 +1,9 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
+import mcjty.lib.McJtyLib;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
-import mcjty.lib.bindings.DefaultValue;
-import mcjty.lib.bindings.IValue;
 import mcjty.lib.blockcommands.Command;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.BaseBlock;
@@ -82,8 +81,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public static final int CHARGE_IDLE = 0;
     public static final int CHARGE_HOLDING = -1;
 
-    public static final Key<BlockPos> VALUE_DESTINATION = new Key<>("destination", Type.BLOCKPOS);
-
     public static final VoxelShape SHAPE = VoxelShapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
     @Cap(type = CapType.ENERGY)
@@ -98,13 +95,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
             .containerSupplier((windowId, player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EndergenicTileEntity.this))
             .energyHandler(() -> energyStorage));
-
-    @Override
-    public IValue<?>[] getValues() {
-        return new IValue[]{
-                new DefaultValue<>(VALUE_DESTINATION, this::getDestination, this::setDestination)
-        };
-    }
 
     // The current chargingMode status.
     // CHARGE_IDLE means this entity is doing nothing.
@@ -620,7 +610,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     // Called from client side when a wrench is used.
-    public void useWrench(PlayerEntity player) {
+    public void useWrenchClient(PlayerEntity player) {
         BlockPos thisCoord = getBlockPos();
         BlockPos coord = RFToolsBase.instance.clientInfo.getSelectedTE();
         TileEntity tileEntity = null;
@@ -686,7 +676,9 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
         if (level.isClientSide) {
             // We're on the client. Send change to server.
-            valueToServer(RFToolsPowerMessages.INSTANCE, VALUE_DESTINATION, destination);
+            executeServerCommand(CMD_SETDESTINATION.getName(), McJtyLib.proxy.getClientPlayer(), TypedMap.builder()
+                    .put(PARAM_DESTINATION, destination)
+                    .build());
         }
     }
 
@@ -753,6 +745,14 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                 GuiEndergenic.fromServer_lastPearlOpportunities = params.get(PARAM_STATOPPORTUNITIES);
             });
 
+    public static Key<BlockPos> PARAM_DESTINATION = new Key<>("dest", Type.BLOCKPOS);
+    @ServerCommand
+    public static final Command<?> CMD_SETDESTINATION = Command.<EndergenicTileEntity>create("setDestination",
+            (te, player, params) -> {
+                te.setDestination(params.get(PARAM_DESTINATION));
+            });
+
+
     @Nonnull
     @Override
     public <T> List<T> executeWithResultList(String command, TypedMap args, Type<T> type) {
@@ -784,7 +784,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         if (world.isClientSide) {
             SoundEvent pling = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note.pling"));
             world.playSound(player, pos, pling, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            useWrench(player);
+            useWrenchClient(player);
         }
         return true;
     }
