@@ -96,12 +96,12 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EndergenicTileEntity.this))
+            .containerSupplier((windowId, player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EndergenicTileEntity.this))
             .energyHandler(() -> energyStorage));
 
     @Override
     public IValue<?>[] getValues() {
-        return new IValue[] {
+        return new IValue[]{
                 new DefaultValue<>(VALUE_DESTINATION, this::getDestination, this::setDestination)
         };
     }
@@ -166,7 +166,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                        AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL).noOcclusion())
+                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL).noOcclusion())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/endergenic"))
@@ -370,7 +370,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                 log("Server Tick: insufficient energy to hold pearl (" + rfStored + " vs " + rf + ")");
                 discardPearl("Not enough energy to hold pearl");
             } else {
-                long rfExtracted = energyStorage.extractEnergy((int)rf, false);
+                long rfExtracted = energyStorage.extractEnergy((int) rf, false);
                 log("Server Tick: holding pearl, consume " + rfExtracted + " RF");
                 rfLost += rfExtracted;
             }
@@ -502,7 +502,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                                             .put(ClientCommandHandler.PARAM_GOODCOUNTER, goodCounter)
                                             .put(ClientCommandHandler.PARAM_BADCOUNTER, badCounter)
                                             .build()),
-                            ((ServerPlayerEntity)p).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
+                            ((ServerPlayerEntity) p).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
         }
     }
 
@@ -740,28 +740,18 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public static Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
     @ServerCommand
     public static final Command<?> CMD_GETSTATS = Command.<EndergenicTileEntity>createWR("getStats",
-        (te, player, params) -> TypedMap.builder()
-                .put(PARAM_STATRF, te.lastRfPerTick)
-                .put(PARAM_STATLOST, te.lastPearlsLost)
-                .put(PARAM_STATLAUNCHED, te.lastPearlsLaunched)
-                .put(PARAM_STATOPPORTUNITIES, te.lastChargeCounter)
-                .build());
-
-    @Override
-    public boolean receiveDataFromServer(String command, @Nonnull TypedMap value) {
-        boolean rc = super.receiveDataFromServer(command, value);
-        if (rc) {
-            return true;
-        }
-        if (CMD_GETSTATS.equals(command)) {
-            GuiEndergenic.fromServer_lastRfPerTick = value.get(PARAM_STATRF);
-            GuiEndergenic.fromServer_lastPearlsLost = value.get(PARAM_STATLOST);
-            GuiEndergenic.fromServer_lastPearlsLaunched = value.get(PARAM_STATLAUNCHED);
-            GuiEndergenic.fromServer_lastPearlOpportunities = value.get(PARAM_STATOPPORTUNITIES);
-            return true;
-        }
-        return false;
-    }
+            (te, player, params) -> TypedMap.builder()
+                    .put(PARAM_STATRF, te.lastRfPerTick)
+                    .put(PARAM_STATLOST, te.lastPearlsLost)
+                    .put(PARAM_STATLAUNCHED, te.lastPearlsLaunched)
+                    .put(PARAM_STATOPPORTUNITIES, te.lastChargeCounter)
+                    .build(),
+            (te, player, params) -> {
+                GuiEndergenic.fromServer_lastRfPerTick = params.get(PARAM_STATRF);
+                GuiEndergenic.fromServer_lastPearlsLost = params.get(PARAM_STATLOST);
+                GuiEndergenic.fromServer_lastPearlsLaunched = params.get(PARAM_STATLAUNCHED);
+                GuiEndergenic.fromServer_lastPearlOpportunities = params.get(PARAM_STATOPPORTUNITIES);
+            });
 
     @Nonnull
     @Override

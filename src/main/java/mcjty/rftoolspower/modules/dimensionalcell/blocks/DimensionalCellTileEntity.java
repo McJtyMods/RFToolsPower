@@ -105,7 +105,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     };
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
-            .containerSupplier((windowId,player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
+            .containerSupplier((windowId, player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
             .itemHandler(() -> items));
     @Cap(type = CapType.MODULE)
     private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
@@ -216,7 +216,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         info.putInt("networkId", networkId);
     }
 
-    private static final EnumProperty<Mode>[] MODES = new EnumProperty[] {
+    private static final EnumProperty<Mode>[] MODES = new EnumProperty[]{
             DOWN, UP, NORTH, SOUTH, WEST, EAST
     };
 
@@ -605,7 +605,17 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public static final Key<Double> PARAM_COSTFACTOR = new Key<>("costfactor", Type.DOUBLE);
     @ServerCommand
     public static final Command<?> CMD_GET_INFO = Command.<DimensionalCellTileEntity>createWR("getInfo",
-        (te, player, params) -> te.getInfo());
+            (te, player, params) -> te.getInfo(),
+            (te, player, params) -> {
+                tooltipEnergy = params.get(PARAM_ENERGY);
+                tooltipBlocks = params.get(PARAM_BLOCKS);
+                tooltipSimpleBlocks = params.get(PARAM_SIMPLEBLOCKS);
+                tooltipAdvancedBlocks = params.get(PARAM_ADVANCEDBLOCKS);
+                tooltipInserted = params.get(PARAM_TOTAL_INSERTED);
+                tooltipExtracted = params.get(PARAM_TOTAL_EXTRACTED);
+                tooltipRfPerTick = params.get(PARAM_RFPERTICK);
+                DimensionalCellTileEntity.tooltipCostFactor = params.get(PARAM_COSTFACTOR).floatValue();
+            });
 
     private TypedMap getInfo() {
         if (networkId == -1) {
@@ -632,26 +642,6 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                     .put(PARAM_COSTFACTOR, (double) getCostFactor())
                     .build();
         }
-    }
-
-    @Override
-    public boolean receiveDataFromServer(String command, @Nonnull TypedMap result) {
-        boolean rc = super.receiveDataFromServer(command, result);
-        if (rc) {
-            return true;
-        }
-        if (CMD_GET_INFO.equals(command)) {
-            tooltipEnergy = result.get(PARAM_ENERGY);
-            tooltipBlocks = result.get(PARAM_BLOCKS);
-            tooltipSimpleBlocks = result.get(PARAM_SIMPLEBLOCKS);
-            tooltipAdvancedBlocks = result.get(PARAM_ADVANCEDBLOCKS);
-            tooltipInserted = result.get(PARAM_TOTAL_INSERTED);
-            tooltipExtracted = result.get(PARAM_TOTAL_EXTRACTED);
-            tooltipRfPerTick = result.get(PARAM_RFPERTICK);
-            DimensionalCellTileEntity.tooltipCostFactor = result.get(PARAM_COSTFACTOR).floatValue();
-            return true;
-        }
-        return false;
     }
 
     @Override
