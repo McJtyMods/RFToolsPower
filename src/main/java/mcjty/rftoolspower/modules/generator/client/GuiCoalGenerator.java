@@ -35,12 +35,16 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
 
     private void initializeFields() {
         energyBar = window.findChild("energybar");
+    }
+
+    private void updateFields() {
         ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(tileEntity.getRSMode().ordinal());
+        updateEnergyBar(energyBar);
     }
 
     @Override
     protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        updateFields();
         drawWindow(matrixStack);
-        updateEnergyBar(energyBar);
     }
 }

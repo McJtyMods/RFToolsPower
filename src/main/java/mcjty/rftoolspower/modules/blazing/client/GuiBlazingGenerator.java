@@ -42,13 +42,18 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
         }
     }
 
-    @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        drawWindow(matrixStack);
+    private void updateFields() {
         updateEnergyBar(energyBar);
 
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
             labels[i].text(String.valueOf((int) tileEntity.getRfPerTick(i)));
         }
     }
+
+    @Override
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        updateFields();
+        drawWindow(matrixStack);
+    }
+
 }

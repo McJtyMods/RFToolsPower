@@ -52,20 +52,22 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         lastLostPearls = window.findChild("lastlost");
         lastLaunchedPearls = window.findChild("lastlaunched");
         lastOpportunities = window.findChild("lastopp");
-
-        energyBar.maxValue(tileEntity.getCapacity());
     }
 
-    @Override
-    protected void renderBg(MatrixStack matrixStack, float v, int i, int i2) {
-        drawWindow(matrixStack);
-        checkStats();
+    private void updateFields() {
+        energyBar.maxValue(tileEntity.getCapacity());
 
         lastRfPerTick.text(fromServer_lastRfPerTick + " RF/tick");
         lastLostPearls.text(fromServer_lastPearlsLost + " pearls");
         lastLaunchedPearls.text(fromServer_lastPearlsLaunched + " pearls");
         lastOpportunities.text(fromServer_lastPearlOpportunities + " times");
+    }
 
+    @Override
+    protected void renderBg(MatrixStack matrixStack, float v, int i, int i2) {
+        updateFields();
+        drawWindow(matrixStack);
+        checkStats();
     }
 
     private void checkStats() {

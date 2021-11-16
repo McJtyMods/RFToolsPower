@@ -47,10 +47,13 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
         }
     }
 
+    private void updateFields() {
+        updateEnergyBar(energyBar);
+    }
 
     @Override
     protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        updateFields();
         drawWindow(matrixStack);
-        updateEnergyBar(energyBar);
     }
 }
