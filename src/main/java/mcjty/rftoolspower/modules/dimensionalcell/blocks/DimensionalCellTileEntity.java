@@ -8,6 +8,8 @@ import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
 import mcjty.lib.bindings.DefaultAction;
 import mcjty.lib.bindings.IAction;
+import mcjty.lib.blockcommands.Command;
+import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.Cap;
@@ -53,16 +55,6 @@ import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellB
 import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellContainer.CONTAINER_FACTORY;
 
 public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
-
-    public static final String CMD_GET_INFO = "getInfo";
-    public static final Key<Integer> PARAM_ENERGY = new Key<>("energy", Type.INTEGER);
-    public static final Key<Integer> PARAM_BLOCKS = new Key<>("block", Type.INTEGER);
-    public static final Key<Integer> PARAM_SIMPLEBLOCKS = new Key<>("simpleblocks", Type.INTEGER);
-    public static final Key<Integer> PARAM_ADVANCEDBLOCKS = new Key<>("advancedblocks", Type.INTEGER);
-    public static final Key<Long> PARAM_TOTAL_INSERTED = new Key<>("totalinserted", Type.LONG);
-    public static final Key<Long> PARAM_TOTAL_EXTRACTED = new Key<>("totalextracted", Type.LONG);
-    public static final Key<Integer> PARAM_RFPERTICK = new Key<>("rfpertick", Type.INTEGER);
-    public static final Key<Double> PARAM_COSTFACTOR = new Key<>("costfactor", Type.DOUBLE);
 
     public static final String ACTION_SETNONE = "setNone";
     public static final String ACTION_SETINPUT = "setInput";
@@ -603,39 +595,43 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         });
     }
 
-    @Override
-    public TypedMap executeWithResult(String command, TypedMap args) {
-        TypedMap rc = super.executeWithResult(command, args);
-        if (rc != null) {
-            return rc;
+    public static final Key<Integer> PARAM_ENERGY = new Key<>("energy", Type.INTEGER);
+    public static final Key<Integer> PARAM_BLOCKS = new Key<>("block", Type.INTEGER);
+    public static final Key<Integer> PARAM_SIMPLEBLOCKS = new Key<>("simpleblocks", Type.INTEGER);
+    public static final Key<Integer> PARAM_ADVANCEDBLOCKS = new Key<>("advancedblocks", Type.INTEGER);
+    public static final Key<Long> PARAM_TOTAL_INSERTED = new Key<>("totalinserted", Type.LONG);
+    public static final Key<Long> PARAM_TOTAL_EXTRACTED = new Key<>("totalextracted", Type.LONG);
+    public static final Key<Integer> PARAM_RFPERTICK = new Key<>("rfpertick", Type.INTEGER);
+    public static final Key<Double> PARAM_COSTFACTOR = new Key<>("costfactor", Type.DOUBLE);
+    @ServerCommand
+    public static final Command<?> CMD_GET_INFO = Command.<DimensionalCellTileEntity>createWR("getInfo",
+        (te, player, params) -> te.getInfo());
+
+    private TypedMap getInfo() {
+        if (networkId == -1) {
+            return TypedMap.builder()
+                    .put(PARAM_ENERGY, getEnergy())
+                    .put(PARAM_BLOCKS, 1)
+                    .put(PARAM_SIMPLEBLOCKS, getDimensionalCellType().isSimple() ? 1 : 0)
+                    .put(PARAM_ADVANCEDBLOCKS, getDimensionalCellType().isAdvanced() ? 1 : 0)
+                    .put(PARAM_TOTAL_INSERTED, getTotalInserted())
+                    .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
+                    .put(PARAM_RFPERTICK, getRfPerTickPerSide())
+                    .put(PARAM_COSTFACTOR, 1.0)
+                    .build();
+        } else {
+            DimensionalCellNetwork.Network network = getNetwork();
+            return TypedMap.builder()
+                    .put(PARAM_ENERGY, network.getEnergy())
+                    .put(PARAM_BLOCKS, network.getBlockCount())
+                    .put(PARAM_SIMPLEBLOCKS, network.getSimpleBlockCount())
+                    .put(PARAM_ADVANCEDBLOCKS, network.getAdvancedBlockCount())
+                    .put(PARAM_TOTAL_INSERTED, getTotalInserted())
+                    .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
+                    .put(PARAM_RFPERTICK, getRfPerTickPerSide())
+                    .put(PARAM_COSTFACTOR, (double) getCostFactor())
+                    .build();
         }
-        if (CMD_GET_INFO.equals(command)) {
-            if (networkId == -1) {
-                return TypedMap.builder()
-                        .put(PARAM_ENERGY, getEnergy())
-                        .put(PARAM_BLOCKS, 1)
-                        .put(PARAM_SIMPLEBLOCKS, getDimensionalCellType().isSimple() ? 1 : 0)
-                        .put(PARAM_ADVANCEDBLOCKS, getDimensionalCellType().isAdvanced() ? 1 : 0)
-                        .put(PARAM_TOTAL_INSERTED, getTotalInserted())
-                        .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
-                        .put(PARAM_RFPERTICK, getRfPerTickPerSide())
-                        .put(PARAM_COSTFACTOR, 1.0)
-                        .build();
-            } else {
-                DimensionalCellNetwork.Network network = getNetwork();
-                return TypedMap.builder()
-                        .put(PARAM_ENERGY, network.getEnergy())
-                        .put(PARAM_BLOCKS, network.getBlockCount())
-                        .put(PARAM_SIMPLEBLOCKS, network.getSimpleBlockCount())
-                        .put(PARAM_ADVANCEDBLOCKS, network.getAdvancedBlockCount())
-                        .put(PARAM_TOTAL_INSERTED, getTotalInserted())
-                        .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
-                        .put(PARAM_RFPERTICK, getRfPerTickPerSide())
-                        .put(PARAM_COSTFACTOR, (double) getCostFactor())
-                        .build();
-            }
-        }
-        return null;
     }
 
     @Override

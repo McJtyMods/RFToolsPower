@@ -5,6 +5,8 @@ import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.bindings.DefaultValue;
 import mcjty.lib.bindings.IValue;
+import mcjty.lib.blockcommands.Command;
+import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
@@ -76,13 +78,6 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.IOrderTicker {
 
     private static Random random = new Random();
-
-    public static final String CMD_GETSTATS = "getStats";
-
-    public static Key<Long> PARAM_STATRF = new Key<>("statrf", Type.LONG);
-    public static Key<Integer> PARAM_STATLOST = new Key<>("statlost", Type.INTEGER);
-    public static Key<Integer> PARAM_STATLAUNCHED = new Key<>("statlaunched", Type.INTEGER);
-    public static Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
 
     public static final int CHARGE_IDLE = 0;
     public static final int CHARGE_HOLDING = -1;
@@ -739,22 +734,18 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         return tagCompound;
     }
 
-    @Override
-    public TypedMap executeWithResult(String command, TypedMap args) {
-        TypedMap rc = super.executeWithResult(command, args);
-        if (rc != null) {
-            return rc;
-        }
-        if (CMD_GETSTATS.equals(command)) {
-            return TypedMap.builder()
-                    .put(PARAM_STATRF, lastRfPerTick)
-                    .put(PARAM_STATLOST, lastPearlsLost)
-                    .put(PARAM_STATLAUNCHED, lastPearlsLaunched)
-                    .put(PARAM_STATOPPORTUNITIES, lastChargeCounter)
-                    .build();
-        }
-        return null;
-    }
+    public static Key<Long> PARAM_STATRF = new Key<>("statrf", Type.LONG);
+    public static Key<Integer> PARAM_STATLOST = new Key<>("statlost", Type.INTEGER);
+    public static Key<Integer> PARAM_STATLAUNCHED = new Key<>("statlaunched", Type.INTEGER);
+    public static Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
+    @ServerCommand
+    public static final Command<?> CMD_GETSTATS = Command.<EndergenicTileEntity>createWR("getStats",
+        (te, player, params) -> TypedMap.builder()
+                .put(PARAM_STATRF, te.lastRfPerTick)
+                .put(PARAM_STATLOST, te.lastPearlsLost)
+                .put(PARAM_STATLAUNCHED, te.lastPearlsLaunched)
+                .put(PARAM_STATOPPORTUNITIES, te.lastChargeCounter)
+                .build());
 
     @Override
     public boolean receiveDataFromServer(String command, @Nonnull TypedMap value) {
