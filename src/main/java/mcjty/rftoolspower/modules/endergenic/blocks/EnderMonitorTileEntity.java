@@ -128,8 +128,8 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @ServerCommand
-    public static final Command CMD_SETMODE = Command.<EnderMonitorTileEntity>create("endermonitor.setMode")
-            .buildCommand((te, playerEntity, params) -> {
+    public static final Command CMD_SETMODE = Command.<EnderMonitorTileEntity>create("endermonitor.setMode",
+            (te, playerEntity, params) -> {
                 String m = params.get(ChoiceLabel.PARAM_CHOICE);
                 te.setMode(EnderMonitorMode.getMode(m));
             });
