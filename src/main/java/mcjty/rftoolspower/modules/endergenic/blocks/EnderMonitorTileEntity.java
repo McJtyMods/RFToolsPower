@@ -1,6 +1,8 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
+import mcjty.lib.blockcommands.Command;
+import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
@@ -10,13 +12,11 @@ import mcjty.lib.sync.GuiSync;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.LogicTileEntity;
-import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -26,8 +26,6 @@ import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
 public class EnderMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
-
-    public static final String CMD_MODE = "endermonitor.setMode";
 
     @GuiSync
     private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
@@ -129,17 +127,10 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
         getOrCreateInfo(tagCompound).putInt("mode", mode.ordinal());
     }
 
-    @Override
-    public boolean execute(PlayerEntity playerMP, String command, TypedMap params) {
-        boolean rc = super.execute(playerMP, command, params);
-        if (rc) {
-            return true;
-        }
-        if (CMD_MODE.equals(command)) {
-            String m = params.get(ChoiceLabel.PARAM_CHOICE);
-            setMode(EnderMonitorMode.getMode(m));
-            return true;
-        }
-        return false;
-    }
+    @ServerCommand
+    public static final Command CMD_SETMODE = Command.<EnderMonitorTileEntity>create("endermonitor.setMode")
+            .buildCommand((te, playerEntity, params) -> {
+                String m = params.get(ChoiceLabel.PARAM_CHOICE);
+                te.setMode(EnderMonitorMode.getMode(m));
+            });
 }
