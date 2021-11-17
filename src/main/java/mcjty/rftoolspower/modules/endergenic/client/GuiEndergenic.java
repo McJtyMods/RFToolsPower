@@ -57,6 +57,9 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     }
 
     private void updateFields() {
+        if (window == null) {
+            return;
+        }
         energyBar.maxValue(tileEntity.getCapacity());
 
         lastRfPerTick.text(fromServer_lastRfPerTick + " RF/tick");

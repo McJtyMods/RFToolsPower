@@ -40,6 +40,9 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     }
 
     private void updateFields() {
+        if (window == null) {
+            return;
+        }
         ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(tileEntity.getRSMode().ordinal());
         updateEnergyBar(energyBar);
     }

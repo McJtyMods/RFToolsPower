@@ -45,6 +45,9 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     }
 
     private void updateFields() {
+        if (window == null) {
+            return;
+        }
         updateEnergyBar(energyBar);
 
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {

@@ -50,6 +50,9 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
     }
 
     private void updateFields() {
+        if (window == null) {
+            return;
+        }
         updateEnergyBar(energyBar);
     }
 
