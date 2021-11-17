@@ -6,8 +6,6 @@ import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.api.module.DefaultModuleSupport;
 import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
-import mcjty.lib.bindings.DefaultAction;
-import mcjty.lib.bindings.IAction;
 import mcjty.lib.blockcommands.Command;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.container.GenericContainer;
@@ -56,11 +54,6 @@ import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellC
 
 public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
 
-    public static final String ACTION_SETNONE = "setNone";
-    public static final String ACTION_SETINPUT = "setInput";
-    public static final String ACTION_SETOUTPUT = "setOutput";
-    public static final String ACTION_CLEARSTATS = "clearStats";
-
     // Client side for tooltip purposes
     public static int tooltipEnergy = 0;
     public static int tooltipBlocks = 0;
@@ -70,20 +63,6 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public static long tooltipExtracted = 0;
     public static int tooltipRfPerTick = 0;
     public static float tooltipCostFactor = 0;
-
-    @Override
-    public IAction[] getActions() {
-        return new IAction[]{
-                new DefaultAction(ACTION_SETNONE, this::setAllNone),
-                new DefaultAction(ACTION_SETINPUT, this::setAllInput),
-                new DefaultAction(ACTION_SETOUTPUT, this::setAllOutput),
-                new DefaultAction(ACTION_CLEARSTATS, () -> {
-                    this.totalExtracted = 0;
-                    this.totalInserted = 0;
-                    this.setChanged();
-                }),
-        };
-    }
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
     private final NoDirectionItemHander items = createItemHandler();
@@ -525,6 +504,15 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         return network.calculateMaximumEnergy();
     }
 
+    @ServerCommand
+    public static final Command<?> ACTION_CLEARSTATS = Command.<DimensionalCellTileEntity>create("clearStats", (te, player, params) -> {
+        te.totalExtracted = 0;
+        te.totalInserted = 0;
+        te.setChanged();
+    });
+
+    @ServerCommand
+    public static final Command<?> ACTION_SETOUTPUT = Command.<DimensionalCellTileEntity>create("setOutput", (te, player, params) -> te.setAllOutput());
 
     public void setAllOutput() {
         level.setBlock(worldPosition, getBlockState()
@@ -537,6 +525,9 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                 Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
+    @ServerCommand
+    public static final Command<?> ACTION_SETINPUT = Command.<DimensionalCellTileEntity>create("setInput", (te, player, params) -> te.setAllInput());
+
     private void setAllInput() {
         level.setBlock(worldPosition, getBlockState()
                         .setValue(DOWN, Mode.MODE_INPUT)
@@ -547,6 +538,9 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
                         .setValue(EAST, Mode.MODE_INPUT),
                 Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
+
+    @ServerCommand
+    public static final Command<?> ACTION_SETNONE = Command.<DimensionalCellTileEntity>create("setNone", (te, player, params) -> te.setAllNone());
 
     private void setAllNone() {
         level.setBlock(worldPosition, getBlockState()
