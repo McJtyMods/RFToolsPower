@@ -31,6 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
+
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
@@ -41,7 +43,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
             .containerSupplier((windowId, player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this))
             .dataListener(Sync.values(new ResourceLocation(RFToolsPower.MODID, "data"), this)));
 
-    public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
+    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
     @Val
     public static final Value<?, Integer> VALUE_MINIMUM = Value.<PowerMonitorTileEntity, Integer>create("minimum", Type.INTEGER, PowerMonitorTileEntity::getMinimum, PowerMonitorTileEntity::setMinimum);
@@ -70,7 +72,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
                 .infoShift(header())
                 .tileEntitySupplier(PowerMonitorTileEntity::new)) {
             @Override
-            protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+            protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
                 super.createBlockStateDefinition(builder);
                 builder.add(LEVEL);
             }
@@ -171,8 +173,9 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
         maximum = info.getByte("maximum");
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         super.save(tagCompound);
         tagCompound.putBoolean("rs", powerOutput > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);

@@ -15,7 +15,7 @@ public class TestAgitator {
         private float duration = BlazingRod.START_DURATION;
         private int infusionSteps = BlazingRod.MAX_INFUSION_STEPS;
 
-        public static IBlazingRod EMPTY = new DummyBlazingRod() {
+        public static final IBlazingRod EMPTY = new DummyBlazingRod() {
             @Override
             public boolean isValid() {
                 return false;
@@ -188,14 +188,13 @@ public class TestAgitator {
         });
         for (int i = 2; i < steps; i++) {
             IBlazingRod finalRod = rod;
-            IBlazingRod rodNew = doTest("Rod Phase " + i, true, a -> {
+            rod = doTest("Rod Phase " + i, true, a -> {
                 a.setStack(4, new DummyBlazingRod());
                 a.setStack(1, new DummyBlazingRod(finalRod));
                 a.setStack(3, new DummyBlazingRod(finalRod));
                 a.setStack(5, new DummyBlazingRod(finalRod));
                 a.setStack(7, new DummyBlazingRod(finalRod));
             });
-            rod = rodNew;
         }
 
         dumpRod(rod, "Iteration");

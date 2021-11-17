@@ -16,9 +16,6 @@ import java.awt.*;
 
 public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity, GenericContainer> {
 
-    private ScrollableLabel minimumLabel;
-    private ScrollableLabel maximumLabel;
-
     public GuiPowerMonitor(PowerMonitorTileEntity te, GenericContainer container, PlayerInventory inventory) {
         super(te, container, inventory, MonitorModule.POWER_MONITOR.get().getManualEntry());
 
@@ -34,12 +31,12 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
     public void init() {
         super.init();
 
-        minimumLabel = new ScrollableLabel().name("minimum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100)
+        ScrollableLabel minimumLabel = new ScrollableLabel().name("minimum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100)
                 .realValue(tileEntity.getMinimum());
         Slider mininumSlider = new Slider().desiredHeight(15).horizontal().minimumKnobSize(15).tooltips("Minimum level").scrollableName("minimum");
         Panel minimumPanel = Widgets.horizontal().children(Widgets.label("Min:").desiredWidth(30), mininumSlider, minimumLabel).desiredHeight(20);
 
-        maximumLabel = new ScrollableLabel().name("maximum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100)
+        ScrollableLabel maximumLabel = new ScrollableLabel().name("maximum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100)
                 .realValue(tileEntity.getMaximum());
         Slider maximumSlider = new Slider().desiredHeight(15).horizontal().minimumKnobSize(15).tooltips("Maximum level").scrollableName("maximum");
         Panel maximumPanel = Widgets.horizontal().children(Widgets.label("Max:").desiredWidth(30), maximumSlider, maximumLabel).desiredHeight(20);

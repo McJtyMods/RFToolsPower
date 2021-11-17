@@ -43,7 +43,7 @@ import static mcjty.lib.container.SlotDefinition.specific;
 
 public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
-    public static int BUFFER_SIZE = 4;
+    public static final int BUFFER_SIZE = 4;
 
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
@@ -95,7 +95,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
                 .infoShift(header(), gold())
                 .tileEntitySupplier(BlazingGeneratorTileEntity::new)) {
             @Override
-            protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+            protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
                 super.createBlockStateDefinition(builder);
                 builder.add(WORKING);
             }
@@ -208,8 +208,9 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
         }
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
             tagCompound.putFloat("rft" + i, rfPerTick[i]);

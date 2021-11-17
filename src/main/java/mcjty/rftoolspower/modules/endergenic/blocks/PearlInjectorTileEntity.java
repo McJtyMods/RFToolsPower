@@ -161,8 +161,9 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
         prevIn = tagCompound.getBoolean("prevIn");
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         super.save(tagCompound);
         tagCompound.putBoolean("prevIn", prevIn);
         return tagCompound;

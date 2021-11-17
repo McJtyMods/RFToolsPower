@@ -152,6 +152,7 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
         return quads;
     }
 
+    @Nonnull
     @Override
     public TextureAtlasSprite getParticleIcon() {
         return getSideTexture(false, false, 1);

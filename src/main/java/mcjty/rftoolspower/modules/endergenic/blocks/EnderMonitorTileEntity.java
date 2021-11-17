@@ -22,6 +22,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
+
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
@@ -113,8 +115,9 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
         mode = EnderMonitorMode.values()[m];
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         super.save(tagCompound);
         tagCompound.putBoolean("rs", powerOutput > 0);
         tagCompound.putBoolean("needPulse", needpulse);
@@ -128,7 +131,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @ServerCommand
-    public static final Command CMD_SETMODE = Command.<EnderMonitorTileEntity>create("endermonitor.setMode",
+    public static final Command<?> CMD_SETMODE = Command.<EnderMonitorTileEntity>create("endermonitor.setMode",
             (te, playerEntity, params) -> {
                 String m = params.get(ChoiceLabel.PARAM_CHOICE);
                 te.setMode(EnderMonitorMode.getMode(m));

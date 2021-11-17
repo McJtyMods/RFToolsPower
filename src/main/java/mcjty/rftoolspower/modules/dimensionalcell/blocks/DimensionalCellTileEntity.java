@@ -128,6 +128,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
 
         @Override
+        @Nonnull
         public String getSerializedName() {
             return name;
         }
@@ -766,6 +767,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
 
+    @Nonnull
     private IMachineInformation createMachineInfo() {
         return new IMachineInformation() {
             private final String[] TAGS = new String[]{"rfpertick_out", "rfpertick_in", "rftotal_in", "rftotal_out"};

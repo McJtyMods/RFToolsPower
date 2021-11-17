@@ -4,6 +4,7 @@ import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public enum Tier implements IStringSerializable {
         throw new IllegalStateException("Unknown powercell tier!");
     }
 
+    @Nonnull
     @Override
     public String getSerializedName() {
         return name().toLowerCase();

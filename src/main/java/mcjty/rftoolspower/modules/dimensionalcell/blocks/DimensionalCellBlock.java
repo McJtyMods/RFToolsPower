@@ -56,14 +56,15 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public static final EnumProperty<DimensionalCellTileEntity.Mode> DOWN = EnumProperty.create("down", DimensionalCellTileEntity.Mode.class);
 
     private final DimensionalCellType type;
-    private final static VoxelShape RENDER_SHAPE = VoxelShapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
+    private static final VoxelShape RENDER_SHAPE = VoxelShapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
     public DimensionalCellType getType() {
         return type;
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, IBlockReader reader, BlockPos pos) {
+    @Nonnull
+    public VoxelShape getOcclusionShape(@Nonnull BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos) {
         return RENDER_SHAPE;
     }
 
@@ -151,7 +152,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
         if (stack.hasTag() && !world.isClientSide) {
             DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
@@ -167,11 +168,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     Block block = world.getBlockState(pos).getBlock();
                     network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
                     dimensionalCellNetwork.save();
-                    if (!world.isClientSide) {
-//                        world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                    //                        world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
 //@todo
 //                        dimensionalCellTileEntity.updateState();
-                    }
                 }
             }
         } else if (!stack.hasTag() && !world.isClientSide) {
@@ -188,8 +187,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     // @todo 1.14 is this the right way? Perhaps not
+    @SuppressWarnings("deprecation")
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    @Nonnull
+    public List<ItemStack> getDrops(@Nonnull BlockState state, LootContext.Builder builder) {
         System.out.println("DimensionalCellBlock.getDrops");
         World world = builder.getLevel();
         Vector3d pos = builder.getOptionalParameter(LootParameters.ORIGIN);
@@ -212,7 +213,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
 
     @Override
-    public void wasExploded(World world, BlockPos pos, Explosion explosion) {
+    public void wasExploded(World world, @Nonnull BlockPos pos, @Nonnull Explosion explosion) {
         if (!world.isClientSide) {
             TileEntity te = world.getBlockEntity(pos);
             if (te instanceof DimensionalCellTileEntity) {
@@ -231,7 +232,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     @Override
-    public void onRemove(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
+    public void onRemove(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
         if (!world.isClientSide) {
             if (state.getBlock() != newstate.getBlock()) {
                 TileEntity te = world.getBlockEntity(pos);
@@ -252,7 +253,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }

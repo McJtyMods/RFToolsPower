@@ -49,7 +49,7 @@ import static mcjty.lib.container.SlotDefinition.specific;
 
 public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITickableTileEntity {
 
-    public static int BUFFER_SIZE = 9;
+    public static final int BUFFER_SIZE = 9;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE * 2)
             .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod).in(), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
@@ -72,26 +72,17 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage));
 
-    public static VoxelShape SLAB = VoxelShapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
+    public static final VoxelShape SLAB = VoxelShapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
 
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_00 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 0), (te, v) -> te.setLocked(0, 0, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_01 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 1), (te, v) -> te.setLocked(0, 1, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_02 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 2), (te, v) -> te.setLocked(0, 2, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_10 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 0), (te, v) -> te.setLocked(1, 0, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_11 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 1), (te, v) -> te.setLocked(1, 1, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_12 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 2), (te, v) -> te.setLocked(1, 2, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_20 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 0), (te, v) -> te.setLocked(2, 0, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_21 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 1), (te, v) -> te.setLocked(2, 1, v));
-    @Val
-    public static final Value<?, Boolean> VALUE_LOCK_22 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 2), (te, v) -> te.setLocked(2, 2, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_00 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 0), (te, v) -> te.setLocked(0, 0, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_01 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 1), (te, v) -> te.setLocked(0, 1, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_02 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 2), (te, v) -> te.setLocked(0, 2, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_10 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 0), (te, v) -> te.setLocked(1, 0, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_11 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 1), (te, v) -> te.setLocked(1, 1, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_12 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 2), (te, v) -> te.setLocked(1, 2, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_20 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 0), (te, v) -> te.setLocked(2, 0, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_21 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 1), (te, v) -> te.setLocked(2, 1, v));
+    @Val public static final Value<?, Boolean> VALUE_LOCK_22 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 2), (te, v) -> te.setLocked(2, 2, v));
 
     // For the client (renderer): rotation speed and current angle
     private float[] rotationSpeed = new float[9];
@@ -122,7 +113,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             }
 
             @Override
-            public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+            @Nonnull
+            public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
                 return SLAB;
             }
         };

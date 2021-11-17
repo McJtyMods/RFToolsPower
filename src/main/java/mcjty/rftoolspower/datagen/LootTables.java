@@ -9,6 +9,8 @@ import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import net.minecraft.data.DataGenerator;
 
+import javax.annotation.Nonnull;
+
 public class LootTables extends BaseLootTableProvider {
 
     public LootTables(DataGenerator dataGeneratorIn) {
@@ -35,6 +37,7 @@ public class LootTables extends BaseLootTableProvider {
         lootTables.put(BlazingModule.BLAZING_INFUSER.get(), createStandardTable("blazing_infuser", BlazingModule.BLAZING_INFUSER.get()));
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "RFToolsPower LootTables";

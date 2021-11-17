@@ -13,6 +13,8 @@ import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntity, GenericContainer> {
 
     private EnergyBar energyBar;
@@ -43,7 +45,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         updateFields();
         drawWindow(matrixStack);
     }

@@ -19,6 +19,7 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNetwork> {
@@ -74,7 +75,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    @Nonnull
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         ListNBT lst = new ListNBT();
         for (Map.Entry<Integer, Network> entry : networks.entrySet()) {
             CompoundNBT tc = new CompoundNBT();
@@ -280,7 +282,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
                     + simpleBlocks);
             long rc = energy / simpleBlockCount;
             if (type.isAdvanced()) {
-                rc *= DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get();
+                rc *= (long) DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get();
             } else if (!type.isSimple()) {
                 rc *= DimensionalCellConfiguration.simpleFactor.get();
             }
@@ -343,13 +345,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
                 CompoundNBT tag = list.getCompound(i);
                 ResourceLocation id = new ResourceLocation(tag.getString("dim"));
                 RegistryKey<World> type = LevelTools.getId(id);
-                if (type == null) {
-                    // Something went wrong!
-                    Logging.logError("Unknown dimension '" + id.toString() + "'!");
-                } else {
-                    BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
-                    blocks.add(GlobalPos.of(type, pos));
-                }
+                BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
+                blocks.add(GlobalPos.of(type, pos));
             }
         }
     }

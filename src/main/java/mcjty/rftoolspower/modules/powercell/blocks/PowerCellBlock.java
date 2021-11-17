@@ -33,8 +33,8 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 
 public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredient {
 
-    public static BooleanProperty UPPER = BooleanProperty.create("upper");
-    public static BooleanProperty LOWER = BooleanProperty.create("lower");
+    public static final BooleanProperty UPPER = BooleanProperty.create("upper");
+    public static final BooleanProperty LOWER = BooleanProperty.create("lower");
 
     @Override
     public RotationType getRotationType() {
@@ -67,7 +67,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
         if (!world.isClientSide) {
 
@@ -124,8 +124,10 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                 .setValue(LOWER, world.getBlockState(pos.below()).getBlock() == this);
     }
 
+    @SuppressWarnings("deprecation")
+    @Nonnull
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+    public BlockState updateShape(@Nonnull BlockState stateIn, @Nonnull Direction facing, @Nonnull BlockState facingState, @Nonnull IWorld world, @Nonnull BlockPos pos, @Nonnull BlockPos facingPos) {
         if (facing == Direction.UP) {
             return stateIn.setValue(UPPER, facingState.getBlock() == this);
         }
@@ -142,14 +144,14 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 //    }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(UPPER, LOWER);
     }
 
     @Override
     @Nonnull
-    public BlockRenderType getRenderShape(BlockState state) {
+    public BlockRenderType getRenderShape(@Nonnull BlockState state) {
         return BlockRenderType.MODEL;
     }
 

@@ -21,8 +21,8 @@ public class RFToolsPower {
     public static final String MODID = "rftoolspower";
 
     @SuppressWarnings("PublicField")
-    public static ModSetup setup = new ModSetup();
-    private Modules modules = new Modules();
+    public static final ModSetup setup = new ModSetup();
+    private final Modules modules = new Modules();
 
     public static RFToolsPower instance;
 

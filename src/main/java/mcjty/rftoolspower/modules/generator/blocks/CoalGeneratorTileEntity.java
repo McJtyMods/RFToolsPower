@@ -90,7 +90,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                         parameter("info", stack -> Long.toString(CoalGeneratorConfig.RFPERTICK.get()) + " RF/FE"))
         ) {
             @Override
-            protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+            protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
                 super.createBlockStateDefinition(builder);
                 builder.add(BlockStateProperties.LIT);
             }
@@ -183,13 +183,14 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     @Override
     @Nonnull
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         super.save(tagCompound);
         CompoundNBT infoTag = getOrCreateInfo(tagCompound);
         infoTag.putInt("burning", burning);
         return tagCompound;
     }
 
+    @Nonnull
     private IPowerInformation createPowerInfo() {
         return new IPowerInformation() {
             @Override

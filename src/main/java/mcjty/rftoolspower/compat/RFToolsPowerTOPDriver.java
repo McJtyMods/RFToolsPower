@@ -24,8 +24,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.text.DecimalFormat;
@@ -82,7 +80,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (CoalGeneratorTileEntity te) -> {
                 Boolean working = te.isWorking();
                 if (working) {
-                    probeInfo.text(CompoundText.createLabelInfo("Producing ", + te.getRfPerTick() + " RF/t"));
+                    probeInfo.text(CompoundText.createLabelInfo("Producing ", te.getRfPerTick() + " RF/t"));
                 }
             }, "Bad tile entity!");
         }
@@ -135,7 +133,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
                 float costFactor = te.getCostFactor();
                 int rfPerTick = te.getRfPerTickPerSide();
 
-                probeInfo.text(CompoundText.createLabelInfo( "Input/Output: ",+ rfPerTick + " RF/t"));
+                probeInfo.text(CompoundText.createLabelInfo( "Input/Output: ",rfPerTick + " RF/t"));
                 DimensionalCellTileEntity.Mode powermode = te.getMode(data.getSideHit());
                 if (powermode == DimensionalCellTileEntity.Mode.MODE_INPUT) {
                     probeInfo.text(CompoundText.create().style(HIGHLIGHTED).text("Side: input"));

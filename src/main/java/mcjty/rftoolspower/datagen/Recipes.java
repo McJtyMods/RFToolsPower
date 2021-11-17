@@ -17,6 +17,7 @@ import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.Tags;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public class Recipes extends BaseRecipeProvider {
@@ -29,7 +30,7 @@ public class Recipes extends BaseRecipeProvider {
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
         build(consumer, ShapedRecipeBuilder.shaped(CoalGeneratorModule.COALGENERATOR.get())
                         .unlockedBy("frame", InventoryChangeTrigger.Instance.hasItems(VariousModule.MACHINE_FRAME.get(), Items.REDSTONE_TORCH)),
                 "cTc", "cFc", "cTc");

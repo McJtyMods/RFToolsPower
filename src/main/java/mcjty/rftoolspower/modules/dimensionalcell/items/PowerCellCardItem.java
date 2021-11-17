@@ -19,6 +19,8 @@ import static mcjty.lib.builder.TooltipBuilder.parameter;
 
 import net.minecraft.item.Item.Properties;
 
+import javax.annotation.Nonnull;
+
 public class PowerCellCardItem extends Item implements ITooltipSettings {
 
     private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
@@ -45,7 +47,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void appendHoverText(@Nonnull ItemStack itemStack, World world, @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag flag) {
         super.appendHoverText(itemStack, world, list, flag);
         tooltipBuilder.get().makeTooltip(getRegistryName(), itemStack, list, flag);
     }

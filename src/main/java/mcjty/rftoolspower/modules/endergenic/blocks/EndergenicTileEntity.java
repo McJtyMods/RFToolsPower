@@ -376,6 +376,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
     }
 
+    @Nonnull
     private IMachineInformation createMachineInfo() {
         return new IMachineInformation() {
             private final String[] TAGS = new String[]{"rftick", "lost", "launched", "opportunities"};
@@ -706,8 +707,9 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         super.save(tagCompound);
 
         tagCompound.putInt("charging", chargingMode);
@@ -726,10 +728,10 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         return tagCompound;
     }
 
-    public static Key<Long> PARAM_STATRF = new Key<>("statrf", Type.LONG);
-    public static Key<Integer> PARAM_STATLOST = new Key<>("statlost", Type.INTEGER);
-    public static Key<Integer> PARAM_STATLAUNCHED = new Key<>("statlaunched", Type.INTEGER);
-    public static Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
+    public static final Key<Long> PARAM_STATRF = new Key<>("statrf", Type.LONG);
+    public static final Key<Integer> PARAM_STATLOST = new Key<>("statlost", Type.INTEGER);
+    public static final Key<Integer> PARAM_STATLAUNCHED = new Key<>("statlaunched", Type.INTEGER);
+    public static final Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
     @ServerCommand
     public static final Command<?> CMD_GETSTATS = Command.<EndergenicTileEntity>createWR("getStats",
             (te, player, params) -> TypedMap.builder()
@@ -745,12 +747,10 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                 GuiEndergenic.fromServer_lastPearlOpportunities = params.get(PARAM_STATOPPORTUNITIES);
             });
 
-    public static Key<BlockPos> PARAM_DESTINATION = new Key<>("dest", Type.BLOCKPOS);
+    public static final Key<BlockPos> PARAM_DESTINATION = new Key<>("dest", Type.BLOCKPOS);
     @ServerCommand
     public static final Command<?> CMD_SETDESTINATION = Command.<EndergenicTileEntity>create("setDestination",
-            (te, player, params) -> {
-                te.setDestination(params.get(PARAM_DESTINATION));
-            });
+            (te, player, params) -> te.setDestination(params.get(PARAM_DESTINATION)));
 
 
     @Nonnull

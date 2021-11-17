@@ -10,6 +10,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
@@ -35,7 +36,7 @@ public class BlazingRod extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, World world, List<ITextComponent> list, ITooltipFlag flags) {
+    public void appendHoverText(@Nonnull ItemStack itemStack, World world, @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag flags) {
         super.appendHoverText(itemStack, world, list, flags);
         tooltipBuilder.get().makeTooltip(getRegistryName(), itemStack, list, flags);
     }

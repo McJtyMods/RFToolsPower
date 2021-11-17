@@ -43,7 +43,7 @@ public class DimensionalCellInformationScreenInfo implements IInformationScreenI
     }
 
     private long calculateRoughMaxRfPerTick() {
-        return cell.getRfPerTickPerSide() * 2;
+        return cell.getRfPerTickPerSide() * 2L;
     }
 
     @Nonnull

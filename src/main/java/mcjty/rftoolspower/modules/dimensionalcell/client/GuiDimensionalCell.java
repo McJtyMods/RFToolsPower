@@ -17,6 +17,8 @@ import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 import static mcjty.lib.gui.widgets.Widgets.*;
 
 public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileEntity, DimensionalCellContainer> {
@@ -87,7 +89,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(@Nonnull MatrixStack matrixStack, float v, int i, int i2) {
         drawWindow(matrixStack);
 
         requestRF();

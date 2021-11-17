@@ -495,7 +495,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
     @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tagCompound) {
+    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
         CompoundNBT info = getOrCreateInfo(tagCompound);
         writeClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
@@ -608,6 +608,7 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
         }
     }
 
+    @Nonnull
     private NullHandler createNullHandler() {
         return new NullHandler();
     }

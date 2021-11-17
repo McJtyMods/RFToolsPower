@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
@@ -37,6 +38,7 @@ public class PowerLevelTileEntity extends LogicTileEntity implements ITickableTi
                 .tileEntitySupplier(PowerLevelTileEntity::new));
     }
 
+    @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT tag = super.getUpdateTag();

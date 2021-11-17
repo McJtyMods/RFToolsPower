@@ -14,6 +14,8 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
+
 public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorTileEntity> {
 
     public BlazingAgitatorRenderer(TileEntityRendererDispatcher dispatcher) {
@@ -21,7 +23,7 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
     }
 
     @Override
-    public void render(BlazingAgitatorTileEntity te, float v, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void render(BlazingAgitatorTileEntity te, float v, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 
         te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             matrixStack.pushPose();

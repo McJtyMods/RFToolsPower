@@ -14,6 +14,8 @@ import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, GenericContainer> {
 
     private EnergyBar energyBar;
@@ -64,7 +66,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(@Nonnull MatrixStack matrixStack, float v, int i, int i2) {
         updateFields();
         drawWindow(matrixStack);
         checkStats();

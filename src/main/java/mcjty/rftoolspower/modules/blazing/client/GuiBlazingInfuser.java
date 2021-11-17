@@ -12,6 +12,8 @@ import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEntity, GenericContainer> {
 
     private EnergyBar energyBar;
@@ -36,7 +38,7 @@ public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEnt
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         drawWindow(matrixStack);
         updateEnergyBar(energyBar);
     }

@@ -2,6 +2,8 @@ package mcjty.rftoolspower.modules.powercell.data;
 
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
+
 public enum SideType implements IStringSerializable {
     NONE(false, false),
     OUTPUT(false, true),
@@ -25,6 +27,7 @@ public enum SideType implements IStringSerializable {
         return output;
     }
 
+    @Nonnull
     @Override
     public String getSerializedName() {
         return name().toLowerCase();

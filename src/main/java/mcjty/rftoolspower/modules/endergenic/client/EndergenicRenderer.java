@@ -20,6 +20,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
+import javax.annotation.Nonnull;
+
 public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity> {
 
     public static final ResourceLocation HALO = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/floatingpearl");
@@ -40,7 +42,7 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
     }
 
     @Override
-    public void render(EndergenicTileEntity tileEntity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(EndergenicTileEntity tileEntity, float partialTicks, @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         BlockPos coord = tileEntity.getBlockPos();
         if (coord.equals(RFToolsBase.instance.clientInfo.getSelectedTE())) {
             RenderGlowEffect.renderGlow(matrixStackIn, bufferIn, REDGLOW);
