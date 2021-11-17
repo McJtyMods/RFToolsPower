@@ -4,8 +4,6 @@ import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.information.IPowerInformation;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
-import mcjty.lib.bindings.DefaultValue;
-import mcjty.lib.bindings.IValue;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
@@ -96,13 +94,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 super.createBlockStateDefinition(builder);
                 builder.add(BlockStateProperties.LIT);
             }
-        };
-    }
-
-    @Override
-    public IValue<?>[] getValues() {
-        return new IValue[]{
-                new DefaultValue<>(VALUE_RSMODE, this::getRSModeInt, this::setRSModeInt),
         };
     }
 

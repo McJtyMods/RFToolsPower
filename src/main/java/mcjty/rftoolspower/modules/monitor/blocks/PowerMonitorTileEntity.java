@@ -1,8 +1,8 @@
 package mcjty.rftoolspower.modules.monitor.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
-import mcjty.lib.bindings.DefaultValue;
-import mcjty.lib.bindings.IValue;
+import mcjty.lib.bindings.Val;
+import mcjty.lib.bindings.Value;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
@@ -10,7 +10,6 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.LogicTileEntity;
-import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.Sync;
@@ -44,8 +43,11 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
-    public static final Key<Integer> VALUE_MINIMUM = new Key<>("minimum", Type.INTEGER);
-    public static final Key<Integer> VALUE_MAXIMUM = new Key<>("maximum", Type.INTEGER);
+    @Val
+    public static final Value<?, Integer> VALUE_MINIMUM = Value.<PowerMonitorTileEntity, Integer>create("minimum", Type.INTEGER, PowerMonitorTileEntity::getMinimum, PowerMonitorTileEntity::setMinimum);
+    @Val
+    public static final Value<?, Integer> VALUE_MAXIMUM = Value.<PowerMonitorTileEntity, Integer>create("maximum", Type.INTEGER, PowerMonitorTileEntity::getMaximum, PowerMonitorTileEntity::setMaximum);
+
 
     // Persisted data
     private int minimum;        // Minimum power percentage
@@ -72,14 +74,6 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
                 super.createBlockStateDefinition(builder);
                 builder.add(LEVEL);
             }
-        };
-    }
-
-    @Override
-    public IValue<?>[] getValues() {
-        return new IValue[]{
-                new DefaultValue<>(VALUE_MINIMUM, this::getMinimum, this::setMinimum),
-                new DefaultValue<>(VALUE_MAXIMUM, this::getMaximum, this::setMaximum)
         };
     }
 

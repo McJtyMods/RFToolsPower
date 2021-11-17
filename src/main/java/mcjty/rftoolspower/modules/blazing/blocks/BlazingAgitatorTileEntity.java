@@ -3,8 +3,8 @@ package mcjty.rftoolspower.modules.blazing.blocks;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
-import mcjty.lib.bindings.DefaultValue;
-import mcjty.lib.bindings.IValue;
+import mcjty.lib.bindings.Val;
+import mcjty.lib.bindings.Value;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
@@ -15,7 +15,6 @@ import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
-import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -75,36 +74,30 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     public static VoxelShape SLAB = VoxelShapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
 
-    public static final Key<Boolean> VALUE_LOCK_00 = new Key<>("lock00", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_01 = new Key<>("lock01", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_02 = new Key<>("lock02", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_10 = new Key<>("lock10", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_11 = new Key<>("lock11", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_12 = new Key<>("lock12", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_20 = new Key<>("lock20", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_21 = new Key<>("lock21", Type.BOOLEAN);
-    public static final Key<Boolean> VALUE_LOCK_22 = new Key<>("lock22", Type.BOOLEAN);
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_00 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 0), (te, v) -> te.setLocked(0, 0, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_01 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 1), (te, v) -> te.setLocked(0, 1, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_02 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 2), (te, v) -> te.setLocked(0, 2, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_10 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 0), (te, v) -> te.setLocked(1, 0, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_11 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 1), (te, v) -> te.setLocked(1, 1, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_12 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(1, 2), (te, v) -> te.setLocked(1, 2, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_20 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 0), (te, v) -> te.setLocked(2, 0, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_21 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 1), (te, v) -> te.setLocked(2, 1, v));
+    @Val
+    public static final Value<?, Boolean> VALUE_LOCK_22 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(2, 2), (te, v) -> te.setLocked(2, 2, v));
 
     // For the client (renderer): rotation speed and current angle
     private float[] rotationSpeed = new float[9];
     private float[] currentAngle = new float[9];
     // Update on server to notify the client:
     private int updateSpeedCounter = 10;  // Every 10 ticks we check if we potentially have to update rotation speed on the client
-
-    @Override
-    public IValue<?>[] getValues() {
-        return new IValue[] {
-                new DefaultValue<>(VALUE_LOCK_00, () -> isLocked(0, 0), b -> setLocked(0, 0, b)),
-                new DefaultValue<>(VALUE_LOCK_01, () -> isLocked(0, 1), b -> setLocked(0, 1, b)),
-                new DefaultValue<>(VALUE_LOCK_02, () -> isLocked(0, 2), b -> setLocked(0, 2, b)),
-                new DefaultValue<>(VALUE_LOCK_10, () -> isLocked(1, 0), b -> setLocked(1, 0, b)),
-                new DefaultValue<>(VALUE_LOCK_11, () -> isLocked(1, 1), b -> setLocked(1, 1, b)),
-                new DefaultValue<>(VALUE_LOCK_12, () -> isLocked(1, 2), b -> setLocked(1, 2, b)),
-                new DefaultValue<>(VALUE_LOCK_20, () -> isLocked(2, 0), b -> setLocked(2, 0, b)),
-                new DefaultValue<>(VALUE_LOCK_21, () -> isLocked(2, 1), b -> setLocked(2, 1, b)),
-                new DefaultValue<>(VALUE_LOCK_22, () -> isLocked(2, 2), b -> setLocked(2, 2, b))
-        };
-    }
 
     private BlazingAgitatorAlgorithm algorithm;
     private boolean locked[] = new boolean[BUFFER_SIZE];
