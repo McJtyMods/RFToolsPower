@@ -5,6 +5,7 @@ import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blockcommands.Command;
+import mcjty.lib.blockcommands.ListCommand;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
@@ -27,7 +28,6 @@ import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
-import mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.RFToolsPower;
@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Random;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
+import static mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog.COMMAND_GETHUDLOG;
 
 public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.IOrderTicker {
 
@@ -752,32 +753,11 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public static final Command<?> CMD_SETDESTINATION = Command.<EndergenicTileEntity>create("setDestination",
             (te, player, params) -> te.setDestination(params.get(PARAM_DESTINATION)));
 
+    @ServerCommand
+    public static final ListCommand<?, ?> CMD_GETHUDLOG = ListCommand.<EndergenicTileEntity, String>create(COMMAND_GETHUDLOG,
+            (te, player, params) -> te.getHudLog(),
+            (te, player, params, list) -> te.clientHudLog = list);
 
-    @Nonnull
-    @Override
-    public <T> List<T> executeWithResultList(String command, TypedMap args, Type<T> type) {
-        List<T> list = super.executeWithResultList(command, args, type);
-        if (!list.isEmpty()) {
-            return list;
-        }
-        if (PacketGetHudLog.CMD_GETHUDLOG.equals(command)) {
-            return type.convert(getHudLog());
-        }
-        return list;
-    }
-
-    @Override
-    public <T> boolean receiveListFromServer(String command, List<T> list, Type<T> type) {
-        boolean rc = super.receiveListFromServer(command, list, type);
-        if (rc) {
-            return true;
-        }
-        if (PacketGetHudLog.CLIENTCMD_GETHUDLOG.equals(command)) {
-            clientHudLog = Type.STRING.convert(list);
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public boolean wrenchUse(World world, BlockPos pos, Direction side, PlayerEntity player) {
