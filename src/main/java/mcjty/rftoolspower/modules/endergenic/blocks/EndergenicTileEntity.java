@@ -73,7 +73,7 @@ import java.util.List;
 import java.util.Random;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
-import static mcjty.rftoolsbase.modules.hud.network.PacketGetHudLog.COMMAND_GETHUDLOG;
+import static mcjty.rftoolsbase.modules.hud.Hud.COMMAND_GETHUDLOG;
 
 public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.IOrderTicker {
 
