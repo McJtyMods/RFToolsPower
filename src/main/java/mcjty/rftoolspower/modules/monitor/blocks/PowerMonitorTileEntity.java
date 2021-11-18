@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.modules.monitor.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
-import mcjty.lib.bindings.Val;
+import mcjty.lib.bindings.GuiValue;
 import mcjty.lib.bindings.Value;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
@@ -45,9 +45,9 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
-    @Val
+    @GuiValue
     public static final Value<?, Integer> VALUE_MINIMUM = Value.<PowerMonitorTileEntity, Integer>create("minimum", Type.INTEGER, PowerMonitorTileEntity::getMinimum, PowerMonitorTileEntity::setMinimum);
-    @Val
+    @GuiValue
     public static final Value<?, Integer> VALUE_MAXIMUM = Value.<PowerMonitorTileEntity, Integer>create("maximum", Type.INTEGER, PowerMonitorTileEntity::getMaximum, PowerMonitorTileEntity::setMaximum);
 
 
