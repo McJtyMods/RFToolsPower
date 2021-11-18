@@ -24,12 +24,6 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     private TextField lastLaunchedPearls;
     private TextField lastOpportunities;
 
-    public static long fromServer_lastRfPerTick = 0;
-    public static int fromServer_lastPearlsLost = 0;
-    public static int fromServer_lastPearlsLaunched = 0;
-    public static int fromServer_lastPearlOpportunities = 0;
-
-
     private int timer = 10;
 
     public GuiEndergenic(EndergenicTileEntity endergenicTileEntity, GenericContainer container, PlayerInventory inventory) {
@@ -62,10 +56,10 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         }
         energyBar.maxValue(tileEntity.getCapacity());
 
-        lastRfPerTick.text(fromServer_lastRfPerTick + " RF/tick");
-        lastLostPearls.text(fromServer_lastPearlsLost + " pearls");
-        lastLaunchedPearls.text(fromServer_lastPearlsLaunched + " pearls");
-        lastOpportunities.text(fromServer_lastPearlOpportunities + " times");
+        lastRfPerTick.text(tileEntity.clientLastRfPerTick + " RF/tick");
+        lastLostPearls.text(tileEntity.clientLastPearlsLost + " pearls");
+        lastLaunchedPearls.text(tileEntity.clientLastPearlsLaunched + " pearls");
+        lastOpportunities.text(tileEntity.clientLastPearlOpportunities + " times");
     }
 
     @Override

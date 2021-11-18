@@ -94,12 +94,12 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         requestRF();
 
-        stats.tooltips("Power statistics. Press to clear:", "Inserted: " + DimensionalCellTileEntity.tooltipInserted, "Extracted: " + DimensionalCellTileEntity.tooltipExtracted);
+        stats.tooltips("Power statistics. Press to clear:", "Inserted: " + tileEntity.tooltipInserted, "Extracted: " + tileEntity.tooltipExtracted);
 
-        int maxValue = (DimensionalCellTileEntity.tooltipBlocks - DimensionalCellTileEntity.tooltipAdvancedBlocks - DimensionalCellTileEntity.tooltipSimpleBlocks) * DimensionalCellConfiguration.rfPerNormalCell.get();
-        maxValue += DimensionalCellTileEntity.tooltipAdvancedBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() * DimensionalCellConfiguration.advancedFactor.get();
-        maxValue += DimensionalCellTileEntity.tooltipSimpleBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() / DimensionalCellConfiguration.simpleFactor.get();
+        int maxValue = (tileEntity.tooltipBlocks - tileEntity.tooltipAdvancedBlocks - tileEntity.tooltipSimpleBlocks) * DimensionalCellConfiguration.rfPerNormalCell.get();
+        maxValue += tileEntity.tooltipAdvancedBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() * DimensionalCellConfiguration.advancedFactor.get();
+        maxValue += tileEntity.tooltipSimpleBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() / DimensionalCellConfiguration.simpleFactor.get();
         energyBar.maxValue(maxValue);
-        energyBar.value(DimensionalCellTileEntity.tooltipEnergy);
+        energyBar.value(tileEntity.tooltipEnergy);
     }
 }

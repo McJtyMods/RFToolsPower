@@ -36,7 +36,6 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.ClientCommandHandler;
 import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
-import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
@@ -82,6 +81,11 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     public static final int CHARGE_IDLE = 0;
     public static final int CHARGE_HOLDING = -1;
+
+    public long clientLastRfPerTick = 0;
+    public int clientLastPearlsLost = 0;
+    public int clientLastPearlsLaunched = 0;
+    public int clientLastPearlOpportunities = 0;
 
     public static final VoxelShape SHAPE = VoxelShapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
@@ -743,10 +747,10 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
                     .put(PARAM_STATOPPORTUNITIES, te.lastChargeCounter)
                     .build(),
             (te, player, params) -> {
-                GuiEndergenic.fromServer_lastRfPerTick = params.get(PARAM_STATRF);
-                GuiEndergenic.fromServer_lastPearlsLost = params.get(PARAM_STATLOST);
-                GuiEndergenic.fromServer_lastPearlsLaunched = params.get(PARAM_STATLAUNCHED);
-                GuiEndergenic.fromServer_lastPearlOpportunities = params.get(PARAM_STATOPPORTUNITIES);
+                te.clientLastRfPerTick = params.get(PARAM_STATRF);
+                te.clientLastPearlsLost = params.get(PARAM_STATLOST);
+                te.clientLastPearlsLaunched = params.get(PARAM_STATLAUNCHED);
+                te.clientLastPearlOpportunities = params.get(PARAM_STATOPPORTUNITIES);
             });
 
     public static final Key<BlockPos> PARAM_DESTINATION = new Key<>("dest", Type.BLOCKPOS);

@@ -56,14 +56,14 @@ import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellC
 public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
 
     // Client side for tooltip purposes
-    public static int tooltipEnergy = 0;
-    public static int tooltipBlocks = 0;
-    public static int tooltipSimpleBlocks = 0;
-    public static int tooltipAdvancedBlocks = 0;
-    public static long tooltipInserted = 0;
-    public static long tooltipExtracted = 0;
-    public static int tooltipRfPerTick = 0;
-    public static float tooltipCostFactor = 0;
+    public int tooltipEnergy = 0;
+    public int tooltipBlocks = 0;
+    public int tooltipSimpleBlocks = 0;
+    public int tooltipAdvancedBlocks = 0;
+    public long tooltipInserted = 0;
+    public long tooltipExtracted = 0;
+    public int tooltipRfPerTick = 0;
+    public float tooltipCostFactor = 0;
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
     private final NoDirectionItemHander items = createItemHandler();
@@ -603,14 +603,14 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public static final ResultCommand<?> CMD_GET_INFO = ResultCommand.<DimensionalCellTileEntity>create("getInfo",
             (te, player, params) -> te.getInfo(),
             (te, player, params) -> {
-                tooltipEnergy = params.get(PARAM_ENERGY);
-                tooltipBlocks = params.get(PARAM_BLOCKS);
-                tooltipSimpleBlocks = params.get(PARAM_SIMPLEBLOCKS);
-                tooltipAdvancedBlocks = params.get(PARAM_ADVANCEDBLOCKS);
-                tooltipInserted = params.get(PARAM_TOTAL_INSERTED);
-                tooltipExtracted = params.get(PARAM_TOTAL_EXTRACTED);
-                tooltipRfPerTick = params.get(PARAM_RFPERTICK);
-                DimensionalCellTileEntity.tooltipCostFactor = params.get(PARAM_COSTFACTOR).floatValue();
+                te.tooltipEnergy = params.get(PARAM_ENERGY);
+                te.tooltipBlocks = params.get(PARAM_BLOCKS);
+                te.tooltipSimpleBlocks = params.get(PARAM_SIMPLEBLOCKS);
+                te.tooltipAdvancedBlocks = params.get(PARAM_ADVANCEDBLOCKS);
+                te.tooltipInserted = params.get(PARAM_TOTAL_INSERTED);
+                te.tooltipExtracted = params.get(PARAM_TOTAL_EXTRACTED);
+                te.tooltipRfPerTick = params.get(PARAM_RFPERTICK);
+                te.tooltipCostFactor = params.get(PARAM_COSTFACTOR).floatValue();
             });
 
     private TypedMap getInfo() {
