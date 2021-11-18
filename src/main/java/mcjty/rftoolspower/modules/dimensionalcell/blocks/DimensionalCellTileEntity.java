@@ -7,6 +7,7 @@ import mcjty.lib.api.module.DefaultModuleSupport;
 import mcjty.lib.api.module.IModuleSupport;
 import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
 import mcjty.lib.blockcommands.Command;
+import mcjty.lib.blockcommands.ResultCommand;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
@@ -599,7 +600,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public static final Key<Integer> PARAM_RFPERTICK = new Key<>("rfpertick", Type.INTEGER);
     public static final Key<Double> PARAM_COSTFACTOR = new Key<>("costfactor", Type.DOUBLE);
     @ServerCommand
-    public static final Command<?> CMD_GET_INFO = Command.<DimensionalCellTileEntity>createWR("getInfo",
+    public static final ResultCommand<?> CMD_GET_INFO = ResultCommand.<DimensionalCellTileEntity>create("getInfo",
             (te, player, params) -> te.getInfo(),
             (te, player, params) -> {
                 tooltipEnergy = params.get(PARAM_ENERGY);

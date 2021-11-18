@@ -6,6 +6,7 @@ import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
 import mcjty.lib.blockcommands.Command;
 import mcjty.lib.blockcommands.ListCommand;
+import mcjty.lib.blockcommands.ResultCommand;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
@@ -734,7 +735,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     public static final Key<Integer> PARAM_STATLAUNCHED = new Key<>("statlaunched", Type.INTEGER);
     public static final Key<Integer> PARAM_STATOPPORTUNITIES = new Key<>("statopportunities", Type.INTEGER);
     @ServerCommand
-    public static final Command<?> CMD_GETSTATS = Command.<EndergenicTileEntity>createWR("getStats",
+    public static final ResultCommand<?> CMD_GETSTATS = ResultCommand.<EndergenicTileEntity>create("getStats",
             (te, player, params) -> TypedMap.builder()
                     .put(PARAM_STATRF, te.lastRfPerTick)
                     .put(PARAM_STATLOST, te.lastPearlsLost)
