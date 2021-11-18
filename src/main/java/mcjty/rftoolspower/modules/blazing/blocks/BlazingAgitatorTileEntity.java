@@ -52,8 +52,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     public static final int BUFFER_SIZE = 9;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE * 2)
-            .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod).in(), CONTAINER_CONTAINER, 0, 28, 7, 3, 3)
-            .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), CONTAINER_CONTAINER, BUFFER_SIZE, 117, 7, 3, 3)
+            .box(specific(BlazingAgitatorTileEntity::isValidBlazingRod).in(), 0, 28, 7, 3, 3)
+            .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), BUFFER_SIZE, 117, 7, 3, 3)
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)

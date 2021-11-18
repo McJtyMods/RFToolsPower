@@ -40,7 +40,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
-import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
 public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
@@ -48,10 +47,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_COALINPUT = 0;
     public static final int SLOT_CHARGEITEM = 1;
 
-    public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(2)
-            .slot(specific(new ItemStack(Items.COAL), new ItemStack(Items.CHARCOAL), new ItemStack(Blocks.COAL_BLOCK)).in(),
-                    CONTAINER_CONTAINER, SLOT_COALINPUT, 82, 24)
-            .slot(specific(EnergyTools::isEnergyItem).in().out(), CONTAINER_CONTAINER, SLOT_CHARGEITEM, 118, 24)
+    private static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(2)
+            .slot(specific(Items.COAL, Items.CHARCOAL, Items.COAL_BLOCK).in(), SLOT_COALINPUT, 82, 24)
+            .slot(specific(EnergyTools::isEnergyItem).in().out(), SLOT_CHARGEITEM, 118, 24)
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)

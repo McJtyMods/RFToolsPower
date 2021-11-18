@@ -42,7 +42,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_PLAYERINV = SLOT_BUFFER + BUFFER_SIZE;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
-            .box(specific(new ItemStack(Items.ENDER_PEARL)).in(), CONTAINER_CONTAINER, SLOT_BUFFER, 10, 25, 9, 2)
+            .box(specific(Items.ENDER_PEARL).in(), SLOT_BUFFER, 10, 25, 9, 2)
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)

@@ -42,9 +42,9 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     private static final int SLOT_CATALYST = 2;
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(3)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, SLOT_INPUT, 46, 7)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), CONTAINER_CONTAINER, SLOT_OUTPUT, 100, 7)
-            .slot(specific(stack -> getCatalystImprovement(stack) != null).in(), CONTAINER_CONTAINER, SLOT_CATALYST, 46, 25)
+            .slot(specific(BlazingModule.BLAZING_ROD.get()).in(), SLOT_INPUT, 46, 7)
+            .slot(specific(BlazingModule.BLAZING_ROD.get()).out(), SLOT_OUTPUT, 100, 7)
+            .slot(specific(stack -> getCatalystImprovement(stack) != null).in(), SLOT_CATALYST, 46, 25)
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ENERGY)

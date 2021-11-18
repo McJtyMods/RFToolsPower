@@ -48,10 +48,10 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
     public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(BUFFER_SIZE)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 0, 10, 7)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 1, 10+18*4, 7)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 2, 10, 7+18*2)
-            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(), CONTAINER_CONTAINER, 3, 10+18*4, 7+18*2)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(),0, 10, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(),1, 10+18*4, 7)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(),2, 10, 7+18*2)
+            .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(),3, 10+18*4, 7+18*2)
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
