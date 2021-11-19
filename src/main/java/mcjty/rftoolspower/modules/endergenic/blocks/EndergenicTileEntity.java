@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
@@ -14,6 +13,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.network.PacketSendClientCommand;
+import mcjty.lib.network.PacketServerCommandTyped;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
@@ -683,9 +683,10 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
         if (level.isClientSide) {
             // We're on the client. Send change to server.
-            executeServerCommand(CMD_SETDESTINATION.getName(), McJtyLib.proxy.getClientPlayer(), TypedMap.builder()
+            PacketServerCommandTyped packet = new PacketServerCommandTyped(getBlockPos(), getDimension(), CMD_SETDESTINATION.getName(), TypedMap.builder()
                     .put(PARAM_DESTINATION, destination)
                     .build());
+            RFToolsPowerMessages.INSTANCE.sendToServer(packet);
         }
     }
 
