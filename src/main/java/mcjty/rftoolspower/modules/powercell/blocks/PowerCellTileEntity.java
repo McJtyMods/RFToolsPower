@@ -481,15 +481,8 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);
-
+        readClientDataFromNBT(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
-        String mode = info.getString("mode");
-        if (mode.length() >= 6) {
-            for (int i = 0 ; i < 6 ; i++) {
-                modes[i] = SideType.VALUES[Integer.parseInt(mode.substring(i, i+1))];
-            }
-        }
-        updateOutputCount();
         localEnergy = info.getLong("energy");
     }
 
@@ -510,6 +503,18 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
             mode += modes[i].ordinal();
         }
         info.putString("mode", mode);
+    }
+
+    @Override
+    public void readClientDataFromNBT(CompoundNBT tagCompound) {
+        CompoundNBT info = tagCompound.getCompound("Info");
+        String mode = info.getString("mode");
+        if (mode.length() >= 6) {
+            for (int i = 0 ; i < 6 ; i++) {
+                modes[i] = SideType.VALUES[Integer.parseInt(mode.substring(i, i+1))];
+            }
+        }
+        updateOutputCount();
     }
 
     @Override

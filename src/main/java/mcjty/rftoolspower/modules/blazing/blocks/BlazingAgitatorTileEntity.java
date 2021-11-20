@@ -151,10 +151,10 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     @Override
     public void readClientDataFromNBT(CompoundNBT tagCompound) {
-        super.readClientDataFromNBT(tagCompound);
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rotationSpeed[i] = tagCompound.getFloat("rs" + i);
         }
+        readItemHandlerCap(tagCompound);
     }
 
     @Override
