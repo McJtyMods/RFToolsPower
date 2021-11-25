@@ -2,7 +2,6 @@ package mcjty.rftoolspower.modules.monitor.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.bindings.GuiValue;
-import mcjty.lib.bindings.Value;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
@@ -10,11 +9,8 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.LogicTileEntity;
-import mcjty.lib.typed.Type;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Sync;
 import mcjty.rftoolsbase.tools.ManualHelper;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.block.Block;
@@ -26,7 +22,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,18 +36,14 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier((windowId, player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this))
-            .dataListener(Sync.values(new ResourceLocation(RFToolsPower.MODID, "data"), this)));
+            .setupSync(this));
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
-    @GuiValue
-    public static final Value<?, Integer> VALUE_MINIMUM = Value.<PowerMonitorTileEntity, Integer>create("minimum", Type.INTEGER, PowerMonitorTileEntity::getMinimum, PowerMonitorTileEntity::setMinimum);
-    @GuiValue
-    public static final Value<?, Integer> VALUE_MAXIMUM = Value.<PowerMonitorTileEntity, Integer>create("maximum", Type.INTEGER, PowerMonitorTileEntity::getMaximum, PowerMonitorTileEntity::setMaximum);
-
-
     // Persisted data
+    @GuiValue
     private int minimum;        // Minimum power percentage
+    @GuiValue
     private int maximum;        // Maximum power percentage
 
     // Transient data

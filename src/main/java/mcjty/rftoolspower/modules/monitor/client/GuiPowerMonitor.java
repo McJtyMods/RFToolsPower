@@ -45,7 +45,7 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         toplevel.setBounds(new Rectangle(leftPos, topPos, imageWidth, imageHeight));
         window = new Window(this, toplevel);
 
-        window.bind(RFToolsPowerMessages.INSTANCE, "minimum", tileEntity, PowerMonitorTileEntity.VALUE_MINIMUM.getKey().getName());
-        window.bind(RFToolsPowerMessages.INSTANCE, "maximum", tileEntity, PowerMonitorTileEntity.VALUE_MAXIMUM.getKey().getName());
+        window.bind(RFToolsPowerMessages.INSTANCE, "minimum", tileEntity, "minimum");
+        window.bind(RFToolsPowerMessages.INSTANCE, "maximum", tileEntity, "maximum");
     }
 }

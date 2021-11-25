@@ -14,9 +14,7 @@ import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Sync;
 import mcjty.rftoolsbase.tools.ManualHelper;
-import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
@@ -30,7 +28,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
@@ -61,9 +58,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     @Cap(type =  CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
             .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), CoalGeneratorTileEntity.this))
-            .dataListener(Sync.values(new ResourceLocation(RFToolsPower.MODID, "data"), this))
             .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage));
+            .energyHandler(() -> energyStorage)
+            .setupSync(this));
 
     @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);

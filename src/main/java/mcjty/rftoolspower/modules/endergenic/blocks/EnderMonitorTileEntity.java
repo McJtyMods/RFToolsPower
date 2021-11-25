@@ -1,6 +1,7 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
+import mcjty.lib.bindings.GuiValue;
 import mcjty.lib.blockcommands.Command;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.LogicSlabBlock;
@@ -8,7 +9,6 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
-import mcjty.lib.sync.SyncToGui;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.LogicTileEntity;
@@ -29,7 +29,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 
 public class EnderMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
 
-    @SyncToGui
+    @GuiValue
     private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
 
     private boolean needpulse = false;
