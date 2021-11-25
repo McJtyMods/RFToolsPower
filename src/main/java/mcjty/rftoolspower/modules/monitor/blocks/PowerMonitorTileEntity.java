@@ -4,7 +4,6 @@ import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.bindings.GuiValue;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
@@ -28,6 +27,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
@@ -35,7 +35,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier(windowId -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR, windowId, ContainerFactory.EMPTY, this))
+            .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, this))
             .setupSync(this));
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);

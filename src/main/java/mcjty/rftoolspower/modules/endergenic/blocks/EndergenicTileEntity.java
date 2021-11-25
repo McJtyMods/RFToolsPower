@@ -10,7 +10,6 @@ import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketServerCommandTyped;
@@ -72,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.rftoolsbase.modules.hud.Hud.COMMAND_GETHUDLOG;
 
@@ -99,7 +99,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier(windowId -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC, windowId, ContainerFactory.EMPTY, this))
+            .containerSupplier(empty(EndergenicModule.CONTAINER_ENDERGENIC, this))
             .energyHandler(() -> energyStorage));
 
     // The current chargingMode status.

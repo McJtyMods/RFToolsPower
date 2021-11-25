@@ -6,7 +6,6 @@ import mcjty.lib.blockcommands.Command;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.Cap;
@@ -24,6 +23,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
@@ -36,7 +36,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .containerSupplier(windowId -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR, windowId, ContainerFactory.EMPTY, this))
+            .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, this))
             .setupSync(this));
 
 
