@@ -57,7 +57,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     @Cap(type =  CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
-            .containerSupplier((windowId,player) -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(windowId -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .setupSync(this));

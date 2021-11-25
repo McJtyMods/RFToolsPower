@@ -55,7 +55,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuserr")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(windowId -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER, windowId, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage));
 

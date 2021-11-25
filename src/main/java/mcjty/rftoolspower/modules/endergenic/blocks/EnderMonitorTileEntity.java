@@ -36,7 +36,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR, windowId, ContainerFactory.EMPTY, this))
+            .containerSupplier(windowId -> new GenericContainer(EndergenicModule.CONTAINER_ENDER_MONITOR, windowId, ContainerFactory.EMPTY, this))
             .setupSync(this));
 
 

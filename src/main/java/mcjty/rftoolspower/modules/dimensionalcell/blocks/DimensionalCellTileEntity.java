@@ -85,7 +85,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     };
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
-            .containerSupplier((windowId, player) -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
+            .containerSupplier(windowId -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
             .itemHandler(() -> items));
     @Cap(type = CapType.MODULE)
     private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {

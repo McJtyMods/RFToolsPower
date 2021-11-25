@@ -49,7 +49,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(windowId -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR, windowId, CONTAINER_FACTORY, this))
             .itemHandler(() -> items));
 
     // For pulse detection.

@@ -71,7 +71,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(windowId -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR, windowId, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .shortListener(Sync.integer(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
