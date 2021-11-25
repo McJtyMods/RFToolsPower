@@ -11,7 +11,7 @@ import mcjty.lib.blockcommands.ResultCommand;
 import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.container.NoDirectionItemHander;
+import mcjty.lib.container.GenericItemHandler;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericTileEntity;
@@ -81,7 +81,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public float tooltipCostFactor = 0;
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final NoDirectionItemHander items = createItemHandler();
+    private final GenericItemHandler items = createItemHandler();
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
 
@@ -747,8 +747,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         }
     }
 
-    private NoDirectionItemHander createItemHandler() {
-        return new NoDirectionItemHander(DimensionalCellTileEntity.this, CONTAINER_FACTORY.get()) {
+    private GenericItemHandler createItemHandler() {
+        return new GenericItemHandler(DimensionalCellTileEntity.this, CONTAINER_FACTORY.get()) {
 
             @Override
             public boolean isItemValid(int index, @Nonnull ItemStack stack) {
