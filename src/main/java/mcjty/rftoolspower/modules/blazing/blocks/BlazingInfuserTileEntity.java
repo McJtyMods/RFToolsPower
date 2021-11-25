@@ -171,11 +171,6 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
             public int getSlotLimit(int slot) {
                 return 1;
             }
-
-            @Override
-            public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
-                return isItemValid(slot, stack);
-            }
         };
     }
 }

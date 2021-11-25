@@ -228,11 +228,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                     return EnergyTools.isEnergyItem(stack);
                 }
             }
-
-            @Override
-            public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
-                return isItemValid(slot, stack);
-            }
         };
     }
 

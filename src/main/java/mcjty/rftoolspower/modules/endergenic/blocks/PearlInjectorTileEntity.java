@@ -177,11 +177,6 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 return stack.getItem() == Items.ENDER_PEARL;
             }
-
-            @Override
-            public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
-                return isItemValid(slot, stack);
-            }
         };
     }
 }

@@ -228,11 +228,6 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
             }
 
             @Override
-            public boolean isItemInsertable(int slot, @Nonnull ItemStack stack) {
-                return isItemValid(slot, stack);
-            }
-
-            @Override
             public int getSlotLimit(int slot) {
                 return 1;
             }
