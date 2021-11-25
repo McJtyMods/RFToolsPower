@@ -1,7 +1,7 @@
 window {
     size(140,30)
 
-    event('mode', 'endermonitor.setMode')
+    bind('mode', 'mode')
 
     panel('','vertical') {
         bgthickness(2)

@@ -3,7 +3,6 @@ package mcjty.rftoolspower.modules.endergenic.client;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
-import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
@@ -25,8 +24,5 @@ public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity,
     public void init() {
         window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/endermonitor.gui"));
         super.init();
-
-        ChoiceLabel mode = window.findChild("mode");
-        mode.choice(tileEntity.getMode().getDescription());
     }
 }

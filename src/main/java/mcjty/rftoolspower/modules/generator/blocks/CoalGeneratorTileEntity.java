@@ -46,7 +46,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     public static final int SLOT_CHARGEITEM = 1;
 
     private static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(2)
-            .slot(specific(Items.COAL, Items.CHARCOAL, Items.COAL_BLOCK).in(), SLOT_COALINPUT, 82, 24)
+            .slot(specific(CoalGeneratorTileEntity::isValidFuel).in(), SLOT_COALINPUT, 82, 24)
             .slot(specific(EnergyTools::isEnergyItem).in().out(), SLOT_CHARGEITEM, 118, 24)
             .playerSlots(10, 70));
 
@@ -57,7 +57,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
 
     @Cap(type =  CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
+    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Coal Generator")
             .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
@@ -223,7 +223,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 if (slot == SLOT_COALINPUT) {
-                    return (stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL || stack.getItem() == Items.COAL_BLOCK);
+                    return isValidFuel(stack);
                 } else {
                     return EnergyTools.isEnergyItem(stack);
                 }
@@ -234,5 +234,9 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
                 return isItemValid(slot, stack);
             }
         };
+    }
+
+    private static boolean isValidFuel(@Nonnull ItemStack stack) {
+        return stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL || stack.getItem() == Items.COAL_BLOCK;
     }
 }

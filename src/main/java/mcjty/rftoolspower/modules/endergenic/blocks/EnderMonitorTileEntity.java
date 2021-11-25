@@ -2,12 +2,9 @@ package mcjty.rftoolspower.modules.endergenic.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.bindings.GuiValue;
-import mcjty.lib.blockcommands.Command;
-import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.gui.widgets.ChoiceLabel;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.LogicTileEntity;
@@ -129,11 +126,4 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
         super.writeInfo(tagCompound);
         getOrCreateInfo(tagCompound).putInt("mode", mode.ordinal());
     }
-
-    @ServerCommand
-    public static final Command<?> CMD_SETMODE = Command.<EnderMonitorTileEntity>create("endermonitor.setMode",
-            (te, playerEntity, params) -> {
-                String m = params.get(ChoiceLabel.PARAM_CHOICE);
-                te.setMode(EnderMonitorMode.getMode(m));
-            });
 }
