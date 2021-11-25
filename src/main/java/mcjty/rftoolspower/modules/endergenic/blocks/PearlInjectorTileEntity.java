@@ -32,7 +32,6 @@ import java.util.Set;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
-import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
 public class PearlInjectorTileEntity extends GenericTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
@@ -50,7 +49,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), PearlInjectorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR, windowId, CONTAINER_FACTORY, this))
             .itemHandler(() -> items));
 
     // For pulse detection.

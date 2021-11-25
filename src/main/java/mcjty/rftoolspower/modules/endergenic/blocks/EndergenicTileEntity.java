@@ -99,7 +99,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier((windowId, player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), EndergenicTileEntity.this))
+            .containerSupplier((windowId, player) -> new GenericContainer(EndergenicModule.CONTAINER_ENDERGENIC, windowId, ContainerFactory.EMPTY, this))
             .energyHandler(() -> energyStorage));
 
     // The current chargingMode status.

@@ -35,7 +35,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier((windowId, player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR.get(), windowId, ContainerFactory.EMPTY.get(), getBlockPos(), PowerMonitorTileEntity.this))
+            .containerSupplier((windowId, player) -> new GenericContainer(MonitorModule.CONTAINER_POWER_MONITOR, windowId, ContainerFactory.EMPTY, this))
             .setupSync(this));
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);

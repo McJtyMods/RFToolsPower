@@ -38,7 +38,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
-import static mcjty.lib.container.ContainerFactory.CONTAINER_CONTAINER;
 import static mcjty.lib.container.SlotDefinition.specific;
 
 public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
@@ -72,7 +71,7 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), windowId, CONTAINER_FACTORY.get(), getBlockPos(), BlazingGeneratorTileEntity.this))
+            .containerSupplier((windowId,player) -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR, windowId, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .shortListener(Sync.integer(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
