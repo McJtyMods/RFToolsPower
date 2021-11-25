@@ -37,6 +37,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
 
@@ -71,13 +72,14 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier(windowId -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_GENERATOR, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_GENERATOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .shortListener(Sync.integer(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
             .shortListener(Sync.integer(() -> (int) rfPerTick[1], v1 -> rfPerTick[1] = v1))
             .shortListener(Sync.integer(() -> (int) rfPerTick[2], v2 -> rfPerTick[2] = v2))
-            .shortListener(Sync.integer(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3)));
+            .shortListener(Sync.integer(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3))
+            .setupSync(this));
 
     public BlazingGeneratorTileEntity() {
         super(BlazingModule.TYPE_BLAZING_GENERATOR.get());

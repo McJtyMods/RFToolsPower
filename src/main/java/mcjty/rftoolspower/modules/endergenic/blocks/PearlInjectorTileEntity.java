@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 import static mcjty.lib.container.SlotDefinition.specific;
@@ -49,8 +50,9 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier(windowId -> new GenericContainer(EndergenicModule.CONTAINER_PEARL_INJECTOR, windowId, CONTAINER_FACTORY, this))
-            .itemHandler(() -> items));
+            .containerSupplier(container(EndergenicModule.CONTAINER_PEARL_INJECTOR, CONTAINER_FACTORY,this))
+            .itemHandler(() -> items)
+            .setupSync(this));
 
     // For pulse detection.
     private boolean prevIn = false;

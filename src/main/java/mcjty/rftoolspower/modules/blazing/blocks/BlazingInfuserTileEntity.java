@@ -30,6 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 import static mcjty.lib.container.SlotDefinition.specific;
@@ -55,9 +56,10 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuserr")
-            .containerSupplier(windowId -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_INFUSER, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_INFUSER, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage));
+            .energyHandler(() -> energyStorage)
+            .setupSync(this));
 
     public BlazingInfuserTileEntity() {
         super(BlazingModule.TYPE_BLAZING_INFUSER.get());

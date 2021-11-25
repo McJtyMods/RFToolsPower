@@ -43,6 +43,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
 
@@ -67,9 +68,10 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
-            .containerSupplier(windowId -> new GenericContainer(BlazingModule.CONTAINER_BLAZING_AGITATOR, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_AGITATOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage));
+            .energyHandler(() -> energyStorage)
+            .setupSync(this));
 
     public static final VoxelShape SLAB = VoxelShapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
 

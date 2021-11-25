@@ -36,6 +36,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
 
@@ -57,7 +58,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
 
     @Cap(type =  CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Crafter")
-            .containerSupplier(windowId -> new GenericContainer(CoalGeneratorModule.CONTAINER_COALGENERATOR, windowId, CONTAINER_FACTORY, this))
+            .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .setupSync(this));
