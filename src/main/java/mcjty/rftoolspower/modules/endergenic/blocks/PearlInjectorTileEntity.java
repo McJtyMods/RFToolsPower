@@ -46,7 +46,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = createItemHandler();
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY, (slot, stack) -> stack.getItem() == Items.ENDER_PEARL);
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
@@ -171,12 +171,4 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
 
-    private GenericItemHandler createItemHandler() {
-        return new GenericItemHandler(this, CONTAINER_FACTORY.get()) {
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == Items.ENDER_PEARL;
-            }
-        };
-    }
 }

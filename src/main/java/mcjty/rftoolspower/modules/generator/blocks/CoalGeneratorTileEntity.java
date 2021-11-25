@@ -51,7 +51,13 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = createItemHandler();
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY, (slot, stack) -> {
+        if (slot == SLOT_COALINPUT) {
+            return isValidFuel(stack);
+        } else {
+            return EnergyTools.isEnergyItem(stack);
+        }
+    });
 
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
@@ -214,19 +220,6 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             @Override
             public String getMachineStatus() {
                 return burning > 0 ? "generating power" : "idle";
-            }
-        };
-    }
-
-    private GenericItemHandler createItemHandler() {
-        return new GenericItemHandler(this, CONTAINER_FACTORY.get()) {
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                if (slot == SLOT_COALINPUT) {
-                    return isValidFuel(stack);
-                } else {
-                    return EnergyTools.isEnergyItem(stack);
-                }
             }
         };
     }

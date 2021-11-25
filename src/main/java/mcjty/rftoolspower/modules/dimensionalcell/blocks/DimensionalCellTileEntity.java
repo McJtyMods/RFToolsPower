@@ -81,7 +81,16 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public float tooltipCostFactor = 0;
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = createItemHandler();
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY, (slot, stack) -> {
+        if (slot == SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
+            return false;
+        }
+        if (slot == SLOT_CARDCOPY && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
+            return false;
+        }
+        return true;
+    }, (slot, stack) -> onUpdateSlot(slot, stack));
+
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
 
@@ -161,6 +170,20 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
     public DimensionalCellTileEntity(TileEntityType<?> type) {
         super(type);
+    }
+
+    private void onUpdateSlot(Integer slot, ItemStack stack) {
+        if (slot == SLOT_CARD) {
+            if (stack.isEmpty()) {
+                handleCardRemoval();
+            } else {
+                handleCardInsertion();
+            }
+        } else if (slot == SLOT_CARDCOPY) {
+            if (!stack.isEmpty()) {
+                PowerCellCardItem.setId(stack, this.networkId);
+            }
+        }
     }
 
     public int getLastRfPerTickIn() {
@@ -745,39 +768,6 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
         public boolean canReceive() {
             return false;
         }
-    }
-
-    private GenericItemHandler createItemHandler() {
-        return new GenericItemHandler(DimensionalCellTileEntity.this, CONTAINER_FACTORY.get()) {
-
-            @Override
-            public boolean isItemValid(int index, @Nonnull ItemStack stack) {
-                if (index == SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
-                    return false;
-                }
-                if (index == SLOT_CARDCOPY && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
-                    return false;
-                }
-                return true;
-            }
-
-
-            @Override
-            protected void onUpdate(int index) {
-                super.onUpdate(index);
-                if (index == SLOT_CARD) {
-                    if (getStackInSlot(index).isEmpty()) {
-                        handleCardRemoval();
-                    } else {
-                        handleCardInsertion();
-                    }
-                } else if (index == SLOT_CARDCOPY) {
-                    if (!getStackInSlot(index).isEmpty()) {
-                        PowerCellCardItem.setId(getStackInSlot(index), networkId);
-                    }
-                }
-            }
-        };
     }
 
     @Nonnull

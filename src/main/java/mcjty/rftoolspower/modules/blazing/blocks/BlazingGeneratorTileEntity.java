@@ -233,9 +233,9 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
             }
 
             @Override
-            protected void onUpdate(int index) {
+            protected void onUpdate(int index, ItemStack stack) {
                 updateSlot(index);
-                super.onUpdate(index);
+                super.onUpdate(index, stack);
             }
         };
     }
