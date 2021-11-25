@@ -9,6 +9,7 @@ import mcjty.lib.api.smartwrench.ISmartWrenchSelector;
 import mcjty.lib.blockcommands.Command;
 import mcjty.lib.blockcommands.ResultCommand;
 import mcjty.lib.blockcommands.ServerCommand;
+import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.NoDirectionItemHander;
 import mcjty.lib.tileentity.Cap;
@@ -42,6 +43,7 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -50,10 +52,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+import static mcjty.lib.api.container.DefaultContainerProvider.container;
+import static mcjty.lib.container.SlotDefinition.generic;
+import static mcjty.lib.container.SlotDefinition.specific;
+import static mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL;
 import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock.*;
-import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellContainer.CONTAINER_FACTORY;
 
 public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
+
+    public static final int SLOT_CARD = 0;
+    public static final int SLOT_CARDCOPY = 1;
+    public static final int SLOT_CHARGEITEM = 2;
+
+    public static final Lazy<ContainerFactory> CONTAINER_FACTORY = Lazy.of(() -> new ContainerFactory(3)
+            .slot(specific(DimensionalCellModule.POWERCELL_CARD.get()).in().out(), SLOT_CARD, 28, 8)
+            .slot(specific(DimensionalCellModule.POWERCELL_CARD.get()), SLOT_CARDCOPY, 64, 30)
+            .slot(generic(), SLOT_CHARGEITEM, 64, 8)
+            .playerSlots(10, 70));
 
     // Client side for tooltip purposes
     public int tooltipEnergy = 0;
@@ -83,12 +98,14 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             LazyOptional.of(() -> new SidedHandler(Direction.WEST)),
             LazyOptional.of(() -> new SidedHandler(Direction.EAST))
     };
+
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
-            .containerSupplier(windowId -> new DimensionalCellContainer(windowId, CONTAINER_FACTORY.get(), getBlockPos(), DimensionalCellTileEntity.this))
+            .containerSupplier(container(CONTAINER_DIMENSIONAL_CELL, CONTAINER_FACTORY, this))
             .itemHandler(() -> items));
+
     @Cap(type = CapType.MODULE)
-    private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(DimensionalCellContainer.SLOT_CARD) {
+    private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
             return itemStack.getItem() instanceof PowerCellCardItem;
@@ -256,7 +273,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private void handleChargingItem() {
-        ItemStack stack = items.getStackInSlot(DimensionalCellContainer.SLOT_CHARGEITEM);
+        ItemStack stack = items.getStackInSlot(SLOT_CHARGEITEM);
         if (stack.isEmpty()) {
             return;
         }
@@ -331,7 +348,7 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     private void handleCardInsertion() {
-        ItemStack stack = items.getStackInSlot(DimensionalCellContainer.SLOT_CARD);
+        ItemStack stack = items.getStackInSlot(SLOT_CARD);
         int id = PowerCellCardItem.getId(stack);
         if (!level.isClientSide) {
             DimensionalCellNetwork channels = DimensionalCellNetwork.get(level);
@@ -734,10 +751,10 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
 
             @Override
             public boolean isItemValid(int index, @Nonnull ItemStack stack) {
-                if (index == DimensionalCellContainer.SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
+                if (index == SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
                     return false;
                 }
-                if (index == DimensionalCellContainer.SLOT_CARDCOPY && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
+                if (index == SLOT_CARDCOPY && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
                     return false;
                 }
                 return true;
@@ -747,13 +764,13 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
             @Override
             protected void onUpdate(int index) {
                 super.onUpdate(index);
-                if (index == DimensionalCellContainer.SLOT_CARD) {
+                if (index == SLOT_CARD) {
                     if (getStackInSlot(index).isEmpty()) {
                         handleCardRemoval();
                     } else {
                         handleCardInsertion();
                     }
-                } else if (index == DimensionalCellContainer.SLOT_CARDCOPY) {
+                } else if (index == SLOT_CARDCOPY) {
                     if (!getStackInSlot(index).isEmpty()) {
                         PowerCellCardItem.setId(getStackInSlot(index), networkId);
                     }
