@@ -81,15 +81,18 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     public float tooltipCostFactor = 0;
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY, (slot, stack) -> {
-        if (slot == SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
-            return false;
-        }
-        if (slot == SLOT_CARDCOPY && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
-            return false;
-        }
-        return true;
-    }, (slot, stack) -> onUpdateSlot(slot, stack));
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
+            .itemValid((slot, stack) -> {
+                if (slot == SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
+                    return false;
+                }
+                if (slot == SLOT_CARDCOPY && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
+                    return false;
+                }
+                return true;
+            })
+            .onUpdate(this::onUpdateSlot)
+            .build();
 
 
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);

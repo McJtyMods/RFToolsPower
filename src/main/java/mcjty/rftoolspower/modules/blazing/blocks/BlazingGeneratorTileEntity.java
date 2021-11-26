@@ -39,6 +39,7 @@ import javax.annotation.Nonnull;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
+import static mcjty.lib.container.GenericItemHandler.match;
 import static mcjty.lib.container.SlotDefinition.specific;
 
 public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
@@ -55,7 +56,11 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = createItemHandler();
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
+            .slotLimit(1)
+            .itemValid(match(BlazingModule.BLAZING_ROD))
+            .onUpdate((slot, stack) -> updateSlot(slot))
+            .build();
 
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
@@ -220,23 +225,4 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
         return super.save(tagCompound);
     }
 
-    private GenericItemHandler createItemHandler() {
-        return new GenericItemHandler(this, CONTAINER_FACTORY.get()) {
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == BlazingModule.BLAZING_ROD.get();
-            }
-
-            @Override
-            public int getSlotLimit(int slot) {
-                return 1;
-            }
-
-            @Override
-            protected void onUpdate(int index, ItemStack stack) {
-                updateSlot(index);
-                super.onUpdate(index, stack);
-            }
-        };
-    }
 }

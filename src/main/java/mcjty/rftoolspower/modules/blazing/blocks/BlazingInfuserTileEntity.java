@@ -52,11 +52,24 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
             BlazingConfiguration.INFUSER_ENERGY_INPUT_PERTICK.get());
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = createItemHandler();
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
+            .slotLimit(1)
+            .itemValid((slot, stack) -> {
+                switch (slot) {
+                    case SLOT_INPUT:
+                    case SLOT_OUTPUT:
+                        return stack.getItem() == BlazingModule.BLAZING_ROD.get();
+                    case SLOT_CATALYST:
+                        return getCatalystImprovement(stack) != null;
+                    default:
+                        return false;
+                }
+            })
+            .build();
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuser")
-            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_INFUSER, CONTAINER_FACTORY,this))
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_INFUSER, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .setupSync(this));
@@ -69,7 +82,7 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
+                        AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinginfuser"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -151,26 +164,4 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
         BlazingRod.setPowerQuality(stack, quality);
     }
 
-    private GenericItemHandler createItemHandler() {
-        return new GenericItemHandler(this, CONTAINER_FACTORY.get()) {
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                switch (slot) {
-                    case SLOT_INPUT:
-                    case SLOT_OUTPUT:
-                        return stack.getItem() == BlazingModule.BLAZING_ROD.get();
-                    case SLOT_CATALYST:
-                        return getCatalystImprovement(stack) != null;
-                    default:
-                        return false;
-                }
-            }
-
-
-            @Override
-            public int getSlotLimit(int slot) {
-                return 1;
-            }
-        };
-    }
 }

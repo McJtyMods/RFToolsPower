@@ -51,20 +51,22 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY, (slot, stack) -> {
-        if (slot == SLOT_COALINPUT) {
-            return isValidFuel(stack);
-        } else {
-            return EnergyTools.isEnergyItem(stack);
-        }
-    });
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
+            .itemValid((slot, stack) -> {
+                        if (slot == SLOT_COALINPUT) {
+                            return isValidFuel(stack);
+                        } else {
+                            return EnergyTools.isEnergyItem(stack);
+                        }
+                    }
+            ).build();
 
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
 
-    @Cap(type =  CapType.CONTAINER)
+    @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Coal Generator")
-            .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY,this))
+            .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .setupSync(this));
@@ -175,7 +177,7 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
         long storedPower = energyStorage.getEnergy();
         EnergyTools.handleSendingEnergy(level, worldPosition, storedPower, CoalGeneratorConfig.SENDPERTICK.get(), energyStorage);
     }
-    
+
     @Override
     public void read(CompoundNBT tagCompound) {
         super.read(tagCompound);

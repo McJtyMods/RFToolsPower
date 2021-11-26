@@ -57,7 +57,10 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
             .playerSlots(10, 70));
 
     @Cap(type = CapType.ITEMS_AUTOMATION)
-    private final GenericItemHandler items = createItemHandler();
+    private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
+            .slotLimit(1)
+            .itemValid((slot, stack) -> isValidBlazingRod(stack))
+            .build();
 
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
@@ -281,17 +284,4 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     }
 
 
-    private GenericItemHandler createItemHandler() {
-        return new GenericItemHandler(this, CONTAINER_FACTORY.get()) {
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return isValidBlazingRod(stack);
-            }
-
-            @Override
-            public int getSlotLimit(int slot) {
-                return 1;
-            }
-        };
-    }
 }
