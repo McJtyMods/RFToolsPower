@@ -191,7 +191,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
                 EnderMonitorMode m = te.getMode();
-                probeInfo.text(CompoundText.createLabelInfo("Mode: ", m.getDescription()));
+                probeInfo.text(CompoundText.createLabelInfo("Mode: ", m.getName()));
             }, "Bad tile entity!");
         }
     }
