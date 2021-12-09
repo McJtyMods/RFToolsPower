@@ -143,7 +143,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void writeClientDataToNBT(CompoundNBT tagCompound) {
+    public void saveClientDataToNBT(CompoundNBT tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putFloat("rs" + i, rotationSpeed[i]);
         }
@@ -151,7 +151,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void readClientDataFromNBT(CompoundNBT tagCompound) {
+    public void loadClientDataFromNBT(CompoundNBT tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rotationSpeed[i] = tagCompound.getFloat("rs" + i);
         }
