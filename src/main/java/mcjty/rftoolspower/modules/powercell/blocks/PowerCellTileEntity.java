@@ -1,7 +1,6 @@
 package mcjty.rftoolspower.modules.powercell.blocks;
 
 import mcjty.lib.api.power.IBigPower;
-import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
@@ -15,7 +14,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -479,7 +477,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     public void load(CompoundNBT tagCompound) {
         super.load(tagCompound);
-        readClientDataFromNBT(tagCompound);
+        loadClientDataFromNBT(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         localEnergy = info.getLong("energy");
     }
@@ -487,13 +485,13 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
         CompoundNBT info = getOrCreateInfo(tagCompound);
-        writeClientDataToNBT(tagCompound);
+        saveClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
         super.saveAdditional(tagCompound);
     }
 
     @Override
-    public void writeClientDataToNBT(CompoundNBT tagCompound) {
+    public void saveClientDataToNBT(CompoundNBT tagCompound) {
         CompoundNBT info = getOrCreateInfo(tagCompound);
         String mode = "";
         for (int i = 0 ; i < 6 ; i++) {
@@ -503,7 +501,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void readClientDataFromNBT(CompoundNBT tagCompound) {
+    public void loadClientDataFromNBT(CompoundNBT tagCompound) {
         CompoundNBT info = tagCompound.getCompound("Info");
         String mode = info.getString("mode");
         if (mode.length() >= 6) {
