@@ -15,6 +15,7 @@ import mcjty.lib.container.GenericItemHandler;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
@@ -58,7 +59,7 @@ import static mcjty.lib.container.SlotDefinition.specific;
 import static mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL;
 import static mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock.*;
 
-public class DimensionalCellTileEntity extends GenericTileEntity implements ITickableTileEntity, ISmartWrenchSelector {
+public class DimensionalCellTileEntity extends TickingTileEntity implements ISmartWrenchSelector {
 
     public static final int SLOT_CARD = 0;
     public static final int SLOT_CARDCOPY = 1;
@@ -265,40 +266,38 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            long time = level.getGameTime();
-            if (lastTime == 0) {
-                lastTime = time;
-            } else if (time > lastTime + 40) {
-                lastRfPerTickIn = (int) (powerIn / (time - lastTime));
-                lastRfPerTickOut = (int) (powerOut / (time - lastTime));
-                lastTime = time;
-                powerIn = 0;
-                powerOut = 0;
-            }
-
-            if (getDimensionalCellType().isCreative()) {
-                // A creative powercell automatically generates 1000000 RF/tick
-                int gain = 1000000;
-                int networkId = getNetworkId();
-                if (networkId == -1) {
-                    receiveEnergyLocal(gain, false);
-                } else {
-                    receiveEnergyMulti(gain, false);
-                }
-            }
-
-            int energyStored = getEnergyStored();
-            if (energyStored <= 0) {
-                return;
-            }
-
-            handleChargingItem();
-            sendOutEnergy();
+    protected void tickServer() {
+        long time = level.getGameTime();
+        if (lastTime == 0) {
+            lastTime = time;
+        } else if (time > lastTime + 40) {
+            lastRfPerTickIn = (int) (powerIn / (time - lastTime));
+            lastRfPerTickOut = (int) (powerOut / (time - lastTime));
+            lastTime = time;
+            powerIn = 0;
+            powerOut = 0;
         }
-    }
 
+        if (getDimensionalCellType().isCreative()) {
+            // A creative powercell automatically generates 1000000 RF/tick
+            int gain = 1000000;
+            int networkId = getNetworkId();
+            if (networkId == -1) {
+                receiveEnergyLocal(gain, false);
+            } else {
+                receiveEnergyMulti(gain, false);
+            }
+        }
+
+        int energyStored = getEnergyStored();
+        if (energyStored <= 0) {
+            return;
+        }
+
+        handleChargingItem();
+        sendOutEnergy();
+    }
+    
     private void handleChargingItem() {
         ItemStack stack = items.getStackInSlot(SLOT_CHARGEITEM);
         if (stack.isEmpty()) {

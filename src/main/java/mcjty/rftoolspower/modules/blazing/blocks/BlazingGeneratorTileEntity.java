@@ -8,10 +8,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.Cap;
-import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericEnergyStorage;
-import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.*;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.RedstoneMode;
 import mcjty.lib.varia.Sync;
@@ -42,7 +39,7 @@ import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.GenericItemHandler.match;
 import static mcjty.lib.container.SlotDefinition.specific;
 
-public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
+public class BlazingGeneratorTileEntity extends TickingTileEntity {
 
     public static final int BUFFER_SIZE = 4;
 
@@ -114,11 +111,9 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            handleSendingEnergy();
-            handlePowerGeneration();
-        }
+    protected void tickServer() {
+        handleSendingEnergy();
+        handlePowerGeneration();
     }
 
     @Override

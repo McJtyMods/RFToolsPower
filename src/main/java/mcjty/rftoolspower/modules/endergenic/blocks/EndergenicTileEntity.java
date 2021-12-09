@@ -13,10 +13,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketServerCommandTyped;
-import mcjty.lib.tileentity.Cap;
-import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericEnergyStorage;
-import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.*;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
@@ -75,7 +72,7 @@ import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.rftoolsbase.modules.hud.Hud.COMMAND_GETHUDLOG;
 
-public class EndergenicTileEntity extends GenericTileEntity implements ITickableTileEntity, IHudSupport, TickOrderHandler.IOrderTicker {
+public class EndergenicTileEntity extends TickingTileEntity implements IHudSupport, TickOrderHandler.IOrderTicker {
 
     private static Random random = new Random();
 
@@ -177,7 +174,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     public EndergenicTileEntity() {
-//        super(5000000, 20000);
         super(EndergenicModule.TYPE_ENDERGENIC.get());
     }
 
@@ -299,7 +295,7 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     @Override
-    public void tickServer() {
+    public void tickOnServer() {
         tickCounter++;
 
         ticks--;

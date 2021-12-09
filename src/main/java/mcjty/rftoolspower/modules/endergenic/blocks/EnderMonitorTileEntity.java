@@ -85,7 +85,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @Override
-    public void tickServer() {
+    public void tickOnServer() {
         int newout = 0;
 
         if (needpulse) {

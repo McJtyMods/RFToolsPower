@@ -2,6 +2,7 @@ package mcjty.rftoolspower.modules.powercell.blocks;
 
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
@@ -35,7 +36,7 @@ import java.util.Set;
 
 import static mcjty.rftoolspower.modules.powercell.data.SideType.NONE;
 
-public class PowerCellTileEntity extends GenericTileEntity implements ITickableTileEntity, IBigPower {
+public class PowerCellTileEntity extends TickingTileEntity implements IBigPower {
 
     private PowerCellNetwork network = null;
     private long localEnergy = 0;
@@ -215,18 +216,15 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            if (outputCount > 0) {
-                PowerCellNetwork network = getNetwork();
-                if (network != null && network.isValid()) {
-                    long energyStored = network.getEnergy();
-                    if (energyStored <= 0) {
-                        return;
-                    }
-                    sendOutEnergy(energyStored);
+    protected void tickServer() {
+        if (outputCount > 0) {
+            PowerCellNetwork network = getNetwork();
+            if (network != null && network.isValid()) {
+                long energyStored = network.getEnergy();
+                if (energyStored <= 0) {
+                    return;
                 }
-//                validateNetwork();
+                sendOutEnergy(energyStored);
             }
         }
     }

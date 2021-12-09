@@ -9,6 +9,7 @@ import mcjty.lib.container.GenericItemHandler;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
@@ -36,7 +37,7 @@ import static mcjty.lib.builder.TooltipBuilder.key;
 import static mcjty.lib.container.GenericItemHandler.match;
 import static mcjty.lib.container.SlotDefinition.specific;
 
-public class PearlInjectorTileEntity extends GenericTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
+public class PearlInjectorTileEntity extends TickingTileEntity implements TickOrderHandler.IOrderTicker {
 
     public static final int BUFFER_SIZE = (9*2);
     public static final int SLOT_BUFFER = 0;
@@ -93,23 +94,21 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            long ticker = TickOrderHandler.getTicker();
-            TickOrderHandler.queue(this);
+    protected void tickServer() {
+        long ticker = TickOrderHandler.getTicker();
+        TickOrderHandler.queue(this);
 
-            // Find all connected endergenics in order
-            EndergenicTileEntity endergenic = findEndergenicTileEntity();
-            Set<BlockPos> connectedEndergenics = new HashSet<>();
-            while (endergenic != null && !connectedEndergenics.contains(endergenic.getBlockPos())) {
-                // Don't add endergenics that have already been added this tick
-                if (ticker != endergenic.getTicker()) {
-                    endergenic.setTicker(ticker);
-                    TickOrderHandler.queue(endergenic);
-                }
-                connectedEndergenics.add(endergenic.getBlockPos());
-                endergenic = endergenic.getDestinationTE();
+        // Find all connected endergenics in order
+        EndergenicTileEntity endergenic = findEndergenicTileEntity();
+        Set<BlockPos> connectedEndergenics = new HashSet<>();
+        while (endergenic != null && !connectedEndergenics.contains(endergenic.getBlockPos())) {
+            // Don't add endergenics that have already been added this tick
+            if (ticker != endergenic.getTicker()) {
+                endergenic.setTicker(ticker);
+                TickOrderHandler.queue(endergenic);
             }
+            connectedEndergenics.add(endergenic.getBlockPos());
+            endergenic = endergenic.getDestinationTE();
         }
     }
 
@@ -119,7 +118,7 @@ public class PearlInjectorTileEntity extends GenericTileEntity implements ITicka
     }
 
     @Override
-    public void tickServer() {
+    public void tickOnServer() {
         boolean pulse = (powerLevel > 0) && !prevIn;
         if (prevIn == powerLevel > 0) {
             return;

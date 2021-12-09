@@ -6,10 +6,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.Cap;
-import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericEnergyStorage;
-import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.*;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -35,7 +32,7 @@ import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 import static mcjty.lib.container.SlotDefinition.specific;
 
-public class BlazingInfuserTileEntity extends GenericTileEntity implements ITickableTileEntity {
+public class BlazingInfuserTileEntity extends TickingTileEntity {
 
     private static final int SLOT_INPUT = 0;
     private static final int SLOT_OUTPUT = 1;
@@ -91,37 +88,35 @@ public class BlazingInfuserTileEntity extends GenericTileEntity implements ITick
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            counter--;
-            if (counter < 0) {
-                counter = 10;
-                ItemStack stack = items.getStackInSlot(SLOT_INPUT);
-                if (stack.getItem() == BlazingModule.BLAZING_ROD.get()) {
-                    int steps = BlazingRod.getInfusionStepsLeft(stack);
-                    if (steps > 0) {
-                        ItemStack catalyst = items.getStackInSlot(SLOT_CATALYST);
-                        if (!catalyst.isEmpty()) {
-                            if (energyStorage.getEnergy() >= BlazingConfiguration.INFUSER_USE_PER_TICK.get()) {
-                                energyStorage.consumeEnergy(BlazingConfiguration.INFUSER_USE_PER_TICK.get());
-                                steps--;
-                                BlazingRod.setInfusionStepsLeft(stack, steps);
-                                items.extractItem(SLOT_CATALYST, 1, false);
-                                infuse(stack, catalyst);
-                                if (steps <= 0) {
-                                    // Move the infused blazing rod to the output area if possible
-                                    if (items.getStackInSlot(SLOT_OUTPUT).isEmpty()) {
-                                        items.setStackInSlot(SLOT_OUTPUT, stack);
-                                        items.setStackInSlot(SLOT_INPUT, ItemStack.EMPTY);
-                                    }
+    protected void tickServer() {
+        counter--;
+        if (counter < 0) {
+            counter = 10;
+            ItemStack stack = items.getStackInSlot(SLOT_INPUT);
+            if (stack.getItem() == BlazingModule.BLAZING_ROD.get()) {
+                int steps = BlazingRod.getInfusionStepsLeft(stack);
+                if (steps > 0) {
+                    ItemStack catalyst = items.getStackInSlot(SLOT_CATALYST);
+                    if (!catalyst.isEmpty()) {
+                        if (energyStorage.getEnergy() >= BlazingConfiguration.INFUSER_USE_PER_TICK.get()) {
+                            energyStorage.consumeEnergy(BlazingConfiguration.INFUSER_USE_PER_TICK.get());
+                            steps--;
+                            BlazingRod.setInfusionStepsLeft(stack, steps);
+                            items.extractItem(SLOT_CATALYST, 1, false);
+                            infuse(stack, catalyst);
+                            if (steps <= 0) {
+                                // Move the infused blazing rod to the output area if possible
+                                if (items.getStackInSlot(SLOT_OUTPUT).isEmpty()) {
+                                    items.setStackInSlot(SLOT_OUTPUT, stack);
+                                    items.setStackInSlot(SLOT_INPUT, ItemStack.EMPTY);
                                 }
                             }
                         }
                     }
                 }
             }
-            markDirtyQuick();
         }
+        markDirtyQuick();
     }
 
     // Return <quality,duration> improvement factor (expressed in percentage when an entire stack would be used for infusion)

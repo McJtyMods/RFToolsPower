@@ -11,10 +11,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.Cap;
-import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericEnergyStorage;
-import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.*;
 import mcjty.lib.typed.Type;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -47,7 +44,7 @@ import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
 
-public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITickableTileEntity {
+public class BlazingAgitatorTileEntity extends TickingTileEntity {
 
     public static final int BUFFER_SIZE = 9;
 
@@ -167,19 +164,17 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            boolean active = false;
-            if (isMachineEnabled()) {
-                if (energyStorage.getEnergy() >= BlazingConfiguration.AGITATOR_USE_PER_TICK.get()) {
-                    energyStorage.consumeEnergy(BlazingConfiguration.AGITATOR_USE_PER_TICK.get());
-                    active = true;
-                    tickRods();
-                }
+    protected void tickServer() {
+        boolean active = false;
+        if (isMachineEnabled()) {
+            if (energyStorage.getEnergy() >= BlazingConfiguration.AGITATOR_USE_PER_TICK.get()) {
+                energyStorage.consumeEnergy(BlazingConfiguration.AGITATOR_USE_PER_TICK.get());
+                active = true;
+                tickRods();
             }
-
-            updateClientRotationSpeed(active);
         }
+
+        updateClientRotationSpeed(active);
     }
 
     private void tickRods() {

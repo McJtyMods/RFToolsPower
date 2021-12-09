@@ -9,10 +9,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.Cap;
-import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericEnergyStorage;
-import mcjty.lib.tileentity.GenericTileEntity;
+import mcjty.lib.tileentity.*;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -40,7 +37,7 @@ import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
 
-public class CoalGeneratorTileEntity extends GenericTileEntity implements ITickableTileEntity {
+public class CoalGeneratorTileEntity extends TickingTileEntity {
 
     public static final int SLOT_COALINPUT = 0;
     public static final int SLOT_CHARGEITEM = 1;
@@ -116,19 +113,16 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
+    protected void tickServer() {
+        markDirtyQuick();
+        handleChargingItem(items);
+        handleSendingEnergy();
 
-            markDirtyQuick();
-            handleChargingItem(items);
-            handleSendingEnergy();
-
-            if (!isMachineEnabled()) {
-                return;
-            }
-
-            handlePowerGeneration();
+        if (!isMachineEnabled()) {
+            return;
         }
+
+        handlePowerGeneration();
     }
 
     private void handlePowerGeneration() {
