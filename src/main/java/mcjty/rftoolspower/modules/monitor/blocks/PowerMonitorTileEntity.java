@@ -7,7 +7,8 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.LogicTileEntity;
+import mcjty.lib.tileentity.LogicSupport;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -18,10 +19,11 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -31,7 +33,9 @@ import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
-public class PowerMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity {
+public class PowerMonitorTileEntity extends TickingTileEntity {
+
+    private final LogicSupport support = new LogicSupport();
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
@@ -70,6 +74,16 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
         };
     }
 
+    @Override
+    public void checkRedstone(World world, BlockPos pos) {
+        support.checkRedstone(this, world, pos);
+    }
+
+    @Override
+    public int getRedstoneOutput(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+        return support.getRedstoneOutput(state, side);
+    }
+
     public int getMinimum() {
         return minimum;
     }
@@ -90,22 +104,18 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
 
     public void setInvalid() {
         changeRfLevel(0);
-        setRedstoneState(0);
+        support.setRedstoneState(this, 0);
     }
 
     @Override
-    public void tick() {
-        if (level.isClientSide) {
-            return;
-        }
-
+    protected void tickServer() {
         counter--;
         if (counter > 0) {
             return;
         }
         counter = 20;
 
-        Direction inputSide = getFacing(level.getBlockState(getBlockPos())).getInputSide();
+        Direction inputSide = LogicSupport.getFacing(level.getBlockState(getBlockPos())).getInputSide();
         BlockPos inputPos = getBlockPos().relative(inputSide);
         TileEntity tileEntity = level.getBlockEntity(inputPos);
         if (!EnergyTools.isEnergyTE(tileEntity, null)) {
@@ -135,7 +145,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
         }
         if (alarm != inAlarm) {
             inAlarm = alarm;
-            setRedstoneState(inAlarm ? 15 : 0);
+            support.setRedstoneState(this, inAlarm ? 15 : 0);
             setChanged();
         }
     }
@@ -151,7 +161,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     @Override
     public void load(CompoundNBT tagCompound) {
         super.load(tagCompound);
-        powerOutput = tagCompound.getBoolean("rs") ? 15 : 0;
+        support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         inAlarm = tagCompound.getBoolean("inAlarm");
     }
 
@@ -167,7 +177,7 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     @Override
     public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
         super.saveAdditional(tagCompound);
-        tagCompound.putBoolean("rs", powerOutput > 0);
+        tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
     }
 

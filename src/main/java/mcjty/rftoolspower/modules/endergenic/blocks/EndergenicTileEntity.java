@@ -43,7 +43,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -445,11 +444,11 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         BlockPos pos = getBlockPos();
         for (Direction dir : OrientationTools.DIRECTION_VALUES) {
             BlockPos c = pos.relative(dir);
-            TileEntity te = level.getBlockEntity(c);
-            if (te instanceof EnderMonitorTileEntity) {
-                EnderMonitorTileEntity enderMonitorTileEntity = (EnderMonitorTileEntity) te;
-                Direction inputSide = enderMonitorTileEntity.getFacing(level.getBlockState(c)).getInputSide();
-                if (inputSide == dir.getOpposite()) {
+            Direction inputSide = LogicSupport.getFacing(level.getBlockState(c)).getInputSide();
+            if (inputSide == dir.getOpposite()) {
+                TileEntity te = level.getBlockEntity(c);
+                if (te instanceof EnderMonitorTileEntity) {
+                    EnderMonitorTileEntity enderMonitorTileEntity = (EnderMonitorTileEntity) te;
                     enderMonitorTileEntity.fireFromEndergenic(mode);
                 }
             }

@@ -5,17 +5,20 @@ import mcjty.lib.bindings.GuiValue;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.GenericContainer;
-import mcjty.lib.tileentity.Cap;
-import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.LogicTileEntity;
+import mcjty.lib.tileentity.*;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -24,7 +27,9 @@ import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
 
-public class EnderMonitorTileEntity extends LogicTileEntity implements ITickableTileEntity, TickOrderHandler.IOrderTicker {
+public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrderHandler.IOrderTicker {
+
+    private final LogicSupport support = new LogicSupport();
 
     @GuiValue
     private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
@@ -54,6 +59,16 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
         return mode;
     }
 
+    @Override
+    public void checkRedstone(World world, BlockPos pos) {
+        support.checkRedstone(this, world, pos);
+    }
+
+    @Override
+    public int getRedstoneOutput(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+        return support.getRedstoneOutput(state, side);
+    }
+
     public void setMode(EnderMonitorMode mode) {
         this.mode = mode;
         setChanged();
@@ -73,10 +88,8 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @Override
-    public void tick() {
-        if (!level.isClientSide) {
-            TickOrderHandler.queue(this);
-        }
+    protected void tickServer() {
+        TickOrderHandler.queue(this);
     }
 
     @Override
@@ -94,13 +107,13 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
             needpulse = false;
         }
 
-        setRedstoneState(newout);
+        support.setRedstoneState(this, newout);
     }
 
     @Override
     public void load(CompoundNBT tagCompound) {
         super.load(tagCompound);
-        powerOutput = tagCompound.getBoolean("rs") ? 15 : 0;
+        support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         needpulse = tagCompound.getBoolean("needPulse");
     }
 
@@ -115,7 +128,7 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     @Override
     public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
         super.saveAdditional(tagCompound);
-        tagCompound.putBoolean("rs", powerOutput > 0);
+        tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("needPulse", needpulse);
     }
 

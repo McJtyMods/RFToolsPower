@@ -58,7 +58,7 @@ public class PowerLevelRenderer extends TileEntityRenderer<PowerLevelTileEntity>
 
         RenderHelper.adjustTransformToDirection(matrixStack, facing);
 
-        int level = te.getPowerOutput();
+        int level = te.getLogicSupport().getPowerOutput();
         if (level > 9) {
             level = 9;
         }
