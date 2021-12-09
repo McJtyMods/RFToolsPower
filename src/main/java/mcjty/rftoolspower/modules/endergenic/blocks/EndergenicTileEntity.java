@@ -695,8 +695,8 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    public void load(CompoundNBT tagCompound) {
+        super.load(tagCompound);
 
         chargingMode = tagCompound.getInt("charging");
         currentAge = tagCompound.getInt("age");
@@ -714,10 +714,9 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
         }
     }
 
-    @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
-        super.save(tagCompound);
+    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+        super.saveAdditional(tagCompound);
 
         tagCompound.putInt("charging", chargingMode);
         tagCompound.putInt("age", currentAge);
@@ -732,7 +731,6 @@ public class EndergenicTileEntity extends GenericTileEntity implements ITickable
             pearlList.add(pearl.getTagCompound());
         }
         tagCompound.put("pearls", pearlList);
-        return tagCompound;
     }
 
     public static final Key<Long> PARAM_STATRF = new Key<>("statrf", Type.LONG);

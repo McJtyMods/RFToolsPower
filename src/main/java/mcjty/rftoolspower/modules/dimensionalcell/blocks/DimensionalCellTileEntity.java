@@ -222,8 +222,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    protected void readInfo(CompoundNBT tagCompound) {
-        super.readInfo(tagCompound);
+    protected void loadInfo(CompoundNBT tagCompound) {
+        super.loadInfo(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         energy = info.getInt("energy");
         totalInserted = info.getLong("totIns");
@@ -232,8 +232,8 @@ public class DimensionalCellTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    protected void writeInfo(CompoundNBT tagCompound) {
-        super.writeInfo(tagCompound);
+    protected void saveInfo(CompoundNBT tagCompound) {
+        super.saveInfo(tagCompound);
         CompoundNBT info = getOrCreateInfo(tagCompound);
         info.putInt("energy", energy);
         info.putLong("totIns", totalInserted);

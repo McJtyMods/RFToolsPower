@@ -149,33 +149,31 @@ public class PowerMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    public void load(CompoundNBT tagCompound) {
+        super.load(tagCompound);
         powerOutput = tagCompound.getBoolean("rs") ? 15 : 0;
         inAlarm = tagCompound.getBoolean("inAlarm");
     }
 
     @Override
-    public void readInfo(CompoundNBT tagCompound) {
-        super.readInfo(tagCompound);
+    public void loadInfo(CompoundNBT tagCompound) {
+        super.loadInfo(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         rflevel = info.getInt("rflevel");
         minimum = info.getByte("minimum");
         maximum = info.getByte("maximum");
     }
 
-    @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
-        super.save(tagCompound);
+    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+        super.saveAdditional(tagCompound);
         tagCompound.putBoolean("rs", powerOutput > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
-        return tagCompound;
     }
 
     @Override
-    public void writeInfo(CompoundNBT tagCompound) {
-        super.writeInfo(tagCompound);
+    public void saveInfo(CompoundNBT tagCompound) {
+        super.saveInfo(tagCompound);
         CompoundNBT info = getOrCreateInfo(tagCompound);
         info.putInt("rflevel", rflevel);
         info.putByte("minimum", (byte) minimum);

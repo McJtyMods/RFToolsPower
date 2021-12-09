@@ -150,7 +150,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putFloat("rs" + i, rotationSpeed[i]);
         }
-        writeItemHandlerCap(tagCompound);
+        saveItemHandlerCap(tagCompound);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rotationSpeed[i] = tagCompound.getFloat("rs" + i);
         }
-        readItemHandlerCap(tagCompound);
+        loadItemHandlerCap(tagCompound);
     }
 
     @Override
@@ -261,8 +261,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    protected void readInfo(CompoundNBT tagCompound) {
-        super.readInfo(tagCompound);
+    protected void loadInfo(CompoundNBT tagCompound) {
+        super.loadInfo(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         byte[] bytes = info.getByteArray("locked");
         if (bytes.length >= BUFFER_SIZE) {
@@ -273,8 +273,8 @@ public class BlazingAgitatorTileEntity extends GenericTileEntity implements ITic
     }
 
     @Override
-    protected void writeInfo(CompoundNBT tagCompound) {
-        super.writeInfo(tagCompound);
+    protected void saveInfo(CompoundNBT tagCompound) {
+        super.saveInfo(tagCompound);
         CompoundNBT info = getOrCreateInfo(tagCompound);
         byte[] bytes = new byte[BUFFER_SIZE];
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {

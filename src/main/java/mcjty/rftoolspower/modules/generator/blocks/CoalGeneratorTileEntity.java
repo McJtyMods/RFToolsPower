@@ -179,19 +179,17 @@ public class CoalGeneratorTileEntity extends GenericTileEntity implements ITicka
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    public void load(CompoundNBT tagCompound) {
+        super.load(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         burning = info.getInt("burning");
     }
 
     @Override
-    @Nonnull
-    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
-        super.save(tagCompound);
+    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+        super.saveAdditional(tagCompound);
         CompoundNBT infoTag = getOrCreateInfo(tagCompound);
         infoTag.putInt("burning", burning);
-        return tagCompound;
     }
 
     @Nonnull

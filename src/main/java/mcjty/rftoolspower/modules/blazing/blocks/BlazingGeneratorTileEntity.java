@@ -205,8 +205,8 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    public void load(CompoundNBT tagCompound) {
+        super.load(tagCompound);
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rfPerTickMax[i] = tagCompound.getInt("rftMax" + i);
             rfPerTick[i] = tagCompound.getFloat("rft" + i);
@@ -214,15 +214,14 @@ public class BlazingGeneratorTileEntity extends GenericTileEntity implements ITi
         }
     }
 
-    @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
             tagCompound.putFloat("rft" + i, rfPerTick[i]);
             tagCompound.putInt("ticks" + i, ticksRemaining[i]);
         }
-        return super.save(tagCompound);
+        super.saveAdditional(tagCompound);
     }
 
 }

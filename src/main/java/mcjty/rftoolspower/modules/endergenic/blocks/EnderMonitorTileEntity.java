@@ -98,32 +98,30 @@ public class EnderMonitorTileEntity extends LogicTileEntity implements ITickable
     }
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    public void load(CompoundNBT tagCompound) {
+        super.load(tagCompound);
         powerOutput = tagCompound.getBoolean("rs") ? 15 : 0;
         needpulse = tagCompound.getBoolean("needPulse");
     }
 
     @Override
-    public void readInfo(CompoundNBT tagCompound) {
-        super.readInfo(tagCompound);
+    public void loadInfo(CompoundNBT tagCompound) {
+        super.loadInfo(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         int m = info.getInt("mode");
         mode = EnderMonitorMode.values()[m];
     }
 
-    @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
-        super.save(tagCompound);
+    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+        super.saveAdditional(tagCompound);
         tagCompound.putBoolean("rs", powerOutput > 0);
         tagCompound.putBoolean("needPulse", needpulse);
-        return tagCompound;
     }
 
     @Override
-    public void writeInfo(CompoundNBT tagCompound) {
-        super.writeInfo(tagCompound);
+    public void saveInfo(CompoundNBT tagCompound) {
+        super.saveInfo(tagCompound);
         getOrCreateInfo(tagCompound).putInt("mode", mode.ordinal());
     }
 }

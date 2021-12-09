@@ -479,20 +479,19 @@ public class PowerCellTileEntity extends GenericTileEntity implements ITickableT
 
 
     @Override
-    public void read(CompoundNBT tagCompound) {
-        super.read(tagCompound);
+    public void load(CompoundNBT tagCompound) {
+        super.load(tagCompound);
         readClientDataFromNBT(tagCompound);
         CompoundNBT info = tagCompound.getCompound("Info");
         localEnergy = info.getLong("energy");
     }
 
-    @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
         CompoundNBT info = getOrCreateInfo(tagCompound);
         writeClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
-        return super.save(tagCompound);
+        super.saveAdditional(tagCompound);
     }
 
     @Override
