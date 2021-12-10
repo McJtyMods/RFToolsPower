@@ -444,10 +444,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         BlockPos pos = getBlockPos();
         for (Direction dir : OrientationTools.DIRECTION_VALUES) {
             BlockPos c = pos.relative(dir);
-            Direction inputSide = LogicSupport.getFacing(level.getBlockState(c)).getInputSide();
-            if (inputSide == dir.getOpposite()) {
-                TileEntity te = level.getBlockEntity(c);
-                if (te instanceof EnderMonitorTileEntity) {
+            TileEntity te = level.getBlockEntity(c);
+            if (te instanceof EnderMonitorTileEntity) {
+                Direction inputSide = LogicSupport.getFacing(level.getBlockState(c)).getInputSide();
+                if (inputSide == dir.getOpposite()) {
                     EnderMonitorTileEntity enderMonitorTileEntity = (EnderMonitorTileEntity) te;
                     enderMonitorTileEntity.fireFromEndergenic(mode);
                 }
