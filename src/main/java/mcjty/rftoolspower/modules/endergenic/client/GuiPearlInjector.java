@@ -7,12 +7,12 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
 
-    public GuiPearlInjector(PearlInjectorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
+    public GuiPearlInjector(PearlInjectorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
         super(tileEntity, container, inventory, EndergenicModule.PEARL_INJECTOR.get().getManualEntry());
     }
 

@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.modules.blazing.items;
 
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class BlazingRodStack implements IBlazingRod {
 

@@ -11,7 +11,10 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.*;
+import mcjty.lib.tileentity.Cap;
+import mcjty.lib.tileentity.CapType;
+import mcjty.lib.tileentity.GenericEnergyStorage;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.typed.Type;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -20,21 +23,20 @@ import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRodStack;
 import mcjty.rftoolspower.modules.blazing.logic.BlazingAgitatorAlgorithm;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -67,13 +69,13 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     private final IInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
             .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_AGITATOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .setupSync(this));
 
-    public static final VoxelShape SLAB = VoxelShapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
+    public static final VoxelShape SLAB = Shapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
 
     @GuiValue
     public static final Value<?, Boolean> VALUE_LOCK_00 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock00", Type.BOOLEAN, te -> te.isLocked(0, 0), (te, v) -> te.setLocked(0, 0, v));
@@ -103,14 +105,14 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     private BlazingAgitatorAlgorithm algorithm;
     private boolean locked[] = new boolean[BUFFER_SIZE];
 
-    public BlazingAgitatorTileEntity() {
-        super(BlazingModule.TYPE_BLAZING_AGITATOR.get());
+    public BlazingAgitatorTileEntity(BlockPos pos, BlockState state) {
+        super(BlazingModule.TYPE_BLAZING_AGITATOR.get(), pos, state);
         algorithm = new BlazingAgitatorAlgorithm(slot -> new BlazingRodStack(items.getStackInSlot(slot)));
     }
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
+                BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazingagitator"))
@@ -124,7 +126,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
 
             @Override
             @Nonnull
-            public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+            public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
                 return SLAB;
             }
         };
@@ -143,7 +145,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundNBT tagCompound) {
+    public void saveClientDataToNBT(CompoundTag tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putFloat("rs" + i, rotationSpeed[i]);
         }
@@ -151,7 +153,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundNBT tagCompound) {
+    public void loadClientDataFromNBT(CompoundTag tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rotationSpeed[i] = tagCompound.getFloat("rs" + i);
         }
@@ -218,7 +220,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
             }
             if (changed) {
                 BlockState state = getBlockState();
-                level.sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NO_RERENDER);
+                level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_CLIENTS + Block.UPDATE_INVISIBLE);
             }
         }
     }
@@ -256,9 +258,9 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    protected void loadInfo(CompoundNBT tagCompound) {
+    protected void loadInfo(CompoundTag tagCompound) {
         super.loadInfo(tagCompound);
-        CompoundNBT info = tagCompound.getCompound("Info");
+        CompoundTag info = tagCompound.getCompound("Info");
         byte[] bytes = info.getByteArray("locked");
         if (bytes.length >= BUFFER_SIZE) {
             for (int i = 0 ; i < BUFFER_SIZE ; i++) {
@@ -268,9 +270,9 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    protected void saveInfo(CompoundNBT tagCompound) {
+    protected void saveInfo(CompoundTag tagCompound) {
         super.saveInfo(tagCompound);
-        CompoundNBT info = getOrCreateInfo(tagCompound);
+        CompoundTag info = getOrCreateInfo(tagCompound);
         byte[] bytes = new byte[BUFFER_SIZE];
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             bytes[i] = (byte) (locked[i] ? 1 : 0);

@@ -2,16 +2,16 @@ package mcjty.rftoolspower.modules.powercell.client;
 
 import com.google.common.collect.Lists;
 import mcjty.rftoolspower.RFToolsPower;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class ClientSetup {
 
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
+        if (!event.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
             return;
         }
 

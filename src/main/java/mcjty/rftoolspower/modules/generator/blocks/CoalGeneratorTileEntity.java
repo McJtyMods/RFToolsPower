@@ -9,23 +9,25 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.*;
+import mcjty.lib.tileentity.Cap;
+import mcjty.lib.tileentity.CapType;
+import mcjty.lib.tileentity.GenericEnergyStorage;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
@@ -62,7 +64,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Coal Generator")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Coal Generator")
             .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
@@ -76,8 +78,8 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
 
     private int burning;
 
-    public CoalGeneratorTileEntity() {
-        super(CoalGeneratorModule.TYPE_COALGENERATOR.get());
+    public CoalGeneratorTileEntity(BlockPos pos, BlockState state) {
+        super(CoalGeneratorModule.TYPE_COALGENERATOR.get(), pos, state);
     }
 
     public static BaseBlock createBlock() {
@@ -88,10 +90,10 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/coalgenerator"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
-                        parameter("info", stack -> Long.toString(CoalGeneratorConfig.RFPERTICK.get()) + " RF/FE"))
+                        parameter("info", stack -> CoalGeneratorConfig.RFPERTICK.get() + " RF/FE"))
         ) {
             @Override
-            protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
+            protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
                 super.createBlockStateDefinition(builder);
                 builder.add(BlockStateProperties.LIT);
             }
@@ -142,7 +144,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
 
         BlockState state = level.getBlockState(worldPosition);
         if (state.getValue(BlockStateProperties.LIT) != isWorking()) {
-            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, isWorking()), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, isWorking()), Block.UPDATE_ALL);
         }
     }
 
@@ -173,16 +175,16 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
-        CompoundNBT info = tagCompound.getCompound("Info");
+        CompoundTag info = tagCompound.getCompound("Info");
         burning = info.getInt("burning");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
         super.saveAdditional(tagCompound);
-        CompoundNBT infoTag = getOrCreateInfo(tagCompound);
+        CompoundTag infoTag = getOrCreateInfo(tagCompound);
         infoTag.putInt("burning", burning);
     }
 

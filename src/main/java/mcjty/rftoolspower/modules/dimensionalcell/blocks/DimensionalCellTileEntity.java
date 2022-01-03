@@ -28,20 +28,20 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.EnumProperty;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
@@ -113,7 +113,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     };
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
             .containerSupplier(container(CONTAINER_DIMENSIONAL_CELL, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .setupSync(this));
@@ -142,7 +142,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     private int powerOut = 0;
     private long lastTime = 0;
 
-    public enum Mode implements IStringSerializable {
+    public enum Mode implements StringRepresentable {
         MODE_NONE("none", "overlay_none"),
         MODE_INPUT("input", "overlay_in"),   // Blue
         MODE_OUTPUT("output", "overlay_out"); // Yellow
@@ -172,7 +172,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     }
 
-    public DimensionalCellTileEntity(TileEntityType<?> type) {
+    public DimensionalCellTileEntity(BlockEntityType<?> type) {
         super(type);
     }
 
@@ -223,9 +223,9 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     @Override
-    protected void loadInfo(CompoundNBT tagCompound) {
+    protected void loadInfo(CompoundTag tagCompound) {
         super.loadInfo(tagCompound);
-        CompoundNBT info = tagCompound.getCompound("Info");
+        CompoundTag info = tagCompound.getCompound("Info");
         energy = info.getInt("energy");
         totalInserted = info.getLong("totIns");
         totalExtracted = info.getLong("totExt");
@@ -233,9 +233,9 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     @Override
-    protected void saveInfo(CompoundNBT tagCompound) {
+    protected void saveInfo(CompoundTag tagCompound) {
         super.saveInfo(tagCompound);
-        CompoundNBT info = getOrCreateInfo(tagCompound);
+        CompoundTag info = getOrCreateInfo(tagCompound);
         info.putInt("energy", energy);
         info.putLong("totIns", totalInserted);
         info.putLong("totExt", totalExtracted);
@@ -318,7 +318,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         for (Direction face : OrientationTools.DIRECTION_VALUES) {
             if (getMode(face) == Mode.MODE_OUTPUT) {
                 BlockPos pos = getBlockPos().relative(face);
-                TileEntity te = level.getBlockEntity(pos);
+                BlockEntity te = level.getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (EnergyTools.isEnergyTE(te, opposite)) {
                     // If the adjacent block is also a powercell then we only send energy if this cell is local or the other cell has a different id
@@ -599,17 +599,17 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     @Override
-    public void selectBlock(PlayerEntity player, BlockPos pos) {
+    public void selectBlock(Player player, BlockPos pos) {
         dumpNetwork(player, this);
     }
 
-    public static void dumpNetwork(PlayerEntity player, DimensionalCellTileEntity dimensionalCellTileEntity) {
+    public static void dumpNetwork(Player player, DimensionalCellTileEntity dimensionalCellTileEntity) {
         DimensionalCellNetwork.Network network = dimensionalCellTileEntity.getNetwork();
         Set<GlobalPos> blocks = network.getBlocks();
 //        System.out.println("blocks.size() = " + blocks.size());
         blocks.forEach(b -> {
             String msg;
-            World w = LevelTools.getLevel(b.dimension());
+            Level w = LevelTools.getLevel(b.dimension());
             if (w == null) {
                 msg = "dimension missing!";
             } else {
@@ -623,7 +623,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                 } else {
                     msg = "not a powercell!";
                 }
-                TileEntity te = w.getBlockEntity(b.pos());
+                BlockEntity te = w.getBlockEntity(b.pos());
                 if (te instanceof DimensionalCellTileEntity) {
                     DimensionalCellTileEntity power = (DimensionalCellTileEntity) te;
                     msg += " (+:" + power.getTotalInserted() + ", -:" + power.getTotalExtracted() + ")";

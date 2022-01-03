@@ -8,7 +8,10 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.*;
+import mcjty.lib.tileentity.Cap;
+import mcjty.lib.tileentity.CapType;
+import mcjty.lib.tileentity.GenericEnergyStorage;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.RedstoneMode;
 import mcjty.lib.varia.Sync;
@@ -17,18 +20,17 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -73,7 +75,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     private int ticksRemaining[] = new int[BUFFER_SIZE];
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
             .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_GENERATOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
@@ -83,14 +85,14 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
             .shortListener(Sync.integer(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3))
             .setupSync(this));
 
-    public BlazingGeneratorTileEntity() {
-        super(BlazingModule.TYPE_BLAZING_GENERATOR.get());
+    public BlazingGeneratorTileEntity(BlockPos pos, BlockState state) {
+        super(BlazingModule.TYPE_BLAZING_GENERATOR.get(), pos, state);
     }
 
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
+                BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"))
@@ -98,7 +100,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
                 .infoShift(header(), gold())
                 .tileEntitySupplier(BlazingGeneratorTileEntity::new)) {
             @Override
-            protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
+            protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
                 super.createBlockStateDefinition(builder);
                 builder.add(WORKING);
             }
@@ -182,7 +184,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
         boolean generating = totalRfGenerated > 0;
         BlockState state = level.getBlockState(worldPosition);
         if (state.getValue(WORKING) != generating) {
-            level.setBlock(worldPosition, state.setValue(WORKING, generating), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            level.setBlock(worldPosition, state.setValue(WORKING, generating), Block.UPDATE_ALL);
         }
 
         markDirtyQuick();
@@ -200,7 +202,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rfPerTickMax[i] = tagCompound.getInt("rftMax" + i);
@@ -210,7 +212,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
             tagCompound.putFloat("rft" + i, rfPerTick[i]);

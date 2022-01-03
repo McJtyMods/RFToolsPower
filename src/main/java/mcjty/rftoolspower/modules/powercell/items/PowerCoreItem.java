@@ -3,11 +3,11 @@ package mcjty.rftoolspower.modules.powercell.items;
 import mcjty.lib.builder.TooltipBuilder;
 import mcjty.lib.tooltips.ITooltipSettings;
 import mcjty.rftoolspower.RFToolsPower;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class PowerCoreItem extends Item implements ITooltipSettings {
 
@@ -28,7 +28,7 @@ public class PowerCoreItem extends Item implements ITooltipSettings {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         tooltipBuilder.get().makeTooltip(getRegistryName(), stack, tooltip, flagIn);
     }

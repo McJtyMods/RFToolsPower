@@ -1,29 +1,31 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Vector3f;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorTileEntity> {
+import net.minecraft.client.renderer.entity.ItemRenderer;
 
-    public BlazingAgitatorRenderer(TileEntityRendererDispatcher dispatcher) {
+public class BlazingAgitatorRenderer extends BlockEntityRenderer<BlazingAgitatorTileEntity> {
+
+    public BlazingAgitatorRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public void render(BlazingAgitatorTileEntity te, float v, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void render(BlazingAgitatorTileEntity te, float v, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
 
         te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             matrixStack.pushPose();
@@ -46,7 +48,7 @@ public class BlazingAgitatorRenderer extends TileEntityRenderer<BlazingAgitatorT
                         }
                         te.setCurrentAngle(x, y, angle);
                         matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
-                        itemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer);
+                        itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer);
                         matrixStack.popPose();
                     }
                 }

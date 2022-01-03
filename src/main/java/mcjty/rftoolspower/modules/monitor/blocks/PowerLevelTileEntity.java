@@ -8,15 +8,15 @@ import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,38 +46,38 @@ public class PowerLevelTileEntity extends TickingTileEntity {
         return support;
     }
     @Override
-    public void checkRedstone(World world, BlockPos pos) {
+    public void checkRedstone(Level world, BlockPos pos) {
         support.checkRedstone(this, world, pos);
     }
 
     @Override
-    public int getRedstoneOutput(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public int getRedstoneOutput(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
         return support.getRedstoneOutput(state, side);
     }
 
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tag = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
         tag.putInt("power", support.getPowerOutput());
         return tag;
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(BlockState state, CompoundTag tag) {
         super.handleUpdateTag(state, tag);
         support.setPowerOutput(tag.getInt("power"));
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         handleUpdateTag(getBlockState(), pkt.getTag());
     }
 
@@ -91,7 +91,7 @@ public class PowerLevelTileEntity extends TickingTileEntity {
 
         Direction inputSide = LogicSupport.getFacing(level.getBlockState(getBlockPos())).getInputSide();
         BlockPos inputPos = getBlockPos().relative(inputSide);
-        TileEntity tileEntity = level.getBlockEntity(inputPos);
+        BlockEntity tileEntity = level.getBlockEntity(inputPos);
         if (!EnergyTools.isEnergyTE(tileEntity, null)) {
             support.setRedstoneState(this, 0);
             return;

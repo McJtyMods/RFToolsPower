@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.client.CustomRenderTypes;
 import mcjty.lib.client.RenderGlowEffect;
 import mcjty.lib.client.RenderHelper;
@@ -12,17 +12,17 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.client.ClientRegistry;
 
 import javax.annotation.Nonnull;
 
-public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity> {
+public class EndergenicRenderer extends BlockEntityRenderer<EndergenicTileEntity> {
 
     public static final ResourceLocation HALO = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/floatingpearl");
     public static final ResourceLocation WHITEFLASH = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/whiteflash");
@@ -37,12 +37,12 @@ public class EndergenicRenderer extends TileEntityRenderer<EndergenicTileEntity>
             .renderType(CustomRenderTypes.TRANSLUCENT_LIGHTNING_NOLIGHTMAPS)
             .build();
 
-    public EndergenicRenderer(TileEntityRendererDispatcher dispatcher) {
+    public EndergenicRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public void render(EndergenicTileEntity tileEntity, float partialTicks, @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(EndergenicTileEntity tileEntity, float partialTicks, @Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         BlockPos coord = tileEntity.getBlockPos();
         if (coord.equals(RFToolsBase.instance.clientInfo.getSelectedTE())) {
             RenderGlowEffect.renderGlow(matrixStackIn, bufferIn, REDGLOW);

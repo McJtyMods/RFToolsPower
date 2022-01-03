@@ -8,21 +8,21 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,7 +48,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                 .infoShift(header(),
                         parameter("info", stack -> {
                             long power = 0;
-                            CompoundNBT tagCompound = stack.getTag();
+                            CompoundTag tagCompound = stack.getTag();
                             if (tagCompound != null) {
                                 power = tagCompound.getLong("Energy");
                             }
@@ -67,11 +67,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     }
 
     @Override
-    public void setPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+    public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
         if (!world.isClientSide) {
 
-            TileEntity te = world.getBlockEntity(pos);
+            BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 long energy = stack.hasTag() ? stack.getTag().getLong("energy") : 0;
@@ -103,9 +103,9 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
 
     @Override
-    protected boolean wrenchUse(World world, BlockPos pos, Direction side, PlayerEntity player) {
+    protected boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (!world.isClientSide) {
-            TileEntity te = world.getBlockEntity(pos);
+            BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) te;
                 powerCellTileEntity.toggleMode(side);
@@ -116,9 +116,9 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
-        World world = context.getLevel();
+        Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         return state.setValue(UPPER, world.getBlockState(pos.above()).getBlock() == this)
                 .setValue(LOWER, world.getBlockState(pos.below()).getBlock() == this);
@@ -127,7 +127,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public BlockState updateShape(@Nonnull BlockState stateIn, @Nonnull Direction facing, @Nonnull BlockState facingState, @Nonnull IWorld world, @Nonnull BlockPos pos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(@Nonnull BlockState stateIn, @Nonnull Direction facing, @Nonnull BlockState facingState, @Nonnull LevelAccessor world, @Nonnull BlockPos pos, @Nonnull BlockPos facingPos) {
         if (facing == Direction.UP) {
             return stateIn.setValue(UPPER, facingState.getBlock() == this);
         }
@@ -144,15 +144,15 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 //    }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(UPPER, LOWER);
     }
 
     @Override
     @Nonnull
-    public BlockRenderType getRenderShape(@Nonnull BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(@Nonnull BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override

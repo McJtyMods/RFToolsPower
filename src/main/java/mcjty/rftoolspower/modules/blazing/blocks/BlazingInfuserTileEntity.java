@@ -6,25 +6,28 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
-import mcjty.lib.tileentity.*;
+import mcjty.lib.tileentity.Cap;
+import mcjty.lib.tileentity.CapType;
+import mcjty.lib.tileentity.GenericEnergyStorage;
+import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
@@ -51,35 +54,29 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
     @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .slotLimit(1)
-            .itemValid((slot, stack) -> {
-                switch (slot) {
-                    case SLOT_INPUT:
-                    case SLOT_OUTPUT:
-                        return stack.getItem() == BlazingModule.BLAZING_ROD.get();
-                    case SLOT_CATALYST:
-                        return getCatalystImprovement(stack) != null;
-                    default:
-                        return false;
-                }
+            .itemValid((slot, stack) -> switch (slot) {
+                case SLOT_INPUT, SLOT_OUTPUT -> stack.getItem() == BlazingModule.BLAZING_ROD.get();
+                case SLOT_CATALYST -> getCatalystImprovement(stack) != null;
+                default -> false;
             })
             .build();
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuser")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuser")
             .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_INFUSER, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .energyHandler(() -> energyStorage)
             .setupSync(this));
 
-    public BlazingInfuserTileEntity() {
-        super(BlazingModule.TYPE_BLAZING_INFUSER.get());
+    public BlazingInfuserTileEntity(BlockPos pos, BlockState state) {
+        super(BlazingModule.TYPE_BLAZING_INFUSER.get(), pos, state);
     }
 
     private int counter = 10;
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                        AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
+                        BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinginfuser"))
                 .info(key("message.rftoolspower.shiftmessage"))

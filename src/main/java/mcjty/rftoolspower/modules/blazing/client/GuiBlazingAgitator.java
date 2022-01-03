@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -10,8 +10,8 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -19,7 +19,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
     private EnergyBar energyBar;
 
-    public GuiBlazingAgitator(BlazingAgitatorTileEntity tileEntity, GenericContainer container, PlayerInventory inventory) {
+    public GuiBlazingAgitator(BlazingAgitatorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
         super(tileEntity, container, inventory, BlazingModule.BLAZING_AGITATOR.get().getManualEntry());
     }
 
@@ -57,7 +57,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         updateFields();
         drawWindow(matrixStack);
     }

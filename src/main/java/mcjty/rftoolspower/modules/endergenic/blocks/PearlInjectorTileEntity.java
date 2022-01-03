@@ -15,15 +15,15 @@ import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -53,7 +53,7 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
             .build();
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
             .containerSupplier(container(EndergenicModule.CONTAINER_PEARL_INJECTOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .setupSync(this));
@@ -86,7 +86,7 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
 
     private EndergenicTileEntity getEndergenicGeneratorAt(Direction k) {
         BlockPos o = getBlockPos().relative(k);
-        TileEntity te = level.getBlockEntity(o);
+        BlockEntity te = level.getBlockEntity(o);
         if (te instanceof EndergenicTileEntity) {
             return (EndergenicTileEntity) te;
         }
@@ -159,13 +159,13 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
     }
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
         prevIn = tagCompound.getBoolean("prevIn");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
         super.saveAdditional(tagCompound);
         tagCompound.putBoolean("prevIn", prevIn);
     }

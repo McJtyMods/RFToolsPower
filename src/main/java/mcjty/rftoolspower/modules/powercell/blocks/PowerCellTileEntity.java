@@ -10,14 +10,14 @@ import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -175,7 +175,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         if (maxReceive > 0) {
             for (Long l : network.getPositions()) {
                 BlockPos p = BlockPos.of(l);
-                TileEntity te = level.getBlockEntity(p);
+                BlockEntity te = level.getBlockEntity(p);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                     received = powercell.receiveEnergyLocal(maxReceive, simulate);
@@ -236,7 +236,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         final int[] count = {0, 0, 0};
         network.getPositions().stream().forEach(l -> {
             BlockPos p = BlockPos.of(l);
-            TileEntity te = level.getBlockEntity(p);
+            BlockEntity te = level.getBlockEntity(p);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 int t = powercell.getTier().ordinal();
@@ -250,7 +250,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
                 final long[] energyToSet = {energyPerBlock + energy[tier.ordinal()] % count[tier.ordinal()]};   // First block gets more (remainder)
                 network.getPositions().stream().forEach(l -> {
                     BlockPos p = BlockPos.of(l);
-                    TileEntity te = level.getBlockEntity(p);
+                    BlockEntity te = level.getBlockEntity(p);
                     if (te instanceof PowerCellTileEntity) {
                         PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                         if (powercell.getTier() == tier) {
@@ -269,7 +269,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         final long[] maxEnergy = {0};
         getNetwork().getPositions().stream().forEach(l -> {
             BlockPos p = BlockPos.of(l);
-            TileEntity te = level.getBlockEntity(p);
+            BlockEntity te = level.getBlockEntity(p);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 energy[0] += powercell.getLocalEnergy();
@@ -296,7 +296,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         for (Direction face : Direction.values()) {
             if (modes[face.ordinal()] == SideType.OUTPUT) {
                 BlockPos pos = getBlockPos().relative(face);
-                TileEntity te = getLevel().getBlockEntity(pos);
+                BlockEntity te = getLevel().getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (te != null) {
                     // @todo tesla
@@ -337,7 +337,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         if (energyExtracted > 0) {
             for (Long l : network.getPositions()) {
                 BlockPos p = BlockPos.of(l);
-                TileEntity te = level.getBlockEntity(p);
+                BlockEntity te = level.getBlockEntity(p);
                 if (te instanceof PowerCellTileEntity) {
                     PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                     toExtractLocal = Math.min(energyExtracted, powercell.localEnergy);
@@ -375,7 +375,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void onReplaced(World world, BlockPos pos, BlockState state, BlockState newstate) {
+    public void onReplaced(Level world, BlockPos pos, BlockState state, BlockState newstate) {
         if (state.getBlock() == newstate.getBlock()) {
             return;
         }
@@ -395,7 +395,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
     public void dismantleNetwork(PowerCellNetwork network) {
         network.getPositions().stream().map(BlockPos::of).forEach(pos -> {
-            TileEntity te = level.getBlockEntity(pos);
+            BlockEntity te = level.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity) {
                 PowerCellTileEntity powercell = (PowerCellTileEntity) te;
                 powercell.setNetwork(null);
@@ -407,7 +407,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     private static Set<BlockPos> alreadyReportedUnexpected = new HashSet<>();
 
     private void buildNetwork(PowerCellNetwork network, BlockPos pos) {
-        TileEntity te = level.getBlockEntity(pos);
+        BlockEntity te = level.getBlockEntity(pos);
         if (te instanceof PowerCellTileEntity) {
             PowerCellTileEntity powercell = (PowerCellTileEntity) te;
 
@@ -446,7 +446,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         SideType[] old = new SideType[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
         super.onDataPacket(net, packet);
         for (int i = 0 ; i < 6 ; i++) {
@@ -475,24 +475,24 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
         loadClientDataFromNBT(tagCompound);
-        CompoundNBT info = tagCompound.getCompound("Info");
+        CompoundTag info = tagCompound.getCompound("Info");
         localEnergy = info.getLong("energy");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
-        CompoundNBT info = getOrCreateInfo(tagCompound);
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
+        CompoundTag info = getOrCreateInfo(tagCompound);
         saveClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
         super.saveAdditional(tagCompound);
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundNBT tagCompound) {
-        CompoundNBT info = getOrCreateInfo(tagCompound);
+    public void saveClientDataToNBT(CompoundTag tagCompound) {
+        CompoundTag info = getOrCreateInfo(tagCompound);
         String mode = "";
         for (int i = 0 ; i < 6 ; i++) {
             mode += modes[i].ordinal();
@@ -501,8 +501,8 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundNBT tagCompound) {
-        CompoundNBT info = tagCompound.getCompound("Info");
+    public void loadClientDataFromNBT(CompoundTag tagCompound) {
+        CompoundTag info = tagCompound.getCompound("Info");
         String mode = info.getString("mode");
         if (mode.length() >= 6) {
             for (int i = 0 ; i < 6 ; i++) {

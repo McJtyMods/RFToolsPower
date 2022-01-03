@@ -6,12 +6,12 @@ import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nonnull;

@@ -3,10 +3,10 @@ package mcjty.rftoolspower.modules.endergenic.data;
 import mcjty.lib.varia.BlockPosTools;
 import mcjty.lib.varia.Logging;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class EndergenicPearl {
     private int ticksLeft;
@@ -19,7 +19,7 @@ public class EndergenicPearl {
         this.age = age;
     }
 
-    public EndergenicPearl(CompoundNBT tagCompound) {
+    public EndergenicPearl(CompoundTag tagCompound) {
         ticksLeft = tagCompound.getInt("t");
         destination = BlockPosTools.read(tagCompound, "dest");
         age = tagCompound.getInt("age");
@@ -38,11 +38,11 @@ public class EndergenicPearl {
     }
 
     // Return true if the pearl has to be removed (it arrived).
-    public boolean handleTick(World world) {
+    public boolean handleTick(Level world) {
         ticksLeft--;
         if (ticksLeft <= 0) {
             // We arrived. Check that the destination is still there.
-            TileEntity te = world.getBlockEntity(destination);
+            BlockEntity te = world.getBlockEntity(destination);
             if (te instanceof EndergenicTileEntity) {
                 EndergenicTileEntity endergenicTileEntity = (EndergenicTileEntity) te;
                 endergenicTileEntity.receivePearl(age);
@@ -54,8 +54,8 @@ public class EndergenicPearl {
         return false;
     }
 
-    public CompoundNBT getTagCompound() {
-        CompoundNBT tagCompound = new CompoundNBT();
+    public CompoundTag getTagCompound() {
+        CompoundTag tagCompound = new CompoundTag();
         tagCompound.putInt("t", ticksLeft);
         BlockPosTools.write(tagCompound, "dest", destination);
         tagCompound.putInt("age", age);

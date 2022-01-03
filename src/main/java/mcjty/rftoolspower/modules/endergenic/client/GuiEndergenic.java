@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -11,8 +11,8 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -26,7 +26,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
 
     private int timer = 10;
 
-    public GuiEndergenic(EndergenicTileEntity endergenicTileEntity, GenericContainer container, PlayerInventory inventory) {
+    public GuiEndergenic(EndergenicTileEntity endergenicTileEntity, GenericContainer container, Inventory inventory) {
         super(endergenicTileEntity, container, inventory, EndergenicModule.ENDERGENIC.get().getManualEntry());
     }
 
@@ -63,7 +63,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(@Nonnull PoseStack matrixStack, float v, int i, int i2) {
         updateFields();
         drawWindow(matrixStack);
         checkStats();

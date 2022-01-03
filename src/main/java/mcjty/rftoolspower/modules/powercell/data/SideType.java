@@ -1,10 +1,10 @@
 package mcjty.rftoolspower.modules.powercell.data;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 import javax.annotation.Nonnull;
 
-public enum SideType implements IStringSerializable {
+public enum SideType implements StringRepresentable {
     NONE(false, false),
     OUTPUT(false, true),
     INPUT(true, false);

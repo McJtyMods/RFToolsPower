@@ -12,15 +12,13 @@ import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEnti
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
-import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class BlockStates extends BaseBlockStateProvider {
 
@@ -57,7 +55,7 @@ public class BlockStates extends BaseBlockStateProvider {
         logicSlabBlock(EndergenicModule.ENDER_MONITOR.get(), "ender_monitor", modLoc("block/endergenic/ender_monitor"));
 
         orientedBlock(EndergenicModule.PEARL_INJECTOR.get(), frontBasedModel("pearl_injector", modLoc("block/endergenic/pearl_injector")));
-        singleTextureBlock(EndergenicModule.ENDERGENIC.get(), "endergenic", BLOCK_FOLDER + "/endergenic/endergenic");
+        singleTextureBlock(EndergenicModule.ENDERGENIC.get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic");
 
         registerBlazingGenerator();
         simpleBlock(BlazingModule.BLAZING_AGITATOR.get(), models().slab("blazing_agitator",

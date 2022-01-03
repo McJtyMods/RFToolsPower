@@ -19,12 +19,12 @@ import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
     private final Map<ResourceLocation, TOPDriver> drivers = new HashMap<>();
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
         ResourceLocation id = blockState.getBlock().getRegistryName();
         if (!drivers.containsKey(id)) {
             if (blockState.getBlock() == CoalGeneratorModule.COALGENERATOR.get()) {
@@ -68,14 +68,14 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class DefaultDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
         }
     }
 
     private static class CoalDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (CoalGeneratorTileEntity te) -> {
                 Boolean working = te.isWorking();
@@ -88,7 +88,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class PowerCellDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (PowerCellTileEntity te) -> {
                 long rfPerTick = te.getRfPerTickReal();
@@ -118,7 +118,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class DimensionalCellDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (DimensionalCellTileEntity te) -> {
                 int id = te.getNetworkId();
@@ -153,7 +153,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class EndergenicDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (EndergenicTileEntity te) -> {
                 if (mode == ProbeMode.EXTENDED) {
@@ -187,7 +187,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class EndermonitorDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (EnderMonitorTileEntity te) -> {
                 EnderMonitorMode m = te.getMode();
@@ -198,7 +198,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class BlazingGeneratorDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (BlazingGeneratorTileEntity te) -> {
                 // @todo
@@ -208,7 +208,7 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     private static class BlazingAgitatorDriver implements TOPDriver {
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+        public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
             McJtyLibTOPDriver.DRIVER.addStandardProbeInfo(mode, probeInfo, player, world, blockState, data);
             Tools.safeConsume(world.getBlockEntity(data.getPos()), (BlazingAgitatorTileEntity te) -> {
                 // @todo

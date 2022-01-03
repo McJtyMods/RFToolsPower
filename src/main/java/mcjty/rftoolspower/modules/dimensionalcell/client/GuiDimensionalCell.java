@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.dimensionalcell.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -14,8 +14,8 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -32,7 +32,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     private static final ResourceLocation iconLocation = new ResourceLocation(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
-    public GuiDimensionalCell(DimensionalCellTileEntity te, GenericContainer container, PlayerInventory inventory) {
+    public GuiDimensionalCell(DimensionalCellTileEntity te, GenericContainer container, Inventory inventory) {
         super(te, container, inventory, DimensionalCellModule.DIMENSIONAL_CELL.get().getManualEntry());
 
         imageWidth = POWERCELL_WIDTH;
@@ -89,7 +89,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(@Nonnull PoseStack matrixStack, float v, int i, int i2) {
         drawWindow(matrixStack);
 
         requestRF();

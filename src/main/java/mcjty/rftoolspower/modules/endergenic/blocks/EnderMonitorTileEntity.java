@@ -11,14 +11,14 @@ import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -37,7 +37,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     private boolean needpulse = false;
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, this))
             .setupSync(this));
 
@@ -60,12 +60,12 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     @Override
-    public void checkRedstone(World world, BlockPos pos) {
+    public void checkRedstone(Level world, BlockPos pos) {
         support.checkRedstone(this, world, pos);
     }
 
     @Override
-    public int getRedstoneOutput(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public int getRedstoneOutput(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
         return support.getRedstoneOutput(state, side);
     }
 
@@ -111,29 +111,29 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         needpulse = tagCompound.getBoolean("needPulse");
     }
 
     @Override
-    public void loadInfo(CompoundNBT tagCompound) {
+    public void loadInfo(CompoundTag tagCompound) {
         super.loadInfo(tagCompound);
-        CompoundNBT info = tagCompound.getCompound("Info");
+        CompoundTag info = tagCompound.getCompound("Info");
         int m = info.getInt("mode");
         mode = EnderMonitorMode.values()[m];
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
         super.saveAdditional(tagCompound);
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("needPulse", needpulse);
     }
 
     @Override
-    public void saveInfo(CompoundNBT tagCompound) {
+    public void saveInfo(CompoundTag tagCompound) {
         super.saveInfo(tagCompound);
         getOrCreateInfo(tagCompound).putInt("mode", mode.ordinal());
     }

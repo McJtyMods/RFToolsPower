@@ -1,7 +1,7 @@
 package mcjty.rftoolspower.modules.powercell.data;
 
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.HashSet;
 import java.util.Set;

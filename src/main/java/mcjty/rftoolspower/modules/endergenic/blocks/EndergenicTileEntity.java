@@ -35,30 +35,30 @@ import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -83,7 +83,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     public int clientLastPearlsLaunched = 0;
     public int clientLastPearlOpportunities = 0;
 
-    public static final VoxelShape SHAPE = VoxelShapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
+    public static final VoxelShape SHAPE = Shapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
@@ -94,7 +94,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDERGENIC, this))
             .energyHandler(() -> energyStorage));
 
@@ -158,7 +158,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                AbstractBlock.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL).noOcclusion())
+                BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL).noOcclusion())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/endergenic"))
@@ -216,20 +216,20 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
     public List<String> getHudLog() {
         List<String> list = new ArrayList<>();
-        list.add(TextFormatting.BLUE + "Last 5 seconds:");
+        list.add(ChatFormatting.BLUE + "Last 5 seconds:");
         list.add("    Charged: " + getLastChargeCounter());
         list.add("    Fired: " + getLastPearlsLaunched());
         list.add("    Lost: " + getLastPearlsLost());
         if (getLastPearlsLost() > 0) {
-            list.add(TextFormatting.RED + "    " + getLastPearlsLostReason());
+            list.add(ChatFormatting.RED + "    " + getLastPearlsLostReason());
         }
         if (getLastPearlArrivedAt() > -2) {
             list.add("    Last pearl at " + getLastPearlArrivedAt());
         }
-        list.add(TextFormatting.BLUE + "Power:");
-        list.add(TextFormatting.GREEN + "    RF Gain " + getLastRfGained());
-        list.add(TextFormatting.RED + "    RF Lost " + getLastRfLost());
-        list.add(TextFormatting.GREEN + "    RF/t " + getLastRfPerTick());
+        list.add(ChatFormatting.BLUE + "Power:");
+        list.add(ChatFormatting.GREEN + "    RF Gain " + getLastRfGained());
+        list.add(ChatFormatting.RED + "    RF Lost " + getLastRfLost());
+        list.add(ChatFormatting.GREEN + "    RF/t " + getLastRfPerTick());
         return list;
     }
 
@@ -444,7 +444,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         BlockPos pos = getBlockPos();
         for (Direction dir : OrientationTools.DIRECTION_VALUES) {
             BlockPos c = pos.relative(dir);
-            TileEntity te = level.getBlockEntity(c);
+            BlockEntity te = level.getBlockEntity(c);
             if (te instanceof EnderMonitorTileEntity) {
                 Direction inputSide = LogicSupport.getFacing(level.getBlockState(c)).getInputSide();
                 if (inputSide == dir.getOpposite()) {
@@ -484,7 +484,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     private void markDirtyClientNoRender() {
         setChanged();
         if (level != null) {
-            level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(worldPosition).inflate(32),
+            level.getEntitiesOfClass(Player.class, new AABB(worldPosition).inflate(32),
                     p -> worldPosition.distSqr(p.getX(), p.getY(), p.getZ(), true) < 32 * 32)
                     .stream()
                     .forEach(p -> RFToolsPowerMessages.INSTANCE.sendTo(
@@ -494,7 +494,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
                                             .put(ClientCommandHandler.PARAM_GOODCOUNTER, goodCounter)
                                             .put(ClientCommandHandler.PARAM_BADCOUNTER, badCounter)
                                             .build()),
-                            ((ServerPlayerEntity) p).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
+                            ((ServerPlayer) p).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
         }
     }
 
@@ -522,7 +522,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (destination == null) {
             return null;
         }
-        TileEntity te = level.getBlockEntity(destination);
+        BlockEntity te = level.getBlockEntity(destination);
         if (te instanceof EndergenicTileEntity) {
             return (EndergenicTileEntity) te;
         } else {
@@ -612,10 +612,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     // Called from client side when a wrench is used.
-    public void useWrenchClient(PlayerEntity player) {
+    public void useWrenchClient(Player player) {
         BlockPos thisCoord = getBlockPos();
         BlockPos coord = RFToolsBase.instance.clientInfo.getSelectedTE();
-        TileEntity tileEntity = null;
+        BlockEntity tileEntity = null;
         if (coord != null) {
             tileEntity = level.getBlockEntity(coord);
         }
@@ -662,7 +662,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
      * @return is the distance in ticks
      */
     public int calculateDistance(BlockPos destination) {
-        double d = new Vector3d(destination.getX(), destination.getY(), destination.getZ()).distanceTo(new Vector3d(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()));
+        double d = new Vec3(destination.getX(), destination.getY(), destination.getZ()).distanceTo(new Vec3(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()));
         return (int) (d / 3.0f) + 1;
     }
 
@@ -690,7 +690,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
 
         chargingMode = tagCompound.getInt("charging");
@@ -701,16 +701,16 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         badCounter = tagCompound.getByte("bad");
         goodCounter = tagCompound.getByte("good");
         pearls.clear();
-        ListNBT list = tagCompound.getList("pearls", Constants.NBT.TAG_COMPOUND);
+        ListTag list = tagCompound.getList("pearls", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
-            CompoundNBT tc = list.getCompound(i);
+            CompoundTag tc = list.getCompound(i);
             EndergenicPearl pearl = new EndergenicPearl(tc);
             pearls.add(pearl);
         }
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
         super.saveAdditional(tagCompound);
 
         tagCompound.putInt("charging", chargingMode);
@@ -721,7 +721,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         tagCompound.putByte("bad", (byte) badCounter);
         tagCompound.putByte("good", (byte) goodCounter);
 
-        ListNBT pearlList = new ListNBT();
+        ListTag pearlList = new ListTag();
         for (EndergenicPearl pearl : pearls) {
             pearlList.add(pearl.getTagCompound());
         }
@@ -759,10 +759,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
 
     @Override
-    public boolean wrenchUse(World world, BlockPos pos, Direction side, PlayerEntity player) {
+    public boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (world.isClientSide) {
             SoundEvent pling = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note.pling"));
-            world.playSound(player, pos, pling, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.playSound(player, pos, pling, SoundSource.BLOCKS, 1.0f, 1.0f);
             useWrenchClient(player);
         }
         return true;

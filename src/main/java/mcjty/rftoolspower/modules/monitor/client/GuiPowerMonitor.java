@@ -10,13 +10,13 @@ import mcjty.lib.gui.widgets.Widgets;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.awt.*;
 
 public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity, GenericContainer> {
 
-    public GuiPowerMonitor(PowerMonitorTileEntity te, GenericContainer container, PlayerInventory inventory) {
+    public GuiPowerMonitor(PowerMonitorTileEntity te, GenericContainer container, Inventory inventory) {
         super(te, container, inventory, MonitorModule.POWER_MONITOR.get().getManualEntry());
 
         imageWidth = 256;

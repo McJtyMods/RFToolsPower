@@ -13,18 +13,17 @@ import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -38,7 +37,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     private final LogicSupport support = new LogicSupport();
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<INamedContainerProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
+    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, this))
             .setupSync(this));
 
@@ -55,8 +54,8 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     private boolean inAlarm = false;
     private int counter = 20;
 
-    public PowerMonitorTileEntity() {
-        super(MonitorModule.TYPE_POWER_MONITOR.get());
+    public PowerMonitorTileEntity(BlockPos pos, BlockState state) {
+        super(MonitorModule.TYPE_POWER_MONITOR.get(), pos, state);
     }
 
     public static LogicSlabBlock createBlock() {
@@ -67,7 +66,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
                 .infoShift(header())
                 .tileEntitySupplier(PowerMonitorTileEntity::new)) {
             @Override
-            protected void createBlockStateDefinition(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
+            protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
                 super.createBlockStateDefinition(builder);
                 builder.add(LEVEL);
             }
@@ -75,12 +74,12 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void checkRedstone(World world, BlockPos pos) {
+    public void checkRedstone(Level world, BlockPos pos) {
         support.checkRedstone(this, world, pos);
     }
 
     @Override
-    public int getRedstoneOutput(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public int getRedstoneOutput(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
         return support.getRedstoneOutput(state, side);
     }
 
@@ -117,7 +116,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
 
         Direction inputSide = LogicSupport.getFacing(level.getBlockState(getBlockPos())).getInputSide();
         BlockPos inputPos = getBlockPos().relative(inputSide);
-        TileEntity tileEntity = level.getBlockEntity(inputPos);
+        BlockEntity tileEntity = level.getBlockEntity(inputPos);
         if (!EnergyTools.isEnergyTE(tileEntity, null)) {
             setInvalid();
             return;
@@ -153,38 +152,38 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     private void changeRfLevel(int newRfLevel) {
         if (newRfLevel != rflevel) {
             rflevel = newRfLevel;
-            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, rflevel), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, rflevel), Block.UPDATE_ALL_IMMEDIATE);
             setChanged();
         }
     }
 
     @Override
-    public void load(CompoundNBT tagCompound) {
+    public void load(CompoundTag tagCompound) {
         super.load(tagCompound);
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         inAlarm = tagCompound.getBoolean("inAlarm");
     }
 
     @Override
-    public void loadInfo(CompoundNBT tagCompound) {
+    public void loadInfo(CompoundTag tagCompound) {
         super.loadInfo(tagCompound);
-        CompoundNBT info = tagCompound.getCompound("Info");
+        CompoundTag info = tagCompound.getCompound("Info");
         rflevel = info.getInt("rflevel");
         minimum = info.getByte("minimum");
         maximum = info.getByte("maximum");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundNBT tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
         super.saveAdditional(tagCompound);
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
     }
 
     @Override
-    public void saveInfo(CompoundNBT tagCompound) {
+    public void saveInfo(CompoundTag tagCompound) {
         super.saveInfo(tagCompound);
-        CompoundNBT info = getOrCreateInfo(tagCompound);
+        CompoundTag info = getOrCreateInfo(tagCompound);
         info.putInt("rflevel", rflevel);
         info.putByte("minimum", (byte) minimum);
         info.putByte("maximum", (byte) maximum);

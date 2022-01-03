@@ -3,7 +3,7 @@ package mcjty.rftoolspower.setup;
 import mcjty.lib.compat.MainCompatHandler;
 import mcjty.lib.setup.DefaultModSetup;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ModSetup extends DefaultModSetup {
