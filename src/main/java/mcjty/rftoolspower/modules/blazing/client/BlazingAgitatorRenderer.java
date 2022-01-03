@@ -1,27 +1,25 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemStack;
-import com.mojang.math.Vector3f;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.renderer.entity.ItemRenderer;
+public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgitatorTileEntity> {
 
-public class BlazingAgitatorRenderer extends BlockEntityRenderer<BlazingAgitatorTileEntity> {
-
-    public BlazingAgitatorRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public BlazingAgitatorRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
@@ -48,7 +46,7 @@ public class BlazingAgitatorRenderer extends BlockEntityRenderer<BlazingAgitator
                         }
                         te.setCurrentAngle(x, y, angle);
                         matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
-                        itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer);
+                        itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer, 0); // @todo 1.18 last parameter?
                         matrixStack.popPose();
                     }
                 }
@@ -59,7 +57,7 @@ public class BlazingAgitatorRenderer extends BlockEntityRenderer<BlazingAgitator
     }
 
     public static void register() {
-        ClientRegistry.bindTileEntityRenderer(BlazingModule.TYPE_BLAZING_AGITATOR.get(), BlazingAgitatorRenderer::new);
+        BlockEntityRenderers.register(BlazingModule.TYPE_BLAZING_AGITATOR.get(), BlazingAgitatorRenderer::new);
     }
 
 }

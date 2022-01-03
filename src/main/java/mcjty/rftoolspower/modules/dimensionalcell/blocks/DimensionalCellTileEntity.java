@@ -14,7 +14,6 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
@@ -28,22 +27,21 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.core.Direction;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -172,8 +170,8 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     }
 
-    public DimensionalCellTileEntity(BlockEntityType<?> type) {
-        super(type);
+    public DimensionalCellTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     private void onUpdateSlot(Integer slot, ItemStack stack) {
@@ -254,13 +252,13 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         Mode mode = getMode(side);
         switch (mode) {
             case MODE_NONE:
-                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_INPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_INPUT), Block.UPDATE_ALL);
                 break;
             case MODE_INPUT:
-                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_OUTPUT), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_OUTPUT), Block.UPDATE_ALL);
                 break;
             case MODE_OUTPUT:
-                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_NONE), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_NONE), Block.UPDATE_ALL);
                 break;
         }
     }
@@ -567,7 +565,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                         .setValue(SOUTH, Mode.MODE_OUTPUT)
                         .setValue(WEST, Mode.MODE_OUTPUT)
                         .setValue(EAST, Mode.MODE_OUTPUT),
-                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                Block.UPDATE_ALL);
     }
 
     @ServerCommand
@@ -581,7 +579,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                         .setValue(SOUTH, Mode.MODE_INPUT)
                         .setValue(WEST, Mode.MODE_INPUT)
                         .setValue(EAST, Mode.MODE_INPUT),
-                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                Block.UPDATE_ALL);
     }
 
     @ServerCommand
@@ -595,7 +593,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                         .setValue(SOUTH, Mode.MODE_NONE)
                         .setValue(WEST, Mode.MODE_NONE)
                         .setValue(EAST, Mode.MODE_NONE),
-                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                Block.UPDATE_ALL);
     }
 
     @Override

@@ -10,20 +10,20 @@ import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -53,8 +53,8 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(this::createNullHandler);
     private final LazyOptional<SidedHandler>[] sidedStorages;
 
-    public PowerCellTileEntity(Tier tier) {
-        super(tier.getType());
+    public PowerCellTileEntity(Tier tier, BlockPos pos, BlockState state) {
+        super(tier.getType(), pos, state);
         this.tier = tier;
         sidedStorages = new LazyOptional[OrientationTools.DIRECTION_VALUES.length];
         for (Direction direction : OrientationTools.DIRECTION_VALUES) {
@@ -73,15 +73,9 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
     public void toggleMode(Direction side) {
         switch (modes[side.ordinal()]) {
-            case NONE:
-                modes[side.ordinal()] = SideType.INPUT;
-                break;
-            case INPUT:
-                modes[side.ordinal()] = SideType.OUTPUT;
-                break;
-            case OUTPUT:
-                modes[side.ordinal()] = SideType.NONE;
-                break;
+            case NONE -> modes[side.ordinal()] = SideType.INPUT;
+            case INPUT -> modes[side.ordinal()] = SideType.OUTPUT;
+            case OUTPUT -> modes[side.ordinal()] = SideType.NONE;
         }
         updateOutputCount();
         markDirtyClient();  // In world render change. So this is needed
@@ -112,27 +106,19 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     public long getLocalMaxEnergy() {
-        switch (tier) {
-            case TIER1:
-                return safeCast(PowerCellConfig.TIER1_MAXRF.get());
-            case TIER2:
-                return safeCast(PowerCellConfig.TIER2_MAXRF.get());
-            case TIER3:
-                return safeCast(PowerCellConfig.TIER3_MAXRF.get());
-        }
-        return 0;
+        return switch (tier) {
+            case TIER1 -> safeCast(PowerCellConfig.TIER1_MAXRF.get());
+            case TIER2 -> safeCast(PowerCellConfig.TIER2_MAXRF.get());
+            case TIER3 -> safeCast(PowerCellConfig.TIER3_MAXRF.get());
+        };
     }
 
     public long getRfPerTickPerSide() {
-        switch (tier) {
-            case TIER1:
-                return PowerCellConfig.TIER1_RFPERTICK.get();
-            case TIER2:
-                return PowerCellConfig.TIER2_RFPERTICK.get();
-            case TIER3:
-                return PowerCellConfig.TIER3_RFPERTICK.get();
-        }
-        return 0;
+        return switch (tier) {
+            case TIER1 -> PowerCellConfig.TIER1_RFPERTICK.get();
+            case TIER2 -> PowerCellConfig.TIER2_RFPERTICK.get();
+            case TIER3 -> PowerCellConfig.TIER3_RFPERTICK.get();
+        };
     }
 
     public long getRfPerTickReal() {
@@ -385,11 +371,11 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         }
         BlockState stateUp = world.getBlockState(pos.above());
         if (stateUp.getBlock() instanceof PowerCellBlock) {
-            world.sendBlockUpdated(pos.above(), stateUp, stateUp, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            world.sendBlockUpdated(pos.above(), stateUp, stateUp, Block.UPDATE_ALL);
         }
         BlockState stateDown = world.getBlockState(pos.below());
         if (stateDown.getBlock() instanceof PowerCellBlock) {
-            world.sendBlockUpdated(pos.below(), stateDown, stateDown, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            world.sendBlockUpdated(pos.below(), stateDown, stateDown, Block.UPDATE_ALL);
         }
     }
 
@@ -453,7 +439,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
             if (old[i] != modes[i]) {
                 ModelDataManager.requestModelDataRefresh(this);
                 BlockState state = level.getBlockState(worldPosition);
-                level.sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
                 return;
             }
         }

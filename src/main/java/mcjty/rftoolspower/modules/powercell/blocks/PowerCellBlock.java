@@ -61,9 +61,9 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                             } else if (stack.getItem() == PowerCellModule.CELL3_ITEM.get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
                             }
-                            return Long.toString(power) + " (max " + Long.toString(totpower) + " RF/FE)";
+                            return power + " (max " + totpower + " RF/FE)";
                         }))
-                .tileEntitySupplier(() -> new PowerCellTileEntity(tier)));
+                .tileEntitySupplier((pos, state) -> new PowerCellTileEntity(tier, pos, state)));
     }
 
     @Override

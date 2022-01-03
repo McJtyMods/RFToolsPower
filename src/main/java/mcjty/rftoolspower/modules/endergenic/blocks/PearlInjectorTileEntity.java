@@ -20,7 +20,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
@@ -70,8 +69,8 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
                 .tileEntitySupplier(PearlInjectorTileEntity::new));
     }
 
-    public PearlInjectorTileEntity() {
-        super(EndergenicModule.TYPE_PEARL_INJECTOR.get());
+    public PearlInjectorTileEntity(BlockPos pos, BlockState state) {
+        super(EndergenicModule.TYPE_PEARL_INJECTOR.get(), pos, state);
     }
 
     public EndergenicTileEntity findEndergenicTileEntity() {

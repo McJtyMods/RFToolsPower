@@ -2,28 +2,28 @@ package mcjty.rftoolspower.modules.monitor.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.client.RenderHelper;
 import mcjty.lib.varia.LogicFacing;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerLevelTileEntity;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.ModelBuilder;
-import net.minecraftforge.client.ClientRegistry;
 
-public class PowerLevelRenderer extends BlockEntityRenderer<PowerLevelTileEntity> {
+public class PowerLevelRenderer implements BlockEntityRenderer<PowerLevelTileEntity> {
 
     public static final ResourceLocation[] DIGITS = new ResourceLocation[] {
             new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_0"),
@@ -38,8 +38,7 @@ public class PowerLevelRenderer extends BlockEntityRenderer<PowerLevelTileEntity
             new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_9")
     };
 
-    public PowerLevelRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public PowerLevelRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
@@ -73,7 +72,7 @@ public class PowerLevelRenderer extends BlockEntityRenderer<PowerLevelTileEntity
     }
 
     public static void register() {
-        ClientRegistry.bindTileEntityRenderer(MonitorModule.TYPE_POWER_LEVEL.get(), PowerLevelRenderer::new);
+        BlockEntityRenderers.register(MonitorModule.TYPE_POWER_LEVEL.get(), PowerLevelRenderer::new);
     }
 
 }

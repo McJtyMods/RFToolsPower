@@ -1,23 +1,23 @@
 package mcjty.rftoolspower.modules.dimensionalcell;
 
+import mcjty.lib.varia.LevelTools;
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.lib.varia.LevelTools;
 import mcjty.lib.worlddata.AbstractWorldData;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -31,11 +31,22 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     private final Map<Integer,Network> networks = new HashMap<>();
 
     public DimensionalCellNetwork() {
-        super(DIMENSIONALCELL_NETWORK_NAME);
+    }
+
+    public DimensionalCellNetwork(CompoundTag tag) {
+        ListTag lst = tag.getList("networks", Tag.TAG_COMPOUND);
+        for (int i = 0 ; i < lst.size() ; i++) {
+            CompoundTag tc = lst.getCompound(i);
+            int channel = tc.getInt("channel");
+            Network value = new Network();
+            value.readFromNBT(tc);
+            networks.put(channel, value);
+        }
+        lastId = tag.getInt("lastId");
     }
 
     public static DimensionalCellNetwork get(Level world) {
-        return getData(world, DimensionalCellNetwork::new, DIMENSIONALCELL_NETWORK_NAME);
+        return getData(world, DimensionalCellNetwork::new, DimensionalCellNetwork::new, DIMENSIONALCELL_NETWORK_NAME);
     }
 
     public Network getOrCreateNetwork(int id) {
@@ -58,20 +69,6 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     public int newChannel() {
         lastId++;
         return lastId;
-    }
-
-    @Override
-    public void load(CompoundTag tagCompound) {
-        networks.clear();
-        ListTag lst = tagCompound.getList("networks", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0 ; i < lst.size() ; i++) {
-            CompoundTag tc = lst.getCompound(i);
-            int channel = tc.getInt("channel");
-            Network value = new Network();
-            value.readFromNBT(tc);
-            networks.put(channel, value);
-        }
-        lastId = tagCompound.getInt("lastId");
     }
 
     @Override
@@ -340,7 +337,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             this.advancedBlocks = tagCompound.getInt("advanced");
             this.simpleBlocks = tagCompound.getInt("simple");
             blocks.clear();
-            ListTag list = tagCompound.getList("blocks", Constants.NBT.TAG_COMPOUND);
+            ListTag list = tagCompound.getList("blocks", Tag.TAG_COMPOUND);
             for (int i = 0 ; i < list.size() ; i++) {
                 CompoundTag tag = list.getCompound(i);
                 ResourceLocation id = new ResourceLocation(tag.getString("dim"));

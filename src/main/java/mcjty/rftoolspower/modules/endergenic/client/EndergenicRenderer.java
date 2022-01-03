@@ -14,15 +14,15 @@ import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class EndergenicRenderer extends BlockEntityRenderer<EndergenicTileEntity> {
+public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEntity> {
 
     public static final ResourceLocation HALO = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/floatingpearl");
     public static final ResourceLocation WHITEFLASH = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/whiteflash");
@@ -37,8 +37,7 @@ public class EndergenicRenderer extends BlockEntityRenderer<EndergenicTileEntity
             .renderType(CustomRenderTypes.TRANSLUCENT_LIGHTNING_NOLIGHTMAPS)
             .build();
 
-    public EndergenicRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public EndergenicRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
@@ -73,6 +72,6 @@ public class EndergenicRenderer extends BlockEntityRenderer<EndergenicTileEntity
     }
 
     public static void register() {
-        ClientRegistry.bindTileEntityRenderer(EndergenicModule.TYPE_ENDERGENIC.get(), EndergenicRenderer::new);
+        BlockEntityRenderers.register(EndergenicModule.TYPE_ENDERGENIC.get(), EndergenicRenderer::new);
     }
 }
