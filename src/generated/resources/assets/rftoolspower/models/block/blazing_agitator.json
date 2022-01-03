@@ -1,5 +1,5 @@
 {
-  "parent": "block/slab",
+  "parent": "minecraft:block/slab",
   "textures": {
     "side": "rftoolspower:block/blazing/blazing_agitator_side",
     "bottom": "rftoolsbase:block/base/machinebottom",

@@ -11,10 +11,14 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:diamond"
+            "items": [
+              "minecraft:diamond"
+            ]
           },
           {
-            "item": "minecraft:redstone"
+            "items": [
+              "minecraft:redstone"
+            ]
           }
         ]
       }

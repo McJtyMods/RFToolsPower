@@ -11,13 +11,19 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:emerald"
+            "items": [
+              "minecraft:emerald"
+            ]
           },
           {
-            "item": "minecraft:redstone"
+            "items": [
+              "minecraft:redstone"
+            ]
           },
           {
-            "item": "rftoolsbase:dimensionalshard"
+            "items": [
+              "rftoolsbase:dimensionalshard"
+            ]
           }
         ]
       }
