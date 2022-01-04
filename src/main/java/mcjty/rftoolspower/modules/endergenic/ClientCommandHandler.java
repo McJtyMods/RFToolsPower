@@ -3,6 +3,7 @@ package mcjty.rftoolspower.modules.endergenic;
 import mcjty.lib.McJtyLib;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
+import mcjty.lib.varia.SafeClientTools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -18,7 +19,7 @@ public class ClientCommandHandler {
     public static void registerCommands() {
         McJtyLib.registerClientCommand(RFToolsPower.MODID, CMD_FLASH_ENDERGENIC, (player, arguments) -> {
             BlockPos pos = arguments.get(PARAM_POS);
-            TileEntity te = McJtyLib.proxy.getClientWorld().getBlockEntity(pos);
+            TileEntity te = SafeClientTools.getClientWorld().getBlockEntity(pos);
             if (te instanceof EndergenicTileEntity) {
                 EndergenicTileEntity tileEntity = (EndergenicTileEntity) te;
                 tileEntity.syncCountersFromServer(arguments.get(PARAM_GOODCOUNTER), arguments.get(PARAM_BADCOUNTER));
