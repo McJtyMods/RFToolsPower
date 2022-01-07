@@ -10,7 +10,7 @@ public class PowerCellNetwork {
 
     private long energy;
     private long maxEnergy;
-    private int networkId;
+    private final int networkId;
 
     // For statistics, keep track of energy added/removed
     private long extracted;
@@ -18,7 +18,7 @@ public class PowerCellNetwork {
 
     private static int lastNetworkId = 0;
 
-    private Set<Long> positions = new HashSet<>();
+    private final Set<Long> positions = new HashSet<>();
 
     public PowerCellNetwork() {
         networkId = lastNetworkId++;

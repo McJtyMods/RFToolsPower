@@ -74,7 +74,7 @@ import static mcjty.rftoolsbase.modules.hud.Hud.COMMAND_GETHUDLOG;
 
 public class EndergenicTileEntity extends TickingTileEntity implements IHudSupport, TickOrderHandler.IOrderTicker {
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public static final int CHARGE_IDLE = 0;
     public static final int CHARGE_HOLDING = -1;
@@ -151,7 +151,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
     // This table indicates how much RF is produced when an endergenic pearl hits this block
     // at that specific chargingMode.
-    private static long rfPerHit[] = new long[]{0, 100, 150, 200, 400, 800, 1600, 3200, 6400, 8000, 12800, 8000, 6400, 2500, 1000, 100};
+    private static final long[] rfPerHit = new long[]{0, 100, 150, 200, 400, 800, 1600, 3200, 6400, 8000, 12800, 8000, 6400, 2500, 1000, 100};
 
     private int tickCounter = 0;            // Only used for logging, counts server ticks.
     private long ticker = -1;       // Used by TickOrderHandler to detect that we've already been added to the queue
@@ -402,17 +402,13 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
             @Override
             public String getData(int index, long millis) {
-                switch (index) {
-                    case 0:
-                        return Long.toString(lastRfPerTick);
-                    case 1:
-                        return Integer.toString(lastPearlsLost);
-                    case 2:
-                        return Integer.toString(lastPearlsLaunched);
-                    case 3:
-                        return Integer.toString(lastChargeCounter);
-                }
-                return null;
+                return switch (index) {
+                    case 0 -> Long.toString(lastRfPerTick);
+                    case 1 -> Integer.toString(lastPearlsLost);
+                    case 2 -> Integer.toString(lastPearlsLaunched);
+                    case 3 -> Integer.toString(lastChargeCounter);
+                    default -> null;
+                };
             }
         };
     }
@@ -487,7 +483,6 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (level != null) {
             level.getEntitiesOfClass(Player.class, new AABB(worldPosition).inflate(32),
                     p -> worldPosition.distSqr(p.getX(), p.getY(), p.getZ(), true) < 32 * 32)
-                    .stream()
                     .forEach(p -> RFToolsPowerMessages.INSTANCE.sendTo(
                             new PacketSendClientCommand(RFToolsPower.MODID, ClientCommandHandler.CMD_FLASH_ENDERGENIC,
                                     TypedMap.builder()

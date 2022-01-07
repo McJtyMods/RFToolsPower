@@ -20,9 +20,8 @@ public class ClientCommandHandler {
         McJtyLib.registerClientCommand(RFToolsPower.MODID, CMD_FLASH_ENDERGENIC, (player, arguments) -> {
             BlockPos pos = arguments.get(PARAM_POS);
             BlockEntity te = SafeClientTools.getClientWorld().getBlockEntity(pos);
-            if (te instanceof EndergenicTileEntity) {
-                EndergenicTileEntity tileEntity = (EndergenicTileEntity) te;
-                tileEntity.syncCountersFromServer(arguments.get(PARAM_GOODCOUNTER), arguments.get(PARAM_BADCOUNTER));
+            if (te instanceof EndergenicTileEntity endergenic) {
+                endergenic.syncCountersFromServer(arguments.get(PARAM_GOODCOUNTER), arguments.get(PARAM_BADCOUNTER));
             }
             return true;
         });

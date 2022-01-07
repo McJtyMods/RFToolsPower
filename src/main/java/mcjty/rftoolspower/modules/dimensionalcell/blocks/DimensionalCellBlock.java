@@ -120,9 +120,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
             SmartWrenchMode currentMode = SmartWrenchItem.getCurrentMode(player.getItemInHand(InteractionHand.MAIN_HAND));
             if (currentMode == SmartWrenchMode.MODE_SELECT) {
                 BlockEntity te = world.getBlockEntity(pos);
-                if (te instanceof DimensionalCellTileEntity) {
-                    DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) te;
-                    DimensionalCellTileEntity.dumpNetwork(player, dimensionalCellTileEntity);
+                if (te instanceof DimensionalCellTileEntity cell) {
+                    DimensionalCellTileEntity.dumpNetwork(player, cell);
                 }
             }
         }
@@ -133,9 +132,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     protected boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (!world.isClientSide) {
             BlockEntity te = world.getBlockEntity(pos);
-            if (te instanceof DimensionalCellTileEntity) {
-                DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) te;
-                dimensionalCellTileEntity.toggleMode(side);
+            if (te instanceof DimensionalCellTileEntity cell) {
+                cell.toggleMode(side);
             }
         }
         return true;
@@ -214,15 +212,14 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     public void wasExploded(Level world, @Nonnull BlockPos pos, @Nonnull Explosion explosion) {
         if (!world.isClientSide) {
             BlockEntity te = world.getBlockEntity(pos);
-            if (te instanceof DimensionalCellTileEntity) {
-                DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
-                DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
+            if (te instanceof DimensionalCellTileEntity cell) {
+                DimensionalCellNetwork.Network network = cell.getNetwork();
                 if (network != null) {
                     int a = network.extractEnergySingleBlock(type);
                     Block block = world.getBlockState(pos).getBlock();
-                    network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
+                    network.remove(world, cell.getGlobalPos(), DimensionalCellBlock.getType(block));
                     DimensionalCellNetwork.get(world).save();
-                    cellTileEntity.setNetworkId(-1);
+                    cell.setNetworkId(-1);
                 }
             }
         }
@@ -234,14 +231,13 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         if (!world.isClientSide) {
             if (state.getBlock() != newstate.getBlock()) {
                 BlockEntity te = world.getBlockEntity(pos);
-                if (te instanceof DimensionalCellTileEntity) {
-                    DimensionalCellTileEntity cellTileEntity = (DimensionalCellTileEntity) te;
-                    DimensionalCellNetwork.Network network = cellTileEntity.getNetwork();
+                if (te instanceof DimensionalCellTileEntity cell) {
+                    DimensionalCellNetwork.Network network = cell.getNetwork();
                     if (network != null) {
                         int a = network.extractEnergySingleBlock(type);
                         System.out.println("a = " + a);
                         Block block = world.getBlockState(pos).getBlock();
-                        network.remove(world, cellTileEntity.getGlobalPos(), DimensionalCellBlock.getType(block));
+                        network.remove(world, cell.getGlobalPos(), DimensionalCellBlock.getType(block));
                         DimensionalCellNetwork.get(world).save();
                     }
                 }

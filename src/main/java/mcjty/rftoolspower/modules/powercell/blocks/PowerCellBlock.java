@@ -72,8 +72,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
         if (!world.isClientSide) {
 
             BlockEntity te = world.getBlockEntity(pos);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            if (te instanceof PowerCellTileEntity powercell) {
                 long energy = stack.hasTag() ? stack.getTag().getLong("energy") : 0;
                 powercell.setLocalEnergy(energy);
                 powercell.getNetwork();   // Force a rebuild of the network
@@ -106,9 +105,8 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     protected boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (!world.isClientSide) {
             BlockEntity te = world.getBlockEntity(pos);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powerCellTileEntity = (PowerCellTileEntity) te;
-                powerCellTileEntity.toggleMode(side);
+            if (te instanceof PowerCellTileEntity powercell) {
+                powercell.toggleMode(side);
             }
         }
         return true;

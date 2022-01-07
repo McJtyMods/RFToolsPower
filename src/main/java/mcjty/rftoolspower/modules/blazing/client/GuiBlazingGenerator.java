@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTileEntity, GenericContainer> {
 
     private EnergyBar energyBar;
-    private Label[] labels = new Label[4];
+    private final Label[] labels = new Label[4];
 
     public GuiBlazingGenerator(BlazingGeneratorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
         super(tileEntity, container, inventory, BlazingModule.BLAZING_GENERATOR.get().getManualEntry());

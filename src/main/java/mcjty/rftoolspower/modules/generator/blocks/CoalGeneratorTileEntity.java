@@ -196,7 +196,6 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
                 return burning > 0 ? getRfPerTick() : 0;
             }
 
-            @Nullable
             @Override
             public String getEnergyUnitName() {
                 return "RF";
@@ -212,7 +211,6 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
                 return isMachineEnabled();
             }
 
-            @Nullable
             @Override
             public String getMachineStatus() {
                 return burning > 0 ? "generating power" : "idle";

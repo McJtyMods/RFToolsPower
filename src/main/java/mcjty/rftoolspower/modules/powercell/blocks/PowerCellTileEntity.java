@@ -62,7 +62,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         }
     }
 
-    private SideType modes[] = new SideType[] {
+    private final SideType[] modes = new SideType[] {
             NONE, NONE, NONE,
             NONE, NONE, NONE };
     private int outputCount = 0;        // Caches the number of sides that have outputs
@@ -162,8 +162,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
             for (Long l : network.getPositions()) {
                 BlockPos p = BlockPos.of(l);
                 BlockEntity te = level.getBlockEntity(p);
-                if (te instanceof PowerCellTileEntity) {
-                    PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                if (te instanceof PowerCellTileEntity powercell) {
                     received = powercell.receiveEnergyLocal(maxReceive, simulate);
                     if (received > 0) {
                         if (!simulate) {
@@ -220,11 +219,10 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         }
         final long[] energy = {0, 0, 0};  // For each tier
         final int[] count = {0, 0, 0};
-        network.getPositions().stream().forEach(l -> {
+        network.getPositions().forEach(l -> {
             BlockPos p = BlockPos.of(l);
             BlockEntity te = level.getBlockEntity(p);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            if (te instanceof PowerCellTileEntity powercell) {
                 int t = powercell.getTier().ordinal();
                 energy[t] += powercell.getLocalEnergy();
                 count[t]++;
@@ -234,11 +232,10 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
             if (count[tier.ordinal()] > 0) {
                 long energyPerBlock = energy[tier.ordinal()] / count[tier.ordinal()];
                 final long[] energyToSet = {energyPerBlock + energy[tier.ordinal()] % count[tier.ordinal()]};   // First block gets more (remainder)
-                network.getPositions().stream().forEach(l -> {
+                network.getPositions().forEach(l -> {
                     BlockPos p = BlockPos.of(l);
                     BlockEntity te = level.getBlockEntity(p);
-                    if (te instanceof PowerCellTileEntity) {
-                        PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                    if (te instanceof PowerCellTileEntity powercell) {
                         if (powercell.getTier() == tier) {
                             powercell.setLocalEnergy(energyToSet[0]);
                             powercell.markDirtyQuick();
@@ -253,11 +250,10 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     private void validateNetwork() {
         final long[] energy = {0};
         final long[] maxEnergy = {0};
-        getNetwork().getPositions().stream().forEach(l -> {
+        getNetwork().getPositions().forEach(l -> {
             BlockPos p = BlockPos.of(l);
             BlockEntity te = level.getBlockEntity(p);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            if (te instanceof PowerCellTileEntity powercell) {
                 energy[0] += powercell.getLocalEnergy();
                 maxEnergy[0] += powercell.getLocalMaxEnergy();
                 if (powercell.network != this.network) {
@@ -324,8 +320,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
             for (Long l : network.getPositions()) {
                 BlockPos p = BlockPos.of(l);
                 BlockEntity te = level.getBlockEntity(p);
-                if (te instanceof PowerCellTileEntity) {
-                    PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+                if (te instanceof PowerCellTileEntity powercell) {
                     toExtractLocal = Math.min(energyExtracted, powercell.localEnergy);
                     if (toExtractLocal > 0) {
                         powercell.localEnergy -= toExtractLocal;
@@ -382,20 +377,18 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     public void dismantleNetwork(PowerCellNetwork network) {
         network.getPositions().stream().map(BlockPos::of).forEach(pos -> {
             BlockEntity te = level.getBlockEntity(pos);
-            if (te instanceof PowerCellTileEntity) {
-                PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+            if (te instanceof PowerCellTileEntity powercell) {
                 powercell.setNetwork(null);
             }
         });
     }
 
-    private static Set<BlockPos> alreadyReportedBad = new HashSet<>();
-    private static Set<BlockPos> alreadyReportedUnexpected = new HashSet<>();
+    private static final Set<BlockPos> alreadyReportedBad = new HashSet<>();
+    private static final Set<BlockPos> alreadyReportedUnexpected = new HashSet<>();
 
     private void buildNetwork(PowerCellNetwork network, BlockPos pos) {
         BlockEntity te = level.getBlockEntity(pos);
-        if (te instanceof PowerCellTileEntity) {
-            PowerCellTileEntity powercell = (PowerCellTileEntity) te;
+        if (te instanceof PowerCellTileEntity powercell) {
 
             if (network.contains(pos)) {
                 if (powercell.network != network) {

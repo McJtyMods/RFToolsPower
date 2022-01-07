@@ -68,11 +68,11 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
 
     // Maximum RF/tick for a slot for the given blazing rod
-    private int rfPerTickMax[] = new int[BUFFER_SIZE];
+    private final int[] rfPerTickMax = new int[BUFFER_SIZE];
     // Current RF/tick for a slot
-    private float rfPerTick[] = new float[BUFFER_SIZE];
+    private final float[] rfPerTick = new float[BUFFER_SIZE];
     // Ticks remaining until the blazing rod is spent
-    private int ticksRemaining[] = new int[BUFFER_SIZE];
+    private final int[] ticksRemaining = new int[BUFFER_SIZE];
 
     @Cap(type = CapType.CONTAINER)
     private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")

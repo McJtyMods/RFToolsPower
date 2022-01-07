@@ -251,15 +251,9 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     public void toggleMode(Direction side) {
         Mode mode = getMode(side);
         switch (mode) {
-            case MODE_NONE:
-                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_INPUT), Block.UPDATE_ALL);
-                break;
-            case MODE_INPUT:
-                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_OUTPUT), Block.UPDATE_ALL);
-                break;
-            case MODE_OUTPUT:
-                level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_NONE), Block.UPDATE_ALL);
-                break;
+            case MODE_NONE -> level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_INPUT), Block.UPDATE_ALL);
+            case MODE_INPUT -> level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_OUTPUT), Block.UPDATE_ALL);
+            case MODE_OUTPUT -> level.setBlock(worldPosition, getBlockState().setValue(MODES[side.ordinal()], Mode.MODE_NONE), Block.UPDATE_ALL);
         }
     }
 
@@ -622,8 +616,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                     msg = "not a powercell!";
                 }
                 BlockEntity te = w.getBlockEntity(b.pos());
-                if (te instanceof DimensionalCellTileEntity) {
-                    DimensionalCellTileEntity power = (DimensionalCellTileEntity) te;
+                if (te instanceof DimensionalCellTileEntity power) {
                     msg += " (+:" + power.getTotalInserted() + ", -:" + power.getTotalExtracted() + ")";
                 }
             }
@@ -803,17 +796,13 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
             @Override
             public String getData(int index, long millis) {
-                switch (index) {
-                    case 0:
-                        return lastRfPerTickOut + "RF/t";
-                    case 1:
-                        return lastRfPerTickIn + "RF/t";
-                    case 2:
-                        return totalExtracted + "RF";
-                    case 3:
-                        return totalInserted + "RF";
-                }
-                return null;
+                return switch (index) {
+                    case 0 -> lastRfPerTickOut + "RF/t";
+                    case 1 -> lastRfPerTickIn + "RF/t";
+                    case 2 -> totalExtracted + "RF";
+                    case 3 -> totalInserted + "RF";
+                    default -> null;
+                };
             }
         };
     }

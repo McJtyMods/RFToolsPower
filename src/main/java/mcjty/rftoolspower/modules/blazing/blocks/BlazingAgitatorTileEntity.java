@@ -97,13 +97,13 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     public static final Value<?, Boolean> VALUE_LOCK_22 = Value.<BlazingAgitatorTileEntity, Boolean>create("lock22", Type.BOOLEAN, te -> te.isLocked(2, 2), (te, v) -> te.setLocked(2, 2, v));
 
     // For the client (renderer): rotation speed and current angle
-    private float[] rotationSpeed = new float[9];
-    private float[] currentAngle = new float[9];
+    private final float[] rotationSpeed = new float[9];
+    private final float[] currentAngle = new float[9];
     // Update on server to notify the client:
     private int updateSpeedCounter = 10;  // Every 10 ticks we check if we potentially have to update rotation speed on the client
 
-    private BlazingAgitatorAlgorithm algorithm;
-    private boolean locked[] = new boolean[BUFFER_SIZE];
+    private final BlazingAgitatorAlgorithm algorithm;
+    private final boolean[] locked = new boolean[BUFFER_SIZE];
 
     public BlazingAgitatorTileEntity(BlockPos pos, BlockState state) {
         super(BlazingModule.TYPE_BLAZING_AGITATOR.get(), pos, state);

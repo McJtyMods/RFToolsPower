@@ -30,7 +30,6 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
 
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-            long millis = System.currentTimeMillis();
             for (int x = 0 ; x < 3 ; x++) {
                 for (int y = 0 ; y < 3 ; y++) {
                     ItemStack stack = h.getStackInSlot(y * 3 + x);

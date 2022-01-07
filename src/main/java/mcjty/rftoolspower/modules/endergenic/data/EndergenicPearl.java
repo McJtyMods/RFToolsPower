@@ -43,9 +43,8 @@ public class EndergenicPearl {
         if (ticksLeft <= 0) {
             // We arrived. Check that the destination is still there.
             BlockEntity te = world.getBlockEntity(destination);
-            if (te instanceof EndergenicTileEntity) {
-                EndergenicTileEntity endergenicTileEntity = (EndergenicTileEntity) te;
-                endergenicTileEntity.receivePearl(age);
+            if (te instanceof EndergenicTileEntity endergenic) {
+                endergenic.receivePearl(age);
             } else {
                 Logging.log("Pearl: where did the destination go?");
             }
