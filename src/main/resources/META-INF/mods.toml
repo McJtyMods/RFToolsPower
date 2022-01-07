@@ -31,6 +31,6 @@ Everything related to power generation
 [[dependencies.rftoolspower]]
     modId="rftoolsbase"
     mandatory=true
-    versionRange="[1.18-3.0.0,)"
+    versionRange="[1.18-3.0.1,)"
     ordering="AFTER"
     side="BOTH"
