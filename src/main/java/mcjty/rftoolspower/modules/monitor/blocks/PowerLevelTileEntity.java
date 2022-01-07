@@ -97,11 +97,11 @@ public class PowerLevelTileEntity extends TickingTileEntity {
             return;
         }
         EnergyTools.EnergyLevel energy = EnergyTools.getEnergyLevelMulti(tileEntity, null);
-        long maxEnergy = energy.getMaxEnergy();
+        long maxEnergy = energy.maxEnergy();
         int ratio = 0;
 
         if (maxEnergy > 0) {
-            long stored = energy.getEnergy();
+            long stored = energy.energy();
             ratio = (int) (stored * 10 / maxEnergy);
             if (ratio < 0) {
                 ratio = 0;

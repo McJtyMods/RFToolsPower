@@ -679,7 +679,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
         if (level.isClientSide) {
             // We're on the client. Send change to server.
-            PacketServerCommandTyped packet = new PacketServerCommandTyped(getBlockPos(), getDimension(), CMD_SETDESTINATION.getName(), TypedMap.builder()
+            PacketServerCommandTyped packet = new PacketServerCommandTyped(getBlockPos(), getDimension(), CMD_SETDESTINATION.name(), TypedMap.builder()
                     .put(PARAM_DESTINATION, destination)
                     .build());
             RFToolsPowerMessages.INSTANCE.sendToServer(packet);

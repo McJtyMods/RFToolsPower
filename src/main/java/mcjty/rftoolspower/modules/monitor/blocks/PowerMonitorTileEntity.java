@@ -122,12 +122,12 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
             return;
         }
         EnergyTools.EnergyLevel energy = EnergyTools.getEnergyLevelMulti(tileEntity, null);
-        long maxEnergy = energy.getMaxEnergy();
+        long maxEnergy = energy.maxEnergy();
         int ratio = 0;  // Will be set as metadata;
         boolean alarm = false;
 
         if (maxEnergy > 0) {
-            long stored = energy.getEnergy();
+            long stored = energy.energy();
             ratio = (int) (1 + (stored * 5) / maxEnergy);
             if (ratio < 1) {
                 ratio = 1;
