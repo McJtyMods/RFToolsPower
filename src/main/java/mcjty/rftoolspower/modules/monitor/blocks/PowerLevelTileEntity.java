@@ -55,7 +55,6 @@ public class PowerLevelTileEntity extends TickingTileEntity {
         return support.getRedstoneOutput(state, side);
     }
 
-
     @Nonnull
     @Override
     public CompoundTag getUpdateTag() {
@@ -77,6 +76,16 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     }
 
     @Override
+    public void saveClientDataToNBT(CompoundTag tagCompound) {
+        saveInfo(tagCompound);
+    }
+
+    @Override
+    public void loadClientDataFromNBT(CompoundTag tagCompound) {
+        loadInfo(tagCompound);
+    }
+
+    @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         handleUpdateTag(pkt.getTag());
     }
@@ -87,7 +96,7 @@ public class PowerLevelTileEntity extends TickingTileEntity {
         if (counter > 0) {
             return;
         }
-        counter = 20;
+        counter = 10;
 
         Direction inputSide = LogicSupport.getFacing(level.getBlockState(getBlockPos())).getInputSide();
         BlockPos inputPos = getBlockPos().relative(inputSide);
@@ -109,6 +118,9 @@ public class PowerLevelTileEntity extends TickingTileEntity {
                 ratio = 9;
             }
         }
-        support.setRedstoneState(this, ratio);
+        if (support.getPowerOutput() != ratio) {
+            support.setRedstoneState(this, ratio);
+            markDirtyClient();
+        }
     }
 }

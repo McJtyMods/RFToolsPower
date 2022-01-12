@@ -1,3 +1,7 @@
+Upcoming:
+- Fixed a crash bug with the power level block when it was broken
+- The power level block also didn't work properly anymore. Now it works again
+
 1.18-4.0.2:
 - Fixed a problem with items not getting restored when breaking and placing blocks
 
