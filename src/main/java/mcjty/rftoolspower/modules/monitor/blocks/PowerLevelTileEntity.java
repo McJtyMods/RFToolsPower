@@ -77,6 +77,16 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     }
 
     @Override
+    public void saveClientDataToNBT(CompoundNBT tagCompound) {
+        saveInfo(tagCompound);
+    }
+
+    @Override
+    public void loadClientDataFromNBT(CompoundNBT tagCompound) {
+        loadInfo(tagCompound);
+    }
+
+    @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         handleUpdateTag(getBlockState(), pkt.getTag());
     }
@@ -109,6 +119,9 @@ public class PowerLevelTileEntity extends TickingTileEntity {
                 ratio = 9;
             }
         }
-        support.setRedstoneState(this, ratio);
+        if (support.getPowerOutput() != ratio) {
+            support.setRedstoneState(this, ratio);
+            markDirtyClient();
+        }
     }
 }

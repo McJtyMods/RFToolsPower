@@ -44,7 +44,6 @@ public class PowerLevelRenderer extends TileEntityRenderer<PowerLevelTileEntity>
 
     @Override
     public void render(PowerLevelTileEntity te, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLightIn, int combinedOverlayIn) {
-        matrixStack.pushPose();
         IVertexBuilder builder = buffer.getBuffer(RenderType.cutout());
 
         BlockState state = te.getLevel().getBlockState(te.getBlockPos());
@@ -53,6 +52,7 @@ public class PowerLevelRenderer extends TileEntityRenderer<PowerLevelTileEntity>
             return;
         }
 
+        matrixStack.pushPose();
         LogicFacing logicFacing = state.getValue(LogicSlabBlock.LOGIC_FACING);
         Direction facing = logicFacing.getSide();
 
