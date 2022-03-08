@@ -482,7 +482,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         setChanged();
         if (level != null) {
             level.getEntitiesOfClass(Player.class, new AABB(worldPosition).inflate(32),
-                    p -> worldPosition.distSqr(p.getX(), p.getY(), p.getZ(), true) < 32 * 32)
+                    p -> worldPosition.distToCenterSqr(p.getX(), p.getY(), p.getZ()) < 32 * 32)
                     .forEach(p -> RFToolsPowerMessages.INSTANCE.sendTo(
                             new PacketSendClientCommand(RFToolsPower.MODID, ClientCommandHandler.CMD_FLASH_ENDERGENIC,
                                     TypedMap.builder()
