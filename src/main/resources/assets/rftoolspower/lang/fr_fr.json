@@ -1,0 +1,89 @@
+{
+    "item.rftoolspower.power_core1": "Noyau d'alimentation (bas)",
+    "item.rftoolspower.power_core2": "Noyau d'alimentation (moyen)",
+    "item.rftoolspower.power_core3": "Noyau d'alimentation (haut)",
+    "item.rftoolspower.blazing_rod": "Bâton flamboyant",
+    "item.rftoolspower.powercell_card": "Carte de cellule d'alimentation",
+
+    "block.rftoolspower.dimensionalcell": "Cellule dimensionnelle",
+    "block.rftoolspower.dimensionalcell_simple": "Cellule dimensionnelle (Simple)",
+    "block.rftoolspower.dimensionalcell_advanced": "Cellule dimensionnelle (Avancée)",
+    "block.rftoolspower.dimensionalcell_creative": "Cellule dimensionnelle (Créative)",
+    "block.rftoolspower.cell1": "Cellule d'alimentation (bas)",
+    "block.rftoolspower.cell2": "Cellule d'alimentation (moyen)",
+    "block.rftoolspower.cell3": "Cellule d'alimentation (haut)",
+    "block.rftoolspower.coalgenerator": "Générateur à charbon",
+    "block.rftoolspower.power_monitor": "Moniteur d'alimentation",
+    "block.rftoolspower.power_level": "Niveau d'énergie",
+    "block.rftoolspower.endergenic": "Endergénique",
+    "block.rftoolspower.ender_monitor": "Moniteur Ender",
+    "block.rftoolspower.pearl_injector": "Injecteur de perles",
+    "block.rftoolspower.blazing_generator": "Générateur flamboyant",
+    "block.rftoolspower.blazing_agitator": "Agitateur flamboyant",
+    "block.rftoolspower.blazing_infuser": "Infuseur flamboyant",
+
+    "itemGroup.rftoolspower": "RFTools Puissance",
+
+    "message.rftoolspower.shiftmessage": "<Appuyez sur Maj>",
+
+    "message.rftoolspower.powercell_card.header": "Utiliser pour connecter des cellules dimensionnelles",
+    "message.rftoolspower.powercell_card.info": "Lien : ",
+
+    "message.rftoolspower.power_core1.header": "Cet objet est un ingrédient d'artisanat pour les cellules d'alimentations",
+    "message.rftoolspower.power_core2.header": "Cet objet est un ingrédient d'artisanat pour les cellules d'alimentations",
+    "message.rftoolspower.power_core3.header": "Cet objet est un ingrédient d'artisanat pour les cellules d'alimentations",
+
+    "message.rftoolspower.blazing_rod.header": "Cet article est produit par l'Agitateur flamboyant et utilisé dans le Générateur flamboyant pour générer de l'énergie",
+    "message.rftoolspower.blazing_rod.time": "Temps : ",
+    "message.rftoolspower.blazing_rod.power": "Puissance : ",
+    "message.rftoolspower.blazing_rod.duration": "Durée : ",
+    "message.rftoolspower.blazing_rod.infused": "Infusé : ",
+
+    "message.rftoolspower.cell1.header": "Ce bloc peut stocker de l'énergie et peut être combiné avec d'autres cellules pour former un grand multibloc. Faites un clic droit avec une clé pour basculer le mode d'entrée/sortie pour un côté",
+    "message.rftoolspower.cell1.info": "Puissance : ",
+
+    "message.rftoolspower.cell2.header": "Ce bloc peut stocker de l'énergie et peut être combiné avec d'autres cellules pour former un grand multibloc. Faites un clic droit avec une clé pour basculer le mode d'entrée/sortie pour un côté",
+    "message.rftoolspower.cell2.info": "Puissance : ",
+
+    "message.rftoolspower.cell3.header": "Ce bloc peut stocker de l'énergie et peut être combiné avec d'autres cellules pour former un grand multibloc. Faites un clic droit avec une clé pour basculer le mode d'entrée/sortie pour un côté",
+    "message.rftoolspower.cell3.info": "Puissance : ",
+
+    "message.rftoolspower.power_monitor.header": "Le moniteur de puissance peut envoyer un signal redstone en fonction de la quantité de puissance dans le bloc cible",
+
+    "message.rftoolspower.power_level.header": "Le bloc de niveau de puissance affiche un chiffre représentant la quantité de puissance dans quelque chose. Il enverra également un signal redstone avec le même montant",
+
+    "message.rftoolspower.blazing_generator.header": "Générez de l'énergie à partir de Bâton de blaze. Ces bâtons de blaze doivent d'abord être 'agités' à l'aide de l'agitateur flamboyant",
+    "message.rftoolspower.blazing_generator.gold": "Bonus d'infusion : plus de production d'énergie",
+
+    "message.rftoolspower.blazing_agitator.header": "Cet appareil peut 'agiter' les bâtons de Blaze afin qu'elles soient utilisables pour le générateur flamboyant",
+    "message.rftoolspower.blazing_agitator.gold": "Bonus d'infusion : bâtons flamboyants de meilleure qualité",
+
+    "message.rftoolspower.blazing_infuser.header": "Cet appareil peut infuser un bâton flamboyante avec des éclats dimensionnels, de la redstone ou de la poussière de pierre lumineuse. Cela améliorera la production d'énergie et/ou la durée de la production d'énergie lorsqu'il est utilisé dans le générateur flamboyant",
+
+    "message.rftoolspower.endergenic.header": "Générez de la puissance à partir des perles de l'Ender. Vous avez besoin d'au moins deux générateurs pour que cela fonctionne et la configuration est relativement compliquée. Le timing est crucial",
+    "message.rftoolspower.endergenic.gold": "Bonus d'infusion : plus de génération d'énergie et une perte de puissance réduite pour la tenue des perles",
+
+    "message.rftoolspower.ender_monitor.header": "Ce bloc peut détecter divers changements dans un générateur endergénique adjacent et envoyer un signal de redstone basé sur celui-ci.",
+
+    "message.rftoolspower.pearl_injector.header": "Cela injectera une perle d'ender dans un générateur endergénique adjacent lorsqu'un signal de redstone est reçu",
+
+    "message.rftoolspower.coalgenerator.header": "Cette machine produit RF/FE à partir de charbon ou de charbon de bois",
+    "message.rftoolspower.coalgenerator.gold": "Bonus d'infusion : plus de production d'énergie et dure plus longtemps avec un seul carburant",
+    "message.rftoolspower.coalgenerator.info": "Production : ",
+
+    "message.rftoolspower.dimensionalcell.header": "Ce bloc peut stocker de l'énergie. En option dans une grande structure multidimensionnelle",
+    "message.rftoolspower.dimensionalcell.gold": "Bonus d'infusion : réduction du coût d'extraction de l'énergie longue distance et augmentation de la sortie RF/tick",
+    "message.rftoolspower.dimensionalcell.info": "Énergie : ",
+
+    "message.rftoolspower.dimensionalcell_advanced.header": "Ce bloc peut stocker de l'énergie. En option dans une grande structure multidimensionnelle",
+    "message.rftoolspower.dimensionalcell_advanced.gold": "Bonus d'infusion : réduction du coût d'extraction de l'énergie longue distance et augmentation de la sortie RF/tick",
+    "message.rftoolspower.dimensionalcell_advanced.info": "Énergie : ",
+
+    "message.rftoolspower.dimensionalcell_simple.header": "Ce bloc peut stocker de l'énergie. En option dans une grande structure multidimensionnelle",
+    "message.rftoolspower.dimensionalcell_simple.gold": "Bonus d'infusion : réduction du coût d'extraction de l'énergie longue distance et augmentation de la sortie RF/tick",
+    "message.rftoolspower.dimensionalcell_simple.info": "Énergie : ",
+
+    "message.rftoolspower.dimensionalcell_creative.header": "Ce bloc peut stocker de l'énergie. En option dans une grande structure multidimensionnelle",
+    "message.rftoolspower.dimensionalcell_creative.gold": "Bonus d'infusion : réduction du coût d'extraction de l'énergie longue distance et augmentation de la sortie RF/tick",
+    "message.rftoolspower.dimensionalcell_creative.info": "Énergie : "
+}
