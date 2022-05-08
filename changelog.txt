@@ -1,3 +1,6 @@
+Upcoming:
+- Fixed a bug with the dimensional cells where you could duplicate power by removing and inserting powercell cards
+
 1.18-4.0.4:
 - Port to 1.18.2
 
