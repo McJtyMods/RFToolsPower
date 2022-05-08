@@ -178,7 +178,8 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
     private void onUpdateSlot(Integer slot, ItemStack stack) {
         if (slot == SLOT_CARD) {
-            if (stack.isEmpty()) {
+            ItemStack s = items.getStackInSlot(SLOT_CARD);
+            if (s.isEmpty()) {
                 handleCardRemoval();
             } else {
                 handleCardInsertion();

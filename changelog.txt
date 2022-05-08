@@ -1,3 +1,6 @@
+Upcoming:
+- Fixed a bug with the dimensional cells where you could duplicate power by removing and inserting powercell cards
+
 1.16-3.0.13:
 - Fixed a crash bug with the power level block when it was broken
 - The power level block also didn't work properly anymore. Now it works again
