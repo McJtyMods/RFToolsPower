@@ -2,24 +2,22 @@ package mcjty.rftoolspower.modules.dimensionalcell.items;
 
 import mcjty.lib.builder.TooltipBuilder;
 import mcjty.lib.tooltips.ITooltipSettings;
+import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.parameter;
-
-import net.minecraft.world.item.Item.Properties;
-
-import javax.annotation.Nonnull;
 
 public class PowerCellCardItem extends Item implements ITooltipSettings {
 
@@ -49,7 +47,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     @Override
     public void appendHoverText(@Nonnull ItemStack itemStack, Level world, @Nonnull List<Component> list, @Nonnull TooltipFlag flag) {
         super.appendHoverText(itemStack, world, list, flag);
-        tooltipBuilder.get().makeTooltip(getRegistryName(), itemStack, list, flag);
+        tooltipBuilder.get().makeTooltip(Tools.getId(this), itemStack, list, flag);
     }
 
     public static int getId(ItemStack stack) {
