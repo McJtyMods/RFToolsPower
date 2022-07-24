@@ -19,9 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.ModelDataManager;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -430,7 +428,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         super.onDataPacket(net, packet);
         for (int i = 0 ; i < 6 ; i++) {
             if (old[i] != modes[i]) {
-                ModelDataManager.requestModelDataRefresh(this);
+                requestModelDataUpdate();
                 BlockState state = level.getBlockState(worldPosition);
                 level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
                 return;
@@ -440,15 +438,15 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder()
-                .withInitial(NORTH, getMode(Direction.NORTH))
-                .withInitial(SOUTH, getMode(Direction.SOUTH))
-                .withInitial(WEST, getMode(Direction.WEST))
-                .withInitial(EAST, getMode(Direction.EAST))
-                .withInitial(UP, getMode(Direction.UP))
-                .withInitial(DOWN, getMode(Direction.DOWN))
-                .withInitial(TIER, tier)
+    public ModelData getModelData() {
+        return ModelData.builder()
+                .with(NORTH, getMode(Direction.NORTH))
+                .with(SOUTH, getMode(Direction.SOUTH))
+                .with(WEST, getMode(Direction.WEST))
+                .with(EAST, getMode(Direction.EAST))
+                .with(UP, getMode(Direction.UP))
+                .with(DOWN, getMode(Direction.DOWN))
+                .with(TIER, tier)
                 .build();
     }
 
