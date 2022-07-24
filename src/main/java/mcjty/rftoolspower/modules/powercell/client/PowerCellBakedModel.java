@@ -1,25 +1,27 @@
 package mcjty.rftoolspower.modules.powercell.client;
 
+import com.mojang.blaze3d.vertex.VertexFormat;
 import mcjty.lib.client.AbstractDynamicBakedModel;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 
 public class PowerCellBakedModel extends AbstractDynamicBakedModel {
@@ -67,8 +69,8 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
     }
 
     @Override
-    @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData data) {
+    @NotNull
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
         if (side != null) {
             return Collections.emptyList();
         }
@@ -76,13 +78,13 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
         boolean upper = Boolean.TRUE.equals(state.getValue(PowerCellBlock.UPPER));
         boolean lower = Boolean.TRUE.equals(state.getValue(PowerCellBlock.LOWER));
 
-        SideType north = data.getData(PowerCellTileEntity.NORTH);
-        SideType south = data.getData(PowerCellTileEntity.SOUTH);
-        SideType west = data.getData(PowerCellTileEntity.WEST);
-        SideType east = data.getData(PowerCellTileEntity.EAST);
-        SideType up = data.getData(PowerCellTileEntity.UP);
-        SideType down = data.getData(PowerCellTileEntity.DOWN);
-        Tier tier = data.getData(PowerCellTileEntity.TIER);
+        SideType north = data.get(PowerCellTileEntity.NORTH);
+        SideType south = data.get(PowerCellTileEntity.SOUTH);
+        SideType west = data.get(PowerCellTileEntity.WEST);
+        SideType east = data.get(PowerCellTileEntity.EAST);
+        SideType up = data.get(PowerCellTileEntity.UP);
+        SideType down = data.get(PowerCellTileEntity.DOWN);
+        Tier tier = data.get(PowerCellTileEntity.TIER);
         if (tier == null) {
             return Collections.emptyList();
         }

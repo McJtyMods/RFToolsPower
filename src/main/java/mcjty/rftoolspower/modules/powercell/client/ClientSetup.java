@@ -5,6 +5,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class ClientSetup {
@@ -31,16 +32,16 @@ public class ClientSetup {
         event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask"));
     }
 
-    public static void onModelBake(ModelBakeEvent event) {
+    public static void onModelBake(ModelEvent.BakingCompleted event) {
         PowerCellBakedModel model = new PowerCellBakedModel();
         Lists.newArrayList("cell1", "cell2", "cell3").stream()
                 .forEach(name -> {
                     ResourceLocation rl = new ResourceLocation(RFToolsPower.MODID, name);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, ""), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=false,upper=false"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=false,upper=true"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=true,upper=false"), model);
-                    event.getModelRegistry().put(new ModelResourceLocation(rl, "lower=true,upper=true"), model);
+                    event.getModels().put(new ModelResourceLocation(rl, ""), model);
+                    event.getModels().put(new ModelResourceLocation(rl, "lower=false,upper=false"), model);
+                    event.getModels().put(new ModelResourceLocation(rl, "lower=false,upper=true"), model);
+                    event.getModels().put(new ModelResourceLocation(rl, "lower=true,upper=false"), model);
+                    event.getModels().put(new ModelResourceLocation(rl, "lower=true,upper=true"), model);
                 });
     }
 }
