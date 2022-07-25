@@ -1,10 +1,5 @@
 {
   "type": "mcjtylib:copy_nbt",
-  "pattern": [
-    "rKr",
-    "KPK",
-    "rKr"
-  ],
   "key": {
     "K": {
       "item": "rftoolspower:power_core3"
@@ -16,6 +11,11 @@
       "item": "minecraft:redstone"
     }
   },
+  "pattern": [
+    "rKr",
+    "KPK",
+    "rKr"
+  ],
   "result": {
     "item": "rftoolspower:cell3"
   }

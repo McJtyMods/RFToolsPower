@@ -6,168 +6,168 @@
       }
     },
     {
-      "when": {
-        "down": "none"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singlenoneadvanced"
+      },
+      "when": {
+        "down": "none"
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
+        "x": 180
+      },
       "when": {
         "up": "none"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
-        "x": 180
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
+        "x": 90
+      },
       "when": {
         "south": "none"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
-        "x": 90
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
+        "x": 270
+      },
       "when": {
         "north": "none"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
-        "x": 270
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
+        "x": 90,
+        "y": 90
+      },
       "when": {
         "west": "none"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
-        "x": 90,
-        "y": 90
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
+        "x": 90,
+        "y": 270
+      },
       "when": {
         "east": "none"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singlenoneadvanced",
-        "x": 90,
-        "y": 270
       }
     },
     {
-      "when": {
-        "down": "input"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleinadvanced"
+      },
+      "when": {
+        "down": "input"
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singleinadvanced",
+        "x": 180
+      },
       "when": {
         "up": "input"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singleinadvanced",
-        "x": 180
       }
     },
     {
+      "apply": {
+        "model": "rftoolspower:block/dimcell/singleinadvanced",
+        "x": 90
+      },
       "when": {
         "south": "input"
-      },
-      "apply": {
-        "model": "rftoolspower:block/dimcell/singleinadvanced",
-        "x": 90
       }
     },
     {
-      "when": {
-        "north": "input"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleinadvanced",
         "x": 270
+      },
+      "when": {
+        "north": "input"
       }
     },
     {
-      "when": {
-        "west": "input"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleinadvanced",
         "x": 90,
         "y": 90
+      },
+      "when": {
+        "west": "input"
       }
     },
     {
-      "when": {
-        "east": "input"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleinadvanced",
         "x": 90,
         "y": 270
+      },
+      "when": {
+        "east": "input"
       }
     },
     {
-      "when": {
-        "down": "output"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleoutadvanced"
+      },
+      "when": {
+        "down": "output"
       }
     },
     {
-      "when": {
-        "up": "output"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleoutadvanced",
         "x": 180
+      },
+      "when": {
+        "up": "output"
       }
     },
     {
-      "when": {
-        "south": "output"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleoutadvanced",
         "x": 90
+      },
+      "when": {
+        "south": "output"
       }
     },
     {
-      "when": {
-        "north": "output"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleoutadvanced",
         "x": 270
+      },
+      "when": {
+        "north": "output"
       }
     },
     {
-      "when": {
-        "west": "output"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleoutadvanced",
         "x": 90,
         "y": 90
+      },
+      "when": {
+        "west": "output"
       }
     },
     {
-      "when": {
-        "east": "output"
-      },
       "apply": {
         "model": "rftoolspower:block/dimcell/singleoutadvanced",
         "x": 90,
         "y": 270
+      },
+      "when": {
+        "east": "output"
       }
     }
   ]

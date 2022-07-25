@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " C ",
-    "rFr",
-    " H "
-  ],
   "key": {
     "C": {
       "tag": "forge:chests"
+    },
+    "F": {
+      "item": "rftoolsbase:machine_frame"
     },
     "H": {
       "item": "minecraft:hopper"
     },
     "r": {
       "item": "minecraft:redstone"
-    },
-    "F": {
-      "item": "rftoolsbase:machine_frame"
     }
   },
+  "pattern": [
+    " C ",
+    "rFr",
+    " H "
+  ],
   "result": {
     "item": "rftoolspower:pearl_injector"
   }

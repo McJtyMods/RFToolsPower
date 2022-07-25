@@ -3,7 +3,6 @@ package mcjty.rftoolspower.modules.dimensionalcell;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.*;
-import mcjty.rftoolspower.modules.dimensionalcell.client.ClientSetup;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
@@ -12,9 +11,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import static mcjty.rftoolspower.setup.Registration.*;
 
@@ -51,8 +50,6 @@ public class DimensionalCellModule implements IModule {
             GuiDimensionalCell.register();
             PowerCellCardItem.initOverrides(POWERCELL_CARD.get());
         });
-
-        ClientSetup.initClient();
     }
 
     @Override

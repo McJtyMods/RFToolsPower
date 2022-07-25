@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "rKr",
-    "KFK",
-    "rKr"
-  ],
   "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
     "K": {
       "item": "rftoolspower:power_core1"
     },
     "r": {
       "item": "minecraft:redstone"
-    },
-    "F": {
-      "item": "rftoolsbase:machine_frame"
     }
   },
+  "pattern": [
+    "rKr",
+    "KFK",
+    "rKr"
+  ],
   "result": {
     "item": "rftoolspower:cell1"
   }

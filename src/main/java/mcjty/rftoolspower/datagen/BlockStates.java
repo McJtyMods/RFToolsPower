@@ -55,7 +55,7 @@ public class BlockStates extends BaseBlockStateProvider {
         logicSlabBlock(EndergenicModule.ENDER_MONITOR.get(), "ender_monitor", modLoc("block/endergenic/ender_monitor"));
 
         orientedBlock(EndergenicModule.PEARL_INJECTOR.get(), frontBasedModel("pearl_injector", modLoc("block/endergenic/pearl_injector")));
-        singleTextureBlock(EndergenicModule.ENDERGENIC.get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic");
+        singleTextureBlockC(EndergenicModule.ENDERGENIC.get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> builder.renderType("translucent"));
 
         registerBlazingGenerator();
         simpleBlock(BlazingModule.BLAZING_AGITATOR.get(), models().slab("blazing_agitator",
@@ -80,13 +80,16 @@ public class BlockStates extends BaseBlockStateProvider {
     private void createDimensionalCellModel(Block block, String suffix, BlockModelBuilder dimCellFrame) {
         BlockModelBuilder singleNone = models().getBuilder("block/dimcell/singlenone" + suffix)
                 .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end().end()
-                .texture("single", modLoc("block/dimcell/dimensionalcell" + suffix));
+                .texture("single", modLoc("block/dimcell/dimensionalcell" + suffix))
+                .renderType("translucent");
         BlockModelBuilder singleIn = models().getBuilder("block/dimcell/singlein" + suffix)
                 .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end().end()
-                .texture("single", modLoc("block/dimcell/dimensionalcellin" + suffix));
+                .texture("single", modLoc("block/dimcell/dimensionalcellin" + suffix))
+                .renderType("translucent");
         BlockModelBuilder singleOut = models().getBuilder("block/dimcell/singleout" + suffix)
                 .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end().end()
-                .texture("single", modLoc("block/dimcell/dimensionalcellout" + suffix));
+                .texture("single", modLoc("block/dimcell/dimensionalcellout" + suffix))
+                .renderType("translucent");
 
         MultiPartBlockStateBuilder bld = getMultipartBuilder(block);
 

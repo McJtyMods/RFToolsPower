@@ -1,9 +1,26 @@
 {
-  "textures": {
-    "window": "rftoolspower:block/dimcell/dimensionalcellwindows"
-  },
   "elements": [
     {
+      "faces": {
+        "down": {
+          "texture": "#window"
+        },
+        "east": {
+          "texture": "#window"
+        },
+        "north": {
+          "texture": "#window"
+        },
+        "south": {
+          "texture": "#window"
+        },
+        "up": {
+          "texture": "#window"
+        },
+        "west": {
+          "texture": "#window"
+        }
+      },
       "from": [
         0,
         0,
@@ -13,12 +30,14 @@
         1,
         16,
         1
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -27,15 +46,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         15,
         0,
@@ -45,12 +62,14 @@
         16,
         16,
         1
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -59,15 +78,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         0,
         0,
@@ -77,12 +94,14 @@
         1,
         16,
         16
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -91,15 +110,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         15,
         0,
@@ -109,12 +126,14 @@
         16,
         16,
         16
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -123,15 +142,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         1,
         15,
@@ -141,12 +158,14 @@
         15,
         16,
         1
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -155,15 +174,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         1,
         15,
@@ -173,12 +190,14 @@
         15,
         16,
         16
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -187,15 +206,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         0,
         15,
@@ -205,12 +222,14 @@
         1,
         16,
         15
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -219,15 +238,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         15,
         15,
@@ -237,12 +254,14 @@
         16,
         16,
         15
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -251,15 +270,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         1,
         0,
@@ -269,12 +286,14 @@
         15,
         1,
         1
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -283,15 +302,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         1,
         0,
@@ -301,12 +318,14 @@
         15,
         1,
         16
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -315,15 +334,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         0,
         0,
@@ -333,12 +350,14 @@
         1,
         1,
         15
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -347,15 +366,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         15,
         0,
@@ -365,12 +382,14 @@
         16,
         1,
         15
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#window"
         },
-        "up": {
+        "east": {
           "texture": "#window"
         },
         "north": {
@@ -379,15 +398,13 @@
         "south": {
           "texture": "#window"
         },
-        "west": {
+        "up": {
           "texture": "#window"
         },
-        "east": {
+        "west": {
           "texture": "#window"
         }
-      }
-    },
-    {
+      },
       "from": [
         1,
         1,
@@ -397,27 +414,10 @@
         15,
         15,
         15
-      ],
-      "faces": {
-        "down": {
-          "texture": "#window"
-        },
-        "up": {
-          "texture": "#window"
-        },
-        "north": {
-          "texture": "#window"
-        },
-        "south": {
-          "texture": "#window"
-        },
-        "west": {
-          "texture": "#window"
-        },
-        "east": {
-          "texture": "#window"
-        }
-      }
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "window": "rftoolspower:block/dimcell/dimensionalcellwindows"
+  }
 }

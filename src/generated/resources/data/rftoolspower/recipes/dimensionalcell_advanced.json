@@ -1,21 +1,21 @@
 {
   "type": "mcjtylib:copy_nbt",
-  "pattern": [
-    "R*R",
-    "*K*",
-    "R*R"
-  ],
   "key": {
-    "K": {
-      "item": "rftoolspower:dimensionalcell"
-    },
     "*": {
       "item": "rftoolsbase:infused_diamond"
+    },
+    "K": {
+      "item": "rftoolspower:dimensionalcell"
     },
     "R": {
       "item": "minecraft:redstone_block"
     }
   },
+  "pattern": [
+    "R*R",
+    "*K*",
+    "R*R"
+  ],
   "result": {
     "item": "rftoolspower:dimensionalcell_advanced"
   }

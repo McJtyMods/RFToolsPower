@@ -60,7 +60,6 @@ public class EndergenicModule implements IModule {
             ClientCommandHandler.registerCommands();
         });
 
-        ClientSetup.initClient();
         EndergenicRenderer.register();
     }
 

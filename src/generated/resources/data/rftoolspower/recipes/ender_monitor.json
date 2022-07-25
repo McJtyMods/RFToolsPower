@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " o ",
-    "rAr",
-    "TrT"
-  ],
   "key": {
     "A": {
       "item": "rftoolsbase:machine_base"
-    },
-    "r": {
-      "item": "minecraft:redstone"
     },
     "T": {
       "item": "minecraft:redstone_torch"
     },
     "o": {
       "tag": "forge:ender_pearls"
+    },
+    "r": {
+      "item": "minecraft:redstone"
     }
   },
+  "pattern": [
+    " o ",
+    "rAr",
+    "TrT"
+  ],
   "result": {
     "item": "rftoolspower:ender_monitor"
   }

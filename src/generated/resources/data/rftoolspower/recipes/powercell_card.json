@@ -1,10 +1,5 @@
 {
   "type": "mcjtylib:copy_nbt",
-  "pattern": [
-    "rgr",
-    "gpg",
-    "rgr"
-  ],
   "key": {
     "g": {
       "item": "minecraft:gold_nugget"
@@ -16,6 +11,11 @@
       "item": "minecraft:redstone"
     }
   },
+  "pattern": [
+    "rgr",
+    "gpg",
+    "rgr"
+  ],
   "result": {
     "item": "rftoolspower:powercell_card"
   }

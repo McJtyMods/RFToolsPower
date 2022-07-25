@@ -1,11 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "RdR",
-    "PFP",
-    "ReR"
-  ],
   "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
     "P": {
       "item": "minecraft:prismarine_shard"
     },
@@ -17,11 +15,13 @@
     },
     "e": {
       "item": "minecraft:emerald"
-    },
-    "F": {
-      "item": "rftoolsbase:machine_frame"
     }
   },
+  "pattern": [
+    "RdR",
+    "PFP",
+    "ReR"
+  ],
   "result": {
     "item": "rftoolspower:dimensionalcell"
   }
