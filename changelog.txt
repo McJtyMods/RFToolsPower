@@ -1,3 +1,6 @@
+1.19-5.0.0:
+- Port to 1.19
+
 1.18-4.0.5:
 - Fixed a bug with the dimensional cells where you could duplicate power by removing and inserting powercell cards
 
