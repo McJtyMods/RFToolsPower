@@ -2,9 +2,9 @@
   "name": "Dimensional Cell",
   "icon": "rftoolspower:dimensionalcell",
   "category": "rftoolspower:category_rftoolspower_powerstorage",
-  "extra_recipe_mappings":[
-    ["rftoolspower:dimensionalcell_creative",0]
-  ],
+  "extra_recipe_mappings":{
+    "rftoolspower:dimensionalcell_creative": 0
+  },
   "sortnum": 20,
   "pages": [
     {
