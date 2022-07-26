@@ -29,6 +29,7 @@ public class BlockStates extends BaseBlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         BlockModelBuilder dimCellFrame = models().getBuilder("block/dimcell/main");
+        dimCellFrame.renderType("translucent");
         createFrame(dimCellFrame, "#window", 1f);
         innerCube(dimCellFrame, "#window", 1f, 1f, 1f, 15f, 15f, 15f);
         dimCellFrame.texture("window", modLoc("block/dimcell/dimensionalcellwindows"));

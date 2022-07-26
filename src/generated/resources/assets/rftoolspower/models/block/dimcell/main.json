@@ -417,6 +417,7 @@
       ]
     }
   ],
+  "render_type": "minecraft:translucent",
   "textures": {
     "window": "rftoolspower:block/dimcell/dimensionalcellwindows"
   }
