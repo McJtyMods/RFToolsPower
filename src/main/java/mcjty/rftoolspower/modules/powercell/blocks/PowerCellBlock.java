@@ -4,25 +4,26 @@ import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
+import mcjty.lib.varia.NBTTools;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,12 +48,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(),
                         parameter("info", stack -> {
-                            long power = 0;
-                            CompoundTag tagCompound = stack.getTag();
-                            if (tagCompound != null) {
-                                power = tagCompound.getLong("Energy");
-                            }
-
+                            long power = getEnergy(stack);
                             long totpower = 0;
                             if (stack.getItem() == PowerCellModule.CELL1_ITEM.get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
@@ -66,6 +62,10 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                 .tileEntitySupplier((pos, state) -> new PowerCellTileEntity(tier, pos, state)));
     }
 
+    private static long getEnergy(ItemStack stack) {
+        return NBTTools.getInfoNBT(stack, CompoundTag::getLong, "energy", 0L);
+    }
+
     @Override
     public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
@@ -73,7 +73,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
 
             BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity powercell) {
-                long energy = stack.hasTag() ? stack.getTag().getLong("energy") : 0;
+                long energy = getEnergy(stack);
                 powercell.setLocalEnergy(energy);
                 powercell.getNetwork();   // Force a rebuild of the network
                 powercell.markDirtyQuick();
