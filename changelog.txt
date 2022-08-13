@@ -1,3 +1,6 @@
+Upcoming:
+- Powercells would not keep power when broken and the tooltip was wrong
+
 1.19-5.0.0:
 - Port to 1.19
 
