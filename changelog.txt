@@ -1,3 +1,6 @@
+Upcoming:
+- Fix patchouli manual
+
 1.18-4.0.6:
 - Powercells would not keep power when broken and the tooltip was wrong
 
