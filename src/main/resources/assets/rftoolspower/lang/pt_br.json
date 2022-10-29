@@ -1,0 +1,90 @@
+{
+    "item.rftoolspower.power_core1": "Núcleo de potência (baixo)",
+    "item.rftoolspower.power_core2": "Núcleo de potência (médio)",
+    "item.rftoolspower.power_core3": "Núcleo de potência (alto)",
+    "item.rftoolspower.blazing_rod": "Haste ardente",
+    "item.rftoolspower.powercell_card": "powercellCard",
+  
+    "block.rftoolspower.dimensionalcell": "Célula dimensional",
+    "block.rftoolspower.dimensionalcell_simple": "Célula dimensional (simples)",
+    "block.rftoolspower.dimensionalcell_advanced": "Célula dimensional (avançado)",
+    "block.rftoolspower.dimensionalcell_creative": "Célula dimensional (criativa)",
+    "block.rftoolspower.cell1": "Powercell (baixo)",
+    "block.rftoolspower.cell2": "Powercell (médio)",
+    "block.rftoolspower.cell3": "Powercell (alto)",
+    "block.rftoolspower.coalgenerator": "Gerador de carvão",
+    "block.rftoolspower.power_monitor": "Monitor de energia",
+    "block.rftoolspower.power_level": "Nível de poder",
+    "block.rftoolspower.endergenic": "Endergênico",
+    "block.rftoolspower.ender_monitor": "Monitor Ender",
+    "block.rftoolspower.pearl_injector": "Injetor de pérola",
+    "block.rftoolspower.blazing_generator": "Gerador de chamas",
+    "block.rftoolspower.blazing_agitator": "Agitador ardente",
+    "block.rftoolspower.blazing_infuser": "Infusor ardente",
+  
+    "itemGroup.rftoolspower": "RFTools Power",
+  
+    "message.rftoolspower.shiftmessage": "<pressione Shift>",
+  
+    "message.rftoolspower.powercell_card.header": "Use para conectar células dimensionais ",
+    "message.rftoolspower.powercell_card.info": "link: ",
+  
+    "message.rftoolspower.power_core1.header": "Este item é um ingrediente de criação para células de energia",
+    "message.rftoolspower.power_core2.header": "Este item é um ingrediente de criação para células de energia",
+    "message.rftoolspower.power_core3.header": "Este item é um ingrediente de criação para células de energia",
+  
+    "message.rftoolspower.blazing_rod.header": "Este item é produzido pelo agitador ardente e usado no gerador em chamas para gerar energia",
+    "message.rftoolspower.blazing_rod.time": "Tempo: ",
+    "message.rftoolspower.blazing_rod.power": "Poder: ",
+    "message.rftoolspower.blazing_rod.duration": "Duração: ",
+    "message.rftoolspower.blazing_rod.infused": "Infundida: ",
+  
+    "message.rftoolspower.cell1.header": "Esse bloco pode armazenar energia e pode ser combinado com outras células para formar um grande multiblock.Clique com o botão direito do mouse com uma chave para alternar o modo de entrada/saída para um lado",
+    "message.rftoolspower.cell1.info": "Poder: ",
+  
+    "message.rftoolspower.cell2.header": "Esse bloco pode armazenar energia e pode ser combinado com outras células para formar um grande multiblock.Clique com o botão direito do mouse com uma chave para alternar o modo de entrada/saída para um lado",
+    "message.rftoolspower.cell2.info": "Poder: ",
+  
+    "message.rftoolspower.cell3.header": "Esse bloco pode armazenar energia e pode ser combinado com outras células para formar um grande multiblock.Clique com o botão direito do mouse com uma chave para alternar o modo de entrada/saída para um lado",
+    "message.rftoolspower.cell3.info": "Poder: ",
+  
+    "message.rftoolspower.power_monitor.header": "O monitor de energia pode enviar um sinal de Redstone, dependendo da quantidade de energia no bloco de destino",
+  
+    "message.rftoolspower.power_level.header": "O bloco de nível de potência mostra um dígito representando a quantidade de energia em algo.Ele também enviará um sinal de Redstone com a mesma quantidade",
+  
+    "message.rftoolspower.blazing_generator.header": "Gerar energia a partir de hastes de incêndio.Essas barras de chamas precisam ser 'agitadas' primeiro usando o agitador ardente",
+    "message.rftoolspower.blazing_generator.gold": "Bônus infundido: mais geração de energia",
+  
+    "message.rftoolspower.blazing_agitator.header": "Este dispositivo pode 'agitar' hastes de chamas para que sejam utilizáveis para o gerador ardente",
+    "message.rftoolspower.blazing_agitator.gold": "Bônus infundido: Melhores hastes de qualidade de qualidade",
+  
+    "message.rftoolspower.blazing_infuser.header": "Este dispositivo pode infusionar uma haste ardente com fragmentos dimensionais, Redstone ou poeira de glowstone.Isso melhorará a produção de energia e/ou duração da produção de energia quando usado no gerador de chamas",
+  
+    "message.rftoolspower.endergenic.header": "Gerar energia a partir de pérolas de ender.Você precisa de pelo menos dois geradores para que isso funcione e a configuração é relativamente complicada.O tempo é crucial",
+    "message.rftoolspower.endergenic.gold": "Bônus infundido: mais geração de energia e redução do powerloss para segurar pérolas",
+  
+    "message.rftoolspower.ender_monitor.header": "Este bloco pode detectar várias mudanças em um gerador endergênico adjacente e enviar um sinal de Redstone com base nisso",
+  
+    "message.rftoolspower.pearl_injector.header": "Isso injetará uma pérola ender em um gerador endergênico adjacente quando um sinal de Redstone for recebido",
+  
+    "message.rftoolspower.coalgenerator.header": "Esta máquina produz RF/Fe a partir de carvão ou carvão",
+    "message.rftoolspower.coalgenerator.gold": "Bônus infundido: mais geração de energia e dura mais tempo em um único combustível",
+    "message.rftoolspower.coalgenerator.info": "Produção: ",
+  
+    "message.rftoolspower.dimensionalcell.header": "Este bloco pode armazenar energia.Opcionalmente em uma grande estrutura multidimensional",
+    "message.rftoolspower.dimensionalcell.gold": "Bônus de infusão: Custo reduzido de extração de energia de longa distância e aumento da saída de RF/carrapato",
+    "message.rftoolspower.dimensionalcell.info": "Energia: ",
+  
+    "message.rftoolspower.dimensionalcell_advanced.header": "Este bloco pode armazenar energia.Opcionalmente em uma grande estrutura multidimensional",
+    "message.rftoolspower.dimensionalcell_advanced.gold": "Bônus de infusão: Custo reduzido de extração de energia de longa distância e aumento da saída de RF/carrapato",
+    "message.rftoolspower.dimensionalcell_advanced.info": "Energia: ",
+  
+    "message.rftoolspower.dimensionalcell_simple.header": "Este bloco pode armazenar energia.Opcionalmente em uma grande estrutura multidimensional",
+    "message.rftoolspower.dimensionalcell_simple.gold": "Bônus de infusão: Custo reduzido de extração de energia de longa distância e aumento da saída de RF/carrapato",
+    "message.rftoolspower.dimensionalcell_simple.info": "Energia: ",
+  
+    "message.rftoolspower.dimensionalcell_creative.header": "Este bloco pode armazenar energia.Opcionalmente em uma grande estrutura multidimensional",
+    "message.rftoolspower.dimensionalcell_creative.gold": "Bônus de infusão: Custo reduzido de extração de energia de longa distância e aumento da saída de RF/carrapato",
+    "message.rftoolspower.dimensionalcell_creative.info": "Energia: "
+  }
+  
