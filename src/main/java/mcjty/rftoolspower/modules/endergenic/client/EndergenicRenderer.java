@@ -34,7 +34,8 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
     public static final RenderSettings FLASH_SETTINGS = RenderSettings.builder()
             .color(255, 255, 255)
             .alpha(128)
-            .renderType(CustomRenderTypes.TRANSLUCENT_LIGHTNING_NOLIGHTMAPS)
+//            .renderType(CustomRenderTypes.TRANSLUCENT_LIGHTNING_NOLIGHTMAPS)
+            .renderType(CustomRenderTypes.translucent())
             .build();
 
     public EndergenicRenderer(BlockEntityRendererProvider.Context context) {
