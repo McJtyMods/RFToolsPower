@@ -240,6 +240,12 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
+    public AABB getRenderBoundingBox() {
+        return new AABB(worldPosition, worldPosition.offset(1, 2, 1));
+    }
+
+
+    @Override
     public List<String> getClientLog() {
         return clientHudLog;
     }
