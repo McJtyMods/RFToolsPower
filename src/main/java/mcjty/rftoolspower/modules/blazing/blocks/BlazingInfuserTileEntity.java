@@ -92,7 +92,15 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
             ItemStack stack = items.getStackInSlot(SLOT_INPUT);
             if (stack.getItem() == BlazingModule.BLAZING_ROD.get()) {
                 int steps = BlazingRod.getInfusionStepsLeft(stack);
-                if (steps > 0) {
+                if (steps <= 0) {
+                    // Item is finished. We need to move it to the output slot if possible. If we
+                    // come here that means that we failed to insert it to the output slot earlier
+                    // Move the infused blazing rod to the output area if possible
+                    if (items.getStackInSlot(SLOT_OUTPUT).isEmpty()) {
+                        items.setStackInSlot(SLOT_OUTPUT, stack);
+                        items.setStackInSlot(SLOT_INPUT, ItemStack.EMPTY);
+                    }
+                } else {
                     ItemStack catalyst = items.getStackInSlot(SLOT_CATALYST);
                     if (!catalyst.isEmpty()) {
                         if (energyStorage.getEnergy() >= BlazingConfiguration.INFUSER_USE_PER_TICK.get()) {
