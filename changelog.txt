@@ -1,3 +1,6 @@
+1.19-5.0.3:
+- If the blazing infuser has no room to output a new rod it would stop trying and the rod would get stuck
+
 1.19-5.0.2:
 - The endergenic rendering is fixed again. Including the HUD
 
