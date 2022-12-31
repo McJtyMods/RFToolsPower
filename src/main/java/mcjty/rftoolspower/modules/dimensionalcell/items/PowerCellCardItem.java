@@ -34,7 +34,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
 
 
     public PowerCellCardItem() {
-        super(new Properties().tab(RFToolsPower.setup.getTab()));
+        super(RFToolsPower.setup.defaultProperties());
     }
 
     public static void initOverrides(PowerCellCardItem item) {

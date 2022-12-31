@@ -23,7 +23,7 @@ public class PowerCoreItem extends Item implements ITooltipSettings {
             .info(header());
 
     public PowerCoreItem() {
-        super(new Properties().tab(RFToolsPower.setup.getTab()));
+        super(RFToolsPower.setup.defaultProperties());
     }
 
     @Override
