@@ -1,7 +1,6 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
@@ -44,7 +43,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
                             angle -= 360;
                         }
                         te.setCurrentAngle(x, y, angle);
-                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(angle));
+                        RenderHelper.rotateYP(matrixStack, angle);
                         itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer, 0); // @todo 1.18 last parameter?
                         matrixStack.popPose();
                     }
