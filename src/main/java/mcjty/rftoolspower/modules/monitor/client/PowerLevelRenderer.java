@@ -2,7 +2,6 @@ package mcjty.rftoolspower.modules.monitor.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.client.RenderHelper;
 import mcjty.lib.varia.LogicFacing;
@@ -63,10 +62,9 @@ public class PowerLevelRenderer implements BlockEntityRenderer<PowerLevelTileEnt
         }
 
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(DIGITS[level]);
-        Matrix4f matrix = matrixStack.last().pose();
 
         ModelBuilder.FaceRotation rotation = ModelBuilder.FaceRotation.values()[logicFacing.getRotationStep()];
-        RenderHelper.renderNorthSouthQuad(builder, matrix, sprite, rotation, .73f);
+        RenderHelper.renderNorthSouthQuad(matrixStack, builder, sprite, rotation, .73f);
 
         matrixStack.popPose();
     }
