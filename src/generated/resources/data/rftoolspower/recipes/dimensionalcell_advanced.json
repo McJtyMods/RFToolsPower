@@ -1,5 +1,5 @@
 {
-  "type": "mcjtylib:copy_nbt",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "*": {
       "item": "rftoolsbase:infused_diamond"

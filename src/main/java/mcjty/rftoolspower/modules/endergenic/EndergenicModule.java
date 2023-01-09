@@ -3,24 +3,32 @@ package mcjty.rftoolspower.modules.endergenic;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.container.GenericContainer;
+import mcjty.lib.datagen.DataGen;
+import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.client.*;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.model.generators.ModelProvider;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegistryObject;
 
+import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.setup.Registration.*;
 
 public class EndergenicModule implements IModule {
@@ -68,4 +76,36 @@ public class EndergenicModule implements IModule {
         EndergenicConfiguration.setup(Config.SERVER_BUILDER, Config.CLIENT_BUILDER);
     }
 
+    @Override
+    public void initDatagen(DataGen dataGen) {
+        dataGen.add(
+                Dob.blockBuilder(ENDER_MONITOR)
+                        .ironPickaxeTags()
+                        .standardLoot(TYPE_ENDER_MONITOR)
+                        .blockState(p -> p.logicSlabBlock(ENDER_MONITOR.get(), "ender_monitor", p.modLoc("block/endergenic/ender_monitor")))
+                        .shaped(builder -> builder
+                                        .define('A', VariousModule.MACHINE_BASE.get())
+                                        .unlockedBy("frame", has(VariousModule.MACHINE_BASE.get())),
+                                " o ", "rAr", "TrT"),
+                Dob.blockBuilder(PEARL_INJECTOR)
+                        .ironPickaxeTags()
+                        .standardLoot(TYPE_PEARL_INJECTOR)
+                        .blockState(p -> p.orientedBlock(PEARL_INJECTOR.get(), p.frontBasedModel("pearl_injector", p.modLoc("block/endergenic/pearl_injector"))))
+                        .shaped(builder -> builder
+                                        .define('F', VariousModule.MACHINE_FRAME.get())
+                                        .define('C', Tags.Items.CHESTS)
+                                        .define('H', Blocks.HOPPER)
+                                        .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
+                                " C ", "rFr", " H "),
+                Dob.blockBuilder(ENDERGENIC)
+                        .ironPickaxeTags()
+                        .standardLoot(TYPE_ENDERGENIC)
+                        .blockState(p -> p.singleTextureBlockC(ENDERGENIC.get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> builder.renderType("translucent")))
+                        .shaped(builder -> builder
+                                        .define('F', VariousModule.MACHINE_FRAME.get())
+                                        .define('Z', VariousModule.INFUSED_ENDERPEARL.get())
+                                        .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
+                                "dod", "ZFZ", "dod")
+        );
+    }
 }

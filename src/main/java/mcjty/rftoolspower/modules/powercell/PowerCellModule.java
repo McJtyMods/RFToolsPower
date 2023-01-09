@@ -1,6 +1,10 @@
 package mcjty.rftoolspower.modules.powercell;
 
+import mcjty.lib.crafting.CopyNBTRecipeBuilder;
+import mcjty.lib.datagen.DataGen;
+import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.client.ClientSetup;
@@ -8,8 +12,11 @@ import mcjty.rftoolspower.modules.powercell.data.Tier;
 import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,6 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 
+import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.setup.Registration.*;
 
 public class PowerCellModule implements IModule {
@@ -52,11 +60,55 @@ public class PowerCellModule implements IModule {
     }
 
     @Override
-    public void initClient(FMLClientSetupEvent event) { }
+    public void initClient(FMLClientSetupEvent event) {
+    }
 
     @Override
     public void initConfig() {
         PowerCellConfig.setup(Config.SERVER_BUILDER);
     }
 
+    @Override
+    public void initDatagen(DataGen dataGen) {
+        dataGen.add(
+                Dob.blockBuilder(CELL1)
+                        .standardLoot(TYPE_CELL1)
+                        .ironPickaxeTags()
+                        .shaped(builder -> builder
+                                        .define('F', VariousModule.MACHINE_FRAME.get())
+                                        .define('K', POWER_CORE1.get())
+                                        .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), PowerCellModule.POWER_CORE1.get())),
+                                "rKr", "KFK", "rKr"),
+                Dob.blockBuilder(CELL2)
+                        .standardLoot(TYPE_CELL2)
+                        .ironPickaxeTags()
+                        .shapedNBT(builder -> builder
+                                        .define('K', POWER_CORE2.get())
+                                        .define('P', CELL1.get())
+                                        .unlockedBy("cell", has(PowerCellModule.CELL1.get())),
+                                "rKr", "KPK", "rKr"),
+                Dob.blockBuilder(CELL3)
+                        .standardLoot(TYPE_CELL3)
+                        .ironPickaxeTags()
+                        .shapedNBT(builder -> builder
+                                        .define('K', POWER_CORE3.get())
+                                        .define('P', CELL2.get())
+                                        .unlockedBy("cell", has(CELL2.get())),
+                                "rKr", "KPK", "rKr"),
+                Dob.itemBuilder(POWER_CORE1)
+                        .shaped(builder -> builder
+                                        .unlockedBy("core", InventoryChangeTrigger.TriggerInstance.hasItems(Items.DIAMOND, Items.REDSTONE)),
+                                " d ", "rRr", " r "),
+                Dob.itemBuilder(POWER_CORE2)
+                        .shaped(builder -> builder
+                                        .define('s', VariousModule.DIMENSIONALSHARD.get())
+                                        .unlockedBy("core", InventoryChangeTrigger.TriggerInstance.hasItems(Items.EMERALD, Items.REDSTONE, VariousModule.DIMENSIONALSHARD.get())),
+                                "ses", "rRr", "srs"),
+                Dob.itemBuilder(POWER_CORE3)
+                        .shaped(builder -> builder
+                                        .define('s', VariousModule.DIMENSIONALSHARD.get())
+                                        .unlockedBy("core", InventoryChangeTrigger.TriggerInstance.hasItems(Items.EMERALD, Items.DIAMOND, Items.REDSTONE, VariousModule.DIMENSIONALSHARD.get())),
+                                "sds", "rRr", "ses")
+        );
+    }
 }
