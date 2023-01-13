@@ -21,12 +21,13 @@ import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+import static mcjty.rftoolspower.RFToolsPower.tab;
 import static mcjty.rftoolspower.setup.Registration.*;
 
 public class CoalGeneratorModule implements IModule {
 
     public static final RegistryObject<BaseBlock> COALGENERATOR = BLOCKS.register("coalgenerator", CoalGeneratorTileEntity::createBlock);
-    public static final RegistryObject<Item> COALGENERATOR_ITEM = ITEMS.register("coalgenerator", () -> new BlockItem(COALGENERATOR.get(), Registration.createStandardProperties()));
+    public static final RegistryObject<Item> COALGENERATOR_ITEM = ITEMS.register("coalgenerator", tab(() -> new BlockItem(COALGENERATOR.get(), Registration.createStandardProperties())));
     public static final RegistryObject<BlockEntityType<?>> TYPE_COALGENERATOR = TILES.register("coalgenerator", () -> BlockEntityType.Builder.of(CoalGeneratorTileEntity::new, COALGENERATOR.get()).build(null));
     public static final RegistryObject<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 

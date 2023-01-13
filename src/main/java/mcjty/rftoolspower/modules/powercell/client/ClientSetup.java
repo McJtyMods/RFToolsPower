@@ -8,28 +8,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import java.util.List;
+
 public class ClientSetup {
 
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-            return;
-        }
-
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellhoriz_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t1"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t2"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t3"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/inputmask"));
-        event.addSprite(new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask"));
+    public static List<ResourceLocation> onTextureStitch() {
+        return List.of(
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t1"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellhoriz_t1"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t1"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t1"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t1"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t2"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t2"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t2"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t2"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellboth_t3"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/celllower_t3"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellmiddle_t3"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/cellupper_t3"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/inputmask"),
+            new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask")
+        );
     }
 
     public static void onModelBake(ModelEvent.BakingCompleted event) {

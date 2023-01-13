@@ -11,12 +11,15 @@ import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.ModSetup;
 import mcjty.rftoolspower.setup.Registration;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.function.Supplier;
 
 @Mod(RFToolsPower.MODID)
 public class RFToolsPower {
@@ -46,12 +49,16 @@ public class RFToolsPower {
         });
     }
 
+    public static <T extends Item> Supplier<T> tab(Supplier<T> supplier) {
+        instance.setup.tab(supplier);
+        return supplier;
+    }
+
     private void onDataGen(GatherDataEvent event) {
         DataGen datagen = new DataGen(MODID, event);
         modules.datagen(datagen);
         datagen.generate();
     }
-
 
     private void setupModules() {
         modules.register(new BlazingModule());
