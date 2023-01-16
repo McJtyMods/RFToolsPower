@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.powercell;
 
-import mcjty.lib.crafting.CopyNBTRecipeBuilder;
+import mcjty.lib.client.ModelTools;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
@@ -14,7 +14,6 @@ import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -53,7 +52,7 @@ public class PowerCellModule implements IModule {
     public PowerCellModule() {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-            bus.addListener(ClientSetup::onModelBake);
+            ModelTools.registerModelBakeEvent(ClientSetup::onModelBake);
             ClientTools.onTextureStitch(bus, ClientSetup::onTextureStitch);
         });
     }
