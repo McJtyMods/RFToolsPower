@@ -1,3 +1,6 @@
+Upcoming:
+- Updated to Latest McJtyLib and made compatible with 1.19.3
+
 1.19-5.0.3:
 - If the blazing infuser has no room to output a new rod it would stop trying and the rod would get stuck
 
