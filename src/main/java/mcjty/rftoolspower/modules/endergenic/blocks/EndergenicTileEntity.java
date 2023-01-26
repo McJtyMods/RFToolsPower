@@ -763,7 +763,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     @Override
     public boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (world.isClientSide) {
-            SoundEvent pling = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note.pling"));
+            SoundEvent pling = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note_block.pling"));
             world.playSound(player, pos, pling, SoundSource.BLOCKS, 1.0f, 1.0f);
             useWrenchClient(player);
         }
