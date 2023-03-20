@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -44,7 +45,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
                         }
                         te.setCurrentAngle(x, y, angle);
                         RenderHelper.rotateYP(matrixStack, angle);
-                        itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer, 0); // @todo 1.18 last parameter?
+                        itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, RenderHelper.MAX_BRIGHTNESS, combinedOverlay, matrixStack, buffer, Minecraft.getInstance().level, 0); // @todo 1.18 last parameter?
                         matrixStack.popPose();
                     }
                 }

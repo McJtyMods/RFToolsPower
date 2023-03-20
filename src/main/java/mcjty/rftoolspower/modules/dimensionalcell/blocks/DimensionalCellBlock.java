@@ -192,7 +192,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
         Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
         List<ItemStack> drops = super.getDrops(state, builder);
         if (!world.isClientSide) {
-            BlockEntity te = world.getBlockEntity(new BlockPos(pos.x, pos.y, pos.z));
+            BlockEntity te = world.getBlockEntity(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z));
             if (te instanceof DimensionalCellTileEntity) {
                 DimensionalCellNetwork.Network network = ((DimensionalCellTileEntity) te).getNetwork();
                 if (network != null) {
