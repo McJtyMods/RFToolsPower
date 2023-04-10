@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
@@ -280,7 +280,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
                 Direction opposite = face.getOpposite();
                 if (te != null) {
                     // @todo tesla
-                    te.getCapability(CapabilityEnergy.ENERGY, opposite).ifPresent(e -> {
+                    te.getCapability(ForgeCapabilities.ENERGY, opposite).ifPresent(e -> {
                         if (!(te instanceof PowerCellTileEntity)) {
                             long rfPerTick = getRfPerTickReal();
                             long rfToGive = Math.min(rfPerTick, stored[0]);
@@ -492,7 +492,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     @Nonnull
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
+        if (capability == ForgeCapabilities.ENERGY) {
             if (facing == null) {
                 return nullStorage.cast();
             } else {

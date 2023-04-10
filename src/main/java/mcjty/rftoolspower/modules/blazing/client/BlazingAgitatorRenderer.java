@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import javax.annotation.Nonnull;
 
@@ -23,7 +23,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
     @Override
     public void render(BlazingAgitatorTileEntity te, float v, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
 
-        te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+        te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
             matrixStack.pushPose();
 
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
