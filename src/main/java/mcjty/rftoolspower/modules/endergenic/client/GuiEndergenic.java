@@ -11,6 +11,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 
@@ -63,9 +64,9 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrixStack, float v, int i, int i2) {
+    protected void renderBg(@Nonnull GuiGraphics graphics, float v, int i, int i2) {
         updateFields();
-        drawWindow(matrixStack);
+        drawWindow(graphics);
         checkStats();
     }
 

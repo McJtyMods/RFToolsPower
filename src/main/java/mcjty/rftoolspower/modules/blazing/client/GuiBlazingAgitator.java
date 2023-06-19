@@ -10,6 +10,7 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import mcjty.rftoolspower.setup.RFToolsPowerMessages;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 
@@ -57,8 +58,8 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         updateFields();
-        drawWindow(matrixStack);
+        drawWindow(graphics);
     }
 }

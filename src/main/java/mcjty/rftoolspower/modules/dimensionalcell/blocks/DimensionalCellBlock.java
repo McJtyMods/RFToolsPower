@@ -29,8 +29,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -76,7 +76,7 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
 
     public DimensionalCellBlock(DimensionalCellType type, BlockEntityType.BlockEntitySupplier<BlockEntity> supplier) {
         super(new BlockBuilder()
-                .properties(BlockBehaviour.Properties.of(Material.METAL)
+                .properties(BlockBehaviour.Properties.of()
                         .strength(2.0f)
                         .sound(SoundType.METAL)
                         .isRedstoneConductor((state, world, pos) -> false)
@@ -183,10 +183,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     // @todo 1.14 is this the right way? Perhaps not
-    @SuppressWarnings("deprecation")
     @Override
-    @Nonnull
-    public List<ItemStack> getDrops(@Nonnull BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         System.out.println("DimensionalCellBlock.getDrops");
         Level world = builder.getLevel();
         Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);

@@ -30,7 +30,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -92,7 +91,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
 
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder().properties(
-                BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).sound(SoundType.METAL))
+                BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"))
