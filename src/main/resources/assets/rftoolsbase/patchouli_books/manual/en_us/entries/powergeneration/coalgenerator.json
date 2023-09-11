@@ -1,7 +1,7 @@
 {
   "name": "Coal Generator",
   "icon": "rftoolspower:coalgenerator",
-  "category": "rftoolspower:category_rftoolspower_powergeneration",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
   "sortnum": 10,
   "pages": [
     {

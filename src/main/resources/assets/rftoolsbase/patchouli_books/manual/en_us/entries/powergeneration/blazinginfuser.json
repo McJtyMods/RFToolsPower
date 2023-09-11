@@ -1,7 +1,7 @@
 {
   "name": "Blazing Infuser",
   "icon": "rftoolspower:blazing_infuser",
-  "category": "rftoolspower:category_rftoolspower_powergeneration",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
   "sortnum": 26,
   "pages": [
     {

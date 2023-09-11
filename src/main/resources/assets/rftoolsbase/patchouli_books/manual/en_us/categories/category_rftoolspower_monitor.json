@@ -1,7 +1,7 @@
 {
   "name": "Power Monitoring",
   "description": "Solutions for monitoring power",
-  "parent": "rftoolspower:category_rftoolspower",
+  "parent": "rftoolsbase:category_rftoolspower",
   "icon": "rftoolspower:power_monitor",
   "sortnum": 30
 }

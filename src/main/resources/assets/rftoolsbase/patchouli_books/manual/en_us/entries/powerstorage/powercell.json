@@ -1,7 +1,7 @@
 {
   "name": "Powercell",
   "icon": "rftoolspower:cell1",
-  "category": "rftoolspower:category_rftoolspower_powerstorage",
+  "category": "rftoolsbase:category_rftoolspower_powerstorage",
   "sortnum": 10,
   "pages": [
     {

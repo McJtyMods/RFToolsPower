@@ -1,7 +1,7 @@
 {
   "name": "Dimensional Cell",
   "icon": "rftoolspower:dimensionalcell",
-  "category": "rftoolspower:category_rftoolspower_powerstorage",
+  "category": "rftoolsbase:category_rftoolspower_powerstorage",
   "extra_recipe_mappings":{
     "rftoolspower:dimensionalcell_creative": 0
   },

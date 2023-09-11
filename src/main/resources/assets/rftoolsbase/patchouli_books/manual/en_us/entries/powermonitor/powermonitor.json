@@ -1,7 +1,7 @@
 {
   "name": "Power Monitor",
   "icon": "rftoolspower:power_monitor",
-  "category": "rftoolspower:category_rftoolspower_monitor",
+  "category": "rftoolsbase:category_rftoolspower_monitor",
   "sortnum": 10,
   "pages": [
     {

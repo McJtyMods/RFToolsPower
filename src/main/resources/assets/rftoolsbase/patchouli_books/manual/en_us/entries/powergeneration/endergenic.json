@@ -1,7 +1,7 @@
 {
   "name": "Endergenic Generator",
   "icon": "rftoolspower:endergenic",
-  "category": "rftoolspower:category_rftoolspower_powergeneration",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
   "sortnum": 30,
   "pages": [
     {

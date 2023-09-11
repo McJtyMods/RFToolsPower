@@ -1,7 +1,7 @@
 {
   "name": "Power Level",
   "icon": "rftoolspower:power_level",
-  "category": "rftoolspower:category_rftoolspower_monitor",
+  "category": "rftoolsbase:category_rftoolspower_monitor",
   "sortnum": 20,
   "pages": [
     {

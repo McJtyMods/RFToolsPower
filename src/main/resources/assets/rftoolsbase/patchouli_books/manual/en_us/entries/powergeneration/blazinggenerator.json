@@ -1,7 +1,7 @@
 {
   "name": "Blazing Generator",
   "icon": "rftoolspower:blazing_generator",
-  "category": "rftoolspower:category_rftoolspower_powergeneration",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
   "sortnum": 20,
   "pages": [
     {
