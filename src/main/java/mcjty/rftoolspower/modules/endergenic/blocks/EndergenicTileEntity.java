@@ -488,14 +488,13 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (level != null) {
             level.getEntitiesOfClass(Player.class, new AABB(worldPosition).inflate(32),
                     p -> worldPosition.distToCenterSqr(p.getX(), p.getY(), p.getZ()) < 32 * 32)
-                    .forEach(p -> RFToolsPowerMessages.INSTANCE.sendTo(
-                            new PacketSendClientCommand(RFToolsPower.MODID, ClientCommandHandler.CMD_FLASH_ENDERGENIC,
+                    .forEach(p -> RFToolsPowerMessages.sendToPlayer(
+                            PacketSendClientCommand.create(RFToolsPower.MODID, ClientCommandHandler.CMD_FLASH_ENDERGENIC,
                                     TypedMap.builder()
                                             .put(ClientCommandHandler.PARAM_POS, getBlockPos())
                                             .put(ClientCommandHandler.PARAM_GOODCOUNTER, goodCounter)
                                             .put(ClientCommandHandler.PARAM_BADCOUNTER, badCounter)
-                                            .build()),
-                            ((ServerPlayer) p).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
+                                            .build()), p));
         }
     }
 
@@ -679,10 +678,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
         if (level.isClientSide) {
             // We're on the client. Send change to server.
-            PacketServerCommandTyped packet = new PacketServerCommandTyped(getBlockPos(), getDimension(), CMD_SETDESTINATION.name(), TypedMap.builder()
+            PacketServerCommandTyped packet = PacketServerCommandTyped.create(getBlockPos(), getDimension(), CMD_SETDESTINATION.name(), TypedMap.builder()
                     .put(PARAM_DESTINATION, destination)
                     .build());
-            RFToolsPowerMessages.INSTANCE.sendToServer(packet);
+            RFToolsPowerMessages.sendToServer(packet);
         }
     }
 

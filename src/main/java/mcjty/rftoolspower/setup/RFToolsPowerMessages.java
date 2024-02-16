@@ -1,11 +1,14 @@
 package mcjty.rftoolspower.setup;
 
-import mcjty.lib.network.*;
+import mcjty.lib.network.PacketHandler;
+import mcjty.lib.network.PacketRequestDataFromServer;
+import mcjty.lib.network.PacketSendClientCommand;
+import mcjty.lib.network.PacketSendServerCommand;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -25,7 +28,7 @@ public class RFToolsPowerMessages {
 
         INSTANCE = net;
 
-        net.registerMessage(id(), PacketRequestDataFromServer.class, PacketRequestDataFromServer::toBytes, PacketRequestDataFromServer::new, new ChannelBoundHandler<>(net, PacketRequestDataFromServer::handle));
+        PacketRequestDataFromServer.register(net, id());
 
         PacketHandler.registerStandardMessages(id(), net);
     }
@@ -49,5 +52,13 @@ public class RFToolsPowerMessages {
 
     public static void sendToClient(Player player, String command) {
         INSTANCE.sendTo(new PacketSendClientCommand(RFToolsPower.MODID, command, TypedMap.EMPTY), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    }
+
+    public static <T> void sendToPlayer(T packet, Player player) {
+        INSTANCE.sendTo(packet, ((ServerPlayer)player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    }
+
+    public static <T> void sendToServer(T packet) {
+        INSTANCE.sendToServer(packet);
     }
 }

@@ -5,6 +5,8 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.lib.setup.DeferredBlock;
+import mcjty.lib.setup.DeferredItem;
 import mcjty.lib.varia.ClientTools;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerLevelTileEntity;
@@ -29,6 +31,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.RFToolsPower.tab;
@@ -36,14 +39,14 @@ import static mcjty.rftoolspower.setup.Registration.*;
 
 public class MonitorModule implements IModule {
 
-    public static final RegistryObject<LogicSlabBlock> POWER_MONITOR = BLOCKS.register("power_monitor", PowerMonitorTileEntity::createBlock);
-    public static final RegistryObject<Item> POWER_MONITOR_ITEM = ITEMS.register("power_monitor", tab(() -> new BlockItem(POWER_MONITOR.get(), Registration.createStandardProperties())));
-    public static final RegistryObject<BlockEntityType<?>> TYPE_POWER_MONITOR = TILES.register("power_monitor", () -> BlockEntityType.Builder.of(PowerMonitorTileEntity::new, POWER_MONITOR.get()).build(null));
-    public static final RegistryObject<MenuType<GenericContainer>> CONTAINER_POWER_MONITOR = CONTAINERS.register("power_monitor", GenericContainer::createContainerType);
+    public static final DeferredBlock<LogicSlabBlock> POWER_MONITOR = BLOCKS.register("power_monitor", PowerMonitorTileEntity::createBlock);
+    public static final DeferredItem<Item> POWER_MONITOR_ITEM = ITEMS.register("power_monitor", tab(() -> new BlockItem(POWER_MONITOR.get(), Registration.createStandardProperties())));
+    public static final Supplier<BlockEntityType<?>> TYPE_POWER_MONITOR = TILES.register("power_monitor", () -> BlockEntityType.Builder.of(PowerMonitorTileEntity::new, POWER_MONITOR.get()).build(null));
+    public static final Supplier<MenuType<GenericContainer>> CONTAINER_POWER_MONITOR = CONTAINERS.register("power_monitor", GenericContainer::createContainerType);
 
-    public static final RegistryObject<LogicSlabBlock> POWER_LEVEL = BLOCKS.register("power_level", PowerLevelTileEntity::createBlock);
-    public static final RegistryObject<Item> POWER_LEVEL_ITEM = ITEMS.register("power_level", tab(() -> new BlockItem(POWER_LEVEL.get(), Registration.createStandardProperties())));
-    public static final RegistryObject<BlockEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> BlockEntityType.Builder.of(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
+    public static final DeferredBlock<LogicSlabBlock> POWER_LEVEL = BLOCKS.register("power_level", PowerLevelTileEntity::createBlock);
+    public static final DeferredItem<Item> POWER_LEVEL_ITEM = ITEMS.register("power_level", tab(() -> new BlockItem(POWER_LEVEL.get(), Registration.createStandardProperties())));
+    public static final Supplier<BlockEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> BlockEntityType.Builder.of(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
 
     public MonitorModule() {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

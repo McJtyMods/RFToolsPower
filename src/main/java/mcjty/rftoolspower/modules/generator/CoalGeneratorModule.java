@@ -5,6 +5,8 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.lib.setup.DeferredBlock;
+import mcjty.lib.setup.DeferredItem;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
@@ -21,15 +23,17 @@ import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+import java.util.function.Supplier;
+
 import static mcjty.rftoolspower.RFToolsPower.tab;
 import static mcjty.rftoolspower.setup.Registration.*;
 
 public class CoalGeneratorModule implements IModule {
 
-    public static final RegistryObject<BaseBlock> COALGENERATOR = BLOCKS.register("coalgenerator", CoalGeneratorTileEntity::createBlock);
-    public static final RegistryObject<Item> COALGENERATOR_ITEM = ITEMS.register("coalgenerator", tab(() -> new BlockItem(COALGENERATOR.get(), Registration.createStandardProperties())));
-    public static final RegistryObject<BlockEntityType<?>> TYPE_COALGENERATOR = TILES.register("coalgenerator", () -> BlockEntityType.Builder.of(CoalGeneratorTileEntity::new, COALGENERATOR.get()).build(null));
-    public static final RegistryObject<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
+    public static final DeferredBlock<BaseBlock> COALGENERATOR = BLOCKS.register("coalgenerator", CoalGeneratorTileEntity::createBlock);
+    public static final DeferredItem<Item> COALGENERATOR_ITEM = ITEMS.register("coalgenerator", tab(() -> new BlockItem(COALGENERATOR.get(), Registration.createStandardProperties())));
+    public static final Supplier<BlockEntityType<?>> TYPE_COALGENERATOR = TILES.register("coalgenerator", () -> BlockEntityType.Builder.of(CoalGeneratorTileEntity::new, COALGENERATOR.get()).build(null));
+    public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 
     @Override
     public void init(FMLCommonSetupEvent event) {
