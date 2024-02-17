@@ -8,12 +8,14 @@ import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.DeferredBlock;
 import mcjty.lib.setup.DeferredItem;
-import mcjty.lib.varia.ClientTools;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
-import mcjty.rftoolspower.modules.endergenic.client.*;
+import mcjty.rftoolspower.modules.endergenic.client.EndergenicRenderer;
+import mcjty.rftoolspower.modules.endergenic.client.GuiEnderMonitor;
+import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
+import mcjty.rftoolspower.modules.endergenic.client.GuiPearlInjector;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.world.inventory.MenuType;
@@ -52,9 +54,6 @@ public class EndergenicModule implements IModule {
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 
     public EndergenicModule(IEventBus bus, Dist dist) {
-        if (dist.isClient()) {
-            ClientTools.onTextureStitch(bus, ClientSetup::onTextureStitch);
-        }
     }
 
     @Override

@@ -7,7 +7,6 @@ import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.DeferredBlock;
 import mcjty.lib.setup.DeferredItem;
-import mcjty.lib.varia.ClientTools;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerLevelTileEntity;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
@@ -47,9 +46,6 @@ public class MonitorModule implements IModule {
     public static final Supplier<BlockEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> BlockEntityType.Builder.of(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
 
     public MonitorModule(IEventBus bus, Dist dist) {
-        if (dist.isClient()) {
-            ClientTools.onTextureStitch(bus, MonitorModule::onTextureStitch);
-        }
     }
 
     @Override

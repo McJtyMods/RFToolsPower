@@ -6,7 +6,6 @@ import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.DeferredBlock;
 import mcjty.lib.setup.DeferredItem;
-import mcjty.lib.varia.ClientTools;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
@@ -53,7 +52,6 @@ public class PowerCellModule implements IModule {
     public PowerCellModule(IEventBus bus, Dist dist) {
         if (dist.isClient()) {
             ModelTools.registerModelBakeEvent(bus, ClientSetup::onModelBake);
-            ClientTools.onTextureStitch(bus, ClientSetup::onTextureStitch);
         }
     }
 
