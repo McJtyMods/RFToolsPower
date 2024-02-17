@@ -23,11 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -53,12 +50,11 @@ public class PowerCellModule implements IModule {
     public static final DeferredItem<Item> POWER_CORE2 = ITEMS.register("power_core2", tab(PowerCoreItem::new));
     public static final DeferredItem<Item> POWER_CORE3 = ITEMS.register("power_core3", tab(PowerCoreItem::new));
 
-    public PowerCellModule() {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-            ModelTools.registerModelBakeEvent(ClientSetup::onModelBake);
+    public PowerCellModule(IEventBus bus, Dist dist) {
+        if (dist.isClient()) {
+            ModelTools.registerModelBakeEvent(bus, ClientSetup::onModelBake);
             ClientTools.onTextureStitch(bus, ClientSetup::onTextureStitch);
-        });
+        }
     }
 
     @Override
@@ -71,7 +67,7 @@ public class PowerCellModule implements IModule {
     }
 
     @Override
-    public void initConfig() {
+    public void initConfig(IEventBus bus) {
         PowerCellConfig.setup(Config.SERVER_BUILDER);
     }
 

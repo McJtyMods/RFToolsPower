@@ -2,6 +2,7 @@ package mcjty.rftoolspower.setup;
 
 import mcjty.lib.modules.Modules;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -15,11 +16,11 @@ public class Config {
     public static ForgeConfigSpec SERVER_CONFIG;
     public static ForgeConfigSpec CLIENT_CONFIG;
 
-    public static void register(Modules modules) {
+    public static void register(IEventBus bus, Modules modules) {
         SERVER_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
         CLIENT_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
 
-        modules.initConfig();
+        modules.initConfig(bus);
 
         SERVER_BUILDER.pop();
         CLIENT_BUILDER.pop();

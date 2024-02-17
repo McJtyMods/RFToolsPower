@@ -16,7 +16,6 @@ import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.client.*;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -25,11 +24,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -54,10 +51,10 @@ public class EndergenicModule implements IModule {
     public static final Supplier<BlockEntityType<EndergenicTileEntity>> TYPE_ENDERGENIC = TILES.register("endergenic", () -> BlockEntityType.Builder.of(EndergenicTileEntity::new, ENDERGENIC.get()).build(null));
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 
-    public EndergenicModule() {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ClientTools.onTextureStitch(FMLJavaModLoadingContext.get().getModEventBus(), ClientSetup::onTextureStitch);
-        });
+    public EndergenicModule(IEventBus bus, Dist dist) {
+        if (dist.isClient()) {
+            ClientTools.onTextureStitch(bus, ClientSetup::onTextureStitch);
+        }
     }
 
     @Override
@@ -78,7 +75,7 @@ public class EndergenicModule implements IModule {
     }
 
     @Override
-    public void initConfig() {
+    public void initConfig(IEventBus bus) {
         EndergenicConfiguration.setup(Config.SERVER_BUILDER, Config.CLIENT_BUILDER);
     }
 

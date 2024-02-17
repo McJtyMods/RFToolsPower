@@ -23,11 +23,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,10 +46,10 @@ public class MonitorModule implements IModule {
     public static final DeferredItem<Item> POWER_LEVEL_ITEM = ITEMS.register("power_level", tab(() -> new BlockItem(POWER_LEVEL.get(), Registration.createStandardProperties())));
     public static final Supplier<BlockEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> BlockEntityType.Builder.of(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
 
-    public MonitorModule() {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ClientTools.onTextureStitch(FMLJavaModLoadingContext.get().getModEventBus(), MonitorModule::onTextureStitch);
-        });
+    public MonitorModule(IEventBus bus, Dist dist) {
+        if (dist.isClient()) {
+            ClientTools.onTextureStitch(bus, MonitorModule::onTextureStitch);
+        }
     }
 
     @Override
@@ -69,7 +67,7 @@ public class MonitorModule implements IModule {
     }
 
     @Override
-    public void initConfig() {
+    public void initConfig(IEventBus bus) {
 
     }
 

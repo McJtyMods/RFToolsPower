@@ -15,7 +15,6 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -38,10 +37,10 @@ public class RFToolsPower {
         Dist dist = FMLEnvironment.dist;
 
         instance = this;
-        setupModules();
+        setupModules(bus, dist);
 
-        Config.register(modules);
-        Registration.register();
+        Config.register(bus, modules);
+        Registration.register(bus);
 
         bus.addListener(setup::init);
         bus.addListener(modules::init);
@@ -62,12 +61,12 @@ public class RFToolsPower {
         datagen.generate();
     }
 
-    private void setupModules() {
+    private void setupModules(IEventBus bus, Dist dist) {
         modules.register(new BlazingModule());
         modules.register(new DimensionalCellModule());
-        modules.register(new EndergenicModule());
+        modules.register(new EndergenicModule(bus, dist));
         modules.register(new CoalGeneratorModule());
-        modules.register(new MonitorModule());
-        modules.register(new PowerCellModule());
+        modules.register(new MonitorModule(bus, dist));
+        modules.register(new PowerCellModule(bus, dist));
     }
 }
