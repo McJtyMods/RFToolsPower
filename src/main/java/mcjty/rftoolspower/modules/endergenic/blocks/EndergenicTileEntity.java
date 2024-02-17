@@ -17,10 +17,7 @@ import mcjty.lib.tileentity.*;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
-import mcjty.lib.varia.BlockPosTools;
-import mcjty.lib.varia.EnergyTools;
-import mcjty.lib.varia.Logging;
-import mcjty.lib.varia.OrientationTools;
+import mcjty.lib.varia.*;
 import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.api.client.IHudSupport;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
@@ -42,7 +39,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -58,8 +54,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -761,7 +755,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     @Override
     public boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (world.isClientSide) {
-            SoundEvent pling = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note_block.pling"));
+            SoundEvent pling = Tools.getSound(new ResourceLocation("block.note_block.pling"));
             world.playSound(player, pos, pling, SoundSource.BLOCKS, 1.0f, 1.0f);
             useWrenchClient(player);
         }
