@@ -1,6 +1,7 @@
 package mcjty.rftoolspower.modules.dimensionalcell.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import mcjty.lib.McJtyLib;
+import mcjty.lib.blockcommands.ICommand;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -8,15 +9,15 @@ import mcjty.lib.gui.widgets.Button;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.Label;
 import mcjty.lib.gui.widgets.Panel;
+import mcjty.lib.network.PacketRequestDataFromServer;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
@@ -73,10 +74,10 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         window = new Window(this, toplevel);
 
-        window.action(RFToolsPowerMessages.INSTANCE, "allnone", tileEntity, DimensionalCellTileEntity.ACTION_SETNONE);
-        window.action(RFToolsPowerMessages.INSTANCE, "allinput", tileEntity, DimensionalCellTileEntity.ACTION_SETINPUT);
-        window.action(RFToolsPowerMessages.INSTANCE, "alloutput", tileEntity, DimensionalCellTileEntity.ACTION_SETOUTPUT);
-        window.action(RFToolsPowerMessages.INSTANCE, "clearstats", tileEntity, DimensionalCellTileEntity.ACTION_CLEARSTATS);
+        window.action("allnone", tileEntity, DimensionalCellTileEntity.ACTION_SETNONE);
+        window.action("allinput", tileEntity, DimensionalCellTileEntity.ACTION_SETINPUT);
+        window.action("alloutput", tileEntity, DimensionalCellTileEntity.ACTION_SETOUTPUT);
+        window.action("clearstats", tileEntity, DimensionalCellTileEntity.ACTION_CLEARSTATS);
 
         requestRF();
     }
@@ -84,7 +85,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private void requestRF() {
         if (System.currentTimeMillis() - lastTime > 250) {
             lastTime = System.currentTimeMillis();
-            tileEntity.requestDataFromServer(RFToolsPowerMessages.INSTANCE, DimensionalCellTileEntity.CMD_GET_INFO, TypedMap.EMPTY);
+            McJtyLib.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
         }
     }
 

@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -8,10 +7,9 @@ import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingInfuserTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
@@ -29,7 +27,7 @@ public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEnt
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_infuser.gui"));
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_infuser.gui"));
         super.init();
         initializeFields();
     }

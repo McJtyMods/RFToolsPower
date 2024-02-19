@@ -1,5 +1,6 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
+import mcjty.lib.McJtyLib;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
@@ -675,7 +676,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
             PacketServerCommandTyped packet = PacketServerCommandTyped.create(getBlockPos(), getDimension(), CMD_SETDESTINATION.name(), TypedMap.builder()
                     .put(PARAM_DESTINATION, destination)
                     .build());
-            RFToolsPowerMessages.sendToServer(packet);
+            McJtyLib.sendToServer(packet);
         }
     }
 

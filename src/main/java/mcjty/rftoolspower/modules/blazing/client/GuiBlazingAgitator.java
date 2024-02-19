@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -9,10 +8,9 @@ import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +28,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
         super.init();
         initializeFields();
         setupEvents();
@@ -45,7 +43,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
         for (int x = 0 ; x < 3 ; x++) {
             for (int y = 0 ; y < 3 ; y++) {
                 String channel = "lock" + x + "" + y;
-                window.bind(RFToolsPowerMessages.INSTANCE, channel, tileEntity, channel);
+                window.bind(channel, tileEntity, channel);
             }
         }
     }

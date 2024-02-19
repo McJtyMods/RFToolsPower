@@ -32,7 +32,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_generator.gui"));
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_generator.gui"));
         super.init();
         initializeFields();
     }

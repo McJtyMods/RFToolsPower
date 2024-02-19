@@ -1,19 +1,20 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import mcjty.lib.McJtyLib;
+import mcjty.lib.blockcommands.ICommand;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.TextField;
+import mcjty.lib.network.PacketRequestDataFromServer;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
@@ -37,7 +38,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/endergenic.gui"));
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/endergenic.gui"));
         super.init();
 
         initializeFields();
@@ -74,7 +75,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         timer--;
         if (timer <= 0) {
             timer = 20;
-            tileEntity.requestDataFromServer(RFToolsPowerMessages.INSTANCE, EndergenicTileEntity.CMD_GETSTATS, TypedMap.EMPTY);
+            McJtyLib.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) EndergenicTileEntity.CMD_GETSTATS).name(), TypedMap.EMPTY, false));
         }
         updateEnergyBar(energyBar);
     }

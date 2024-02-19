@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.generator.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
@@ -9,10 +8,9 @@ import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +28,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/coalgenerator.gui"));
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/coalgenerator.gui"));
         super.init();
 
         initializeFields();

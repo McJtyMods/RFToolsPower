@@ -9,7 +9,6 @@ import mcjty.lib.gui.widgets.Slider;
 import mcjty.lib.gui.widgets.Widgets;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.awt.*;
@@ -45,7 +44,7 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         toplevel.setBounds(new Rectangle(leftPos, topPos, imageWidth, imageHeight));
         window = new Window(this, toplevel);
 
-        window.bind(RFToolsPowerMessages.INSTANCE, "minimum", tileEntity, "minimum");
-        window.bind(RFToolsPowerMessages.INSTANCE, "maximum", tileEntity, "maximum");
+        window.bind("minimum", tileEntity, "minimum");
+        window.bind("maximum", tileEntity, "maximum");
     }
 }

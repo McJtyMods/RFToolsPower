@@ -6,9 +6,8 @@ import mcjty.lib.gui.Window;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
 
@@ -22,7 +21,7 @@ public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntit
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, RFToolsPowerMessages.INSTANCE, new ResourceLocation(RFToolsPower.MODID, "gui/pearl_injector.gui"));
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/pearl_injector.gui"));
         super.init();
     }
 }
