@@ -11,8 +11,6 @@ public class ModSetup extends DefaultModSetup {
     @Override
     public void init(FMLCommonSetupEvent e) {
         super.init(e);
-
-        RFToolsPowerMessages.registerMessages("rftoolspower");
     }
 
     @Override

@@ -1,12 +1,12 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.blockcommands.ICommand;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
 import mcjty.lib.gui.Window;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.TextField;
+import mcjty.lib.network.Networking;
 import mcjty.lib.network.PacketRequestDataFromServer;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
@@ -75,7 +75,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         timer--;
         if (timer <= 0) {
             timer = 20;
-            McJtyLib.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) EndergenicTileEntity.CMD_GETSTATS).name(), TypedMap.EMPTY, false));
+            Networking.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) EndergenicTileEntity.CMD_GETSTATS).name(), TypedMap.EMPTY, false));
         }
         updateEnergyBar(energyBar);
     }

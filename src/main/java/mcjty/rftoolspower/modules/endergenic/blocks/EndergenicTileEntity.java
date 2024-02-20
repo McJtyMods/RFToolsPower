@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.endergenic.blocks;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
@@ -12,6 +11,7 @@ import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.GenericContainer;
+import mcjty.lib.network.Networking;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketServerCommandTyped;
 import mcjty.lib.tileentity.*;
@@ -32,7 +32,6 @@ import mcjty.rftoolspower.modules.endergenic.EndergenicConfiguration;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
-import mcjty.rftoolspower.setup.RFToolsPowerMessages;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -483,7 +482,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (level != null) {
             level.getEntitiesOfClass(Player.class, new AABB(worldPosition).inflate(32),
                     p -> worldPosition.distToCenterSqr(p.getX(), p.getY(), p.getZ()) < 32 * 32)
-                    .forEach(p -> RFToolsPowerMessages.sendToPlayer(
+                    .forEach(p -> Networking.sendToPlayer(
                             PacketSendClientCommand.create(RFToolsPower.MODID, ClientCommandHandler.CMD_FLASH_ENDERGENIC,
                                     TypedMap.builder()
                                             .put(ClientCommandHandler.PARAM_POS, getBlockPos())
@@ -676,7 +675,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
             PacketServerCommandTyped packet = PacketServerCommandTyped.create(getBlockPos(), getDimension(), CMD_SETDESTINATION.name(), TypedMap.builder()
                     .put(PARAM_DESTINATION, destination)
                     .build());
-            McJtyLib.sendToServer(packet);
+            Networking.sendToServer(packet);
         }
     }
 

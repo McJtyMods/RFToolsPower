@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.dimensionalcell.client;
 
-import mcjty.lib.McJtyLib;
 import mcjty.lib.blockcommands.ICommand;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.gui.GenericGuiContainer;
@@ -9,6 +8,7 @@ import mcjty.lib.gui.widgets.Button;
 import mcjty.lib.gui.widgets.EnergyBar;
 import mcjty.lib.gui.widgets.Label;
 import mcjty.lib.gui.widgets.Panel;
+import mcjty.lib.network.Networking;
 import mcjty.lib.network.PacketRequestDataFromServer;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolspower.RFToolsPower;
@@ -85,7 +85,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private void requestRF() {
         if (System.currentTimeMillis() - lastTime > 250) {
             lastTime = System.currentTimeMillis();
-            McJtyLib.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
+            Networking.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
         }
     }
 
