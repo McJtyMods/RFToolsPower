@@ -111,7 +111,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     };
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
+    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
             .containerSupplier(container(CONTAINER_DIMENSIONAL_CELL, CONTAINER_FACTORY, this))
             .itemHandler(() -> items)
             .setupSync(this));

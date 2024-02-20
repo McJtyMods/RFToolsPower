@@ -53,6 +53,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -88,7 +89,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
+    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDERGENIC, this))
             .energyHandler(() -> energyStorage));
 

@@ -21,7 +21,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
 
@@ -39,7 +39,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     private boolean needpulse = false;
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
+    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, this))
             .setupSync(this));
 

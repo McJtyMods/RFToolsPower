@@ -52,7 +52,7 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
             .build();
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
+    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
             .containerSupplier(container(EndergenicModule.CONTAINER_PEARL_INJECTOR, CONTAINER_FACTORY,this))
             .itemHandler(() -> items)
             .setupSync(this));

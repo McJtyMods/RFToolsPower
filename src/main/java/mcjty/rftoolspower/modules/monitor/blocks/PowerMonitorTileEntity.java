@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
 
@@ -37,7 +37,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     private final LogicSupport support = new LogicSupport();
 
     @Cap(type = CapType.CONTAINER)
-    private final LazyOptional<MenuProvider> screenHandler = LazyOptional.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
+    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, this))
             .setupSync(this));
 
