@@ -97,7 +97,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
 
     @Cap(type = CapType.INFUSABLE)
-    private final LazyOptional<IInfusable> infusableHandler = LazyOptional.of(() -> new DefaultInfusable(DimensionalCellTileEntity.this));
+    private final IInfusable infusableHandler = new DefaultInfusable(DimensionalCellTileEntity.this);
 
     private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
     private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
@@ -117,12 +117,12 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             .setupSync(this));
 
     @Cap(type = CapType.MODULE)
-    private final LazyOptional<IModuleSupport> moduleSupportHandler = LazyOptional.of(() -> new DefaultModuleSupport(SLOT_CARD) {
+    private final IModuleSupport moduleSupportHandler = new DefaultModuleSupport(SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
             return itemStack.getItem() instanceof PowerCellCardItem;
         }
-    });
+    };
 
     private int networkId = -1;
 
@@ -346,7 +346,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     private Float getInfusedFactor() {
-        return infusableHandler.map(IInfusable::getInfusedFactor).orElse(0.0f);
+        return infusableHandler.getInfusedFactor();
     }
 
     public int getRfPerTickPerSide() {

@@ -29,11 +29,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
@@ -74,7 +72,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     private final IInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);
 
     @Cap(type = CapType.POWER_INFO)
-    private final LazyOptional<IPowerInformation> powerInfoHandler = LazyOptional.of(this::createPowerInfo);
+    private final IPowerInformation powerInfoHandler = createPowerInfo();
 
     private int burning;
 
