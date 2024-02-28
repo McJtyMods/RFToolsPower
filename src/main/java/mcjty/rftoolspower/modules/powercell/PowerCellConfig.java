@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.powercell;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ForgeConfigSpec;
 
 // ----- Powercells ------
 public class PowerCellConfig {

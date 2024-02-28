@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.generator;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ForgeConfigSpec;
 
 // ----- Coal generator ------
 public class CoalGeneratorConfig {

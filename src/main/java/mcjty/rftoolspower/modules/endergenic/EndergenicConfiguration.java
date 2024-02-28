@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.endergenic;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ForgeConfigSpec;
 
 public class EndergenicConfiguration {
     public static final String CATEGORY_ENDERGENIC = "endergenic";

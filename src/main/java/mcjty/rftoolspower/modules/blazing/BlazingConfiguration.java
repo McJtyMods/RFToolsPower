@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.blazing;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ForgeConfigSpec;
 
 public class BlazingConfiguration {
     public static final String CATEGORY_BLAZING = "blazing";
