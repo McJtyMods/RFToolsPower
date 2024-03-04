@@ -1,19 +1,19 @@
 package mcjty.rftoolspower.modules.generator;
 
-import net.neoforged.neoforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 // ----- Coal generator ------
 public class CoalGeneratorConfig {
 
     public static final String SUB_CATEGORY_COALGENERATOR = "coalgenerator";
 
-    public static ForgeConfigSpec.IntValue MAXENERGY; // TODO change these to longs once Configuration supports them
-    public static ForgeConfigSpec.IntValue SENDPERTICK;
-    public static ForgeConfigSpec.IntValue CHARGEITEMPERTICK;
-    public static ForgeConfigSpec.IntValue RFPERTICK;
-    public static ForgeConfigSpec.IntValue TICKSPERCOAL;
+    public static ModConfigSpec.IntValue MAXENERGY; // TODO change these to longs once Configuration supports them
+    public static ModConfigSpec.IntValue SENDPERTICK;
+    public static ModConfigSpec.IntValue CHARGEITEMPERTICK;
+    public static ModConfigSpec.IntValue RFPERTICK;
+    public static ModConfigSpec.IntValue TICKSPERCOAL;
 
-    public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER) {
+    public static void setup(ModConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Coal generator settings").push(SUB_CATEGORY_COALGENERATOR);
 
         RFPERTICK = SERVER_BUILDER

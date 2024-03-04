@@ -67,7 +67,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     @Override
     protected void renderBg(@Nonnull GuiGraphics graphics, float v, int i, int i2) {
         updateFields();
-        drawWindow(graphics);
+        drawWindow(graphics, xxx, xxx, yyy);
         checkStats();
     }
 

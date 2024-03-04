@@ -1,22 +1,22 @@
 package mcjty.rftoolspower.modules.powercell;
 
-import net.neoforged.neoforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 // ----- Powercells ------
 public class PowerCellConfig {
 
     public static final String SUB_CATEGORY_POWERCELL = "powercell";
 
-    public static ForgeConfigSpec.LongValue TIER1_MAXRF;
-    public static ForgeConfigSpec.LongValue TIER2_MAXRF;
-    public static ForgeConfigSpec.LongValue TIER3_MAXRF;
-    public static ForgeConfigSpec.IntValue TIER1_RFPERTICK;
-    public static ForgeConfigSpec.IntValue TIER2_RFPERTICK;
-    public static ForgeConfigSpec.IntValue TIER3_RFPERTICK;
-    public static ForgeConfigSpec.DoubleValue RFPERTICK_SCALE;
-    public static ForgeConfigSpec.IntValue NETWORK_MAX;
+    public static ModConfigSpec.LongValue TIER1_MAXRF;
+    public static ModConfigSpec.LongValue TIER2_MAXRF;
+    public static ModConfigSpec.LongValue TIER3_MAXRF;
+    public static ModConfigSpec.IntValue TIER1_RFPERTICK;
+    public static ModConfigSpec.IntValue TIER2_RFPERTICK;
+    public static ModConfigSpec.IntValue TIER3_RFPERTICK;
+    public static ModConfigSpec.DoubleValue RFPERTICK_SCALE;
+    public static ModConfigSpec.IntValue NETWORK_MAX;
 
-    public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER) {
+    public static void setup(ModConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Powercell settings").push(SUB_CATEGORY_POWERCELL);
 
         PowerCellConfig.TIER1_MAXRF = SERVER_BUILDER

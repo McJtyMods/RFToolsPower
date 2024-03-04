@@ -1,28 +1,28 @@
 package mcjty.rftoolspower.modules.endergenic;
 
-import net.neoforged.neoforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class EndergenicConfiguration {
     public static final String CATEGORY_ENDERGENIC = "endergenic";
 
-    public static ForgeConfigSpec.IntValue MAXENERGY;
+    public static ModConfigSpec.IntValue MAXENERGY;
 
     // This value indicates the chance (with 0 being no chance and 1000 being 100% chance) that an
     // endergenic pearl is lost while holding it.
-    public static ForgeConfigSpec.IntValue chanceLost;
+    public static ModConfigSpec.IntValue chanceLost;
     // This value indicates how much RF is being consumed every tick to try to keep the endergenic pearl.
-    public static ForgeConfigSpec.IntValue rfToHoldPearl;
+    public static ModConfigSpec.IntValue rfToHoldPearl;
     // This value indicates how much RF will be kept in the internal buffer (not given to conduits and machines next to it) as
     // a reserve to be able to hold pearls.
-    public static ForgeConfigSpec.IntValue ENDERGENIC_KEEPRF;
+    public static ModConfigSpec.IntValue ENDERGENIC_KEEPRF;
     // This value indicates how much RF/tick this block can send out to neighbours
-    public static ForgeConfigSpec.IntValue ENDERGENIC_SENDPERTICK;
-    public static ForgeConfigSpec.IntValue goodParticleCount;
-    public static ForgeConfigSpec.IntValue badParticleCount;
+    public static ModConfigSpec.IntValue ENDERGENIC_SENDPERTICK;
+    public static ModConfigSpec.IntValue goodParticleCount;
+    public static ModConfigSpec.IntValue badParticleCount;
 
-    public static ForgeConfigSpec.DoubleValue powergenFactor;
+    public static ModConfigSpec.DoubleValue powergenFactor;
 
-    public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+    public static void setup(ModConfigSpec.Builder SERVER_BUILDER, ModConfigSpec.Builder CLIENT_BUILDER) {
         SERVER_BUILDER.comment("Settings for the endergenic generator").push(CATEGORY_ENDERGENIC);
         CLIENT_BUILDER.comment("Settings for the endergenic generator").push(CATEGORY_ENDERGENIC);
 

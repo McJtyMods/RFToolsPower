@@ -1,22 +1,22 @@
 package mcjty.rftoolspower.modules.blazing;
 
-import net.neoforged.neoforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class BlazingConfiguration {
     public static final String CATEGORY_BLAZING = "blazing";
 
-    public static ForgeConfigSpec.IntValue GENERATOR_MAXENERGY;
-    public static ForgeConfigSpec.IntValue GENERATOR_SENDPERTICK;
+    public static ModConfigSpec.IntValue GENERATOR_MAXENERGY;
+    public static ModConfigSpec.IntValue GENERATOR_SENDPERTICK;
 
-    public static ForgeConfigSpec.IntValue AGITATOR_MAXENERGY;
-    public static ForgeConfigSpec.IntValue AGITATOR_ENERGY_INPUT_PERTICK;
-    public static ForgeConfigSpec.IntValue AGITATOR_USE_PER_TICK;
+    public static ModConfigSpec.IntValue AGITATOR_MAXENERGY;
+    public static ModConfigSpec.IntValue AGITATOR_ENERGY_INPUT_PERTICK;
+    public static ModConfigSpec.IntValue AGITATOR_USE_PER_TICK;
 
-    public static ForgeConfigSpec.IntValue INFUSER_MAXENERGY;
-    public static ForgeConfigSpec.IntValue INFUSER_ENERGY_INPUT_PERTICK;
-    public static ForgeConfigSpec.IntValue INFUSER_USE_PER_TICK;
+    public static ModConfigSpec.IntValue INFUSER_MAXENERGY;
+    public static ModConfigSpec.IntValue INFUSER_ENERGY_INPUT_PERTICK;
+    public static ModConfigSpec.IntValue INFUSER_USE_PER_TICK;
 
-    public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+    public static void setup(ModConfigSpec.Builder SERVER_BUILDER, ModConfigSpec.Builder CLIENT_BUILDER) {
         SERVER_BUILDER.comment("Settings for the blazing generator").push(CATEGORY_BLAZING);
         CLIENT_BUILDER.comment("Settings for the blazing generator").push(CATEGORY_BLAZING);
 

@@ -38,7 +38,7 @@ public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEnt
 
     @Override
     protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-        drawWindow(graphics);
+        drawWindow(graphics, xxx, xxx, yyy);
         updateEnergyBar(energyBar);
     }
 }

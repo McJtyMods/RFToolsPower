@@ -1,23 +1,23 @@
 package mcjty.rftoolspower.modules.dimensionalcell;
 
-import net.neoforged.neoforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class DimensionalCellConfiguration {
 
     public static final String CATEGORY_DIMENSIONALCELL = "dimensionalcell";
-    public static ForgeConfigSpec.IntValue rfPerNormalCell;
-    public static ForgeConfigSpec.IntValue advancedFactor;
-    public static ForgeConfigSpec.IntValue simpleFactor;
-    public static ForgeConfigSpec.IntValue rfPerTick;
+    public static ModConfigSpec.IntValue rfPerNormalCell;
+    public static ModConfigSpec.IntValue advancedFactor;
+    public static ModConfigSpec.IntValue simpleFactor;
+    public static ModConfigSpec.IntValue rfPerTick;
 
-    public static ForgeConfigSpec.DoubleValue powerCellCostFactor;
-    public static ForgeConfigSpec.DoubleValue powerCellDistanceCap;
-    public static ForgeConfigSpec.DoubleValue powerCellMinDistance;
-    public static ForgeConfigSpec.DoubleValue powerCellRFToolsDimensionAdvantage;
+    public static ModConfigSpec.DoubleValue powerCellCostFactor;
+    public static ModConfigSpec.DoubleValue powerCellDistanceCap;
+    public static ModConfigSpec.DoubleValue powerCellMinDistance;
+    public static ModConfigSpec.DoubleValue powerCellRFToolsDimensionAdvantage;
 
-    public static ForgeConfigSpec.IntValue CHARGEITEMPERTICK;
+    public static ModConfigSpec.IntValue CHARGEITEMPERTICK;
 
-    public static void setup(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+    public static void setup(ModConfigSpec.Builder SERVER_BUILDER, ModConfigSpec.Builder CLIENT_BUILDER) {
         SERVER_BUILDER.comment("Settings for the powercell").push(CATEGORY_DIMENSIONALCELL);
         CLIENT_BUILDER.comment("Settings for the powercell").push(CATEGORY_DIMENSIONALCELL);
 

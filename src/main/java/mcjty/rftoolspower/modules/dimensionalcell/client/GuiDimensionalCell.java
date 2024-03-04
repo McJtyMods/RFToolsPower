@@ -92,7 +92,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     @Override
     protected void renderBg(@Nonnull GuiGraphics graphics, float v, int i, int i2) {
-        drawWindow(graphics);
+        drawWindow(graphics, xxx, xxx, yyy);
 
         requestRF();
 
