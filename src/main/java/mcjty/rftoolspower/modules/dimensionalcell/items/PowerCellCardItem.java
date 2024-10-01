@@ -21,7 +21,7 @@ import static mcjty.lib.builder.TooltipBuilder.parameter;
 
 public class PowerCellCardItem extends Item implements ITooltipSettings {
 
-    private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
+    private final Lazy<TooltipBuilder> tooltipBuilder = Lazy.of(() -> new TooltipBuilder()
             .info(header(),
                     parameter("info", stack -> {
                         int id = getId(stack);
@@ -30,7 +30,7 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
                         } else {
                             return Integer.toString(id);
                         }
-                    }));
+                    })));
 
 
     public PowerCellCardItem() {
@@ -38,15 +38,15 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     }
 
     public static void initOverrides(PowerCellCardItem item) {
-        ItemProperties.register(item, new ResourceLocation(RFToolsPower.MODID, "linked"), (stack, world, livingEntity, seed) -> {
+        ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "linked"), (stack, world, livingEntity, seed) -> {
             int id = getId(stack);
             return id == -1 ? 0 : 1;
         });
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack itemStack, Level world, @Nonnull List<Component> list, @Nonnull TooltipFlag flag) {
-        super.appendHoverText(itemStack, world, list, flag);
+    public void appendHoverText(@Nonnull ItemStack itemStack, TooltipContext context, @Nonnull List<Component> list, @Nonnull TooltipFlag flag) {
+        super.appendHoverText(itemStack, context, list, flag);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), itemStack, list, flag);
     }
 

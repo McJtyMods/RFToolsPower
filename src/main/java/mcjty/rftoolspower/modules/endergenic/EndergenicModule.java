@@ -16,17 +16,20 @@ import mcjty.rftoolspower.modules.endergenic.client.GuiEndergenic;
 import mcjty.rftoolspower.modules.endergenic.client.GuiPearlInjector;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.function.Supplier;
 
@@ -77,11 +80,11 @@ public class EndergenicModule implements IModule {
     }
 
     @Override
-    public void initDatagen(DataGen dataGen) {
+    public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(ENDER_MONITOR)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_ENDER_MONITOR)
+                        .standardLoot()
                         .blockState(p -> p.logicSlabBlock(ENDER_MONITOR.get(), "ender_monitor", p.modLoc("block/endergenic/ender_monitor")))
                         .shaped(builder -> builder
                                         .define('A', VariousModule.MACHINE_BASE.get())
@@ -89,7 +92,7 @@ public class EndergenicModule implements IModule {
                                 " o ", "rAr", "TrT"),
                 Dob.blockBuilder(PEARL_INJECTOR)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_PEARL_INJECTOR)
+                        .standardLoot()
                         .blockState(p -> p.orientedBlock(PEARL_INJECTOR.get(), p.frontBasedModel("pearl_injector", p.modLoc("block/endergenic/pearl_injector"))))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -99,7 +102,7 @@ public class EndergenicModule implements IModule {
                                 " C ", "rFr", " H "),
                 Dob.blockBuilder(ENDERGENIC)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_ENDERGENIC)
+                        .standardLoot()
                         .blockState(p -> p.singleTextureBlockC(ENDERGENIC.get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> builder.renderType("translucent")))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())

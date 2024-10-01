@@ -16,8 +16,10 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nonnull;
 
@@ -32,17 +34,17 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     private static long lastTime = 0;
 
-    private static final ResourceLocation iconLocation = new ResourceLocation(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
+    private static final ResourceLocation iconLocation = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
-    public GuiDimensionalCell(DimensionalCellTileEntity te, GenericContainer container, Inventory inventory) {
-        super(te, container, inventory, DimensionalCellModule.DIMENSIONAL_CELL.get().getManualEntry());
+    public GuiDimensionalCell(GenericContainer container, Inventory inventory, Component title) {
+        super(container, inventory, title, DimensionalCellModule.DIMENSIONAL_CELL.get().getManualEntry());
 
         imageWidth = POWERCELL_WIDTH;
         imageHeight = POWERCELL_HEIGHT;
     }
 
-    public static void register() {
-        register(DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
+    public static void register(RegisterMenuScreensEvent event) {
+        event.register(DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
     }
 
     @Override
@@ -74,10 +76,10 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         window = new Window(this, toplevel);
 
-        window.action("allnone", tileEntity, DimensionalCellTileEntity.ACTION_SETNONE);
-        window.action("allinput", tileEntity, DimensionalCellTileEntity.ACTION_SETINPUT);
-        window.action("alloutput", tileEntity, DimensionalCellTileEntity.ACTION_SETOUTPUT);
-        window.action("clearstats", tileEntity, DimensionalCellTileEntity.ACTION_CLEARSTATS);
+        window.action("allnone", getTE(), DimensionalCellTileEntity.ACTION_SETNONE);
+        window.action("allinput", getTE(), DimensionalCellTileEntity.ACTION_SETINPUT);
+        window.action("alloutput", getTE(), DimensionalCellTileEntity.ACTION_SETOUTPUT);
+        window.action("clearstats", getTE(), DimensionalCellTileEntity.ACTION_CLEARSTATS);
 
         requestRF();
     }
@@ -85,17 +87,18 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private void requestRF() {
         if (System.currentTimeMillis() - lastTime > 250) {
             lastTime = System.currentTimeMillis();
-            Networking.sendToServer(PacketRequestDataFromServer.create(tileEntity.getDimension(), tileEntity.getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
+            Networking.sendToServer(PacketRequestDataFromServer.create(getTE().getDimension(), getTE().getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
         }
     }
 
 
     @Override
-    protected void renderBg(@Nonnull GuiGraphics graphics, float v, int i, int i2) {
-        drawWindow(graphics, xxx, xxx, yyy);
+    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+        drawWindow(graphics, partialTicks, mouseX, mouseY);
 
         requestRF();
 
+        DimensionalCellTileEntity tileEntity = getTE();
         stats.tooltips("Power statistics. Press to clear:", "Inserted: " + tileEntity.tooltipInserted, "Extracted: " + tileEntity.tooltipExtracted);
 
         int maxValue = (tileEntity.tooltipBlocks - tileEntity.tooltipAdvancedBlocks - tileEntity.tooltipSimpleBlocks) * DimensionalCellConfiguration.rfPerNormalCell.get();

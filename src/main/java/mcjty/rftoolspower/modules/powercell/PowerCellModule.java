@@ -13,15 +13,18 @@ import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.function.Supplier;
 
@@ -68,10 +71,10 @@ public class PowerCellModule implements IModule {
     }
 
     @Override
-    public void initDatagen(DataGen dataGen) {
+    public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(CELL1)
-                        .standardLoot(TYPE_CELL1)
+                        .standardLoot()
                         .ironPickaxeTags()
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -79,7 +82,7 @@ public class PowerCellModule implements IModule {
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), PowerCellModule.POWER_CORE1.get())),
                                 "rKr", "KFK", "rKr"),
                 Dob.blockBuilder(CELL2)
-                        .standardLoot(TYPE_CELL2)
+                        .standardLoot()
                         .ironPickaxeTags()
                         .shapedNBT(builder -> builder
                                         .define('K', POWER_CORE2.get())
@@ -87,7 +90,7 @@ public class PowerCellModule implements IModule {
                                         .unlockedBy("cell", has(PowerCellModule.CELL1.get())),
                                 "rKr", "KPK", "rKr"),
                 Dob.blockBuilder(CELL3)
-                        .standardLoot(TYPE_CELL3)
+                        .standardLoot()
                         .ironPickaxeTags()
                         .shapedNBT(builder -> builder
                                         .define('K', POWER_CORE3.get())

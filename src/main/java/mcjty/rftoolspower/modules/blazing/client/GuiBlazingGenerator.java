@@ -10,8 +10,10 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nonnull;
 
@@ -20,23 +22,23 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     private EnergyBar energyBar;
     private final Label[] labels = new Label[4];
 
-    public GuiBlazingGenerator(BlazingGeneratorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
-        super(tileEntity, container, inventory, BlazingModule.BLAZING_GENERATOR.get().getManualEntry());
+    public GuiBlazingGenerator(GenericContainer container, Inventory inventory, Component title) {
+        super(container, inventory, title, BlazingModule.BLAZING_GENERATOR.get().getManualEntry());
     }
 
-    public static void register() {
-        register(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), GuiBlazingGenerator::new);
+    public static void register(RegisterMenuScreensEvent event) {
+        event.register(BlazingModule.CONTAINER_BLAZING_GENERATOR.get(), GuiBlazingGenerator::new);
     }
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_generator.gui"));
+        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_generator.gui"));
         super.init();
         initializeFields();
     }
 
     private void initializeFields() {
-        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(tileEntity.getRSMode().ordinal());
+        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getTE().getRSMode().ordinal());
         energyBar = window.findChild("energybar");
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
             labels[i] = window.findChild("gen" + i);
@@ -49,15 +51,16 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
         }
         updateEnergyBar(energyBar);
 
+        BlazingGeneratorTileEntity te = getTE();
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
-            labels[i].text(String.valueOf((int) tileEntity.getRfPerTick(i)));
+            labels[i].text(String.valueOf((int) te.getRfPerTick(i)));
         }
     }
 
     @Override
     protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         updateFields();
-        drawWindow(graphics, xxx, xxx, yyy);
+        drawWindow(graphics, partialTicks, mouseX, mouseY);
     }
 
 }

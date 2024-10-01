@@ -4,14 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -22,11 +21,9 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
 
     @Override
     public void render(BlazingAgitatorTileEntity te, float v, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-
-        te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
+        IItemHandler h = te.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, te.getBlockPos(), null);
+        if (h != null) {
             matrixStack.pushPose();
-
-            ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
             for (int x = 0 ; x < 3 ; x++) {
                 for (int y = 0 ; y < 3 ; y++) {
@@ -50,7 +47,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
             }
 
             matrixStack.popPose();
-        });
+        }
     }
 
     public static void register() {

@@ -11,18 +11,21 @@ import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
 import mcjty.rftoolspower.modules.monitor.client.GuiPowerMonitor;
 import mcjty.rftoolspower.modules.monitor.client.PowerLevelRenderer;
 import mcjty.rftoolspower.setup.Registration;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,11 +73,11 @@ public class MonitorModule implements IModule {
     }
 
     @Override
-    public void initDatagen(DataGen dataGen) {
+    public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(POWER_MONITOR)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_POWER_MONITOR)
+                        .standardLoot()
                         .blockState(p -> {
                             ModelFile[][] models = new ModelFile[][]{
                                     p.getLogicSlabModels("power_monitor0", p.modLoc("block/monitor/power_monitor0")),

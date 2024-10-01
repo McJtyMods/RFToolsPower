@@ -11,6 +11,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.function.Supplier;
 
@@ -66,11 +69,11 @@ public class DimensionalCellModule implements IModule {
     }
 
     @Override
-    public void initDatagen(DataGen dataGen) {
+    public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(DIMENSIONAL_CELL)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_DIMENSIONAL_CELL)
+                        .standardLoot()
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL.get(), ""))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -79,7 +82,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "PFP", "ReR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_ADVANCED)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_DIMENSIONAL_CELL_ADVANCED)
+                        .standardLoot()
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_ADVANCED.get(), "advanced"))
                         .shaped(builder -> builder
                                         .define('K', DIMENSIONAL_CELL.get())
@@ -88,7 +91,7 @@ public class DimensionalCellModule implements IModule {
                                 "R*R", "*K*", "R*R"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_SIMPLE)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_DIMENSIONAL_CELL_SIMPLE)
+                        .standardLoot()
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_SIMPLE.get(), "simple"))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -97,7 +100,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "qFq", "RdR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_CREATIVE)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_DIMENSIONAL_CELL_CREATIVE)
+                        .standardLoot()
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_CREATIVE.get(), "creative")),
                 Dob.itemBuilder(POWERCELL_CARD)
                         .shaped(builder -> builder

@@ -18,19 +18,23 @@ import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 import static mcjty.lib.datagen.DataGen.has;
@@ -78,16 +82,16 @@ public class BlazingModule implements IModule {
     }
 
     @Override
-    public void initDatagen(DataGen dataGen) {
+    public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(BLAZING_AGITATOR)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_BLAZING_AGITATOR)
+                        .standardLoot()
                         .blockState(p -> {
                             p.simpleBlock(BLAZING_AGITATOR.get(), p.models().slab("blazing_agitator",
                                     p.modLoc("block/blazing/blazing_agitator_side"),
-                                    new ResourceLocation("rftoolsbase", "block/base/machinebottom"),
-                                    new ResourceLocation("rftoolsbase", "block/base/machinetop")));
+                                    ResourceLocation.fromNamespaceAndPath("rftoolsbase", "block/base/machinebottom"),
+                                    ResourceLocation.fromNamespaceAndPath("rftoolsbase", "block/base/machinetop")));
                         })
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -96,7 +100,7 @@ public class BlazingModule implements IModule {
                                 "XXX", "GFG", "iii"),
                 Dob.blockBuilder(BLAZING_GENERATOR)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_BLAZING_GENERATOR)
+                        .standardLoot()
                         .blockState(p -> {
                             ModelFile modelIdle = p.frontBasedModel("blazing_generator_idle", p.modLoc("block/blazing/blazing_generator_idle"));
                             ModelFile modelBusy = p.frontBasedModel("blazing_generator_busy", p.modLoc("block/blazing/blazing_generator_busy"));
@@ -116,7 +120,7 @@ public class BlazingModule implements IModule {
                                 "XYX", "RFR", "XYX"),
                 Dob.blockBuilder(BLAZING_INFUSER)
                         .ironPickaxeTags()
-                        .standardLoot(TYPE_BLAZING_INFUSER)
+                        .standardLoot()
                         .blockState(p -> p.orientedBlock(BLAZING_INFUSER.get(), p.frontBasedModel("blazing_infuser", p.modLoc("block/blazing/blazing_infuser"))))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())

@@ -12,12 +12,10 @@ import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.ModSetup;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.fml.common.Mod;
-import net.neoforged.neoforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.neoforged.neoforge.fml.loading.FMLEnvironment;
 
 import java.util.function.Supplier;
 
@@ -32,10 +30,7 @@ public class RFToolsPower {
 
     public static RFToolsPower instance;
 
-    public RFToolsPower() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        Dist dist = FMLEnvironment.dist;
-
+    public RFToolsPower(IEventBus bus, Dist dist) {
         instance = this;
         setupModules(bus, dist);
 
@@ -45,6 +40,7 @@ public class RFToolsPower {
         bus.addListener(setup::init);
         bus.addListener(modules::init);
         bus.addListener(this::onDataGen);
+        // @todo 1.21 add capability registrar
 
         if (dist.isClient()) {
             bus.addListener(modules::initClient);
@@ -57,7 +53,7 @@ public class RFToolsPower {
 
     private void onDataGen(GatherDataEvent event) {
         DataGen datagen = new DataGen(MODID, event);
-        modules.datagen(datagen);
+        modules.datagen(datagen, event.getLookupProvider());
         datagen.generate();
     }
 

@@ -23,13 +23,13 @@ public class BlazingRod extends Item {
     public static final float START_DURATION = 20f;
     public static final int MAX_INFUSION_STEPS = 64;
 
-    private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
+    private final Lazy<TooltipBuilder> tooltipBuilder = Lazy.of(() -> new TooltipBuilder()
             .info(key("message.rftoolsbase.shiftmessage"))
             .infoShift(header(),
                     parameter("time", BlazingRod::isCharging, stack -> getAgitationTimePercentage(stack) + "%"),
                     parameter("infused", BlazingRod::isInfused, stack -> getInfusionPercentage(stack) + "%"),
                     parameter("power", stack -> getRfPerTick(stack) + " RF/t"),
-                    parameter("duration", stack -> getTotalTicks(stack) + " ticks"));
+                    parameter("duration", stack -> getTotalTicks(stack) + " ticks")));
 
 
     public BlazingRod() {
@@ -37,8 +37,8 @@ public class BlazingRod extends Item {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack itemStack, Level world, @Nonnull List<Component> list, @Nonnull TooltipFlag flags) {
-        super.appendHoverText(itemStack, world, list, flags);
+    public void appendHoverText(@Nonnull ItemStack itemStack, TooltipContext context, @Nonnull List<Component> list, @Nonnull TooltipFlag flags) {
+        super.appendHoverText(itemStack, context, list, flags);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), itemStack, list, flags);
     }
 

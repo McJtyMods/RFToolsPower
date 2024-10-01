@@ -9,8 +9,10 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nonnull;
 
@@ -18,24 +20,24 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
     private EnergyBar energyBar;
 
-    public GuiBlazingAgitator(BlazingAgitatorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
-        super(tileEntity, container, inventory, BlazingModule.BLAZING_AGITATOR.get().getManualEntry());
+    public GuiBlazingAgitator(GenericContainer container, Inventory inventory, Component title) {
+        super(container, inventory, title, BlazingModule.BLAZING_AGITATOR.get().getManualEntry());
     }
 
-    public static void register() {
-        register(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
+    public static void register(RegisterMenuScreensEvent event) {
+        event.register(BlazingModule.CONTAINER_BLAZING_AGITATOR.get(), GuiBlazingAgitator::new);
     }
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
+        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
         super.init();
         initializeFields();
         setupEvents();
     }
 
     private void initializeFields() {
-        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(tileEntity.getRSMode().ordinal());
+        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getTE().getRSMode().ordinal());
         energyBar = window.findChild("energybar");
     }
 
@@ -43,7 +45,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
         for (int x = 0 ; x < 3 ; x++) {
             for (int y = 0 ; y < 3 ; y++) {
                 String channel = "lock" + x + "" + y;
-                window.bind(channel, tileEntity, channel);
+                window.bind(channel, getTE(), channel);
             }
         }
     }
@@ -58,6 +60,6 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
     @Override
     protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         updateFields();
-        drawWindow(graphics, xxx, xxx, yyy);
+        drawWindow(graphics, partialTicks, mouseX, mouseY);
     }
 }

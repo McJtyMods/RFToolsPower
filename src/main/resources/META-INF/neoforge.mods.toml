@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="[2,)"
 license="MIT License https://github.com/McJtyMods/RFToolsPower/blob/1.16/LICENCE"
 issueTrackerURL="http://github.com/McJtyMods/RFToolsPower/issues"
 displayURL="http://github.com/McJtyMods/RFToolsPower/"
@@ -20,20 +20,20 @@ description='''
 Everything related to power generation
 '''
 [[dependencies.rftoolspower]]
-    modId="forge"
-    mandatory=true
-    versionRange="[47,)"
+    modId="neoforge"
+    type="required"
+    versionRange="[21.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.rftoolspower]]
     modId="mcjtylib"
     mandatory=true
-    versionRange="[1.20-8.0.0,)"
+    versionRange="[1.21-9.0.0,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.rftoolspower]]
     modId="rftoolsbase"
     mandatory=true
-    versionRange="[1.20-5.0.0,)"
+    versionRange="[1.21-6.0.0,)"
     ordering="AFTER"
     side="BOTH"

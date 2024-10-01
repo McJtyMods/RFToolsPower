@@ -11,6 +11,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -73,7 +74,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
     @Override
     @Nonnull
-    public CompoundTag save(@Nonnull CompoundTag tagCompound) {
+    public CompoundTag save(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
         ListTag lst = new ListTag();
         for (Map.Entry<Integer, Network> entry : networks.entrySet()) {
             CompoundTag tc = new CompoundTag();
