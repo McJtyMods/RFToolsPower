@@ -1,6 +1,7 @@
 package mcjty.rftoolspower.modules.generator;
 
 import mcjty.lib.blocks.BaseBlock;
+import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
@@ -31,9 +32,12 @@ import static mcjty.rftoolspower.setup.Registration.*;
 
 public class CoalGeneratorModule implements IModule {
 
-    public static final DeferredBlock<BaseBlock> COALGENERATOR = BLOCKS.register("coalgenerator", CoalGeneratorTileEntity::createBlock);
-    public static final DeferredItem<Item> COALGENERATOR_ITEM = ITEMS.register("coalgenerator", tab(() -> new BlockItem(COALGENERATOR.get(), Registration.createStandardProperties())));
-    public static final Supplier<BlockEntityType<?>> TYPE_COALGENERATOR = TILES.register("coalgenerator", () -> BlockEntityType.Builder.of(CoalGeneratorTileEntity::new, COALGENERATOR.get()).build(null));
+    public static final RBlock<BaseBlock, BlockItem, CoalGeneratorTileEntity> COALGENERATOR = RBLOCKS.registerBlock("coalgenerator",
+            CoalGeneratorTileEntity.class,
+            CoalGeneratorTileEntity::createBlock,
+            block -> new BlockItem(block.get(), createStandardProperties()),
+            CoalGeneratorTileEntity::new
+    );
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 
     public CoalGeneratorModule(IEventBus bus) {

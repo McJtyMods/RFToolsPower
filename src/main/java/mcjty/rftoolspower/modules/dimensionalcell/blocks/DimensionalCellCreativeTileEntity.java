@@ -7,6 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 public class DimensionalCellCreativeTileEntity extends DimensionalCellTileEntity {
 
     public DimensionalCellCreativeTileEntity(BlockPos pos, BlockState state) {
-        super(DimensionalCellModule.TYPE_DIMENSIONAL_CELL_CREATIVE.get(), pos, state);
+        super(DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.be().get(), pos, state);
     }
 }

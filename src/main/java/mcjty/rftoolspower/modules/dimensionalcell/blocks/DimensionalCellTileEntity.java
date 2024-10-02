@@ -19,9 +19,7 @@ import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
 import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.*;
-import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
 import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
-import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
@@ -47,6 +45,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
+import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.container.SlotDefinition.generic;
@@ -76,7 +75,6 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     public int tooltipRfPerTick = 0;
     public float tooltipCostFactor = 0;
 
-    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .itemValid((slot, stack) -> {
                 if (slot == SLOT_CARD && stack.getItem() != DimensionalCellModule.POWERCELL_CARD.get()) {
@@ -89,12 +87,14 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             })
             .onUpdate(this::onUpdateSlot)
             .build();
-
+    @Cap(type = CapType.ITEMS_AUTOMATION)
+    private static final Function<DimensionalCellTileEntity, GenericItemHandler> ITEM_CAP = tile -> tile.items;
 
     private final Lazy<IInformationScreenInfo> infoScreenInfo = Lazy.of(this::createScreenInfo);
 
-    @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusableHandler = new DefaultInfusable(DimensionalCellTileEntity.this);
+    @Cap(type = CapType.INFUSABLE)
+    private static final Function<DimensionalCellTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusableHandler;
 
     private final Lazy<NullHandler> nullStorage = Lazy.of(NullHandler::new);
     private final Lazy<IMachineInformation> infoHandler = Lazy.of(this::createMachineInfo);
@@ -108,13 +108,13 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     };
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
-            .containerSupplier(container(CONTAINER_DIMENSIONAL_CELL, CONTAINER_FACTORY, this))
-            .itemHandler(() -> items)
-            .setupSync(this));
+    private static final Function<DimensionalCellTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Dimensional Cell")
+            .containerSupplier(container(CONTAINER_DIMENSIONAL_CELL, CONTAINER_FACTORY, be))
+            .itemHandler(() -> be.items)
+            .setupSync(be);
 
     @Cap(type = CapType.MODULE)
-    private final IModuleSupport moduleSupportHandler = new DefaultModuleSupport(SLOT_CARD) {
+    private static final IModuleSupport MODULE_CAP = new DefaultModuleSupport(SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
             return itemStack.getItem() instanceof PowerCellCardItem;
@@ -604,11 +604,11 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                 msg = "dimension missing!";
             } else {
                 Block block = w.getBlockState(b.pos()).getBlock();
-                if (block == DimensionalCellModule.DIMENSIONAL_CELL.get()) {
+                if (block == DimensionalCellModule.DIMENSIONAL_CELL.block().get()) {
                     msg = "normal";
-                } else if (block == DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.get()) {
+                } else if (block == DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get()) {
                     msg = "advanced";
-                } else if (block == DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.get()) {
+                } else if (block == DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get()) {
                     msg = "creative";
                 } else {
                     msg = "not a powercell!";

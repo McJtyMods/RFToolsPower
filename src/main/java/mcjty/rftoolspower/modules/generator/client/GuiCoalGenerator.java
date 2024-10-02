@@ -21,7 +21,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     private EnergyBar energyBar;
 
     public GuiCoalGenerator(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, CoalGeneratorModule.COALGENERATOR.get().getManualEntry());
+        super(container, inventory, title, CoalGeneratorModule.COALGENERATOR.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

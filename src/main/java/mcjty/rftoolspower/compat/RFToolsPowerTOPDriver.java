@@ -42,19 +42,19 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
         ResourceLocation id = Tools.getId(blockState);
         if (!drivers.containsKey(id)) {
-            if (blockState.getBlock() == CoalGeneratorModule.COALGENERATOR.get()) {
+            if (blockState.getBlock() == CoalGeneratorModule.COALGENERATOR.block().get()) {
                 drivers.put(id, new CoalDriver());
             } else if (blockState.getBlock() instanceof PowerCellBlock) {
                 drivers.put(id, new PowerCellDriver());
             } else if (blockState.getBlock() instanceof DimensionalCellBlock) {
                 drivers.put(id, new DimensionalCellDriver());
-            } else if (blockState.getBlock() == EndergenicModule.ENDERGENIC.get()) {
+            } else if (blockState.getBlock() == EndergenicModule.ENDERGENIC.block().get()) {
                 drivers.put(id, new EndergenicDriver());
-            } else if (blockState.getBlock() == EndergenicModule.ENDER_MONITOR.get()) {
+            } else if (blockState.getBlock() == EndergenicModule.ENDER_MONITOR.block().get()) {
                 drivers.put(id, new EndermonitorDriver());
-            } else if (blockState.getBlock() == BlazingModule.BLAZING_GENERATOR.get()) {
+            } else if (blockState.getBlock() == BlazingModule.BLAZING_GENERATOR.block().get()) {
                 drivers.put(id, new BlazingGeneratorDriver());
-            } else if (blockState.getBlock() == BlazingModule.BLAZING_AGITATOR.get()) {
+            } else if (blockState.getBlock() == BlazingModule.BLAZING_AGITATOR.block().get()) {
                 drivers.put(id, new BlazingAgitatorDriver());
             } else {
                 drivers.put(id, new DefaultDriver());

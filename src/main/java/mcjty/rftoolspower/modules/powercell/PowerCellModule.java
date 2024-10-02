@@ -1,10 +1,14 @@
 package mcjty.rftoolspower.modules.powercell;
 
+import mcjty.lib.blocks.BaseBlock;
+import mcjty.lib.blocks.LogicSlabBlock;
+import mcjty.lib.blocks.RBlock;
 import mcjty.lib.client.ModelTools;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolsbase.modules.various.VariousModule;
+import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.client.ClientSetup;
@@ -34,17 +38,26 @@ import static mcjty.rftoolspower.setup.Registration.*;
 
 public class PowerCellModule implements IModule {
 
-    public static final DeferredBlock<Block> CELL1 = BLOCKS.register("cell1", () -> new PowerCellBlock(Tier.TIER1));
-    public static final DeferredItem<Item> CELL1_ITEM = ITEMS.register("cell1", tab(() -> new BlockItem(CELL1.get(), Registration.createStandardProperties())));
-    public static final Supplier<BlockEntityType<?>> TYPE_CELL1 = TILES.register("cell1", () -> BlockEntityType.Builder.of((pos, state) -> new PowerCellTileEntity(Tier.TIER1, pos, state), CELL1.get()).build(null));
+    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL1 = RBLOCKS.registerBlock("ender_monitor",
+            PowerCellTileEntity.class,
+            () -> new PowerCellBlock(Tier.TIER1),
+            block -> new BlockItem(block.get(), createStandardProperties()),
+            (pos, state) -> new PowerCellTileEntity(Tier.TIER1, pos, state)
+    );
 
-    public static final DeferredBlock<Block> CELL2 = BLOCKS.register("cell2", () -> new PowerCellBlock(Tier.TIER2));
-    public static final DeferredItem<Item> CELL2_ITEM = ITEMS.register("cell2", tab(() -> new BlockItem(CELL2.get(), Registration.createStandardProperties())));
-    public static final Supplier<BlockEntityType<?>> TYPE_CELL2 = TILES.register("cell2", () -> BlockEntityType.Builder.of((pos, state) -> new PowerCellTileEntity(Tier.TIER2, pos, state), CELL2.get()).build(null));
+    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL2 = RBLOCKS.registerBlock("ender_monitor",
+            PowerCellTileEntity.class,
+            () -> new PowerCellBlock(Tier.TIER2),
+            block -> new BlockItem(block.get(), createStandardProperties()),
+            (pos, state) -> new PowerCellTileEntity(Tier.TIER2, pos, state)
+    );
 
-    public static final DeferredBlock<Block> CELL3 = BLOCKS.register("cell3", () -> new PowerCellBlock(Tier.TIER3));
-    public static final DeferredItem<Item> CELL3_ITEM = ITEMS.register("cell3", tab(() -> new BlockItem(CELL3.get(), Registration.createStandardProperties())));
-    public static final Supplier<BlockEntityType<?>> TYPE_CELL3 = TILES.register("cell3", () -> BlockEntityType.Builder.of((pos, state) -> new PowerCellTileEntity(Tier.TIER3, pos, state), CELL3.get()).build(null));
+    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL3 = RBLOCKS.registerBlock("ender_monitor",
+            PowerCellTileEntity.class,
+            () -> new PowerCellBlock(Tier.TIER3),
+            block -> new BlockItem(block.get(), createStandardProperties()),
+            (pos, state) -> new PowerCellTileEntity(Tier.TIER3, pos, state)
+    );
 
     public static final DeferredItem<Item> POWER_CORE1 = ITEMS.register("power_core1", tab(PowerCoreItem::new));
     public static final DeferredItem<Item> POWER_CORE2 = ITEMS.register("power_core2", tab(PowerCoreItem::new));
@@ -86,16 +99,16 @@ public class PowerCellModule implements IModule {
                         .ironPickaxeTags()
                         .shapedNBT(builder -> builder
                                         .define('K', POWER_CORE2.get())
-                                        .define('P', CELL1.get())
-                                        .unlockedBy("cell", has(PowerCellModule.CELL1.get())),
+                                        .define('P', CELL1.block().get())
+                                        .unlockedBy("cell", has(PowerCellModule.CELL1.block().get())),
                                 "rKr", "KPK", "rKr"),
                 Dob.blockBuilder(CELL3)
                         .standardLoot()
                         .ironPickaxeTags()
                         .shapedNBT(builder -> builder
                                         .define('K', POWER_CORE3.get())
-                                        .define('P', CELL2.get())
-                                        .unlockedBy("cell", has(CELL2.get())),
+                                        .define('P', CELL2.block().get())
+                                        .unlockedBy("cell", has(CELL2.block().get())),
                                 "rKr", "KPK", "rKr"),
                 Dob.itemBuilder(POWER_CORE1)
                         .shaped(builder -> builder

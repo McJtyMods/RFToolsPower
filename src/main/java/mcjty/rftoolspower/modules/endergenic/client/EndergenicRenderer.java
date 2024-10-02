@@ -82,6 +82,6 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
     }
 
     public static void register() {
-        BlockEntityRenderers.register(EndergenicModule.TYPE_ENDERGENIC.get(), EndergenicRenderer::new);
+        BlockEntityRenderers.register(EndergenicModule.ENDERGENIC.be().get(), EndergenicRenderer::new);
     }
 }

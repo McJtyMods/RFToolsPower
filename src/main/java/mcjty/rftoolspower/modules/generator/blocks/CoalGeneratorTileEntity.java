@@ -34,6 +34,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
+import java.util.function.Function;
+
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
@@ -48,7 +50,6 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
             .slot(specific(EnergyTools::isEnergyItem).in().out(), SLOT_CHARGEITEM, 118, 24)
             .playerSlots(10, 70));
 
-    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .itemValid((slot, stack) -> {
                         if (slot == SLOT_COALINPUT) {
@@ -58,27 +59,32 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
                         }
                     }
             ).build();
+    @Cap(type = CapType.ITEMS_AUTOMATION)
+    private static final Function<CoalGeneratorTileEntity, GenericItemHandler> ITEM_CAP = tile -> tile.items;
 
-    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, CoalGeneratorConfig.MAXENERGY.get(), 0);
+    @Cap(type = CapType.ENERGY)
+    private static final Function<CoalGeneratorTileEntity, GenericEnergyStorage> ENERGY_CAP = tile -> tile.energyStorage;
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Coal Generator")
-            .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY, this))
-            .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage)
-            .setupSync(this));
+    private static final Function<CoalGeneratorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Coal Generator")
+            .containerSupplier(container(CoalGeneratorModule.CONTAINER_COALGENERATOR, CONTAINER_FACTORY, be))
+            .itemHandler(() -> be.items)
+            .energyHandler(() -> be.energyStorage)
+            .setupSync(be);
 
-    @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);
+    @Cap(type = CapType.INFUSABLE)
+    private static final Function<CoalGeneratorTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusable;
 
-    @Cap(type = CapType.POWER_INFO)
     private final IPowerInformation powerInfoHandler = createPowerInfo();
+    @Cap(type = CapType.POWER_INFO)
+    private static final Function<CoalGeneratorTileEntity, IPowerInformation> POWER_INFO_CAP = tile -> tile.powerInfoHandler;
 
     private int burning;
 
     public CoalGeneratorTileEntity(BlockPos pos, BlockState state) {
-        super(CoalGeneratorModule.TYPE_COALGENERATOR.get(), pos, state);
+        super(CoalGeneratorModule.COALGENERATOR.be().get(), pos, state);
     }
 
     public static BaseBlock createBlock() {

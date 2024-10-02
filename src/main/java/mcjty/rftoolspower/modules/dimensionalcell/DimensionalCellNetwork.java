@@ -132,7 +132,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             for (GlobalPos c : copy) {
                 Level world = LevelTools.getLevel(c.dimension());
                 BlockState state = world.getBlockState(c.pos());
-                if (state.getBlock() == DimensionalCellModule.DIMENSIONAL_CELL.get()) {
+                if (state.getBlock() == DimensionalCellModule.DIMENSIONAL_CELL.block().get()) {
                     blocks.add(c);
                 } else if (DimensionalCellBlock.getType(state.getBlock()).isAdvanced()) {
                     blocks.add(c);

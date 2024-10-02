@@ -30,7 +30,7 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     private final LogicSupport support = new LogicSupport();
 
     public PowerLevelTileEntity(BlockPos pos, BlockState state) {
-        super(MonitorModule.TYPE_POWER_LEVEL.get(), pos, state);
+        super(MonitorModule.POWER_LEVEL.be().get(), pos, state);
     }
 
     private int counter = 20;

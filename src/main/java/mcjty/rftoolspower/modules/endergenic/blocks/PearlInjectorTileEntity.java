@@ -70,7 +70,7 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
     }
 
     public PearlInjectorTileEntity(BlockPos pos, BlockState state) {
-        super(EndergenicModule.TYPE_PEARL_INJECTOR.get(), pos, state);
+        super(EndergenicModule.PEARL_INJECTOR.be().get(), pos, state);
     }
 
     public EndergenicTileEntity findEndergenicTileEntity() {

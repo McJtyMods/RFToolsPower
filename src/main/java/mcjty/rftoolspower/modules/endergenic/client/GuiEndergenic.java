@@ -31,7 +31,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
     private int timer = 10;
 
     public GuiEndergenic(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, EndergenicModule.ENDERGENIC.get().getManualEntry());
+        super(container, inventory, title, EndergenicModule.ENDERGENIC.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

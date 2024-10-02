@@ -14,7 +14,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
 
     public GuiPearlInjector(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, EndergenicModule.PEARL_INJECTOR.get().getManualEntry());
+        super(container, inventory, title, EndergenicModule.PEARL_INJECTOR.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

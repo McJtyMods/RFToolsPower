@@ -70,7 +70,7 @@ public class PowerLevelRenderer implements BlockEntityRenderer<PowerLevelTileEnt
     }
 
     public static void register() {
-        BlockEntityRenderers.register(MonitorModule.TYPE_POWER_LEVEL.get(), PowerLevelRenderer::new);
+        BlockEntityRenderers.register(MonitorModule.POWER_LEVEL.be().get(), PowerLevelRenderer::new);
     }
 
 }

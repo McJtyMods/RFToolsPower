@@ -50,11 +50,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
                         parameter("info", stack -> {
                             long power = getEnergy(stack);
                             long totpower = 0;
-                            if (stack.getItem() == PowerCellModule.CELL1_ITEM.get()) {
+                            if (stack.getItem() == PowerCellModule.CELL1.item().get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER1_MAXRF.get());
-                            } else if (stack.getItem() == PowerCellModule.CELL2_ITEM.get()) {
+                            } else if (stack.getItem() == PowerCellModule.CELL2.item().get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER2_MAXRF.get());
-                            } else if (stack.getItem() == PowerCellModule.CELL3_ITEM.get()) {
+                            } else if (stack.getItem() == PowerCellModule.CELL3.item().get()) {
                                 totpower = PowerCellTileEntity.safeCast(PowerCellConfig.TIER3_MAXRF.get());
                             }
                             return power + " (max " + totpower + " RF/FE)";

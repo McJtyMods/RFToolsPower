@@ -28,6 +28,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 
+import java.util.function.Function;
+
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
@@ -45,11 +47,11 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
             .slot(specific(stack -> getCatalystImprovement(stack) != null).in(), SLOT_CATALYST, 46, 25)
             .playerSlots(10, 70));
 
-    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.INFUSER_MAXENERGY.get(),
             BlazingConfiguration.INFUSER_ENERGY_INPUT_PERTICK.get());
+    @Cap(type = CapType.ENERGY)
+    private static final Function<BlazingInfuserTileEntity, GenericEnergyStorage> ENERGY_CAP = tile -> tile.energyStorage;
 
-    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .slotLimit(1)
             .itemValid((slot, stack) -> switch (slot) {
@@ -58,16 +60,18 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
                 default -> false;
             })
             .build();
+    @Cap(type = CapType.ITEMS_AUTOMATION)
+    private static final Function<BlazingInfuserTileEntity, GenericItemHandler> ITEM_CAP = tile -> tile.items;
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Infuser")
-            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_INFUSER, CONTAINER_FACTORY, this))
-            .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage)
-            .setupSync(this));
+    private static final Function<BlazingInfuserTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Blazing Infuser")
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_INFUSER, CONTAINER_FACTORY, be))
+            .itemHandler(() -> be.items)
+            .energyHandler(() -> be.energyStorage)
+            .setupSync(be);
 
     public BlazingInfuserTileEntity(BlockPos pos, BlockState state) {
-        super(BlazingModule.TYPE_BLAZING_INFUSER.get(), pos, state);
+        super(BlazingModule.BLAZING_INFUSER.be().get(), pos, state);
     }
 
     private int counter = 10;

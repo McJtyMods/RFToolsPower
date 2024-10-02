@@ -29,6 +29,8 @@ import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
 
+import java.util.function.Function;
+
 import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.header;
 import static mcjty.lib.builder.TooltipBuilder.key;
@@ -38,9 +40,9 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     private final LogicSupport support = new LogicSupport();
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
-            .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, this))
-            .setupSync(this));
+    private static final Function<PowerMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
+            .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, be))
+            .setupSync(be);
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
@@ -56,7 +58,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     private int counter = 20;
 
     public PowerMonitorTileEntity(BlockPos pos, BlockState state) {
-        super(MonitorModule.TYPE_POWER_MONITOR.get(), pos, state);
+        super(MonitorModule.POWER_MONITOR.be().get(), pos, state);
     }
 
     public static LogicSlabBlock createBlock() {

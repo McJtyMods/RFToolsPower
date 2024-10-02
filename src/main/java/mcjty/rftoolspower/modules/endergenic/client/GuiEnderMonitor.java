@@ -14,7 +14,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity, GenericContainer> {
 
     public GuiEnderMonitor(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, EndergenicModule.ENDER_MONITOR.get().getManualEntry());
+        super(container, inventory, title, EndergenicModule.ENDER_MONITOR.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

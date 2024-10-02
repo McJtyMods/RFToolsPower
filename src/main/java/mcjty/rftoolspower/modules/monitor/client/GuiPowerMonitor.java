@@ -19,7 +19,7 @@ import java.awt.*;
 public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity, GenericContainer> {
 
     public GuiPowerMonitor(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, MonitorModule.POWER_MONITOR.get().getManualEntry());
+        super(container, inventory, title, MonitorModule.POWER_MONITOR.block().get().getManualEntry());
 
         imageWidth = 256;
         imageHeight = 50;

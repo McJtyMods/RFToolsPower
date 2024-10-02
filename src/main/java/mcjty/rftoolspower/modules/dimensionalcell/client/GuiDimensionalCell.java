@@ -37,7 +37,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private static final ResourceLocation iconLocation = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
     public GuiDimensionalCell(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, DimensionalCellModule.DIMENSIONAL_CELL.get().getManualEntry());
+        super(container, inventory, title, DimensionalCellModule.DIMENSIONAL_CELL.block().get().getManualEntry());
 
         imageWidth = POWERCELL_WIDTH;
         imageHeight = POWERCELL_HEIGHT;

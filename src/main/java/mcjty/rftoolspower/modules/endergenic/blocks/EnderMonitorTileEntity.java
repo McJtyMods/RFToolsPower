@@ -55,7 +55,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     public EnderMonitorTileEntity(BlockPos pos, BlockState state) {
-        super(EndergenicModule.TYPE_ENDER_MONITOR.get(), pos, state);
+        super(EndergenicModule.ENDER_MONITOR.be().get(), pos, state);
     }
 
     public EnderMonitorMode getMode() {

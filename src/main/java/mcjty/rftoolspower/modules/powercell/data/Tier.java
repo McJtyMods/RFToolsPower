@@ -24,11 +24,11 @@ public enum Tier implements StringRepresentable {
     public BlockEntityType<?> getType() {
         switch (this) {
             case TIER1:
-                return PowerCellModule.TYPE_CELL1.get();
+                return PowerCellModule.CELL1.be().get();
             case TIER2:
-                return PowerCellModule.TYPE_CELL2.get();
+                return PowerCellModule.CELL2.be().get();
             case TIER3:
-                return PowerCellModule.TYPE_CELL3.get();
+                return PowerCellModule.CELL3.be().get();
         }
         throw new IllegalStateException("Unknown powercell tier!");
     }

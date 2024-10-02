@@ -40,6 +40,8 @@ import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
 
+import java.util.function.Function;
+
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.SlotDefinition.specific;
@@ -53,25 +55,28 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
             .box(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).out(), BUFFER_SIZE, 117, 7, 3, 3)
             .playerSlots(10, 70));
 
-    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .slotLimit(1)
             .itemValid((slot, stack) -> isValidBlazingRod(stack))
             .build();
+    @Cap(type = CapType.ITEMS_AUTOMATION)
+    private static final Function<BlazingAgitatorTileEntity, GenericItemHandler> ITEM_CAP = be -> be.items;
 
-    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, true, BlazingConfiguration.AGITATOR_MAXENERGY.get(),
             BlazingConfiguration.AGITATOR_ENERGY_INPUT_PERTICK.get());
+    @Cap(type = CapType.ENERGY)
+    private static final Function<BlazingAgitatorTileEntity, GenericEnergyStorage> ENERGY_CAP = be -> be.energyStorage;
 
-    @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
+    @Cap(type = CapType.INFUSABLE)
+    private static final Function<BlazingAgitatorTileEntity, IInfusable> INFUSABLE_CAP = be -> be.infusable;
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
-            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_AGITATOR, CONTAINER_FACTORY,this))
-            .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage)
-            .setupSync(this));
+    private static final Function<BlazingAgitatorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Blazing Agitator")
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_AGITATOR, CONTAINER_FACTORY, be))
+            .itemHandler(() -> be.items)
+            .energyHandler(() -> be.energyStorage)
+            .setupSync(be);
 
     public static final VoxelShape SLAB = Shapes.box(0f, 0f, 0f, 1f, 0.5f, 1f);
 
@@ -104,7 +109,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     private final boolean[] locked = new boolean[BUFFER_SIZE];
 
     public BlazingAgitatorTileEntity(BlockPos pos, BlockState state) {
-        super(BlazingModule.TYPE_BLAZING_AGITATOR.get(), pos, state);
+        super(BlazingModule.BLAZING_AGITATOR.be().get(), pos, state);
         algorithm = new BlazingAgitatorAlgorithm(slot -> new BlazingRodStack(items.getStackInSlot(slot)));
     }
 

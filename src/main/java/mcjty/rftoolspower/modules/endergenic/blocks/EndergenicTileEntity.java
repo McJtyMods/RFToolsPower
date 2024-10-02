@@ -58,6 +58,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.*;
@@ -77,18 +78,20 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
     public static final VoxelShape SHAPE = Shapes.box(0.002, 0.002, 0.002, 0.998, 0.998, 0.998);
 
-    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
+    @Cap(type = CapType.ENERGY)
+    private static final Function<EndergenicTileEntity, GenericEnergyStorage> ENERGY_CAP = tile -> tile.energyStorage;
 
     private final Lazy<IMachineInformation> infoHandler = Lazy.of(this::createMachineInfo);
 
-    @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
+    @Cap(type = CapType.INFUSABLE)
+    private static final Function<EndergenicTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusable;
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Endergenic")
-            .containerSupplier(empty(EndergenicModule.CONTAINER_ENDERGENIC, this))
-            .energyHandler(() -> energyStorage));
+    private static final Function<EndergenicTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Endergenic")
+            .containerSupplier(empty(EndergenicModule.CONTAINER_ENDERGENIC, be))
+            .energyHandler(() -> be.energyStorage);
 
     // The current chargingMode status.
     // CHARGE_IDLE means this entity is doing nothing.
@@ -165,7 +168,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     public EndergenicTileEntity(BlockPos pos, BlockState state) {
-        super(EndergenicModule.TYPE_ENDERGENIC.get(), pos, state);
+        super(EndergenicModule.ENDERGENIC.be().get(), pos, state);
     }
 
     @Override

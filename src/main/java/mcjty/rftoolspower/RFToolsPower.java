@@ -41,7 +41,7 @@ public class RFToolsPower {
         bus.addListener(setup::init);
         bus.addListener(modules::init);
         bus.addListener(this::onDataGen);
-        // @todo 1.21 add capability registrar
+        bus.addListener(setup.getBlockCapabilityRegistrar(Registration.RBLOCKS));
 
         if (dist.isClient()) {
             bus.addListener(modules::initClient);

@@ -21,7 +21,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
     private EnergyBar energyBar;
 
     public GuiBlazingAgitator(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, BlazingModule.BLAZING_AGITATOR.get().getManualEntry());
+        super(container, inventory, title, BlazingModule.BLAZING_AGITATOR.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

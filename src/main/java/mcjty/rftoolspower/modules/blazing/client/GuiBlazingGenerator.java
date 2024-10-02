@@ -23,7 +23,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     private final Label[] labels = new Label[4];
 
     public GuiBlazingGenerator(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, BlazingModule.BLAZING_GENERATOR.get().getManualEntry());
+        super(container, inventory, title, BlazingModule.BLAZING_GENERATOR.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

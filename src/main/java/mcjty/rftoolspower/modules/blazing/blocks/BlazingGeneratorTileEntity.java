@@ -35,6 +35,8 @@ import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
 
+import java.util.function.Function;
+
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
 import static mcjty.lib.container.GenericItemHandler.match;
@@ -53,18 +55,21 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
             .slot(specific(new ItemStack(BlazingModule.BLAZING_ROD.get())).in(),3, 10+18*4, 7+18*2)
             .playerSlots(10, 70));
 
-    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .slotLimit(1)
             .itemValid(match(BlazingModule.BLAZING_ROD))
             .onUpdate((slot, stack) -> updateSlot(slot))
             .build();
+    @Cap(type = CapType.ITEMS_AUTOMATION)
+    private static final Function<BlazingGeneratorTileEntity, GenericItemHandler> ITEM_CAP = tile -> tile.items;
 
-    @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, BlazingConfiguration.GENERATOR_MAXENERGY.get(), 0);
+    @Cap(type = CapType.ENERGY)
+    private static final Function<BlazingGeneratorTileEntity, GenericEnergyStorage> ENERGY_CAP = tile -> tile.energyStorage;
 
-    @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
+    @Cap(type = CapType.INFUSABLE)
+    private static final Function<BlazingGeneratorTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusable;
 
     // Maximum RF/tick for a slot for the given blazing rod
     private final int[] rfPerTickMax = new int[BUFFER_SIZE];
@@ -74,18 +79,18 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     private final int[] ticksRemaining = new int[BUFFER_SIZE];
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
-            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_GENERATOR, CONTAINER_FACTORY,this))
-            .itemHandler(() -> items)
-            .energyHandler(() -> energyStorage)
-            .shortListener(Sync.integer(() -> (int) rfPerTick[0], v -> rfPerTick[0] = v))
-            .shortListener(Sync.integer(() -> (int) rfPerTick[1], v1 -> rfPerTick[1] = v1))
-            .shortListener(Sync.integer(() -> (int) rfPerTick[2], v2 -> rfPerTick[2] = v2))
-            .shortListener(Sync.integer(() -> (int) rfPerTick[3], v3 -> rfPerTick[3] = v3))
-            .setupSync(this));
+    private static final Function<BlazingGeneratorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Blazing Generator")
+            .containerSupplier(container(BlazingModule.CONTAINER_BLAZING_GENERATOR, CONTAINER_FACTORY, be))
+            .itemHandler(() -> be.items)
+            .energyHandler(() -> be.energyStorage)
+            .shortListener(Sync.integer(() -> (int) be.rfPerTick[0], v -> be.rfPerTick[0] = v))
+            .shortListener(Sync.integer(() -> (int) be.rfPerTick[1], v1 -> be.rfPerTick[1] = v1))
+            .shortListener(Sync.integer(() -> (int) be.rfPerTick[2], v2 -> be.rfPerTick[2] = v2))
+            .shortListener(Sync.integer(() -> (int) be.rfPerTick[3], v3 -> be.rfPerTick[3] = v3))
+            .setupSync(be);
 
     public BlazingGeneratorTileEntity(BlockPos pos, BlockState state) {
-        super(BlazingModule.TYPE_BLAZING_GENERATOR.get(), pos, state);
+        super(BlazingModule.BLAZING_GENERATOR.be().get(), pos, state);
     }
 
 

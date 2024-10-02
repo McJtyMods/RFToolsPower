@@ -20,7 +20,7 @@ public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEnt
     private EnergyBar energyBar;
 
     public GuiBlazingInfuser(GenericContainer container, Inventory inventory, Component title) {
-        super(container, inventory, title, BlazingModule.BLAZING_INFUSER.get().getManualEntry());
+        super(container, inventory, title, BlazingModule.BLAZING_INFUSER.block().get().getManualEntry());
     }
 
     public static void register(RegisterMenuScreensEvent event) {

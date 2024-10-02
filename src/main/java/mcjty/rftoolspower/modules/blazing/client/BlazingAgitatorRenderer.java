@@ -51,7 +51,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
     }
 
     public static void register() {
-        BlockEntityRenderers.register(BlazingModule.TYPE_BLAZING_AGITATOR.get(), BlazingAgitatorRenderer::new);
+        BlockEntityRenderers.register(BlazingModule.BLAZING_AGITATOR.be().get(), BlazingAgitatorRenderer::new);
     }
 
 }
