@@ -13,6 +13,7 @@ import mcjty.rftoolspower.setup.ModSetup;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.IEventBus;
@@ -30,11 +31,11 @@ public class RFToolsPower {
 
     public static RFToolsPower instance;
 
-    public RFToolsPower(IEventBus bus, Dist dist) {
+    public RFToolsPower(ModContainer mod, IEventBus bus, Dist dist) {
         instance = this;
         setupModules(bus, dist);
 
-        Config.register(bus, modules);
+        Config.register(mod, bus, modules);
         Registration.register(bus);
 
         bus.addListener(setup::init);
@@ -58,10 +59,10 @@ public class RFToolsPower {
     }
 
     private void setupModules(IEventBus bus, Dist dist) {
-        modules.register(new BlazingModule());
-        modules.register(new DimensionalCellModule());
+        modules.register(new BlazingModule(bus));
+        modules.register(new DimensionalCellModule(bus));
         modules.register(new EndergenicModule(bus, dist));
-        modules.register(new CoalGeneratorModule());
+        modules.register(new CoalGeneratorModule(bus));
         modules.register(new MonitorModule(bus, dist));
         modules.register(new PowerCellModule(bus, dist));
     }

@@ -341,7 +341,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             ListTag list = tagCompound.getList("blocks", Tag.TAG_COMPOUND);
             for (int i = 0 ; i < list.size() ; i++) {
                 CompoundTag tag = list.getCompound(i);
-                ResourceLocation id = new ResourceLocation(tag.getString("dim"));
+                ResourceLocation id = ResourceLocation.parse(tag.getString("dim"));
                 ResourceKey<Level> type = LevelTools.getId(id);
                 BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
                 blocks.add(GlobalPos.of(type, pos));

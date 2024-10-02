@@ -19,6 +19,7 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -173,15 +174,17 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void load(CompoundTag tagCompound) {
-        super.load(tagCompound);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tagCompound, provider);
+        // @todo 1.21 data
         CompoundTag info = tagCompound.getCompound("Info");
         burning = info.getInt("burning");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
-        super.saveAdditional(tagCompound);
+    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tagCompound, provider);
+        // @todo 1.21 data
         CompoundTag infoTag = getOrCreateInfo(tagCompound);
         infoTag.putInt("burning", burning);
     }

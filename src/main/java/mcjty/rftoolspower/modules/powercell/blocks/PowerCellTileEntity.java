@@ -1,10 +1,10 @@
 package mcjty.rftoolspower.modules.powercell.blocks;
 
+import cpw.mods.util.Lazy;
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
-import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
 import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
@@ -12,6 +12,7 @@ import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -19,11 +20,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
@@ -47,16 +46,16 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     public static final ModelProperty<Tier> TIER = new ModelProperty<>();
 
 
-    private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
-    private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(this::createNullHandler);
-    private final LazyOptional<SidedHandler>[] sidedStorages;
+    private final Lazy<IInformationScreenInfo> infoScreenInfo = Lazy.of(this::createScreenInfo);
+    private final Lazy<NullHandler> nullStorage = Lazy.of(this::createNullHandler);
+    private final Lazy<SidedHandler>[] sidedStorages;
 
     public PowerCellTileEntity(Tier tier, BlockPos pos, BlockState state) {
         super(tier.getType(), pos, state);
         this.tier = tier;
-        sidedStorages = new LazyOptional[OrientationTools.DIRECTION_VALUES.length];
+        sidedStorages = new Lazy[OrientationTools.DIRECTION_VALUES.length];
         for (Direction direction : OrientationTools.DIRECTION_VALUES) {
-            sidedStorages[direction.ordinal()] = LazyOptional.of(() -> createSidedHandler(direction));
+            sidedStorages[direction.ordinal()] = Lazy.of(() -> createSidedHandler(direction));
         }
     }
 
@@ -279,8 +278,8 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
                 BlockEntity te = getLevel().getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (te != null) {
-                    // @todo tesla
-                    te.getCapability(ForgeCapabilities.ENERGY, opposite).ifPresent(e -> {
+                    IEnergyStorage e = getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, pos, opposite);
+                    if (e != null) {
                         if (!(te instanceof PowerCellTileEntity)) {
                             long rfPerTick = getRfPerTickReal();
                             long rfToGive = Math.min(rfPerTick, stored[0]);
@@ -290,7 +289,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
                             stored[0] -= received;
                             energyExtracted[0] += received;
                         }
-                    });
+                    };
                     if (stored[0] <= 0) {
                         break;
                     }
@@ -423,9 +422,9 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider lookupProvider) {
         SideType[] old = new SideType[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
-        super.onDataPacket(net, packet);
+        super.onDataPacket(net, packet, lookupProvider);
         for (int i = 0 ; i < 6 ; i++) {
             if (old[i] != modes[i]) {
                 requestModelDataUpdate();
@@ -452,19 +451,21 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
 
     @Override
-    public void load(CompoundTag tagCompound) {
-        super.load(tagCompound);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tagCompound, provider);
+        // @todo 1.21 data
         loadClientDataFromNBT(tagCompound);
         CompoundTag info = tagCompound.getCompound("Info");
         localEnergy = info.getLong("energy");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
         CompoundTag info = getOrCreateInfo(tagCompound);
+        // @todo 1.21 data
         saveClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
-        super.saveAdditional(tagCompound);
+        super.saveAdditional(tagCompound, provider);
     }
 
     @Override
@@ -489,21 +490,22 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         updateOutputCount();
     }
 
-    @Override
-    @Nonnull
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        if (capability == ForgeCapabilities.ENERGY) {
-            if (facing == null) {
-                return nullStorage.cast();
-            } else {
-                return sidedStorages[facing.ordinal()].cast();
-            }
-        }
-        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
-            return infoScreenInfo.cast();
-        }
-        return super.getCapability(capability, facing);
-    }
+    // @todo 1.21
+//    @Override
+//    @Nonnull
+//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
+//        if (capability == ForgeCapabilities.ENERGY) {
+//            if (facing == null) {
+//                return nullStorage.cast();
+//            } else {
+//                return sidedStorages[facing.ordinal()].cast();
+//            }
+//        }
+//        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
+//            return infoScreenInfo.cast();
+//        }
+//        return super.getCapability(capability, facing);
+//    }
 
     class SidedHandler implements IEnergyStorage {
 

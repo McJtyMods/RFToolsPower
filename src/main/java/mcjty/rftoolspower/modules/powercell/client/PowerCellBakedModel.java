@@ -26,8 +26,8 @@ import java.util.List;
 
 public class PowerCellBakedModel extends AbstractDynamicBakedModel {
 
-    public static final ResourceLocation TEXTURE_INPUTMASK = new ResourceLocation(RFToolsPower.MODID, "block/powercell/inputmask");
-    public static final ResourceLocation TEXTURE_OUTPUTMASK = new ResourceLocation(RFToolsPower.MODID, "block/powercell/outputmask");
+    public static final ResourceLocation TEXTURE_INPUTMASK = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/powercell/inputmask");
+    public static final ResourceLocation TEXTURE_OUTPUTMASK = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/powercell/outputmask");
 
     private VertexFormat format;
 
@@ -60,12 +60,12 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
             s += "both_t";
         }
         s += tier;
-        return getTexture(new ResourceLocation(RFToolsPower.MODID, s));
+        return getTexture(ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, s));
     }
 
     private static TextureAtlasSprite getTopTexture() {
         String name = "block/powercell/cellhoriz_t1";
-        return getTexture(new ResourceLocation(RFToolsPower.MODID, name));
+        return getTexture(ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, name));
     }
 
     @Override

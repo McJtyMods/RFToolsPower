@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -50,6 +51,10 @@ public class DimensionalCellModule implements IModule {
 
     public static final DeferredItem<PowerCellCardItem> POWERCELL_CARD = ITEMS.register("powercell_card", tab(PowerCellCardItem::new));
 
+    public DimensionalCellModule(IEventBus bus) {
+        bus.addListener(this::registerMenuScreens);
+    }
+
     @Override
     public void init(FMLCommonSetupEvent event) {
 
@@ -58,9 +63,12 @@ public class DimensionalCellModule implements IModule {
     @Override
     public void initClient(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            GuiDimensionalCell.register();
             PowerCellCardItem.initOverrides(POWERCELL_CARD.get());
         });
+    }
+
+    public void registerMenuScreens(RegisterMenuScreensEvent event) {
+        GuiDimensionalCell.register(event);
     }
 
     @Override

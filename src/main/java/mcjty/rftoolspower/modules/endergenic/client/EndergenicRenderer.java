@@ -19,17 +19,19 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 
 public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEntity> {
 
-    public static final ResourceLocation HALO = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/floatingpearl");
-    public static final ResourceLocation WHITEFLASH = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/whiteflash");
-    public static final ResourceLocation BLACKFLASH = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/redflash");
+    public static final ResourceLocation HALO = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/floatingpearl");
+    public static final ResourceLocation WHITEFLASH = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/whiteflash");
+    public static final ResourceLocation BLACKFLASH = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/redflash");
 
-    public static final ResourceLocation REDGLOW = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/redglow");
-    public static final ResourceLocation BLUEGLOW = new ResourceLocation(RFToolsPower.MODID, "block/endergenic/blueglow");
+    public static final ResourceLocation REDGLOW = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/redglow");
+    public static final ResourceLocation BLUEGLOW = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/blueglow");
 
     public static final RenderSettings FLASH_SETTINGS = RenderSettings.builder()
             .color(255, 255, 255)
@@ -70,6 +72,13 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
         if (showOverlay) {
             HudRenderer.renderHud(matrixStackIn, bufferIn, tileEntity);
         }
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(EndergenicTileEntity be) {
+        BlockPos pos = be.getBlockPos();
+        Vec3 worldPosition = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+        return new AABB(worldPosition, worldPosition.add(1, 2, 1));
     }
 
     public static void register() {

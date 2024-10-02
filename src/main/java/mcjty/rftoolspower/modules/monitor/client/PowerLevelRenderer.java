@@ -25,16 +25,16 @@ import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 public class PowerLevelRenderer implements BlockEntityRenderer<PowerLevelTileEntity> {
 
     public static final ResourceLocation[] DIGITS = new ResourceLocation[] {
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_0"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_1"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_2"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_3"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_4"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_5"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_6"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_7"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_8"),
-            new ResourceLocation(RFToolsPower.MODID, "block/monitor/powerlevel_9")
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_0"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_1"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_2"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_3"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_4"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_5"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_6"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_7"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_8"),
+            ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/monitor/powerlevel_9")
     };
 
     public PowerLevelRenderer(BlockEntityRendererProvider.Context context) {

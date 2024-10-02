@@ -6,22 +6,24 @@ import mcjty.lib.gui.Window;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity, GenericContainer> {
 
-    public GuiEnderMonitor(EnderMonitorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
-        super(tileEntity, container, inventory, EndergenicModule.ENDER_MONITOR.get().getManualEntry());
+    public GuiEnderMonitor(GenericContainer container, Inventory inventory, Component title) {
+        super(container, inventory, title, EndergenicModule.ENDER_MONITOR.get().getManualEntry());
     }
 
-    public static void register() {
-        register(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
+    public static void register(RegisterMenuScreensEvent event) {
+        event.register(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
     }
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/endermonitor.gui"));
+        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/endermonitor.gui"));
         super.init();
     }
 }

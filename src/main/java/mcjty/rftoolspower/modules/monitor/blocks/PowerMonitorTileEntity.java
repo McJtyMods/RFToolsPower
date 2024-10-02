@@ -15,6 +15,7 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.BlockGetter;
@@ -158,8 +159,9 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void load(CompoundTag tagCompound) {
-        super.load(tagCompound);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tagCompound, provider);
+        // @todo 1.21 data
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         inAlarm = tagCompound.getBoolean("inAlarm");
     }
@@ -167,6 +169,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     @Override
     public void loadInfo(CompoundTag tagCompound) {
         super.loadInfo(tagCompound);
+        // @todo 1.21 data
         CompoundTag info = tagCompound.getCompound("Info");
         rflevel = info.getInt("rflevel");
         minimum = info.getByte("minimum");
@@ -174,8 +177,9 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
-        super.saveAdditional(tagCompound);
+    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tagCompound, provider);
+        // @todo 1.21 data
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
     }
@@ -183,6 +187,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     @Override
     public void saveInfo(CompoundTag tagCompound) {
         super.saveInfo(tagCompound);
+        // @todo 1.21 data
         CompoundTag info = getOrCreateInfo(tagCompound);
         info.putInt("rflevel", rflevel);
         info.putByte("minimum", (byte) minimum);

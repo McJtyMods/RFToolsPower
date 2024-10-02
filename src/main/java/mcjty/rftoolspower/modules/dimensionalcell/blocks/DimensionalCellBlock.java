@@ -88,9 +88,11 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
                         parameter("info", stack -> {
-                            String energy = stack.getTag() == null ? "0" : String.valueOf(getEnergy(stack));
-                            String max = String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
-                            return energy + " (max " + max + " RF/FE)";
+                            // @todo 1.21 data
+//                            String energy = stack.getTag() == null ? "0" : String.valueOf(getEnergy(stack));
+//                            String max = String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
+//                            return energy + " (max " + max + " RF/FE)";
+                            return "todo 1.21";
                         }))
         );
         this.type = type;
@@ -150,7 +152,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     @Override
     public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
-        if (stack.hasTag() && !world.isClientSide) {
+        // @todo 1.21 data
+        if (/*stack.hasTag() && */ !world.isClientSide) {
             DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
             if (dimensionalCellTileEntity != null) {
                 int networkId = dimensionalCellTileEntity.getNetworkId();
@@ -164,12 +167,10 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                     Block block = world.getBlockState(pos).getBlock();
                     network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
                     dimensionalCellNetwork.save();
-                    //                        world.notifyBlockUpdate(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-//@todo
-//                        dimensionalCellTileEntity.updateState();
                 }
             }
-        } else if (!stack.hasTag() && !world.isClientSide) {
+            // @todo 1.21 data
+        } else if (/*!stack.hasTag() && */ !world.isClientSide) {
             DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
             if (dimensionalCellTileEntity != null && type.isCreative()) {
                 dimensionalCellTileEntity.setAllOutput();

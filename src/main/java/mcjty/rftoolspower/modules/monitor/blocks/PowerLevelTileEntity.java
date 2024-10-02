@@ -10,6 +10,7 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -57,15 +58,17 @@ public class PowerLevelTileEntity extends TickingTileEntity {
 
     @Nonnull
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tag = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.Provider lookup) {
+        CompoundTag tag = super.getUpdateTag(lookup);
+        // @todo 1.21 data
         tag.putInt("power", support.getPowerOutput());
         return tag;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookup) {
+        super.handleUpdateTag(tag, lookup);
+        // @todo 1.21 data
         support.setPowerOutput(tag.getInt("power"));
     }
 
@@ -86,8 +89,8 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        handleUpdateTag(pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookup) {
+        handleUpdateTag(pkt.getTag(), lookup);
     }
 
     @Override

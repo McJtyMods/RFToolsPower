@@ -23,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.bus.api.IEventBus;
@@ -55,6 +56,7 @@ public class EndergenicModule implements IModule {
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 
     public EndergenicModule(IEventBus bus, Dist dist) {
+        bus.addListener(this::registerMenuScreens);
     }
 
     @Override
@@ -65,13 +67,16 @@ public class EndergenicModule implements IModule {
     @Override
     public void initClient(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            GuiEndergenic.register();
-            GuiEnderMonitor.register();
-            GuiPearlInjector.register();
             ClientCommandHandler.registerCommands();
         });
 
         EndergenicRenderer.register();
+    }
+
+    public void registerMenuScreens(RegisterMenuScreensEvent event) {
+        GuiEnderMonitor.register(event);
+        GuiEndergenic.register(event);
+        GuiPearlInjector.register(event);
     }
 
     @Override

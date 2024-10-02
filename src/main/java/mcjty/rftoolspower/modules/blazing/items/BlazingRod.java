@@ -63,7 +63,8 @@ public class BlazingRod extends Item {
     }
 
     public static void setInfusionStepsLeft(ItemStack stack, int steps) {
-        stack.getOrCreateTag().putInt("infSteps", steps);
+        // @todo 1.21 data
+//        stack.getOrCreateTag().putInt("infSteps", steps);
     }
 
     // Get time left (in ticks) before ready
@@ -72,7 +73,8 @@ public class BlazingRod extends Item {
     }
 
     public static void setAgitationTimeLeft(ItemStack stack, float time) {
-        stack.getOrCreateTag().putFloat("time", time);
+        // @todo 1.21 data
+//        stack.getOrCreateTag().putFloat("time", time);
     }
 
     public static int getAgitationTimePercentage(ItemStack stack) {
@@ -86,7 +88,8 @@ public class BlazingRod extends Item {
     }
 
     public static void setPowerQuality(ItemStack stack, float quality) {
-        stack.getOrCreateTag().putFloat("quality", quality);
+        // @todo 1.21 data
+//        stack.getOrCreateTag().putFloat("quality", quality);
     }
 
     public static int getRfPerTick(ItemStack stack) {
@@ -95,11 +98,13 @@ public class BlazingRod extends Item {
 
     // Duration is expressed in ticks
     public static float getPowerDuration(ItemStack stack) {
+        // @todo 1.21 data
         return NBTTools.getFloat(stack, "duration", START_DURATION);
     }
 
     public static void setPowerDuration(ItemStack stack, float duration) {
-        stack.getOrCreateTag().putFloat("duration", duration);
+        // @todo 1.21 data
+//        stack.getOrCreateTag().putFloat("duration", duration);
     }
 
     public static int getTotalTicks(ItemStack stack) {

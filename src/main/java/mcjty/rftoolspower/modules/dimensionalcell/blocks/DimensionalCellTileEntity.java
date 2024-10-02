@@ -41,10 +41,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
@@ -94,20 +91,20 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             .build();
 
 
-    private final LazyOptional<IInformationScreenInfo> infoScreenInfo = LazyOptional.of(this::createScreenInfo);
+    private final Lazy<IInformationScreenInfo> infoScreenInfo = Lazy.of(this::createScreenInfo);
 
     @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusableHandler = new DefaultInfusable(DimensionalCellTileEntity.this);
 
-    private final LazyOptional<NullHandler> nullStorage = LazyOptional.of(NullHandler::new);
-    private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
-    private final LazyOptional<SidedHandler>[] sidedStorages = new LazyOptional[]{
-            LazyOptional.of(() -> new SidedHandler(Direction.DOWN)),
-            LazyOptional.of(() -> new SidedHandler(Direction.UP)),
-            LazyOptional.of(() -> new SidedHandler(Direction.NORTH)),
-            LazyOptional.of(() -> new SidedHandler(Direction.SOUTH)),
-            LazyOptional.of(() -> new SidedHandler(Direction.WEST)),
-            LazyOptional.of(() -> new SidedHandler(Direction.EAST))
+    private final Lazy<NullHandler> nullStorage = Lazy.of(NullHandler::new);
+    private final Lazy<IMachineInformation> infoHandler = Lazy.of(this::createMachineInfo);
+    private final Lazy<SidedHandler>[] sidedStorages = new Lazy[]{
+            Lazy.of(() -> new SidedHandler(Direction.DOWN)),
+            Lazy.of(() -> new SidedHandler(Direction.UP)),
+            Lazy.of(() -> new SidedHandler(Direction.NORTH)),
+            Lazy.of(() -> new SidedHandler(Direction.SOUTH)),
+            Lazy.of(() -> new SidedHandler(Direction.WEST)),
+            Lazy.of(() -> new SidedHandler(Direction.EAST))
     };
 
     @Cap(type = CapType.CONTAINER)
@@ -675,24 +672,25 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     }
 
-    @Override
-    @Nonnull
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        if (capability == ForgeCapabilities.ENERGY) {
-            if (facing == null) {
-                return nullStorage.cast();
-            } else {
-                return sidedStorages[facing.ordinal()].cast();
-            }
-        }
-        if (capability == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
-            return infoHandler.cast();
-        }
-        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
-            return infoScreenInfo.cast();
-        }
-        return super.getCapability(capability, facing);
-    }
+    // @todo 1.21
+//    @Override
+//    @Nonnull
+//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
+//        if (capability == ForgeCapabilities.ENERGY) {
+//            if (facing == null) {
+//                return nullStorage.cast();
+//            } else {
+//                return sidedStorages[facing.ordinal()].cast();
+//            }
+//        }
+//        if (capability == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
+//            return infoHandler.cast();
+//        }
+//        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
+//            return infoScreenInfo.cast();
+//        }
+//        return super.getCapability(capability, facing);
+//    }
 
     private class SidedHandler implements IEnergyStorage {
         private final Direction facing;

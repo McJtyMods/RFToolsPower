@@ -19,11 +19,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -47,6 +48,7 @@ public class MonitorModule implements IModule {
     public static final Supplier<BlockEntityType<PowerLevelTileEntity>> TYPE_POWER_LEVEL = TILES.register("power_level", () -> BlockEntityType.Builder.of(PowerLevelTileEntity::new, POWER_LEVEL.get()).build(null));
 
     public MonitorModule(IEventBus bus, Dist dist) {
+        bus.addListener(this::registerMenuScreens);
     }
 
     @Override
@@ -56,11 +58,11 @@ public class MonitorModule implements IModule {
 
     @Override
     public void initClient(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            GuiPowerMonitor.register();
-        });
-
         PowerLevelRenderer.register();
+    }
+
+    public void registerMenuScreens(RegisterMenuScreensEvent event) {
+        GuiPowerMonitor.register(event);
     }
 
     @Override

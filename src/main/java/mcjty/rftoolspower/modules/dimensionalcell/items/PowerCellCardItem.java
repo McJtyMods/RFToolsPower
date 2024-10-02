@@ -51,16 +51,19 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     }
 
     public static int getId(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return -1;
-        }
-        if (!stack.getTag().contains("id")) {
-            return -1;
-        }
-        return stack.getTag().getInt("id");
+        // @todo 1.21 data
+//        if (!stack.hasTag()) {
+//            return -1;
+//        }
+//        if (!stack.getTag().contains("id")) {
+//            return -1;
+//        }
+//        return stack.getTag().getInt("id");
+        return -1;
     }
 
     public static void setId(ItemStack stack, int id) {
-        stack.getOrCreateTag().putInt("id", id);
+        // @todo 1.21 data
+//        stack.getOrCreateTag().putInt("id", id);
     }
 }

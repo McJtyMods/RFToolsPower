@@ -21,7 +21,6 @@ import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.*;
 import mcjty.rftoolsbase.RFToolsBase;
 import mcjty.rftoolsbase.api.client.IHudSupport;
-import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
@@ -35,6 +34,7 @@ import mcjty.rftoolspower.modules.endergenic.data.EndergenicPearl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -52,12 +52,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.capabilities.Capability;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -83,7 +80,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     @Cap(type = CapType.ENERGY)
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(this, false, EndergenicConfiguration.MAXENERGY.get(), 0);
 
-    private final LazyOptional<IMachineInformation> infoHandler = LazyOptional.of(this::createMachineInfo);
+    private final Lazy<IMachineInformation> infoHandler = Lazy.of(this::createMachineInfo);
 
     @Cap(type = CapType.INFUSABLE)
     private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
@@ -232,12 +229,6 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     public BlockPos getHudPos() {
         return getBlockPos();
     }
-
-    @Override
-    public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition, worldPosition.offset(1, 2, 1));
-    }
-
 
     @Override
     public List<String> getClientLog() {
@@ -685,8 +676,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
-    public void load(CompoundTag tagCompound) {
-        super.load(tagCompound);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tagCompound, provider);
+
+        // @todo 1.21 data
 
         chargingMode = tagCompound.getInt("charging");
         currentAge = tagCompound.getInt("age");
@@ -705,8 +698,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
-        super.saveAdditional(tagCompound);
+    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.saveAdditional(tagCompound, provider);
+
+        // @todo 1.21 data
 
         tagCompound.putInt("charging", chargingMode);
         tagCompound.putInt("age", currentAge);
@@ -756,7 +751,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     @Override
     public boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
         if (world.isClientSide) {
-            SoundEvent pling = Tools.getSound(new ResourceLocation("block.note_block.pling"));
+            SoundEvent pling = Tools.getSound(ResourceLocation.fromNamespaceAndPath("minecraft", "block.note_block.pling"));
             world.playSound(player, pos, pling, SoundSource.BLOCKS, 1.0f, 1.0f);
             useWrenchClient(player);
         }
@@ -767,12 +762,13 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         return energyStorage.getCapacity();
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
-        if (cap == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
-            return infoHandler.cast();
-        }
-        return super.getCapability(cap, facing);
-    }
+    // @todo 1.21
+//    @Nonnull
+//    @Override
+//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
+//        if (cap == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
+//            return infoHandler.cast();
+//        }
+//        return super.getCapability(cap, facing);
+//    }
 }

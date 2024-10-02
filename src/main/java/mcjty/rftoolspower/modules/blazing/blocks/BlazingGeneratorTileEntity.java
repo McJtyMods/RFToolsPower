@@ -21,6 +21,7 @@ import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +32,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
@@ -201,8 +201,9 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void load(CompoundTag tagCompound) {
-        super.load(tagCompound);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tagCompound, provider);
+        // @todo 1.21 data
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rfPerTickMax[i] = tagCompound.getInt("rftMax" + i);
             rfPerTick[i] = tagCompound.getFloat("rft" + i);
@@ -211,13 +212,14 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
+    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
+        // @todo 1.21 data
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
             tagCompound.putFloat("rft" + i, rfPerTick[i]);
             tagCompound.putInt("ticks" + i, ticksRemaining[i]);
         }
-        super.saveAdditional(tagCompound);
+        super.saveAdditional(tagCompound, provider);
     }
 
 }

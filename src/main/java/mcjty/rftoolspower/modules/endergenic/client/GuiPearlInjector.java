@@ -6,22 +6,24 @@ import mcjty.lib.gui.Window;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
 
-    public GuiPearlInjector(PearlInjectorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
-        super(tileEntity, container, inventory, EndergenicModule.PEARL_INJECTOR.get().getManualEntry());
+    public GuiPearlInjector(GenericContainer container, Inventory inventory, Component title) {
+        super(container, inventory, title, EndergenicModule.PEARL_INJECTOR.get().getManualEntry());
     }
 
-    public static void register() {
-        register(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+    public static void register(RegisterMenuScreensEvent event) {
+        event.register(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
     }
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/pearl_injector.gui"));
+        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/pearl_injector.gui"));
         super.init();
     }
 }

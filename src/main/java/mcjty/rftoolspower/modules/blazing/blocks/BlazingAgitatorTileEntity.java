@@ -147,7 +147,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putFloat("rs" + i, rotationSpeed[i]);
         }
-        saveItemHandlerCap(tagCompound);
+        saveItemHandlerCap(tagCompound, getLevel().registryAccess());   // @todo 1.21 right?
     }
 
     @Override

@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.Tags;
@@ -60,6 +61,10 @@ public class BlazingModule implements IModule {
 
     public static final DeferredItem<BlazingRod> BLAZING_ROD = ITEMS.register("blazing_rod", tab(BlazingRod::new));
 
+    public BlazingModule(IEventBus bus) {
+        bus.addListener(this::registerMenuScreens);
+    }
+
     @Override
     public void init(FMLCommonSetupEvent event) {
 
@@ -67,13 +72,13 @@ public class BlazingModule implements IModule {
 
     @Override
     public void initClient(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            GuiBlazingAgitator.register();
-            GuiBlazingGenerator.register();
-            GuiBlazingInfuser.register();
-        });
-
         BlazingAgitatorRenderer.register();
+    }
+
+    public void registerMenuScreens(RegisterMenuScreensEvent event) {
+        GuiBlazingAgitator.register(event);
+        GuiBlazingGenerator.register(event);
+        GuiBlazingInfuser.register(event);
     }
 
     @Override

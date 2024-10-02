@@ -9,8 +9,10 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nonnull;
 
@@ -18,17 +20,17 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
 
     private EnergyBar energyBar;
 
-    public GuiCoalGenerator(CoalGeneratorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
-        super(tileEntity, container, inventory, CoalGeneratorModule.COALGENERATOR.get().getManualEntry());
+    public GuiCoalGenerator(GenericContainer container, Inventory inventory, Component title) {
+        super(container, inventory, title, CoalGeneratorModule.COALGENERATOR.get().getManualEntry());
     }
 
-    public static void register() {
-        register(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
+    public static void register(RegisterMenuScreensEvent event) {
+        event.register(CoalGeneratorModule.CONTAINER_COALGENERATOR.get(), GuiCoalGenerator::new);
     }
 
     @Override
     public void init() {
-        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/coalgenerator.gui"));
+        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/coalgenerator.gui"));
         super.init();
 
         initializeFields();
@@ -42,13 +44,13 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
         if (window == null) {
             return;
         }
-        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(tileEntity.getRSMode().ordinal());
+        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getTE().getRSMode().ordinal());
         updateEnergyBar(energyBar);
     }
 
     @Override
     protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         updateFields();
-        drawWindow(graphics, xxx, xxx, yyy);
+        drawWindow(graphics, partialTicks, mouseX, mouseY);
     }
 }

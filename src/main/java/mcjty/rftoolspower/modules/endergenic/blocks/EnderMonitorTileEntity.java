@@ -16,6 +16,7 @@ import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.BlockGetter;
@@ -113,8 +114,9 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     @Override
-    public void load(CompoundTag tagCompound) {
-        super.load(tagCompound);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider lookup) {
+        super.loadAdditional(tagCompound, lookup);
+        // @todo 1.21 data
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         needpulse = tagCompound.getBoolean("needPulse");
     }
@@ -128,8 +130,9 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound) {
-        super.saveAdditional(tagCompound);
+    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider lookup) {
+        super.saveAdditional(tagCompound, lookup);
+        // @todo 1.21 data
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("needPulse", needpulse);
     }

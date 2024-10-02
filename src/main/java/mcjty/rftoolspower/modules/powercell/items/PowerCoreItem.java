@@ -19,15 +19,15 @@ import static mcjty.lib.builder.TooltipBuilder.header;
 
 public class PowerCoreItem extends Item implements ITooltipSettings {
 
-    private final Lazy<TooltipBuilder> tooltipBuilder = () -> new TooltipBuilder()
-            .info(header());
+    private final Lazy<TooltipBuilder> tooltipBuilder = Lazy.of(() -> new TooltipBuilder()
+            .info(header()));
 
     public PowerCoreItem() {
         super(RFToolsPower.setup.defaultProperties());
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, TooltipContext worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), stack, tooltip, flagIn);
     }
