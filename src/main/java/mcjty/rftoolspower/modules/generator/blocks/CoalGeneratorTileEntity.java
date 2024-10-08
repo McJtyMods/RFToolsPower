@@ -162,7 +162,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     }
 
     public boolean isWorking() {
-        return burning > 0 && isMachineEnabled();
+        return getData(CoalGeneratorModule.COAL_GENERATOR_DATA).burning() > 0 && isMachineEnabled();
     }
 
     private void handleChargingItem(IItemHandler handler) {
