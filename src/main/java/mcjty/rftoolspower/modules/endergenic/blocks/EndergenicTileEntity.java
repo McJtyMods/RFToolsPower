@@ -761,13 +761,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         return energyStorage.getCapacity();
     }
 
-    // @todo 1.21
-//    @Nonnull
-//    @Override
-//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
-//        if (cap == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
-//            return infoHandler.cast();
-//        }
-//        return super.getCapability(cap, facing);
-//    }
+    public IMachineInformation getInfoHandler() {
+        return infoHandler.get();
+    }
 }

@@ -41,16 +41,10 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     @Cap(type = CapType.CONTAINER)
     private static final Function<PowerMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, be))
+            .data(MonitorModule.POWER_MONITOR_DATA, PowerMonitorData.STREAM_CODEC)
             .setupSync(be);
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
-
-    // Persisted data
-    // @todo 1.21
-//    @GuiValue
-//    private int minimum;        // Minimum power percentage
-//    @GuiValue
-//    private int maximum;        // Maximum power percentage
 
     // Transient data
     private boolean inAlarm = false;

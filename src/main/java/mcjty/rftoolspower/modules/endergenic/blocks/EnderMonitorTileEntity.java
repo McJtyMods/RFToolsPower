@@ -36,15 +36,12 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
 
     private final LogicSupport support = new LogicSupport();
 
-    @GuiValue
-    // @todo 1.21
-//    private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
-
     private boolean needpulse = false;
 
     @Cap(type = CapType.CONTAINER)
     private static final Function<EnderMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, be))
+            .data(EndergenicModule.ENDER_MONITOR_DATA, EnderMonitorData.STREAM_CODEC)
             .setupSync(be);
 
 

@@ -488,22 +488,17 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         updateOutputCount();
     }
 
-    // @todo 1.21
-//    @Override
-//    @Nonnull
-//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-//        if (capability == ForgeCapabilities.ENERGY) {
-//            if (facing == null) {
-//                return nullStorage.cast();
-//            } else {
-//                return sidedStorages[facing.ordinal()].cast();
-//            }
-//        }
-//        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
-//            return infoScreenInfo.cast();
-//        }
-//        return super.getCapability(capability, facing);
-//    }
+    public IInformationScreenInfo getInfoScreenInfo() {
+        return infoScreenInfo.get();
+    }
+
+    public IEnergyStorage getEnergyStorage(Direction facing) {
+        if (facing == null) {
+            return nullStorage.get();
+        } else {
+            return sidedStorages[facing.ordinal()].get();
+        }
+    }
 
     class SidedHandler implements IEnergyStorage {
 
