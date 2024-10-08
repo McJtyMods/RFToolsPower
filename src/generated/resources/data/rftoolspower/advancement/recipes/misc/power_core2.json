@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "core": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:emerald"
+          },
+          {
+            "items": "minecraft:redstone"
+          },
+          {
+            "items": "rftoolsbase:dimensionalshard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rftoolspower:power_core2"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "core"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rftoolspower:power_core2"
+    ]
+  }
+}

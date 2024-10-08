@@ -28,7 +28,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -114,7 +114,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             .setupSync(be);
 
     @Cap(type = CapType.MODULE)
-    private static final IModuleSupport MODULE_CAP = new DefaultModuleSupport(SLOT_CARD) {
+    private static final Function<DimensionalCellTileEntity, IModuleSupport> MODULE_CAP = be -> new DefaultModuleSupport(SLOT_CARD) {
         @Override
         public boolean isModule(ItemStack itemStack) {
             return itemStack.getItem() instanceof PowerCellCardItem;
@@ -219,23 +219,19 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     @Override
-    protected void loadInfo(CompoundTag tagCompound) {
-        super.loadInfo(tagCompound);
-        CompoundTag info = tagCompound.getCompound("Info");
-        energy = info.getInt("energy");
-        totalInserted = info.getLong("totIns");
-        totalExtracted = info.getLong("totExt");
-        networkId = info.getInt("networkId");
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        var data = input.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
+        if (data != null) {
+            setData(DimensionalCellModule.DIMENSIONAL_CELL_DATA, data);
+        }
     }
 
     @Override
-    protected void saveInfo(CompoundTag tagCompound) {
-        super.saveInfo(tagCompound);
-        CompoundTag info = getOrCreateInfo(tagCompound);
-        info.putInt("energy", energy);
-        info.putLong("totIns", totalInserted);
-        info.putLong("totExt", totalExtracted);
-        info.putInt("networkId", networkId);
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        var data = getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA);
+        builder.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA, data);
     }
 
     private static final EnumProperty<Mode>[] MODES = new EnumProperty[]{

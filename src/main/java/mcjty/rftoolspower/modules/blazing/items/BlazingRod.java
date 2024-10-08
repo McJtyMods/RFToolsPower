@@ -1,14 +1,14 @@
 package mcjty.rftoolspower.modules.blazing.items;
 
 import mcjty.lib.builder.TooltipBuilder;
-import mcjty.lib.varia.NBTTools;
 import mcjty.lib.varia.Tools;
+import mcjty.rftoolspower.modules.blazing.BlazingModule;
+import mcjty.rftoolspower.modules.blazing.data.BlazingRodData;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
@@ -59,22 +59,26 @@ public class BlazingRod extends Item {
 
     // Get the number of infusing steps that are still possible
     public static int getInfusionStepsLeft(ItemStack stack) {
-        return NBTTools.getInt(stack, "infSteps", MAX_INFUSION_STEPS);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        return data.steps();
     }
 
     public static void setInfusionStepsLeft(ItemStack stack, int steps) {
-        // @todo 1.21 data
-//        stack.getOrCreateTag().putInt("infSteps", steps);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        data = data.withSteps(steps);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
     }
 
     // Get time left (in ticks) before ready
     public static float getAgitationTimeLeft(ItemStack stack) {
-        return NBTTools.getFloat(stack, "time", MAXTIME);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        return data.time();
     }
 
     public static void setAgitationTimeLeft(ItemStack stack, float time) {
-        // @todo 1.21 data
-//        stack.getOrCreateTag().putFloat("time", time);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        data = data.withTime(time);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
     }
 
     public static int getAgitationTimePercentage(ItemStack stack) {
@@ -84,12 +88,14 @@ public class BlazingRod extends Item {
 
     // Quality is expressed in RF per 1000 ticks
     public static float getPowerQuality(ItemStack stack) {
-        return NBTTools.getFloat(stack, "quality", START_QUALITY);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        return data.quality();
     }
 
     public static void setPowerQuality(ItemStack stack, float quality) {
-        // @todo 1.21 data
-//        stack.getOrCreateTag().putFloat("quality", quality);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        data = data.withQuality(quality);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
     }
 
     public static int getRfPerTick(ItemStack stack) {
@@ -98,13 +104,14 @@ public class BlazingRod extends Item {
 
     // Duration is expressed in ticks
     public static float getPowerDuration(ItemStack stack) {
-        // @todo 1.21 data
-        return NBTTools.getFloat(stack, "duration", START_DURATION);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        return data.duration();
     }
 
     public static void setPowerDuration(ItemStack stack, float duration) {
-        // @todo 1.21 data
-//        stack.getOrCreateTag().putFloat("duration", duration);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        data = data.withDuration(duration);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
     }
 
     public static int getTotalTicks(ItemStack stack) {

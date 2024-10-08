@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "q": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "pattern": [
+    "RdR",
+    "qFq",
+    "RdR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:dimensionalcell_simple"
+  }
+}

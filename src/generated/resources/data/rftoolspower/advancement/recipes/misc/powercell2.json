@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "cell": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rftoolspower:powercell1"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rftoolspower:powercell2"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "cell"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rftoolspower:powercell2"
+    ]
+  }
+}

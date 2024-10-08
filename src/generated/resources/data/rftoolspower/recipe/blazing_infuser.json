@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "X": {
+      "tag": "c:rods/blaze"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "s": {
+      "item": "rftoolsbase:dimensionalshard"
+    }
+  },
+  "pattern": [
+    "iXi",
+    "sFs",
+    "iXi"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:blazing_infuser"
+  }
+}

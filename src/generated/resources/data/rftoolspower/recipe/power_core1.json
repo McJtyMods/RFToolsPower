@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    " d ",
+    "rRr",
+    " r "
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:power_core1"
+  }
+}

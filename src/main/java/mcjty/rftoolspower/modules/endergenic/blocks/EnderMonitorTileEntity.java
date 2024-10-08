@@ -13,18 +13,20 @@ import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolsbase.tools.TickOrderHandler;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
+import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorData;
 import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.empty;
 import static mcjty.lib.builder.TooltipBuilder.header;
@@ -35,14 +37,15 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     private final LogicSupport support = new LogicSupport();
 
     @GuiValue
-    private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
+    // @todo 1.21
+//    private EnderMonitorMode mode = EnderMonitorMode.MODE_LOSTPEARL;
 
     private boolean needpulse = false;
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
-            .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, this))
-            .setupSync(this));
+    private static final Function<EnderMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
+            .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, be))
+            .setupSync(be);
 
 
     public static LogicSlabBlock createBlock() {
@@ -59,7 +62,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     public EnderMonitorMode getMode() {
-        return mode;
+        return getData(EndergenicModule.ENDER_MONITOR_DATA).mode();
     }
 
     @Override
@@ -73,8 +76,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     public void setMode(EnderMonitorMode mode) {
-        this.mode = mode;
-        setChanged();
+        setData(EndergenicModule.ENDER_MONITOR_DATA, new EnderMonitorData(mode));
     }
 
     /**
@@ -82,7 +84,8 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
      * @param mode is the mode to fire
      */
     public void fireFromEndergenic(EnderMonitorMode mode) {
-        if (this.mode != mode) {
+        EnderMonitorData data = getData(EndergenicModule.ENDER_MONITOR_DATA);
+        if (data.mode() != mode) {
             return; // Not monitoring this mode. We do nothing.
         }
 
@@ -116,30 +119,30 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider lookup) {
         super.loadAdditional(tagCompound, lookup);
-        // @todo 1.21 data
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         needpulse = tagCompound.getBoolean("needPulse");
     }
 
     @Override
-    public void loadInfo(CompoundTag tagCompound) {
-        super.loadInfo(tagCompound);
-        CompoundTag info = tagCompound.getCompound("Info");
-        int m = info.getInt("mode");
-        mode = EnderMonitorMode.values()[m];
-    }
-
-    @Override
     public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider lookup) {
         super.saveAdditional(tagCompound, lookup);
-        // @todo 1.21 data
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("needPulse", needpulse);
     }
 
     @Override
-    public void saveInfo(CompoundTag tagCompound) {
-        super.saveInfo(tagCompound);
-        getOrCreateInfo(tagCompound).putInt("mode", mode.ordinal());
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        var data = input.get(EndergenicModule.ITEM_ENDER_MONITOR_DATA);
+        if (data != null) {
+            setData(EndergenicModule.ENDER_MONITOR_DATA, data);
+        }
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        var data = getData(EndergenicModule.ENDER_MONITOR_DATA);
+        builder.set(EndergenicModule.ITEM_ENDER_MONITOR_DATA, data);
     }
 }

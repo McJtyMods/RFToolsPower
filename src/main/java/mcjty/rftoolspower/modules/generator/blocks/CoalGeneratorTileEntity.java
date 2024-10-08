@@ -18,9 +18,9 @@ import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
+import mcjty.rftoolspower.modules.generator.data.CoalGeneratorData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,7 +33,6 @@ import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-
 import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
@@ -80,8 +79,6 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     private final IPowerInformation powerInfoHandler = createPowerInfo();
     @Cap(type = CapType.POWER_INFO)
     private static final Function<CoalGeneratorTileEntity, IPowerInformation> POWER_INFO_CAP = tile -> tile.powerInfoHandler;
-
-    private int burning;
 
     public CoalGeneratorTileEntity(BlockPos pos, BlockState state) {
         super(CoalGeneratorModule.COALGENERATOR.be().get(), pos, state);
@@ -133,6 +130,8 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     }
 
     private void handlePowerGeneration() {
+        CoalGeneratorData data = getData(CoalGeneratorModule.COAL_GENERATOR_DATA);
+        int burning = data.burning();
         if (burning > 0) {
             burning--;
             long rf = getRfPerTick();
@@ -151,6 +150,8 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
         if (state.getValue(BlockStateProperties.LIT) != isWorking()) {
             level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, isWorking()), Block.UPDATE_ALL);
         }
+        data = data.withBurning(burning);
+        setData(CoalGeneratorModule.COAL_GENERATOR_DATA, data);
     }
 
     public long getRfPerTick() {
@@ -180,19 +181,19 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tagCompound, provider);
-        // @todo 1.21 data
-        CompoundTag info = tagCompound.getCompound("Info");
-        burning = info.getInt("burning");
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        var data = input.get(CoalGeneratorModule.ITEM_COAL_GENERATOR_DATA);
+        if (data != null) {
+            setData(CoalGeneratorModule.COAL_GENERATOR_DATA, data);
+        }
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tagCompound, provider);
-        // @todo 1.21 data
-        CompoundTag infoTag = getOrCreateInfo(tagCompound);
-        infoTag.putInt("burning", burning);
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        var data = getData(CoalGeneratorModule.COAL_GENERATOR_DATA);
+        builder.set(CoalGeneratorModule.ITEM_COAL_GENERATOR_DATA, data);
     }
 
     @Nonnull

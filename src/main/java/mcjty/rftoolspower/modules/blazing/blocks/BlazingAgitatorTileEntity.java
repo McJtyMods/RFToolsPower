@@ -20,10 +20,12 @@ import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.blazing.BlazingConfiguration;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
+import mcjty.rftoolspower.modules.blazing.data.AgitatorData;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRodStack;
 import mcjty.rftoolspower.modules.blazing.logic.BlazingAgitatorAlgorithm;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -39,7 +41,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
-
 import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
@@ -106,7 +107,6 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     private int updateSpeedCounter = 10;  // Every 10 ticks we check if we potentially have to update rotation speed on the client
 
     private final BlazingAgitatorAlgorithm algorithm;
-    private final boolean[] locked = new boolean[BUFFER_SIZE];
 
     public BlazingAgitatorTileEntity(BlockPos pos, BlockState state) {
         super(BlazingModule.BLAZING_AGITATOR.be().get(), pos, state);
@@ -189,10 +189,11 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
                 if (stack.getItem() == Items.BLAZE_ROD) {
                     items.setStackInSlot(i, new ItemStack(BlazingModule.BLAZING_ROD.get()));
                 } else {
+                    AgitatorData data = getData(BlazingModule.AGITATOR_DATA);
                     float timeLeft = BlazingRod.getAgitationTimeLeft(stack);
                     if (timeLeft > 0) {
                         algorithm.tickBlazingRod(i, new BlazingRodStack(stack), timeLeft, infusable.getInfusedFactor());
-                    } else if (!locked[i]) {
+                    } else if (!data.isLocked(i)) {
                         moveToOutput(i, stack);
                     }
                 }
@@ -252,36 +253,29 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     public boolean isLocked(int x, int y) {
-        return locked[y*3 + x];
+        AgitatorData data = getData(BlazingModule.AGITATOR_DATA);
+        return data.isLocked(y*3 + x);
     }
 
     public void setLocked(int x, int y, boolean v) {
-        locked[y*3 + x] = v;
-        setChanged();
+        AgitatorData data = getData(BlazingModule.AGITATOR_DATA);
+        data.setLocked(y*3 + x, v);
+        setData(BlazingModule.AGITATOR_DATA, data);
     }
 
     @Override
-    protected void loadInfo(CompoundTag tagCompound) {
-        super.loadInfo(tagCompound);
-        CompoundTag info = tagCompound.getCompound("Info");
-        byte[] bytes = info.getByteArray("locked");
-        if (bytes.length >= BUFFER_SIZE) {
-            for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-                locked[i] = bytes[i] != 0;
-            }
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        var data = input.get(BlazingModule.ITEM_AGITATOR_DATA);
+        if (data != null) {
+            setData(BlazingModule.AGITATOR_DATA, data);
         }
     }
 
     @Override
-    protected void saveInfo(CompoundTag tagCompound) {
-        super.saveInfo(tagCompound);
-        CompoundTag info = getOrCreateInfo(tagCompound);
-        byte[] bytes = new byte[BUFFER_SIZE];
-        for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-            bytes[i] = (byte) (locked[i] ? 1 : 0);
-        }
-        info.putByteArray("locked", bytes);
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        var data = getData(BlazingModule.AGITATOR_DATA);
+        builder.set(BlazingModule.ITEM_AGITATOR_DATA, data);
     }
-
-
 }

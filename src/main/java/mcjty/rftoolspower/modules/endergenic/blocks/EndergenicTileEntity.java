@@ -682,8 +682,6 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tagCompound, provider);
 
-        // @todo 1.21 data
-
         chargingMode = tagCompound.getInt("charging");
         currentAge = tagCompound.getInt("age");
         destination = BlockPosTools.read(tagCompound, "dest");
@@ -703,8 +701,6 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     @Override
     public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.saveAdditional(tagCompound, provider);
-
-        // @todo 1.21 data
 
         tagCompound.putInt("charging", chargingMode);
         tagCompound.putInt("age", currentAge);

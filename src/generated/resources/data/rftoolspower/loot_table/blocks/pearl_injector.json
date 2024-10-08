@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "mcjtylib:item_energy",
+                "minecraft:container"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "rftoolspower:pearl_injector"
+        }
+      ],
+      "name": "pearl_injector",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "rftoolspower:blocks/pearl_injector"
+}

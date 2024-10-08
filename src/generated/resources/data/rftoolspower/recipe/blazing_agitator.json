@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "X": {
+      "tag": "c:rods/blaze"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "GFG",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:blazing_agitator"
+  }
+}

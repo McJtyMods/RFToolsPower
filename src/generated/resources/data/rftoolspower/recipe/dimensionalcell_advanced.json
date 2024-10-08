@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "*": {
+      "item": "rftoolsbase:infused_diamond"
+    },
+    "K": {
+      "item": "rftoolspower:dimensionalcell"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "pattern": [
+    "R*R",
+    "*K*",
+    "R*R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:dimensionalcell_advanced"
+  }
+}

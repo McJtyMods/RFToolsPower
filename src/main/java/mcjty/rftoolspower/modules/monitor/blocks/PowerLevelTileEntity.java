@@ -60,7 +60,6 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider lookup) {
         CompoundTag tag = super.getUpdateTag(lookup);
-        // @todo 1.21 data
         tag.putInt("power", support.getPowerOutput());
         return tag;
     }
@@ -68,7 +67,6 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookup) {
         super.handleUpdateTag(tag, lookup);
-        // @todo 1.21 data
         support.setPowerOutput(tag.getInt("power"));
     }
 

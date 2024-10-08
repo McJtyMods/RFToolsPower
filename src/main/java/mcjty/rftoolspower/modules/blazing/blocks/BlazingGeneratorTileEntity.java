@@ -208,7 +208,6 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tagCompound, provider);
-        // @todo 1.21 data
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rfPerTickMax[i] = tagCompound.getInt("rftMax" + i);
             rfPerTick[i] = tagCompound.getFloat("rft" + i);
@@ -218,7 +217,6 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
 
     @Override
     public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
-        // @todo 1.21 data
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
             tagCompound.putFloat("rft" + i, rfPerTick[i]);

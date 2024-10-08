@@ -8,11 +8,14 @@ import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolsbase.modules.various.VariousModule;
+import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerLevelTileEntity;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
 import mcjty.rftoolspower.modules.monitor.client.GuiPowerMonitor;
 import mcjty.rftoolspower.modules.monitor.client.PowerLevelRenderer;
+import mcjty.rftoolspower.modules.monitor.data.PowerMonitorData;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -21,9 +24,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +53,16 @@ public class MonitorModule implements IModule {
             block -> new BlockItem(block.get(), createStandardProperties()),
             PowerLevelTileEntity::new
     );
+
+    public static final Supplier<AttachmentType<PowerMonitorData>> POWER_MONITOR_DATA = ATTACHMENT_TYPES.register(
+            "power_monitor_data", () -> AttachmentType.builder(() -> new PowerMonitorData(0, (byte) 0, (byte) 0))
+                    .serialize(PowerMonitorData.CODEC)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<PowerMonitorData>> ITEM_POWER_MONITOR_DATA = COMPONENTS.registerComponentType(
+            "power_monitor_data",
+            builder -> builder
+                    .persistent(PowerMonitorData.CODEC)
+                    .networkSynchronized(PowerMonitorData.STREAM_CODEC));
 
     public MonitorModule(IEventBus bus, Dist dist) {
         bus.addListener(this::registerMenuScreens);

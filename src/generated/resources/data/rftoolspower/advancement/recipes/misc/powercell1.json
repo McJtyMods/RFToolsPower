@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "frame": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rftoolsbase:machine_frame"
+          },
+          {
+            "items": "rftoolspower:power_core1"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rftoolspower:powercell1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "frame"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rftoolspower:powercell1"
+    ]
+  }
+}

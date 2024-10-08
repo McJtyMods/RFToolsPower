@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "c:chests"
+    },
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    " C ",
+    "rFr",
+    " H "
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:pearl_injector"
+  }
+}

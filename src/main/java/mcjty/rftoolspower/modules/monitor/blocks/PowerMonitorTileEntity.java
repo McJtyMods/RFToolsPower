@@ -1,7 +1,6 @@
 package mcjty.rftoolspower.modules.monitor.blocks;
 
 import mcjty.lib.api.container.DefaultContainerProvider;
-import mcjty.lib.bindings.GuiValue;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.GenericContainer;
@@ -13,9 +12,11 @@ import mcjty.lib.varia.EnergyTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
+import mcjty.rftoolspower.modules.monitor.data.PowerMonitorData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.BlockGetter;
@@ -25,10 +26,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
-
 import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.empty;
@@ -47,13 +46,13 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
 
     // Persisted data
-    @GuiValue
-    private int minimum;        // Minimum power percentage
-    @GuiValue
-    private int maximum;        // Maximum power percentage
+    // @todo 1.21
+//    @GuiValue
+//    private int minimum;        // Minimum power percentage
+//    @GuiValue
+//    private int maximum;        // Maximum power percentage
 
     // Transient data
-    private int rflevel = 0;
     private boolean inAlarm = false;
     private int counter = 20;
 
@@ -87,21 +86,23 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     }
 
     public int getMinimum() {
-        return minimum;
+        return getData(MonitorModule.POWER_MONITOR_DATA).minimum();
     }
 
     public void setMinimum(int minimum) {
-        this.minimum = minimum;
-        setChanged();
+        PowerMonitorData data = getData(MonitorModule.POWER_MONITOR_DATA);
+        data = data.withMinimum((byte) minimum);
+        setData(MonitorModule.POWER_MONITOR_DATA, data);
     }
 
     public int getMaximum() {
-        return maximum;
+        return getData(MonitorModule.POWER_MONITOR_DATA).maximum();
     }
 
     public void setMaximum(int maximum) {
-        this.maximum = maximum;
-        setChanged();
+        PowerMonitorData data = getData(MonitorModule.POWER_MONITOR_DATA);
+        data = data.withMaximum((byte) maximum);
+        setData(MonitorModule.POWER_MONITOR_DATA, data);
     }
 
     public void setInvalid() {
@@ -129,6 +130,8 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
         int ratio = 0;  // Will be set as metadata;
         boolean alarm = false;
 
+        PowerMonitorData data = getData(MonitorModule.POWER_MONITOR_DATA);
+
         if (maxEnergy > 0) {
             long stored = energy.energy();
             ratio = (int) (1 + (stored * 5) / maxEnergy);
@@ -138,10 +141,10 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
                 ratio = 5;
             }
             long percentage = stored * 100 / maxEnergy;
-            alarm = percentage >= minimum && percentage <= maximum;
+            alarm = percentage >= data.minimum() && percentage <= data.maximum();
         }
 
-        if (rflevel != ratio) {
+        if (data.rflevel() != ratio) {
             changeRfLevel(ratio);
             setChanged();
         }
@@ -153,46 +156,41 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     }
 
     private void changeRfLevel(int newRfLevel) {
-        if (newRfLevel != rflevel) {
-            rflevel = newRfLevel;
-            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, rflevel), Block.UPDATE_ALL_IMMEDIATE);
-            setChanged();
+        PowerMonitorData data = getData(MonitorModule.POWER_MONITOR_DATA);
+        if (newRfLevel != data.rflevel()) {
+            data = data.withRflevel(newRfLevel);
+            setData(MonitorModule.POWER_MONITOR_DATA, data);
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(LEVEL, data.rflevel()), Block.UPDATE_ALL_IMMEDIATE);
         }
     }
 
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tagCompound, provider);
-        // @todo 1.21 data
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         inAlarm = tagCompound.getBoolean("inAlarm");
     }
 
     @Override
-    public void loadInfo(CompoundTag tagCompound) {
-        super.loadInfo(tagCompound);
-        // @todo 1.21 data
-        CompoundTag info = tagCompound.getCompound("Info");
-        rflevel = info.getInt("rflevel");
-        minimum = info.getByte("minimum");
-        maximum = info.getByte("maximum");
-    }
-
-    @Override
     public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.saveAdditional(tagCompound, provider);
-        // @todo 1.21 data
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
     }
 
     @Override
-    public void saveInfo(CompoundTag tagCompound) {
-        super.saveInfo(tagCompound);
-        // @todo 1.21 data
-        CompoundTag info = getOrCreateInfo(tagCompound);
-        info.putInt("rflevel", rflevel);
-        info.putByte("minimum", (byte) minimum);
-        info.putByte("maximum", (byte) maximum);
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        var data = input.get(MonitorModule.ITEM_POWER_MONITOR_DATA);
+        if (data != null) {
+            setData(MonitorModule.POWER_MONITOR_DATA, data);
+        }
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        var data = getData(MonitorModule.POWER_MONITOR_DATA);
+        builder.set(MonitorModule.ITEM_POWER_MONITOR_DATA, data);
     }
 }

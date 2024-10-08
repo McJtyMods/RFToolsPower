@@ -8,7 +8,6 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
-import mcjty.lib.tileentity.GenericTileEntity;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.tools.ManualHelper;
@@ -29,6 +28,7 @@ import net.neoforged.neoforge.common.util.Lazy;
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.header;
@@ -46,16 +46,17 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
             .box(specific(Items.ENDER_PEARL).in(), SLOT_BUFFER, 10, 25, 9, 2)
             .playerSlots(10, 70));
 
-    @Cap(type = CapType.ITEMS_AUTOMATION)
     private final GenericItemHandler items = GenericItemHandler.create(this, CONTAINER_FACTORY)
             .itemValid(match(Items.ENDER_PEARL))
             .build();
+    @Cap(type = CapType.ITEMS_AUTOMATION)
+    private static final Function<PearlInjectorTileEntity, GenericItemHandler> ITEM_CAP = be -> be.items;
 
     @Cap(type = CapType.CONTAINER)
-    private final Lazy<MenuProvider> screenHandler = Lazy.of(() -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
-            .containerSupplier(container(EndergenicModule.CONTAINER_PEARL_INJECTOR, CONTAINER_FACTORY,this))
-            .itemHandler(() -> items)
-            .setupSync(this));
+    private static final Function<PearlInjectorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Pearl Injector")
+            .containerSupplier(container(EndergenicModule.CONTAINER_PEARL_INJECTOR, CONTAINER_FACTORY, be))
+            .itemHandler(() -> be.items)
+            .setupSync(be);
 
     // For pulse detection.
     private boolean prevIn = false;
@@ -160,16 +161,12 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tagCompound, provider);
-        // @todo 1.21 data
         prevIn = tagCompound.getBoolean("prevIn");
     }
 
     @Override
     public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.saveAdditional(tagCompound, provider);
-        // @todo 1.21 data
         tagCompound.putBoolean("prevIn", prevIn);
     }
-
-
 }

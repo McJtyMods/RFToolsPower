@@ -8,23 +8,24 @@ import mcjty.lib.modules.IModule;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.*;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
+import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
-import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import static mcjty.rftoolspower.RFToolsPower.tab;
@@ -63,6 +64,16 @@ public class DimensionalCellModule implements IModule {
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_DIMENSIONAL_CELL = CONTAINERS.register("dimensionalcell", GenericContainer::createContainerType);
 
     public static final DeferredItem<PowerCellCardItem> POWERCELL_CARD = ITEMS.register("powercell_card", tab(PowerCellCardItem::new));
+
+    public static final Supplier<AttachmentType<DimensionalCellData>> DIMENSIONAL_CELL_DATA = ATTACHMENT_TYPES.register(
+            "dimensional_cell_data", () -> AttachmentType.builder(() -> new DimensionalCellData(0, 0, 0, -1))
+                    .serialize(DimensionalCellData.CODEC)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<DimensionalCellData>> ITEM_DIMENSIONAL_CELL_DATA = COMPONENTS.registerComponentType(
+            "dimensional_cell_data",
+            builder -> builder
+                    .persistent(DimensionalCellData.CODEC)
+                    .networkSynchronized(DimensionalCellData.STREAM_CODEC));
 
     public DimensionalCellModule(IEventBus bus) {
         bus.addListener(this::registerMenuScreens);

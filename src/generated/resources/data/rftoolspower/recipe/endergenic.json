@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "Z": {
+      "item": "rftoolsbase:infused_enderpearl"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "o": {
+      "tag": "c:ender_pearls"
+    }
+  },
+  "pattern": [
+    "dod",
+    "ZFZ",
+    "dod"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rftoolspower:endergenic"
+  }
+}

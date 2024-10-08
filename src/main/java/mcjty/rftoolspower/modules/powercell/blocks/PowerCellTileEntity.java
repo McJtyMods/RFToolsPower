@@ -453,7 +453,6 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
         super.loadAdditional(tagCompound, provider);
-        // @todo 1.21 data
         loadClientDataFromNBT(tagCompound);
         CompoundTag info = tagCompound.getCompound("Info");
         localEnergy = info.getLong("energy");
@@ -462,7 +461,6 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
         CompoundTag info = getOrCreateInfo(tagCompound);
-        // @todo 1.21 data
         saveClientDataToNBT(tagCompound);
         info.putLong("energy", localEnergy);
         super.saveAdditional(tagCompound, provider);
