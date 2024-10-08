@@ -201,7 +201,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
         return new IPowerInformation() {
             @Override
             public long getEnergyDiffPerTick() {
-                return burning > 0 ? getRfPerTick() : 0;
+                return getData(CoalGeneratorModule.COAL_GENERATOR_DATA).burning() > 0 ? getRfPerTick() : 0;
             }
 
             @Override
@@ -221,7 +221,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
 
             @Override
             public String getMachineStatus() {
-                return burning > 0 ? "generating power" : "idle";
+                return getData(CoalGeneratorModule.COAL_GENERATOR_DATA).burning() > 0 ? "generating power" : "idle";
             }
         };
     }
