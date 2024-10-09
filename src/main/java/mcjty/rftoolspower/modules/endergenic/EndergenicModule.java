@@ -7,6 +7,7 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
@@ -126,7 +127,7 @@ public class EndergenicModule implements IModule {
                                 " C ", "rFr", " H "),
                 Dob.blockBuilder(ENDERGENIC)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> p.singleTextureBlockC(ENDERGENIC.block().get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> builder.renderType("translucent")))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())

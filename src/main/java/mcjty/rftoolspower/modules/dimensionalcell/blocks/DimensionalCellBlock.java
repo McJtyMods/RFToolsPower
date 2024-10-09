@@ -5,15 +5,15 @@ import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
-import mcjty.lib.varia.NBTTools;
 import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
+import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
@@ -88,11 +87,9 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
                         parameter("info", stack -> {
-                            // @todo 1.21 data
-//                            String energy = stack.getTag() == null ? "0" : String.valueOf(getEnergy(stack));
-//                            String max = String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
-//                            return energy + " (max " + max + " RF/FE)";
-                            return "todo 1.21";
+                            String energy = String.valueOf(getEnergy(stack));
+                            String max = String.valueOf(DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor(type) / DimensionalCellConfiguration.simpleFactor.get());
+                            return energy + " (max " + max + " RF/FE)";
                         }))
         );
         this.type = type;
@@ -142,38 +139,45 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     private static int getEnergy(ItemStack stack) {
-        return NBTTools.getInfoNBT(stack, CompoundTag::getInt, "energy", 0);
+        var data = stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
+        return data == null ? 0 : data.energy();
     }
 
     private static void setEnergy(ItemStack stack, int energy) {
-        NBTTools.setInfoNBT(stack, CompoundTag::putInt, "energy", energy);
+        var data = stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
+        if (data == null) {
+            data = new DimensionalCellData(energy, 0, 0, -1);
+        } else {
+            data = data.withEnergy(energy);
+        }
+        stack.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA, data);
     }
 
     @Override
     public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
-        // @todo 1.21 data
-        if (/*stack.hasTag() && */ !world.isClientSide) {
-            DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
-            if (dimensionalCellTileEntity != null) {
-                int networkId = dimensionalCellTileEntity.getNetworkId();
-                if (networkId == -1) {
-                    // No network, energy is already restored to the local block
-                } else {
-                    int energy = getEnergy(stack);
-                    DimensionalCellNetwork dimensionalCellNetwork = DimensionalCellNetwork.get(world);
-                    DimensionalCellNetwork.Network network = dimensionalCellNetwork.getChannel(networkId);
-                    network.receiveEnergy(energy);
-                    Block block = world.getBlockState(pos).getBlock();
-                    network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
-                    dimensionalCellNetwork.save();
+        if (!world.isClientSide) {
+            if (stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA) == null) {
+                DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
+                if (dimensionalCellTileEntity != null && type.isCreative()) {
+                    dimensionalCellTileEntity.setAllOutput();
                 }
-            }
-            // @todo 1.21 data
-        } else if (/*!stack.hasTag() && */ !world.isClientSide) {
-            DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
-            if (dimensionalCellTileEntity != null && type.isCreative()) {
-                dimensionalCellTileEntity.setAllOutput();
+            } else {
+                DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
+                if (dimensionalCellTileEntity != null) {
+                    int networkId = dimensionalCellTileEntity.getNetworkId();
+                    if (networkId == -1) {
+                        // No network, energy is already restored to the local block
+                    } else {
+                        int energy = getEnergy(stack);
+                        DimensionalCellNetwork dimensionalCellNetwork = DimensionalCellNetwork.get(world);
+                        DimensionalCellNetwork.Network network = dimensionalCellNetwork.getChannel(networkId);
+                        network.receiveEnergy(energy);
+                        Block block = world.getBlockState(pos).getBlock();
+                        network.add(world, dimensionalCellTileEntity.getGlobalPos(), getType(block));
+                        dimensionalCellNetwork.save();
+                    }
+                }
             }
         }
 

@@ -1,17 +1,17 @@
 package mcjty.rftoolspower.modules.powercell.blocks;
 
+import mcjty.lib.api.power.ItemEnergy;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
-import mcjty.lib.varia.NBTTools;
+import mcjty.lib.setup.Registration;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -63,7 +63,11 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     }
 
     private static long getEnergy(ItemStack stack) {
-        return NBTTools.getInfoNBT(stack, CompoundTag::getLong, "energy", 0L);
+        ItemEnergy energy = stack.get(Registration.ITEM_ENERGY);
+        if (energy != null) {
+            return energy.energy();
+        }
+        return 0;
     }
 
     @Override

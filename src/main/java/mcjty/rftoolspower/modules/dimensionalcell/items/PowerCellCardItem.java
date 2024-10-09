@@ -4,13 +4,14 @@ import mcjty.lib.builder.TooltipBuilder;
 import mcjty.lib.tooltips.ITooltipSettings;
 import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
+import mcjty.rftoolspower.modules.dimensionalcell.data.PowerCardData;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
@@ -51,19 +52,10 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     }
 
     public static int getId(ItemStack stack) {
-        // @todo 1.21 data
-//        if (!stack.hasTag()) {
-//            return -1;
-//        }
-//        if (!stack.getTag().contains("id")) {
-//            return -1;
-//        }
-//        return stack.getTag().getInt("id");
-        return -1;
+        return stack.getOrDefault(DimensionalCellModule.ITEM_POWERCARD_DATA, PowerCardData.EMPTY).id();
     }
 
     public static void setId(ItemStack stack, int id) {
-        // @todo 1.21 data
-//        stack.getOrCreateTag().putInt("id", id);
+        stack.set(DimensionalCellModule.ITEM_POWERCARD_DATA, new PowerCardData(id));
     }
 }

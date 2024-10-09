@@ -3,6 +3,8 @@ package mcjty.rftoolspower.modules.monitor.blocks;
 
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
+import mcjty.lib.setup.Registration;
+import mcjty.lib.tileentity.BaseBEData;
 import mcjty.lib.tileentity.LogicSupport;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
@@ -77,13 +79,13 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundTag tagCompound) {
-        saveInfo(tagCompound);
+    public void saveClientDataToNBT(CompoundTag tag) {
+        tag.putByte("powered", powerLevel);
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundTag tagCompound) {
-        loadInfo(tagCompound);
+    public void loadClientDataFromNBT(CompoundTag tag) {
+        powerLevel = tag.getByte("powered");
     }
 
     @Override

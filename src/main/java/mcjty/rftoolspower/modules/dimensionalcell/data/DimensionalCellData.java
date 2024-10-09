@@ -22,4 +22,8 @@ public record DimensionalCellData(int energy, long totalInserted, long totalExtr
             ByteBufCodecs.INT, DimensionalCellData::networkId,
             DimensionalCellData::new
     );
+
+    public DimensionalCellData withEnergy(int energy) {
+        return new DimensionalCellData(energy, totalInserted, totalExtracted, networkId);
+    }
 }

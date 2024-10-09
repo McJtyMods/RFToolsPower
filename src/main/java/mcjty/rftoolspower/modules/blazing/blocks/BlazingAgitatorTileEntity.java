@@ -11,6 +11,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
@@ -25,6 +26,7 @@ import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRodStack;
 import mcjty.rftoolspower.modules.blazing.logic.BlazingAgitatorAlgorithm;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
@@ -68,7 +70,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     @Cap(type = CapType.ENERGY)
     private static final Function<BlazingAgitatorTileEntity, GenericEnergyStorage> ENERGY_CAP = be -> be.energyStorage;
 
-    private final IInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
+    private final DefaultInfusable infusable = new DefaultInfusable(BlazingAgitatorTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
     private static final Function<BlazingAgitatorTileEntity, IInfusable> INFUSABLE_CAP = be -> be.infusable;
 
@@ -148,19 +150,19 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundTag tagCompound) {
+    public void saveClientDataToNBT(CompoundTag tag) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-            tagCompound.putFloat("rs" + i, rotationSpeed[i]);
+            tag.putFloat("rs" + i, rotationSpeed[i]);
         }
-        saveItemHandlerCap(tagCompound, getLevel().registryAccess());   // @todo 1.21 right?
+        items.save(tag, "items", getLevel().registryAccess());
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundTag tagCompound) {
+    public void loadClientDataFromNBT(CompoundTag tag) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-            rotationSpeed[i] = tagCompound.getFloat("rs" + i);
+            rotationSpeed[i] = tag.getFloat("rs" + i);
         }
-        loadItemHandlerCap(tagCompound);
+        items.load(tag, "items", getLevel().registryAccess());
     }
 
     @Override
@@ -264,18 +266,39 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        items.save(tag, "items", provider);
+        energyStorage.save(tag, "energy", provider);
+        infusable.save(tag, "infusable");
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        items.load(tag, "items", provider);
+        energyStorage.load(tag, "energy", provider);
+        infusable.load(tag, "infusable");
+    }
+
+    @Override
     protected void applyImplicitComponents(DataComponentInput input) {
         super.applyImplicitComponents(input);
         var data = input.get(BlazingModule.ITEM_AGITATOR_DATA);
         if (data != null) {
             setData(BlazingModule.AGITATOR_DATA, data);
         }
+        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
+        infusable.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
+        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        var data = getData(BlazingModule.AGITATOR_DATA);
-        builder.set(BlazingModule.ITEM_AGITATOR_DATA, data);
+        builder.set(BlazingModule.ITEM_AGITATOR_DATA, getData(BlazingModule.AGITATOR_DATA));
+        energyStorage.collectImplicitComponents(builder);
+        infusable.collectImplicitComponents(builder);
+        items.collectImplicitComponents(builder);
     }
 }

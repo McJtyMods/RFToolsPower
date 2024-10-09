@@ -8,6 +8,7 @@ import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
+import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
 import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
@@ -90,6 +91,8 @@ public class RFToolsPower {
             public @Nullable IMachineInformation getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
                 if (be instanceof EndergenicTileEntity te) {
                     return te.getInfoHandler();
+                } else if (be instanceof DimensionalCellTileEntity te) {
+                    return te.getInfoHandler();
                 }
                 return null;
             }
@@ -99,6 +102,8 @@ public class RFToolsPower {
             public @Nullable IInformationScreenInfo getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
                 if (be instanceof PowerCellTileEntity te) {
                     return te.getInfoScreenInfo();
+                } else if (be instanceof DimensionalCellTileEntity te) {
+                    return te.getInfoScreenInfo();
                 }
                 return null;
             }
@@ -107,6 +112,8 @@ public class RFToolsPower {
             @Override
             public @Nullable IEnergyStorage getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
                 if (be instanceof PowerCellTileEntity te) {
+                    return te.getEnergyStorage(direction);
+                } else if (be instanceof DimensionalCellTileEntity te) {
                     return te.getEnergyStorage(direction);
                 }
                 return null;

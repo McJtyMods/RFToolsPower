@@ -4,11 +4,13 @@ import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.information.IPowerInformation;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
+import mcjty.lib.api.power.ItemEnergy;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
@@ -20,7 +22,9 @@ import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import mcjty.rftoolspower.modules.generator.data.CoalGeneratorData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -72,7 +76,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
             .energyHandler(() -> be.energyStorage)
             .setupSync(be);
 
-    private final IInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);
+    private final DefaultInfusable infusable = new DefaultInfusable(CoalGeneratorTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
     private static final Function<CoalGeneratorTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusable;
 
@@ -181,19 +185,40 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        energyStorage.save(tag, "energy", provider);
+        items.save(tag, "items", provider);
+        infusable.save(tag, "infusable");
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        energyStorage.load(tag, "energy", provider);
+        items.load(tag, "items", provider);
+        infusable.load(tag, "infusable");
+    }
+
+    @Override
     protected void applyImplicitComponents(DataComponentInput input) {
         super.applyImplicitComponents(input);
         var data = input.get(CoalGeneratorModule.ITEM_COAL_GENERATOR_DATA);
         if (data != null) {
             setData(CoalGeneratorModule.COAL_GENERATOR_DATA, data);
         }
+        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
+        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
+        infusable.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        var data = getData(CoalGeneratorModule.COAL_GENERATOR_DATA);
-        builder.set(CoalGeneratorModule.ITEM_COAL_GENERATOR_DATA, data);
+        builder.set(CoalGeneratorModule.ITEM_COAL_GENERATOR_DATA, getData(CoalGeneratorModule.COAL_GENERATOR_DATA));
+        energyStorage.collectImplicitComponents(builder);
+        items.collectImplicitComponents(builder);
+        infusable.collectImplicitComponents(builder);
     }
 
     @Nonnull

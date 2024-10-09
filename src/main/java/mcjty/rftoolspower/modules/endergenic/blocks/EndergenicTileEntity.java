@@ -14,6 +14,7 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.network.Networking;
 import mcjty.lib.network.PacketSendClientCommand;
 import mcjty.lib.network.PacketServerCommandTyped;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.tileentity.*;
 import mcjty.lib.typed.Key;
 import mcjty.lib.typed.Type;
@@ -35,6 +36,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -84,7 +86,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
     private final Lazy<IMachineInformation> infoHandler = Lazy.of(this::createMachineInfo);
 
-    private final IInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
+    private final DefaultInfusable infusable = new DefaultInfusable(EndergenicTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
     private static final Function<EndergenicTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusable;
 
@@ -679,42 +681,62 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tagCompound, provider);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
 
-        chargingMode = tagCompound.getInt("charging");
-        currentAge = tagCompound.getInt("age");
-        destination = BlockPosTools.read(tagCompound, "dest");
-        distance = tagCompound.getInt("distance");
-        prevIn = tagCompound.getBoolean("prevIn");
-        badCounter = tagCompound.getByte("bad");
-        goodCounter = tagCompound.getByte("good");
+        chargingMode = tag.getInt("charging");
+        currentAge = tag.getInt("age");
+        destination = BlockPosTools.read(tag, "dest");
+        distance = tag.getInt("distance");
+        prevIn = tag.getBoolean("prevIn");
+        badCounter = tag.getByte("bad");
+        goodCounter = tag.getByte("good");
         pearls.clear();
-        ListTag list = tagCompound.getList("pearls", Tag.TAG_COMPOUND);
+        ListTag list = tag.getList("pearls", Tag.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             CompoundTag tc = list.getCompound(i);
             EndergenicPearl pearl = new EndergenicPearl(tc);
             pearls.add(pearl);
         }
+
+        energyStorage.load(tag, "energy", provider);
+        infusable.load(tag, "infusable");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tagCompound, provider);
+    public void saveAdditional(@Nonnull CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
 
-        tagCompound.putInt("charging", chargingMode);
-        tagCompound.putInt("age", currentAge);
-        BlockPosTools.write(tagCompound, "dest", destination);
-        tagCompound.putInt("distance", distance);
-        tagCompound.putBoolean("prevIn", prevIn);
-        tagCompound.putByte("bad", (byte) badCounter);
-        tagCompound.putByte("good", (byte) goodCounter);
+        tag.putInt("charging", chargingMode);
+        tag.putInt("age", currentAge);
+        BlockPosTools.write(tag, "dest", destination);
+        tag.putInt("distance", distance);
+        tag.putBoolean("prevIn", prevIn);
+        tag.putByte("bad", (byte) badCounter);
+        tag.putByte("good", (byte) goodCounter);
 
         ListTag pearlList = new ListTag();
         for (EndergenicPearl pearl : pearls) {
             pearlList.add(pearl.getTagCompound());
         }
-        tagCompound.put("pearls", pearlList);
+        tag.put("pearls", pearlList);
+
+        energyStorage.save(tag, "energy", provider);
+        infusable.save(tag, "infusable");
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
+        infusable.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        energyStorage.collectImplicitComponents(builder);
+        infusable.collectImplicitComponents(builder);
     }
 
     public static final Key<Long> PARAM_STATRF = new Key<>("statrf", Type.LONG);

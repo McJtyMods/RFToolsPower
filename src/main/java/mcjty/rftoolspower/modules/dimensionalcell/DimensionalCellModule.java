@@ -5,10 +5,12 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.*;
 import mcjty.rftoolspower.modules.dimensionalcell.client.GuiDimensionalCell;
 import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
+import mcjty.rftoolspower.modules.dimensionalcell.data.PowerCardData;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -25,7 +27,6 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import static mcjty.rftoolspower.RFToolsPower.tab;
@@ -74,6 +75,11 @@ public class DimensionalCellModule implements IModule {
             builder -> builder
                     .persistent(DimensionalCellData.CODEC)
                     .networkSynchronized(DimensionalCellData.STREAM_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<PowerCardData>> ITEM_POWERCARD_DATA = COMPONENTS.registerComponentType(
+            "powercard_data",
+            builder -> builder
+                    .persistent(PowerCardData.CODEC)
+                    .networkSynchronized(PowerCardData.STREAM_CODEC));
 
     public DimensionalCellModule(IEventBus bus) {
         bus.addListener(this::registerMenuScreens);
@@ -105,7 +111,7 @@ public class DimensionalCellModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(DIMENSIONAL_CELL)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL.block().get(), ""))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -114,7 +120,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "PFP", "ReR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_ADVANCED)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_ADVANCED.block().get(), "advanced"))
                         .shaped(builder -> builder
                                         .define('K', DIMENSIONAL_CELL.block().get())
@@ -123,7 +129,7 @@ public class DimensionalCellModule implements IModule {
                                 "R*R", "*K*", "R*R"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_SIMPLE)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_SIMPLE.block().get(), "simple"))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -132,7 +138,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "qFq", "RdR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_CREATIVE)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_CREATIVE.block().get(), "creative")),
                 Dob.itemBuilder(POWERCELL_CARD)
                         .shaped(builder -> builder

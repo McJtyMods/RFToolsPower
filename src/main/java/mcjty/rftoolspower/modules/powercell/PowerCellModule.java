@@ -87,7 +87,7 @@ public class PowerCellModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(CELL1)
-                        .standardLoot()
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -95,7 +95,7 @@ public class PowerCellModule implements IModule {
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), PowerCellModule.POWER_CORE1.get())),
                                 "rKr", "KFK", "rKr"),
                 Dob.blockBuilder(CELL2)
-                        .standardLoot()
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         // @todo 1.21 shapedNBT
                         .shaped(builder -> builder
@@ -104,7 +104,7 @@ public class PowerCellModule implements IModule {
                                         .unlockedBy("cell", has(PowerCellModule.CELL1.block().get())),
                                 "rKr", "KPK", "rKr"),
                 Dob.blockBuilder(CELL3)
-                        .standardLoot()
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         // @todo 1.21 shapedNBT
                         .shaped(builder -> builder

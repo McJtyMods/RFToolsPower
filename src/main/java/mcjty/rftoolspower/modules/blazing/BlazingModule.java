@@ -6,6 +6,7 @@ import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
@@ -118,7 +119,7 @@ public class BlazingModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(BLAZING_AGITATOR)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(BlazingModule.ITEM_AGITATOR_DATA.get(), Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> {
                             p.simpleBlock(BLAZING_AGITATOR.block().get(), p.models().slab("blazing_agitator",
                                     p.modLoc("block/blazing/blazing_agitator_side"),
@@ -132,7 +133,7 @@ public class BlazingModule implements IModule {
                                 "XXX", "GFG", "iii"),
                 Dob.blockBuilder(BLAZING_GENERATOR)
                         .ironPickaxeTags()
-                        .standardLoot()
+                        .standardLoot(Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> {
                             ModelFile modelIdle = p.frontBasedModel("blazing_generator_idle", p.modLoc("block/blazing/blazing_generator_idle"));
                             ModelFile modelBusy = p.frontBasedModel("blazing_generator_busy", p.modLoc("block/blazing/blazing_generator_busy"));

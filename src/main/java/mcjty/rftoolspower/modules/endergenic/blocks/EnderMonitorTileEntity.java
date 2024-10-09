@@ -114,8 +114,8 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider lookup) {
-        super.loadAdditional(tagCompound, lookup);
+    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        super.loadAdditional(tagCompound, provider);
         support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
         needpulse = tagCompound.getBoolean("needPulse");
     }

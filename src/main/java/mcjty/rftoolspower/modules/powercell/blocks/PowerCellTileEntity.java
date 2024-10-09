@@ -2,6 +2,8 @@ package mcjty.rftoolspower.modules.powercell.blocks;
 
 import cpw.mods.util.Lazy;
 import mcjty.lib.api.power.IBigPower;
+import mcjty.lib.api.power.ItemEnergy;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
@@ -13,6 +15,7 @@ import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -44,7 +47,6 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     public static final ModelProperty<SideType> UP = new ModelProperty<>();
     public static final ModelProperty<SideType> DOWN = new ModelProperty<>();
     public static final ModelProperty<Tier> TIER = new ModelProperty<>();
-
 
     private final Lazy<IInformationScreenInfo> infoScreenInfo = Lazy.of(this::createScreenInfo);
     private final Lazy<NullHandler> nullStorage = Lazy.of(this::createNullHandler);
@@ -451,29 +453,41 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tagCompound, provider);
-        loadClientDataFromNBT(tagCompound);
-        CompoundTag info = tagCompound.getCompound("Info");
-        localEnergy = info.getLong("energy");
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        loadClientDataFromNBT(tag);
+        localEnergy = tag.getLong("energy");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
-        CompoundTag info = getOrCreateInfo(tagCompound);
-        saveClientDataToNBT(tagCompound);
-        info.putLong("energy", localEnergy);
-        super.saveAdditional(tagCompound, provider);
+    public void saveAdditional(@Nonnull CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        saveClientDataToNBT(tag);
+        tag.putLong("energy", localEnergy);
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundTag tagCompound) {
-        CompoundTag info = getOrCreateInfo(tagCompound);
+    public void saveClientDataToNBT(CompoundTag tag) {
         String mode = "";
         for (int i = 0 ; i < 6 ; i++) {
             mode += modes[i].ordinal();
         }
-        info.putString("mode", mode);
+        tag.putString("mode", mode);
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        ItemEnergy energy = input.get(Registration.ITEM_ENERGY);
+        if (energy != null) {
+            setLocalEnergy(energy.energy());
+        }
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        builder.set(Registration.ITEM_ENERGY, new ItemEnergy(getLocalEnergy()));
     }
 
     @Override

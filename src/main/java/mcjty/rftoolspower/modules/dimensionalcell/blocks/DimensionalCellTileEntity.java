@@ -12,6 +12,7 @@ import mcjty.lib.blockcommands.ServerCommand;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.TickingTileEntity;
@@ -24,11 +25,14 @@ import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
+import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -92,7 +96,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
     private final Lazy<IInformationScreenInfo> infoScreenInfo = Lazy.of(this::createScreenInfo);
 
-    private final IInfusable infusableHandler = new DefaultInfusable(DimensionalCellTileEntity.this);
+    private final DefaultInfusable infusableHandler = new DefaultInfusable(DimensionalCellTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
     private static final Function<DimensionalCellTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusableHandler;
 
@@ -122,9 +126,6 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     };
 
     private int networkId = -1;
-
-    // Only used when this block is not part of a network
-    private int energy = 0;
 
     // Total amount of energy extracted from this block (local or not)
     private long totalExtracted = 0;
@@ -225,13 +226,30 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         if (data != null) {
             setData(DimensionalCellModule.DIMENSIONAL_CELL_DATA, data);
         }
+        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
+        infusableHandler.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        var data = getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA);
-        builder.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA, data);
+        builder.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA, getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA));
+        items.collectImplicitComponents(builder);
+        infusableHandler.collectImplicitComponents(builder);
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        items.save(tag, "items", provider);
+        infusableHandler.save(tag, "infusable");
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        items.load(tag, "items", provider);
+        infusableHandler.load(tag, "infusable");
     }
 
     private static final EnumProperty<Mode>[] MODES = new EnumProperty[]{
@@ -350,7 +368,8 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         if (!level.isClientSide) {
             DimensionalCellNetwork.Network network = getNetwork();
             if (network != null) {
-                energy = network.extractEnergySingleBlock(getDimensionalCellType());
+                int energy = network.extractEnergySingleBlock(getDimensionalCellType());
+                setEnergy(energy);
                 network.remove(level, getGlobalPos(), getDimensionalCellType());
                 DimensionalCellNetwork.get(level).save();
             }
@@ -371,7 +390,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             networkId = id;
             DimensionalCellNetwork.Network network = getNetwork();
             network.add(level, getGlobalPos(), getDimensionalCellType());
-            network.receiveEnergy(energy);
+            network.receiveEnergy(getEnergy());
             channels.save();
         } else {
             networkId = id;
@@ -391,8 +410,13 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         return getDimensionalCellType().isAdvanced() ? (DimensionalCellConfiguration.advancedFactor.get() * DimensionalCellConfiguration.simpleFactor.get()) : DimensionalCellConfiguration.simpleFactor.get();
     }
 
+    private void setEnergy(int energy) {
+        DimensionalCellData data = getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA).withEnergy(energy);
+        setData(DimensionalCellModule.DIMENSIONAL_CELL_DATA, data);
+    }
+
     public int getEnergy() {
-        return energy;
+        return getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA).energy();
     }
 
     public GlobalPos getGlobalPos() {
@@ -455,11 +479,12 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     private int receiveEnergyLocal(int maxReceive, boolean simulate) {
         long capacityL = (long) DimensionalCellConfiguration.rfPerNormalCell.get() * getPowerFactor() / DimensionalCellConfiguration.simpleFactor.get();
         int capacity = capacityL > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) capacityL;
+        int energy = getEnergy();
         int maxInsert = Math.min(capacity - energy, maxReceive);
         if (maxInsert > 0) {
             if (!simulate) {
                 energy += maxInsert;
-                setChanged();
+                setEnergy(energy);
             }
         }
         return getDimensionalCellType().isCreative() ? maxReceive : maxInsert;
@@ -498,6 +523,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
     private int extractEnergyLocal(int maxExtract, boolean simulate, int maximum) {
         // We act as a single block
+        int energy = getEnergy();
         if (maxExtract > energy) {
             maxExtract = energy;
         }
@@ -506,7 +532,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
         if (!simulate) {
             energy -= maxExtract;
-            setChanged();
+            setEnergy(energy);
         }
         return maxExtract;
     }
@@ -517,7 +543,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
         int networkId = getNetworkId();
         if (networkId == -1) {
-            return energy;
+            return getEnergy();
         }
         DimensionalCellNetwork.Network network = getNetwork();
         return network.getEnergy();
@@ -668,25 +694,21 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     }
 
-    // @todo 1.21
-//    @Override
-//    @Nonnull
-//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-//        if (capability == ForgeCapabilities.ENERGY) {
-//            if (facing == null) {
-//                return nullStorage.cast();
-//            } else {
-//                return sidedStorages[facing.ordinal()].cast();
-//            }
-//        }
-//        if (capability == CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY) {
-//            return infoHandler.cast();
-//        }
-//        if (capability == CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY) {
-//            return infoScreenInfo.cast();
-//        }
-//        return super.getCapability(capability, facing);
-//    }
+    public IMachineInformation getInfoHandler() {
+        return infoHandler.get();
+    }
+
+    public IInformationScreenInfo getInfoScreenInfo() {
+        return infoScreenInfo.get();
+    }
+
+    public IEnergyStorage getEnergyStorage(Direction facing) {
+        if (facing == null) {
+            return nullStorage.get();
+        } else {
+            return sidedStorages[facing.ordinal()].get();
+        }
+    }
 
     private class SidedHandler implements IEnergyStorage {
         private final Direction facing;

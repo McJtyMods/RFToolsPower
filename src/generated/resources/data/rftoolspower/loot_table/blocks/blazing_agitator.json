@@ -15,7 +15,9 @@
               "function": "minecraft:copy_components",
               "include": [
                 "mcjtylib:item_energy",
-                "minecraft:container"
+                "mcjtylib:item_inventory",
+                "rftoolspower:agitator_data",
+                "mcjtylib:infusable"
               ],
               "source": "block_entity"
             }

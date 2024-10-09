@@ -3,11 +3,13 @@ package mcjty.rftoolspower.modules.blazing.blocks;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
+import mcjty.lib.api.power.ItemEnergy;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.container.ContainerFactory;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.container.GenericItemHandler;
+import mcjty.lib.setup.Registration;
 import mcjty.lib.tileentity.Cap;
 import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
@@ -22,6 +24,7 @@ import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.items.BlazingRod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +37,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import javax.annotation.Nonnull;
-
 import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
@@ -67,7 +69,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     @Cap(type = CapType.ENERGY)
     private static final Function<BlazingGeneratorTileEntity, GenericEnergyStorage> ENERGY_CAP = tile -> tile.energyStorage;
 
-    private final IInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
+    private final DefaultInfusable infusable = new DefaultInfusable(BlazingGeneratorTileEntity.this);
     @Cap(type = CapType.INFUSABLE)
     private static final Function<BlazingGeneratorTileEntity, IInfusable> INFUSABLE_CAP = tile -> tile.infusable;
 
@@ -206,23 +208,44 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tagCompound, provider);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-            rfPerTickMax[i] = tagCompound.getInt("rftMax" + i);
-            rfPerTick[i] = tagCompound.getFloat("rft" + i);
-            ticksRemaining[i] = tagCompound.getInt("ticks" + i);
+            rfPerTickMax[i] = tag.getInt("rftMax" + i);
+            rfPerTick[i] = tag.getFloat("rft" + i);
+            ticksRemaining[i] = tag.getInt("ticks" + i);
         }
+        energyStorage.load(tag, "energy", provider);
+        items.load(tag, "items", provider);
+        infusable.load(tag, "infusable");
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
+    public void saveAdditional(@Nonnull CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-            tagCompound.putInt("rftMax" + i, rfPerTickMax[i]);
-            tagCompound.putFloat("rft" + i, rfPerTick[i]);
-            tagCompound.putInt("ticks" + i, ticksRemaining[i]);
+            tag.putInt("rftMax" + i, rfPerTickMax[i]);
+            tag.putFloat("rft" + i, rfPerTick[i]);
+            tag.putInt("ticks" + i, ticksRemaining[i]);
         }
-        super.saveAdditional(tagCompound, provider);
+        energyStorage.save(tag, "energy", provider);
+        items.save(tag, "items", provider);
+        infusable.save(tag, "infusable");
     }
 
+    @Override
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
+        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
+        infusable.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        energyStorage.collectImplicitComponents(builder);
+        items.collectImplicitComponents(builder);
+        infusable.collectImplicitComponents(builder);
+    }
 }
