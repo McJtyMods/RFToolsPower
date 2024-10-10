@@ -4,7 +4,8 @@ import mcjty.lib.api.smartwrench.SmartWrenchMode;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.crafting.INBTPreservingIngredient;
+import mcjty.lib.crafting.IComponentsToPreserve;
+import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.items.SmartWrenchItem;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
@@ -14,6 +15,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
 import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -38,12 +40,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
 
-public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIngredient {
+public class DimensionalCellBlock extends BaseBlock implements IComponentsToPreserve {
 
     public static final EnumProperty<DimensionalCellTileEntity.Mode> NORTH = EnumProperty.create("north", DimensionalCellTileEntity.Mode.class);
     public static final EnumProperty<DimensionalCellTileEntity.Mode> SOUTH = EnumProperty.create("south", DimensionalCellTileEntity.Mode.class);
@@ -102,8 +103,8 @@ public class DimensionalCellBlock extends BaseBlock implements INBTPreservingIng
     }
 
     @Override
-    public Collection<String> getTagsToPreserve() {
-        return Collections.singleton("BlockEntityTag");
+    public Collection<DataComponentType<?>> getComponentsToPreserve() {
+        return List.of(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get(), Registration.ITEM_INFUSABLE.get(), Registration.ITEM_INVENTORY.get());
     }
 
     private static int getPowerFactor(DimensionalCellType type) {

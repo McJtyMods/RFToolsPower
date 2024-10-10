@@ -1,36 +1,27 @@
 package mcjty.rftoolspower.modules.powercell;
 
-import mcjty.lib.blocks.BaseBlock;
-import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.client.ModelTools;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolsbase.modules.various.VariousModule;
-import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.client.ClientSetup;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
-import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
-
-import java.util.function.Supplier;
 
 import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.RFToolsPower.tab;
@@ -98,7 +89,7 @@ public class PowerCellModule implements IModule {
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         // @todo 1.21 shapedNBT
-                        .shaped(builder -> builder
+                        .shapedComponentPreserve(builder -> builder
                                         .define('K', POWER_CORE2.get())
                                         .define('P', CELL1.block().get())
                                         .unlockedBy("cell", has(PowerCellModule.CELL1.block().get())),
@@ -107,7 +98,7 @@ public class PowerCellModule implements IModule {
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         // @todo 1.21 shapedNBT
-                        .shaped(builder -> builder
+                        .shapedComponentPreserve(builder -> builder
                                         .define('K', POWER_CORE3.get())
                                         .define('P', CELL2.block().get())
                                         .unlockedBy("cell", has(CELL2.block().get())),

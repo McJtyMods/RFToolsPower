@@ -96,7 +96,7 @@ public class RFToolsPower {
                 }
                 return null;
             }
-        });
+        }, EndergenicModule.ENDERGENIC.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
         event.registerBlock(CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY, new IBlockCapabilityProvider<>() {
             @Override
             public @Nullable IInformationScreenInfo getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
@@ -107,7 +107,7 @@ public class RFToolsPower {
                 }
                 return null;
             }
-        });
+        }, PowerCellModule.CELL1.block().get(), PowerCellModule.CELL2.block().get(), PowerCellModule.CELL3.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
         event.registerBlock(Capabilities.EnergyStorage.BLOCK, new IBlockCapabilityProvider<>() {
             @Override
             public @Nullable IEnergyStorage getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
@@ -118,6 +118,6 @@ public class RFToolsPower {
                 }
                 return null;
             }
-        });
+        }, PowerCellModule.CELL1.block().get(), PowerCellModule.CELL2.block().get(), PowerCellModule.CELL3.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
     }
 }

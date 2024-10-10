@@ -4,7 +4,7 @@ import mcjty.lib.api.power.ItemEnergy;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.crafting.INBTPreservingIngredient;
+import mcjty.lib.crafting.IComponentsToPreserve;
 import mcjty.lib.setup.Registration;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
@@ -12,6 +12,7 @@ import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,11 +29,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
 
-public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredient {
+public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
 
     public static final BooleanProperty UPPER = BooleanProperty.create("upper");
     public static final BooleanProperty LOWER = BooleanProperty.create("lower");
@@ -158,7 +159,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     }
 
     @Override
-    public Collection<String> getTagsToPreserve() {
-        return Collections.singleton("BlockEntityTag");
+    public Collection<DataComponentType<?>> getComponentsToPreserve() {
+        return List.of(Registration.ITEM_ENERGY.get());
     }
 }
