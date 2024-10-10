@@ -23,7 +23,7 @@ public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntit
 
     @Override
     public void init() {
-        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/pearl_injector.gui"));
+        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/pearl_injector.gui"));
         super.init();
     }
 }

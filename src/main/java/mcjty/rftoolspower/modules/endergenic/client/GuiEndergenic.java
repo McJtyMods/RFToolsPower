@@ -40,7 +40,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
 
     @Override
     public void init() {
-        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/endergenic.gui"));
+        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/endergenic.gui"));
         super.init();
 
         initializeFields();
@@ -58,7 +58,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         if (window == null) {
             return;
         }
-        EndergenicTileEntity tileEntity = getTE();
+        EndergenicTileEntity tileEntity = getBE();
         energyBar.maxValue(tileEntity.getCapacity());
 
         lastRfPerTick.text(tileEntity.clientLastRfPerTick + " RF/tick");
@@ -78,7 +78,7 @@ public class GuiEndergenic extends GenericGuiContainer<EndergenicTileEntity, Gen
         timer--;
         if (timer <= 0) {
             timer = 20;
-            Networking.sendToServer(PacketRequestDataFromServer.create(getTE().getDimension(), getTE().getBlockPos(), ((ICommand) EndergenicTileEntity.CMD_GETSTATS).name(), TypedMap.EMPTY, false));
+            Networking.sendToServer(PacketRequestDataFromServer.create(getBE().getDimension(), getBE().getBlockPos(), ((ICommand) EndergenicTileEntity.CMD_GETSTATS).name(), TypedMap.EMPTY, false));
         }
         updateEnergyBar(energyBar);
     }

@@ -30,7 +30,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
 
     @Override
     public void init() {
-        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/coalgenerator.gui"));
+        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/coalgenerator.gui"));
         super.init();
 
         initializeFields();
@@ -44,7 +44,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
         if (window == null) {
             return;
         }
-        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getTE().getRSMode().ordinal());
+        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getBE().getRSMode().ordinal());
         updateEnergyBar(energyBar);
     }
 

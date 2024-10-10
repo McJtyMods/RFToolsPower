@@ -23,7 +23,7 @@ public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity,
 
     @Override
     public void init() {
-        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/endermonitor.gui"));
+        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/endermonitor.gui"));
         super.init();
     }
 }

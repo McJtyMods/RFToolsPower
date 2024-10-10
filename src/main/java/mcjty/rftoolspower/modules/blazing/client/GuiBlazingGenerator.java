@@ -32,13 +32,13 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
 
     @Override
     public void init() {
-        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_generator.gui"));
+        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_generator.gui"));
         super.init();
         initializeFields();
     }
 
     private void initializeFields() {
-        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getTE().getRSMode().ordinal());
+        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getBE().getRSMode().ordinal());
         energyBar = window.findChild("energybar");
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
             labels[i] = window.findChild("gen" + i);
@@ -51,7 +51,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
         }
         updateEnergyBar(energyBar);
 
-        BlazingGeneratorTileEntity te = getTE();
+        BlazingGeneratorTileEntity te = getBE();
         for (int i = 0 ; i < BlazingGeneratorTileEntity.BUFFER_SIZE ; i++) {
             labels[i].text(String.valueOf((int) te.getRfPerTick(i)));
         }

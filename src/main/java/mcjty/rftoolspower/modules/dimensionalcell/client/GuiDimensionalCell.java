@@ -76,10 +76,10 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         window = new Window(this, toplevel);
 
-        window.action("allnone", getTE(), DimensionalCellTileEntity.ACTION_SETNONE);
-        window.action("allinput", getTE(), DimensionalCellTileEntity.ACTION_SETINPUT);
-        window.action("alloutput", getTE(), DimensionalCellTileEntity.ACTION_SETOUTPUT);
-        window.action("clearstats", getTE(), DimensionalCellTileEntity.ACTION_CLEARSTATS);
+        window.action("allnone", getBE(), DimensionalCellTileEntity.ACTION_SETNONE);
+        window.action("allinput", getBE(), DimensionalCellTileEntity.ACTION_SETINPUT);
+        window.action("alloutput", getBE(), DimensionalCellTileEntity.ACTION_SETOUTPUT);
+        window.action("clearstats", getBE(), DimensionalCellTileEntity.ACTION_CLEARSTATS);
 
         requestRF();
     }
@@ -87,7 +87,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     private void requestRF() {
         if (System.currentTimeMillis() - lastTime > 250) {
             lastTime = System.currentTimeMillis();
-            Networking.sendToServer(PacketRequestDataFromServer.create(getTE().getDimension(), getTE().getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
+            Networking.sendToServer(PacketRequestDataFromServer.create(getBE().getDimension(), getBE().getBlockPos(), ((ICommand) DimensionalCellTileEntity.CMD_GET_INFO).name(), TypedMap.EMPTY, false));
         }
     }
 
@@ -98,7 +98,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
         requestRF();
 
-        DimensionalCellTileEntity tileEntity = getTE();
+        DimensionalCellTileEntity tileEntity = getBE();
         stats.tooltips("Power statistics. Press to clear:", "Inserted: " + tileEntity.tooltipInserted, "Extracted: " + tileEntity.tooltipExtracted);
 
         int maxValue = (tileEntity.tooltipBlocks - tileEntity.tooltipAdvancedBlocks - tileEntity.tooltipSimpleBlocks) * DimensionalCellConfiguration.rfPerNormalCell.get();

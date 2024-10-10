@@ -30,14 +30,14 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
 
     @Override
     public void init() {
-        window = new Window(this, getTE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
+        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_agitator.gui"));
         super.init();
         initializeFields();
         setupEvents();
     }
 
     private void initializeFields() {
-        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getTE().getRSMode().ordinal());
+        ((ImageChoiceLabel) window.findChild("redstone")).setCurrentChoice(getBE().getRSMode().ordinal());
         energyBar = window.findChild("energybar");
     }
 
@@ -45,7 +45,7 @@ public class GuiBlazingAgitator extends GenericGuiContainer<BlazingAgitatorTileE
         for (int x = 0 ; x < 3 ; x++) {
             for (int y = 0 ; y < 3 ; y++) {
                 String channel = "lock" + x + "" + y;
-                window.bind(channel, getTE(), channel);
+                window.bind(channel, getBE(), channel);
             }
         }
     }

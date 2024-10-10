@@ -90,7 +90,7 @@ public class BlazingModule implements IModule {
                     .networkSynchronized(BlazingRodData.STREAM_CODEC));
 
     public BlazingModule(IEventBus bus) {
-        bus.addListener(this::registerMenuScreens);
+        bus.addListener(this::registerScreens);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class BlazingModule implements IModule {
         BlazingAgitatorRenderer.register();
     }
 
-    public void registerMenuScreens(RegisterMenuScreensEvent event) {
+    public void registerScreens(RegisterMenuScreensEvent event) {
         GuiBlazingAgitator.register(event);
         GuiBlazingGenerator.register(event);
         GuiBlazingInfuser.register(event);
