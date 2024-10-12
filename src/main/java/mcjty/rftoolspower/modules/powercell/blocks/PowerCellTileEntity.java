@@ -1,6 +1,5 @@
 package mcjty.rftoolspower.modules.powercell.blocks;
 
-import cpw.mods.util.Lazy;
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.api.power.ItemEnergy;
 import mcjty.lib.setup.Registration;
@@ -26,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
