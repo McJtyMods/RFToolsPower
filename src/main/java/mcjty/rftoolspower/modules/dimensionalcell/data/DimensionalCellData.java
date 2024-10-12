@@ -26,4 +26,8 @@ public record DimensionalCellData(int energy, long totalInserted, long totalExtr
     public DimensionalCellData withEnergy(int energy) {
         return new DimensionalCellData(energy, totalInserted, totalExtracted, networkId);
     }
+
+    public DimensionalCellData withNetworkId(int networkId) {
+        return new DimensionalCellData(energy, totalInserted, totalExtracted, networkId);
+    }
 }

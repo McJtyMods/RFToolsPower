@@ -125,8 +125,6 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     };
 
-    private int networkId = -1;
-
     // Total amount of energy extracted from this block (local or not)
     private long totalExtracted = 0;
     // Total amount of energy inserted in this block (local or not)
@@ -182,7 +180,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             }
         } else if (slot == SLOT_CARDCOPY) {
             if (!stack.isEmpty()) {
-                PowerCellCardItem.setId(stack, this.networkId);
+                PowerCellCardItem.setId(stack, getNetworkId());
             }
         }
     }
@@ -196,12 +194,13 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     public int getNetworkId() {
-        return networkId;
+        return getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA).networkId();
     }
 
     public void setNetworkId(int networkId) {
-        this.networkId = networkId;
-        setChanged();
+        DimensionalCellData data = getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA);
+        data = data.withNetworkId(networkId);
+        setData(DimensionalCellModule.DIMENSIONAL_CELL_DATA, data);
     }
 
     @Nullable
@@ -374,7 +373,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                 DimensionalCellNetwork.get(level).save();
             }
         }
-        networkId = -1;
+        setNetworkId(-1);
         setChanged();
     }
 
@@ -387,13 +386,13 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                 id = channels.newChannel();
                 PowerCellCardItem.setId(stack, id);
             }
-            networkId = id;
+            setNetworkId(id);
             DimensionalCellNetwork.Network network = getNetwork();
             network.add(level, getGlobalPos(), getDimensionalCellType());
             network.receiveEnergy(getEnergy());
             channels.save();
         } else {
-            networkId = id;
+            setNetworkId(id);
         }
         setChanged();
     }
@@ -668,7 +667,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             });
 
     private TypedMap getInfo() {
-        if (networkId == -1) {
+        if (getNetworkId() == -1) {
             return TypedMap.builder()
                     .put(PARAM_ENERGY, getEnergy())
                     .put(PARAM_BLOCKS, 1)
