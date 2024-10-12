@@ -424,9 +424,9 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider lookupProvider) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
         SideType[] old = new SideType[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
-        super.onDataPacket(net, packet, lookupProvider);
+        super.onDataPacket(net, packet, provider);
         for (int i = 0 ; i < 6 ; i++) {
             if (old[i] != modes[i]) {
                 requestModelDataUpdate();
@@ -455,19 +455,19 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        loadClientDataFromNBT(tag);
+        loadClientDataFromNBT(tag, provider);
         localEnergy = tag.getLong("energy");
     }
 
     @Override
     public void saveAdditional(@Nonnull CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
-        saveClientDataToNBT(tag);
+        saveClientDataToNBT(tag, provider);
         tag.putLong("energy", localEnergy);
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundTag tag) {
+    public void saveClientDataToNBT(CompoundTag tag, HolderLookup.Provider provider) {
         String mode = "";
         for (int i = 0 ; i < 6 ; i++) {
             mode += modes[i].ordinal();
@@ -491,7 +491,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundTag tagCompound) {
+    public void loadClientDataFromNBT(CompoundTag tagCompound, HolderLookup.Provider provider) {
         CompoundTag info = tagCompound.getCompound("Info");
         String mode = info.getString("mode");
         if (mode.length() >= 6) {

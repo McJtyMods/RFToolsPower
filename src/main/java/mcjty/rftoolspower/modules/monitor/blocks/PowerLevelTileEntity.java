@@ -3,8 +3,6 @@ package mcjty.rftoolspower.modules.monitor.blocks;
 
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.builder.BlockBuilder;
-import mcjty.lib.setup.Registration;
-import mcjty.lib.tileentity.BaseBEData;
 import mcjty.lib.tileentity.LogicSupport;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
@@ -60,15 +58,15 @@ public class PowerLevelTileEntity extends TickingTileEntity {
 
     @Nonnull
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider lookup) {
-        CompoundTag tag = super.getUpdateTag(lookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tag = super.getUpdateTag(provider);
         tag.putInt("power", support.getPowerOutput());
         return tag;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookup) {
-        super.handleUpdateTag(tag, lookup);
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider) {
+        super.handleUpdateTag(tag, provider);
         support.setPowerOutput(tag.getInt("power"));
     }
 
@@ -79,18 +77,18 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundTag tag) {
+    public void saveClientDataToNBT(CompoundTag tag, HolderLookup.Provider provider) {
         tag.putByte("powered", powerLevel);
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundTag tag) {
+    public void loadClientDataFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
         powerLevel = tag.getByte("powered");
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookup) {
-        handleUpdateTag(pkt.getTag(), lookup);
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
+        handleUpdateTag(pkt.getTag(), provider);
     }
 
     @Override

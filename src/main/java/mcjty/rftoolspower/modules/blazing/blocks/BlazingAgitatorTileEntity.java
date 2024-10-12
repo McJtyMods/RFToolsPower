@@ -150,7 +150,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void saveClientDataToNBT(CompoundTag tag) {
+    public void saveClientDataToNBT(CompoundTag tag, HolderLookup.Provider provider) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tag.putFloat("rs" + i, rotationSpeed[i]);
         }
@@ -158,7 +158,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void loadClientDataFromNBT(CompoundTag tag) {
+    public void loadClientDataFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rotationSpeed[i] = tag.getFloat("rs" + i);
         }

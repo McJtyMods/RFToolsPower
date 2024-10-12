@@ -88,7 +88,6 @@ public class PowerCellModule implements IModule {
                 Dob.blockBuilder(CELL2)
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
-                        // @todo 1.21 shapedNBT
                         .shapedComponentPreserve(builder -> builder
                                         .define('K', POWER_CORE2.get())
                                         .define('P', CELL1.block().get())
@@ -97,7 +96,6 @@ public class PowerCellModule implements IModule {
                 Dob.blockBuilder(CELL3)
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
-                        // @todo 1.21 shapedNBT
                         .shapedComponentPreserve(builder -> builder
                                         .define('K', POWER_CORE3.get())
                                         .define('P', CELL2.block().get())
