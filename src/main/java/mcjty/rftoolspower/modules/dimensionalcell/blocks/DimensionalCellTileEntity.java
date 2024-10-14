@@ -180,7 +180,8 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
             }
         } else if (slot == SLOT_CARDCOPY) {
             if (!stack.isEmpty()) {
-                PowerCellCardItem.setId(stack, getNetworkId());
+                int id = getNetworkId();
+                PowerCellCardItem.setId(stack, id);
             }
         }
     }
@@ -617,7 +618,6 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     public static void dumpNetwork(Player player, DimensionalCellTileEntity dimensionalCellTileEntity) {
         DimensionalCellNetwork.Network network = dimensionalCellTileEntity.getNetwork();
         Set<GlobalPos> blocks = network.getBlocks();
-//        System.out.println("blocks.size() = " + blocks.size());
         blocks.forEach(b -> {
             String msg;
             Level w = LevelTools.getLevel(b.dimension());
