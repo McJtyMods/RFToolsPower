@@ -47,7 +47,9 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         toplevel.setBounds(new Rectangle(leftPos, topPos, imageWidth, imageHeight));
         window = new Window(this, toplevel);
 
-        window.bind("minimum", tileEntity, "minimum");
-        window.bind("maximum", tileEntity, "maximum");
+        window.bindData("minimum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get(), data -> data.withMinimum((byte) minimumLabel.getRealValue()));
+        window.bindData("maximum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get(), data -> data.withMaximum((byte) maximumLabel.getRealValue()));
+//        window.bind("minimum", tileEntity, "minimum");
+//        window.bind("maximum", tileEntity, "maximum");
     }
 }
