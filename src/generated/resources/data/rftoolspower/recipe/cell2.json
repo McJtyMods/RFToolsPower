@@ -1,0 +1,27 @@
+{
+  "type": "mcjtylib:copy_components",
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+      "K": {
+        "item": "rftoolspower:power_core2"
+      },
+      "P": {
+        "item": "rftoolspower:cell1"
+      },
+      "r": {
+        "item": "minecraft:redstone"
+      }
+    },
+    "pattern": [
+      "rKr",
+      "KPK",
+      "rKr"
+    ],
+    "result": {
+      "count": 1,
+      "id": "rftoolspower:cell2"
+    }
+  }
+}

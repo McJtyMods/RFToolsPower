@@ -9,6 +9,7 @@ import mcjty.lib.gui.widgets.Slider;
 import mcjty.lib.gui.widgets.Widgets;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
+import mcjty.rftoolspower.modules.monitor.data.PowerMonitorData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -33,13 +34,11 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         super.init();
 
         PowerMonitorTileEntity tileEntity = getBE();
-        ScrollableLabel minimumLabel = new ScrollableLabel().name("minimum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100)
-                .realValue(tileEntity.getMinimum());
+        ScrollableLabel minimumLabel = new ScrollableLabel().name("minimum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100);
         Slider mininumSlider = new Slider().desiredHeight(15).horizontal().minimumKnobSize(15).tooltips("Minimum level").scrollableName("minimum");
         Panel minimumPanel = Widgets.horizontal().children(Widgets.label("Min:").desiredWidth(30), mininumSlider, minimumLabel).desiredHeight(20);
 
-        ScrollableLabel maximumLabel = new ScrollableLabel().name("maximum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100)
-                .realValue(tileEntity.getMaximum());
+        ScrollableLabel maximumLabel = new ScrollableLabel().name("maximum").suffix("%").desiredWidth(30).realMinimum(0).realMaximum(100);
         Slider maximumSlider = new Slider().desiredHeight(15).horizontal().minimumKnobSize(15).tooltips("Maximum level").scrollableName("maximum");
         Panel maximumPanel = Widgets.horizontal().children(Widgets.label("Max:").desiredWidth(30), maximumSlider, maximumLabel).desiredHeight(20);
 
@@ -47,9 +46,11 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         toplevel.setBounds(new Rectangle(leftPos, topPos, imageWidth, imageHeight));
         window = new Window(this, toplevel);
 
+        PowerMonitorData monitorData = menu.getAttachmentData(MonitorModule.POWER_MONITOR_DATA.get());
+        minimumLabel.realValue(monitorData.minimum());
+        maximumLabel.realValue(monitorData.maximum());
+
         window.bindData("minimum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get(), data -> data.withMinimum((byte) minimumLabel.getRealValue()));
         window.bindData("maximum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get(), data -> data.withMaximum((byte) maximumLabel.getRealValue()));
-//        window.bind("minimum", tileEntity, "minimum");
-//        window.bind("maximum", tileEntity, "maximum");
     }
 }

@@ -16,7 +16,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:powercell1"
+        "recipe": "rftoolspower:cell1"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -29,7 +29,7 @@
   ],
   "rewards": {
     "recipes": [
-      "rftoolspower:powercell1"
+      "rftoolspower:cell1"
     ]
   }
 }

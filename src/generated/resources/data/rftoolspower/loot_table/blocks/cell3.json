@@ -21,12 +21,12 @@
               "source": "block_entity"
             }
           ],
-          "name": "rftoolspower:powercell1"
+          "name": "rftoolspower:cell3"
         }
       ],
-      "name": "powercell1",
+      "name": "cell3",
       "rolls": 1.0
     }
   ],
-  "random_sequence": "rftoolspower:blocks/powercell1"
+  "random_sequence": "rftoolspower:blocks/cell3"
 }

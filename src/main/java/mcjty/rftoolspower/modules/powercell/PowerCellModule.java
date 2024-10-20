@@ -29,21 +29,21 @@ import static mcjty.rftoolspower.setup.Registration.*;
 
 public class PowerCellModule implements IModule {
 
-    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL1 = RBLOCKS.registerBlock("powercell1",
+    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL1 = RBLOCKS.registerBlock("cell1",
             PowerCellTileEntity.class,
             () -> new PowerCellBlock(Tier.TIER1),
             block -> new BlockItem(block.get(), createStandardProperties()),
             (pos, state) -> new PowerCellTileEntity(Tier.TIER1, pos, state)
     );
 
-    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL2 = RBLOCKS.registerBlock("powercell2",
+    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL2 = RBLOCKS.registerBlock("cell2",
             PowerCellTileEntity.class,
             () -> new PowerCellBlock(Tier.TIER2),
             block -> new BlockItem(block.get(), createStandardProperties()),
             (pos, state) -> new PowerCellTileEntity(Tier.TIER2, pos, state)
     );
 
-    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL3 = RBLOCKS.registerBlock("powercell3",
+    public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL3 = RBLOCKS.registerBlock("cell3",
             PowerCellTileEntity.class,
             () -> new PowerCellBlock(Tier.TIER3),
             block -> new BlockItem(block.get(), createStandardProperties()),

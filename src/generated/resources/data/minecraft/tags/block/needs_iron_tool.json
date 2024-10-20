@@ -13,8 +13,8 @@
     "rftoolspower:coalgenerator",
     "rftoolspower:power_monitor",
     "rftoolspower:power_level",
-    "rftoolspower:powercell1",
-    "rftoolspower:powercell2",
-    "rftoolspower:powercell3"
+    "rftoolspower:cell1",
+    "rftoolspower:cell2",
+    "rftoolspower:cell3"
   ]
 }

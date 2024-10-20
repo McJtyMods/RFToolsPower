@@ -38,7 +38,7 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     public static LogicSlabBlock createBlock() {
         return new LogicSlabBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
-                .info(key("message.rftoolsutility.shiftmessage"))
+                .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(PowerLevelTileEntity::new));
     }
@@ -56,34 +56,15 @@ public class PowerLevelTileEntity extends TickingTileEntity {
         return support.getRedstoneOutput(state, side);
     }
 
-    @Nonnull
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        CompoundTag tag = super.getUpdateTag(provider);
-        tag.putInt("power", support.getPowerOutput());
-        return tag;
-    }
-
-    @Override
-    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider) {
-        super.handleUpdateTag(tag, provider);
-        support.setPowerOutput(tag.getInt("power"));
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
-    }
-
     @Override
     public void saveClientDataToNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.putByte("powered", powerLevel);
+        tag.putInt("power", support.getPowerOutput());
     }
 
     @Override
     public void loadClientDataFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        powerLevel = tag.getByte("powered");
+//        powerLevel = tag.getByte("powered");
+        support.setPowerOutput(tag.getInt("power"));
     }
 
     @Override

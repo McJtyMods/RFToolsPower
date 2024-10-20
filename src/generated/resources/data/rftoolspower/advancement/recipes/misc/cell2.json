@@ -1,11 +1,10 @@
 {
-  "parent": "minecraft:recipes/root",
   "criteria": {
     "cell": {
       "conditions": {
         "items": [
           {
-            "items": "rftoolspower:powercell2"
+            "items": "rftoolspower:cell1"
           }
         ]
       },
@@ -13,7 +12,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:powercell3"
+        "recipe": "rftoolspower:cell2"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +25,8 @@
   ],
   "rewards": {
     "recipes": [
-      "rftoolspower:powercell3"
+      "rftoolspower:cell2"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }
