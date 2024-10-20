@@ -111,7 +111,7 @@ public class DimensionalCellModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(DIMENSIONAL_CELL)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL.block().get(), ""))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -120,7 +120,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "PFP", "ReR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_ADVANCED)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_ADVANCED.block().get(), "advanced"))
                         .shaped(builder -> builder
                                         .define('K', DIMENSIONAL_CELL.block().get())
@@ -129,7 +129,7 @@ public class DimensionalCellModule implements IModule {
                                 "R*R", "*K*", "R*R"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_SIMPLE)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_SIMPLE.block().get(), "simple"))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -138,7 +138,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "qFq", "RdR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_CREATIVE)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_CREATIVE.block().get(), "creative")),
                 Dob.itemBuilder(POWERCELL_CARD)
                         .shaped(builder -> builder

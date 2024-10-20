@@ -16,7 +16,8 @@
               "include": [
                 "mcjtylib:item_energy",
                 "mcjtylib:item_inventory",
-                "mcjtylib:infusable"
+                "mcjtylib:infusable",
+                "rftoolspower:dimensional_cell_data"
               ],
               "source": "block_entity"
             }

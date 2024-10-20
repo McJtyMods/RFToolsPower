@@ -476,6 +476,18 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     }
 
     @Override
+    public void loadClientDataFromNBT(CompoundTag tagCompound, HolderLookup.Provider provider) {
+        String mode = tagCompound.getString("mode");
+        if (mode.length() >= 6) {
+            for (int i = 0 ; i < 6 ; i++) {
+                modes[i] = SideType.VALUES[Integer.parseInt(mode.substring(i, i+1))];
+            }
+        }
+        updateOutputCount();
+    }
+
+
+    @Override
     protected void applyImplicitComponents(DataComponentInput input) {
         super.applyImplicitComponents(input);
         ItemEnergy energy = input.get(Registration.ITEM_ENERGY);
@@ -488,18 +500,6 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
         builder.set(Registration.ITEM_ENERGY, new ItemEnergy(getLocalEnergy()));
-    }
-
-    @Override
-    public void loadClientDataFromNBT(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        CompoundTag info = tagCompound.getCompound("Info");
-        String mode = info.getString("mode");
-        if (mode.length() >= 6) {
-            for (int i = 0 ; i < 6 ; i++) {
-                modes[i] = SideType.VALUES[Integer.parseInt(mode.substring(i, i+1))];
-            }
-        }
-        updateOutputCount();
     }
 
     public IInformationScreenInfo getInfoScreenInfo() {
