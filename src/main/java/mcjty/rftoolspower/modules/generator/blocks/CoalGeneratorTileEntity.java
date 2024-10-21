@@ -93,7 +93,7 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
                 .tileEntitySupplier(CoalGeneratorTileEntity::new)
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
-                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/coalgenerator"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/coalgenerator"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
                         parameter("info", stack -> CoalGeneratorConfig.RFPERTICK.get() + " RF/FE"))

@@ -158,7 +158,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
                 BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL).noOcclusion())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
-                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/endergenic"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/endergenic"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
                 .tileEntitySupplier(EndergenicTileEntity::new)) {

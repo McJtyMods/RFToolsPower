@@ -48,7 +48,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     public static LogicSlabBlock createBlock() {
         return new LogicSlabBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
-                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/endergenic"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/endergenic"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(EnderMonitorTileEntity::new));

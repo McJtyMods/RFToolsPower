@@ -57,7 +57,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     public static LogicSlabBlock createBlock() {
         return new LogicSlabBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
-                .manualEntry(ManualHelper.create("rftoolspower:powermonitor/powermonitor"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powermonitor/powermonitor"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(PowerMonitorTileEntity::new)) {

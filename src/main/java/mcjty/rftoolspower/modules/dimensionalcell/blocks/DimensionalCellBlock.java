@@ -84,7 +84,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .tileEntitySupplier(supplier)
                 .infusable()
-                .manualEntry(ManualHelper.create("rftoolspower:powerstorage/dimensionalcell"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powerstorage/dimensionalcell"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold(),
                         parameter("info", stack -> {

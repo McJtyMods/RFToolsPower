@@ -84,7 +84,7 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
         return new BaseBlock(new BlockBuilder().properties(
                         BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
-                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinginfuser"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/blazinginfuser"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(BlazingInfuserTileEntity::new));

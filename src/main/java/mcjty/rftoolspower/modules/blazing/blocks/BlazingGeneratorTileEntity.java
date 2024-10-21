@@ -101,7 +101,7 @@ public class BlazingGeneratorTileEntity extends TickingTileEntity {
                 BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
-                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/blazinggenerator"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/blazinggenerator"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(), gold())
                 .tileEntitySupplier(BlazingGeneratorTileEntity::new)) {

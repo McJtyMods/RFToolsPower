@@ -66,7 +66,7 @@ public class PearlInjectorTileEntity extends TickingTileEntity implements TickOr
     public static BaseBlock createBlock() {
         return new BaseBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
-                .manualEntry(ManualHelper.create("rftoolspower:powergeneration/pearlinjector"))
+                .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/pearlinjector"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(PearlInjectorTileEntity::new));
