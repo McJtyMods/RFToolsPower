@@ -1,3 +1,6 @@
+Upcoming:
+- Updates for latest McJtyLib
+
 1.21-7.0.0:
 - Port to 1.21
 

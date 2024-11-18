@@ -41,7 +41,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     @Cap(type = CapType.CONTAINER)
     private static final Function<EnderMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, be))
-            .data(EndergenicModule.ENDER_MONITOR_DATA, EnderMonitorData.STREAM_CODEC)
+            .data(EndergenicModule.ENDER_MONITOR_DATA, EnderMonitorData.STREAM_CODEC, EnderMonitorData.CODEC)
             .setupSync(be);
 
 

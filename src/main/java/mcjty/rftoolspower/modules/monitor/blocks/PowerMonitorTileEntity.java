@@ -41,7 +41,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     @Cap(type = CapType.CONTAINER)
     private static final Function<PowerMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Power Monitor")
             .containerSupplier(empty(MonitorModule.CONTAINER_POWER_MONITOR, be))
-            .data(MonitorModule.POWER_MONITOR_DATA, PowerMonitorData.STREAM_CODEC)
+            .data(MonitorModule.POWER_MONITOR_DATA, PowerMonitorData.STREAM_CODEC, PowerMonitorData.CODEC)
             .setupSync(be);
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 5);
