@@ -50,7 +50,7 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         minimumLabel.realValue(monitorData.minimum());
         maximumLabel.realValue(monitorData.maximum());
 
-        window.bindData("minimum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get(), data -> data.withMinimum((byte) minimumLabel.getRealValue()));
-        window.bindData("maximum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get(), data -> data.withMaximum((byte) maximumLabel.getRealValue()));
+        window.bindData("minimum", "minimum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get());
+        window.bindData("maximum", "maximum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get());
     }
 }
