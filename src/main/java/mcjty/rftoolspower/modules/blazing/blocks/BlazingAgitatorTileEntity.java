@@ -261,7 +261,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
 
     public void setLocked(int x, int y, boolean v) {
         AgitatorData data = getData(BlazingModule.AGITATOR_DATA);
-        data.setLocked(y*3 + x, v);
+        data = data.setLocked(y*3 + x, v);
         setData(BlazingModule.AGITATOR_DATA, data);
     }
 

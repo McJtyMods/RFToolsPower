@@ -24,10 +24,12 @@ public record AgitatorData(List<Boolean> locked) {
         return (idx >= 0 && idx < locked.size()) ? locked.get(idx) : false;
     }
 
-    public void setLocked(int idx, boolean value) {
-        while (idx >= locked.size()) {
-            locked.add(false);
+    public AgitatorData setLocked(int idx, boolean value) {
+        List<Boolean> newLocked = new ArrayList<>(locked);
+        while (idx >= newLocked.size()) {
+            newLocked.add(false);
         }
-        locked.set(idx, value);
+        newLocked.set(idx, value);
+        return new AgitatorData(newLocked);
     }
 }
