@@ -1,3 +1,6 @@
+Upcoming:
+- Small changes
+
 1.21-7.0.2:
 - Fixed a problem with the blazing agitator 'lock' buttons not working properly
 
