@@ -29,7 +29,6 @@ import static mcjty.rftoolspower.RFToolsPower.MODID;
 public class Registration {
 
     public static final RBlockRegistry RBLOCKS = new RBlockRegistry(MODID, RFToolsPower.setup::addTabItem);
-//    public static final DeferredBlocks BLOCKS = DeferredBlocks.create(MODID);
     public static final DeferredItems ITEMS = DeferredItems.create(MODID);
     public static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MODID);
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, MODID);
