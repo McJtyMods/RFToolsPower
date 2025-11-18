@@ -1,3 +1,6 @@
+Upcoming:
+- Small fix for the blazing agitator
+
 1.21-7.0.4:
 - BONNe fixed a problem with the ender monitor not working properly
 

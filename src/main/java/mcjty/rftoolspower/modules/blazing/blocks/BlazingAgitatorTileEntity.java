@@ -154,7 +154,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             tag.putFloat("rs" + i, rotationSpeed[i]);
         }
-        items.save(tag, "items", getLevel().registryAccess());
+        items.save(tag, "items", provider);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
             rotationSpeed[i] = tag.getFloat("rs" + i);
         }
-        items.load(tag, "items", getLevel().registryAccess());
+        items.load(tag, "items", provider);
     }
 
     @Override
