@@ -28,7 +28,7 @@ Everything related to power generation
 [[dependencies.rftoolspower]]
     modId="mcjtylib"
     mandatory=true
-    versionRange="[1.21-9.0.17,)"
+    versionRange="[1.21-9.0.18,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.rftoolspower]]
