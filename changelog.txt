@@ -1,4 +1,4 @@
-Upcoming:
+1.21-7.0.5:
 - Small fix for the blazing agitator
 
 1.21-7.0.4:
