@@ -2,6 +2,9 @@
   "name": "Power Level",
   "icon": "rftoolspower:power_level",
   "category": "rftoolsbase:category_rftoolspower_monitor",
+  "extra_recipe_mappings": {
+    "rftoolspower:power_level": 0
+  },
   "sortnum": 20,
   "pages": [
     {

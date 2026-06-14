@@ -2,6 +2,9 @@
   "name": "Coal Generator",
   "icon": "rftoolspower:coalgenerator",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:coalgenerator": 0
+  },
   "sortnum": 10,
   "pages": [
     {

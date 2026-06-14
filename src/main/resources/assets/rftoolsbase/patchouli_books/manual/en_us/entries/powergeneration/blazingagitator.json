@@ -2,6 +2,9 @@
   "name": "Blazing Agitator",
   "icon": "rftoolspower:blazing_agitator",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:blazing_agitator": 0
+  },
   "sortnum": 23,
   "pages": [
     {

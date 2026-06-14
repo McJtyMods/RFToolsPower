@@ -2,6 +2,9 @@
   "name": "Blazing Generator",
   "icon": "rftoolspower:blazing_generator",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:blazing_generator": 0
+  },
   "sortnum": 20,
   "pages": [
     {

@@ -2,6 +2,9 @@
   "name": "Pearl Injector",
   "icon": "rftoolspower:pearl_injector",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:pearl_injector": 0
+  },
   "sortnum": 40,
   "pages": [
     {

@@ -2,6 +2,9 @@
   "name": "Blazing Infuser",
   "icon": "rftoolspower:blazing_infuser",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:blazing_infuser": 0
+  },
   "sortnum": 26,
   "pages": [
     {

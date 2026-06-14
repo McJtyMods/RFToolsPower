@@ -2,6 +2,9 @@
   "name": "Powercell Card",
   "icon": "rftoolspower:powercell_card",
   "category": "rftoolsbase:category_rftoolspower_powerstorage",
+  "extra_recipe_mappings": {
+    "rftoolspower:powercell_card": 0
+  },
   "sortnum": 30,
   "pages": [
     {
