@@ -5,6 +5,9 @@ import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.data.BlazingRodData;
 import mcjty.rftoolspower.setup.Registration;
+import mcjty.lib.tooltips.ITooltipSettings;
+import mcjty.lib.gui.ManualEntry;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +19,7 @@ import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
 
-public class BlazingRod extends Item {
+public class BlazingRod extends Item implements ITooltipSettings {
 
     public static final float MAXTIME = 20.0f * 30.0f;
     public static final float START_QUALITY = 60000f;
@@ -117,4 +120,10 @@ public class BlazingRod extends Item {
     public static int getTotalTicks(ItemStack stack) {
         return (int) getPowerDuration(stack);
     }
+
+    @Override
+    public ManualEntry getManualEntry() {
+        return ManualHelper.create("rftoolspower:powergeneration/blazinggenerator");
+    }
+
 }

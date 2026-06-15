@@ -2,11 +2,22 @@
   "name": "Coal Generator",
   "icon": "rftoolspower:coalgenerator",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:coalgenerator": 0
+  },
   "sortnum": 10,
   "pages": [
     {
       "type": "text",
-      "text": "The Coal Generator can convert coal and blocks of coal to power"
+      "text": "The Coal Generator is a simple early FE generator. Insert coal or coal blocks and it will burn them into power for nearby machines or connected cables."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:coalgenerator"
+    },
+    {
+      "type": "text",
+      "text": "It has an internal buffer, so it can keep burning while output is temporarily blocked. Coal blocks are convenient for longer unattended runs."
     }
   ]
 }

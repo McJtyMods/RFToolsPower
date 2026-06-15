@@ -2,6 +2,14 @@
   "name": "Powercell",
   "icon": "rftoolspower:cell1",
   "category": "rftoolsbase:category_rftoolspower_powerstorage",
+  "extra_recipe_mappings": {
+    "rftoolspower:cell1": 0,
+    "rftoolspower:cell2": 0,
+    "rftoolspower:cell3": 0,
+    "rftoolspower:power_core1": 0,
+    "rftoolspower:power_core2": 0,
+    "rftoolspower:power_core3": 0
+  },
   "sortnum": 10,
   "pages": [
     {

@@ -4,6 +4,8 @@ import mcjty.lib.builder.TooltipBuilder;
 import mcjty.lib.tooltips.ITooltipSettings;
 import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
+import mcjty.lib.gui.ManualEntry;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,4 +33,10 @@ public class PowerCoreItem extends Item implements ITooltipSettings {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), stack, tooltip, flagIn);
     }
+
+    @Override
+    public ManualEntry getManualEntry() {
+        return ManualHelper.create("rftoolspower:powerstorage/powercell");
+    }
+
 }

@@ -2,6 +2,9 @@
   "name": "Power Monitor",
   "icon": "rftoolspower:power_monitor",
   "category": "rftoolsbase:category_rftoolspower_monitor",
+  "extra_recipe_mappings": {
+    "rftoolspower:power_monitor": 0
+  },
   "sortnum": 10,
   "pages": [
     {

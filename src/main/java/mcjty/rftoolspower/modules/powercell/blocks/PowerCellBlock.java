@@ -10,6 +10,7 @@ import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
@@ -46,6 +47,7 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
     public PowerCellBlock(Tier tier) {
         super(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .manualEntry(ManualHelper.create("rftoolspower:powerstorage/powercell"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(),
                         parameter("info", stack -> {

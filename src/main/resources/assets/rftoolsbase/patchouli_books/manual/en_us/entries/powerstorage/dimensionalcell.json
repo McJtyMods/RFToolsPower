@@ -2,26 +2,29 @@
   "name": "Dimensional Cell",
   "icon": "rftoolspower:dimensionalcell",
   "category": "rftoolsbase:category_rftoolspower_powerstorage",
-  "extra_recipe_mappings":{
+  "extra_recipe_mappings": {
+    "rftoolspower:dimensionalcell_simple": 0,
+    "rftoolspower:dimensionalcell": 0,
+    "rftoolspower:dimensionalcell_advanced": 0,
     "rftoolspower:dimensionalcell_creative": 0
   },
   "sortnum": 20,
   "pages": [
     {
       "type": "text",
-      "text": "The Dimensional Cell is a multi-dimensional power storage. Similarly to the $(l:rftoolspower:powerstorage/powercell)Powercell$(), they can store and transmit vast amounts of power. However, unlike powercells, they do not have to be next to one another to share their RF. Instead, Dimensional Cells are $(thing)Linked$() by a $(l:rftoolspower:powerstorage/powercell)Powercell Card$()."
+      "text": "The Dimensional Cell is multi-dimensional power storage. Like a $(l:rftoolsbase:powerstorage/powercell)Powercell$(/l), it stores and transfers FE, but linked cells can share power without touching."
     },
     {
       "type": "text",
-      "text": "[TODO: screenshot of gui goes here]"
+      "text": "Dimensional Cells are linked with a $(l:rftoolsbase:powerstorage/powercell_card)Powercell Card$(/l). Insert an unlinked card to create a link, or copy an existing cell link to another card."
     },
     {
       "type": "text",
-      "text": "The Cell's GUI has 3 slots. The top left slot is used for creating a new $(thing)link$(), the bottom slot is for programming a new Powercell Card to the Dimensional Cell's current link, and the top-right slot is for inserting items to be charged with RF, such as a Charged Porter. $(br2)On the far left is a bar showing how full the entire network of Dimensional Cells is, while on the right we have four buttons."
+      "text": "The GUI has card slots for linking/copying, a charge slot for FE items, a network storage bar, side mode buttons, and a Stats button for inserted/extracted FE."
     },
     {
       "type": "text",
-      "text": "$(thing)Stats$(), when moused over, shows how much RF has been inserted or extracted from this block. $(thing)None$(), $(thing)In$() and $(thing)Out$() will set all sides of the block to ignore, transmit, receive RF, respectively. $(br2)The individual sides of the Dimensional Cell can also be configured with a $(l:rftoolsbase:tools/smartwrench)smart wrench$() in $(thing)Wrench Mode$(). Blue is input, Yellow is output, and a blank side is neither."
+      "text": "None, In, and Out set all sides to ignore, receive, or transmit FE. Individual sides can also be changed with a $(l:rftoolsbase:tools/smartwrench)Smart Wrench$(/l): blue input, yellow output, blank disabled."
     },
     {
       "type": "text",

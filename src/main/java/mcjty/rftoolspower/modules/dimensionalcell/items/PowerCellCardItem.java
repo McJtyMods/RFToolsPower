@@ -6,6 +6,8 @@ import mcjty.lib.varia.Tools;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.data.PowerCardData;
+import mcjty.lib.gui.ManualEntry;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -58,4 +60,10 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     public static void setId(ItemStack stack, int id) {
         stack.set(DimensionalCellModule.ITEM_POWERCARD_DATA, new PowerCardData(id));
     }
+
+    @Override
+    public ManualEntry getManualEntry() {
+        return ManualHelper.create("rftoolspower:powerstorage/powercell_card");
+    }
+
 }

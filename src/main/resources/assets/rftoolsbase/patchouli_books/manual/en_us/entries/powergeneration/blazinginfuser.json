@@ -2,15 +2,26 @@
   "name": "Blazing Infuser",
   "icon": "rftoolspower:blazing_infuser",
   "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "extra_recipe_mappings": {
+    "rftoolspower:blazing_infuser": 0
+  },
   "sortnum": 26,
   "pages": [
     {
       "type": "text",
-      "text": "Blazing rods as produced by the $(l:rftoolspower:powergeneration/blazingagitator)Blazing Agitator$(/l) can be improved even further by infusing them with a stack of certain catalyst items. Note that once infused, a blazing rod can no longer be used in the blazing agitator to help improve other rods"
+      "text": "The Blazing Infuser improves Blazing Rods made by the $(l:rftoolsbase:powergeneration/blazingagitator)Blazing Agitator$(/l). It consumes catalyst items to increase rod power, duration, or both."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:blazing_infuser"
     },
     {
       "type": "text",
-      "text": "Catalysts (power/time benefit for a full stack):$(br2)$(li)$(item)redstone$() 40% more power$(li)$(item)glowstone$() 10% more power, 30% more time$(li)$(item)quartz$() 40% more time$(li)$(item)dimensional shards$() 60% more power, 60% more time$(li)$(item)nether star$() 120% more power, 120% more time$(li)$(item)ghast tear$() 80% more power, 80% more time"
+      "text": "After infusion, a rod can no longer help improve other rods in the Agitator. First make a good booster set, then infuse rods intended for fuel."
+    },
+    {
+      "type": "text",
+      "text": "Catalysts for a full stack: redstone gives power, quartz gives duration, glowstone favors duration, dimensional shards improve both, and ghast tears or nether stars give large boosts."
     }
   ]
 }
