@@ -1,8 +1,11 @@
 package mcjty.rftoolspower.modules.blazing.items;
 
 import mcjty.lib.builder.TooltipBuilder;
+import mcjty.lib.gui.ManualEntry;
+import mcjty.lib.tooltips.ITooltipSettings;
 import mcjty.lib.varia.NBTTools;
 import mcjty.lib.varia.Tools;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.setup.Registration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -16,7 +19,7 @@ import java.util.List;
 
 import static mcjty.lib.builder.TooltipBuilder.*;
 
-public class BlazingRod extends Item {
+public class BlazingRod extends Item implements ITooltipSettings {
 
     public static final float MAXTIME = 20.0f * 30.0f;
     public static final float START_QUALITY = 60000f;
@@ -40,6 +43,11 @@ public class BlazingRod extends Item {
     public void appendHoverText(@Nonnull ItemStack itemStack, Level world, @Nonnull List<Component> list, @Nonnull TooltipFlag flags) {
         super.appendHoverText(itemStack, world, list, flags);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), itemStack, list, flags);
+    }
+
+    @Override
+    public ManualEntry getManualEntry() {
+        return ManualHelper.create("rftoolspower:powergeneration/blazinggenerator");
     }
 
     public static boolean isCharging(ItemStack stack) {

@@ -6,6 +6,7 @@ import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.tileentity.LogicSupport;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.monitor.MonitorModule;
 import net.minecraft.core.BlockPos;
@@ -37,6 +38,7 @@ public class PowerLevelTileEntity extends TickingTileEntity {
     public static LogicSlabBlock createBlock() {
         return new LogicSlabBlock(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .manualEntry(ManualHelper.create("rftoolspower:powermonitor/powerlevel"))
                 .info(key("message.rftoolsutility.shiftmessage"))
                 .infoShift(header())
                 .tileEntitySupplier(PowerLevelTileEntity::new));

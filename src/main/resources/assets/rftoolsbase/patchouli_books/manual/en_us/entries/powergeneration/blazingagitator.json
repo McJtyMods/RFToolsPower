@@ -9,11 +9,19 @@
   "pages": [
     {
       "type": "text",
-      "text": "Blaze rods have to be processed by the blazing agitator before they can be used in the $(l:rftoolspower:powergeneration/blazinggenerator)Blazing Generator$(/l). Using a little bit of power the agitator will slowly build up the potenty of blaze rods that are placed in the input area. Note that blaze rods adjacent to other blaze rods will improve the quality and speed at which this happens"
+      "text": "The Blazing Agitator prepares blaze rods for the $(l:rftoolsbase:powergeneration/blazinggenerator)Blazing Generator$(/l). It uses a little FE to turn normal rods into Blazing Rods."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:blazing_agitator"
     },
     {
       "type": "text",
-      "text": "It is worthwhile to spend some time improving blazing rods until you have top-quality rods that you can use to improve the quality of other blazing rods procued by this agitator. For that reason there are 9 buttons that you can use to prevent fully processed blazing rods from going to the output area"
+      "text": "Nearby rods in the input grid improve each other. Better rods finish faster and gain better power quality, so it pays to keep a few strong rods in the grid."
+    },
+    {
+      "type": "text",
+      "text": "The nine lock buttons keep finished rods from moving to output. Use them to keep high-quality rods in place as boosters for future rods."
     }
   ]
 }

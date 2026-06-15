@@ -5,6 +5,7 @@ import mcjty.lib.blocks.RotationType;
 import mcjty.lib.builder.BlockBuilder;
 import mcjty.lib.crafting.INBTPreservingIngredient;
 import mcjty.lib.varia.NBTTools;
+import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.PowerCellModule;
@@ -45,6 +46,7 @@ public class PowerCellBlock extends BaseBlock implements INBTPreservingIngredien
     public PowerCellBlock(Tier tier) {
         super(new BlockBuilder()
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
+                .manualEntry(ManualHelper.create("rftoolspower:powerstorage/powercell"))
                 .info(key("message.rftoolspower.shiftmessage"))
                 .infoShift(header(),
                         parameter("info", stack -> {

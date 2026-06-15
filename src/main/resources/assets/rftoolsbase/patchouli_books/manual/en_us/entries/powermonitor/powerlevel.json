@@ -13,7 +13,7 @@
     },
     {
       "type": "crafting",
-      "heading": "Power Monitor",
+      "heading": "Power Level",
       "recipe": "rftoolspower:power_level"
     }
   ]
