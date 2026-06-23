@@ -1,0 +1,16 @@
+{
+  "name": "Cartão Powercell",
+  "icon": "rftoolspower:powercell_card",
+  "category": "rftoolsbase:category_rftoolspower_powerstorage",
+  "sortnum": 30,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este cartão é usado para vincular $(l:rftoolspower:powerstorage/dimensionalcell)Células Dimensionais$() entre si. Quando criado, ele estará $(thing)Desvinculado.$() Insira-o em uma Powercell para vinculá-la. Se a célula ainda não estiver vinculada, isso criará um novo vínculo. Se já houver um cartão no slot mais à esquerda, o novo cartão será reprogramado para o mesmo vínculo."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:powercell_card"
+    }
+  ]
+}

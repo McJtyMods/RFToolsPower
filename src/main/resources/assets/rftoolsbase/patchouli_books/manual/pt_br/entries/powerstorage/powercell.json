@@ -1,0 +1,43 @@
+{
+  "name": "Powercell",
+  "icon": "rftoolspower:cell1",
+  "category": "rftoolsbase:category_rftoolspower_powerstorage",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(item)Powercells$() armazenam grandes quantidades de energia. Elas podem ser colocadas individualmente, ou próximas umas das outras para formar uma estrutura multibloco. Powercells automaticamente distribuem RF entre si e seus vizinhos, e se unem em um multibloco independentemente do nível."
+    },
+    {
+      "type": "text",
+      "text": "Powercells não possuem interface, mas podem ser configuradas para entrada, saída ou ignorar energia ao usar uma $(l:rftoolsbase:tools/smartwrench)chave inglesa inteligente$() no $(thing)Modo de Chave$(). Azul é entrada, Amarelo é saída, e um lado vazio não faz nada."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:power_core1",
+      "recipe2": "rftoolspower:cell1"
+    },
+    {
+      "type": "text",
+      "text": "Por padrão, o $(item)Powercell (baixo)$() pode armazenar 500.000 RF cada."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:power_core2",
+      "recipe2": "rftoolspower:cell2"
+    },
+    {
+      "type": "text",
+      "text": "Por padrão, o $(item)Powercell (médio)$() pode armazenar 4.000.000 RF cada."
+    },
+    {
+      "type": "crafting",
+      "recipe": "rftoolspower:power_core3",
+      "recipe2": "rftoolspower:cell3"
+    },
+    {
+      "type": "text",
+      "text": "Por padrão, o $(item)Powercell (alto)$() pode armazenar 20.000.000 RF cada. Isso é muita energia!"
+    }
+  ]
+}
