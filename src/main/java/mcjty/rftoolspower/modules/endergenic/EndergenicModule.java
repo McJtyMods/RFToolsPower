@@ -30,7 +30,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import mcjty.lib.datagen.model.ModelProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -44,30 +44,27 @@ public class EndergenicModule implements IModule {
     public static final RBlock<LogicSlabBlock, BlockItem, EnderMonitorTileEntity> ENDER_MONITOR = RBLOCKS.registerBlock("ender_monitor",
             EnderMonitorTileEntity.class,
             EnderMonitorTileEntity::createBlock,
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            EnderMonitorTileEntity::new
-    );
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            EnderMonitorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDER_MONITOR = CONTAINERS.register("ender_monitor", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, PearlInjectorTileEntity> PEARL_INJECTOR = RBLOCKS.registerBlock("pearl_injector",
             PearlInjectorTileEntity.class,
             PearlInjectorTileEntity::createBlock,
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            PearlInjectorTileEntity::new
-    );
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            PearlInjectorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_PEARL_INJECTOR = CONTAINERS.register("pearl_injector", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, EndergenicTileEntity> ENDERGENIC = RBLOCKS.registerBlock("endergenic",
             EndergenicTileEntity.class,
             EndergenicTileEntity::createBlock,
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            EndergenicTileEntity::new
-    );
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            EndergenicTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 
     public static final Supplier<AttachmentType<EnderMonitorData>> ENDER_MONITOR_DATA = ATTACHMENT_TYPES.register(
             "ender_monitor_data", () -> AttachmentType.builder(() -> new EnderMonitorData(EnderMonitorMode.MODE_LOSTPEARL))
-                    .serialize(EnderMonitorData.CODEC)
+                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(EnderMonitorData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<EnderMonitorData>> ITEM_ENDER_MONITOR_DATA = COMPONENTS.registerComponentType(
             "ender_monitor_data",
@@ -127,8 +124,8 @@ public class EndergenicModule implements IModule {
                                 " C ", "rFr", " H "),
                 Dob.blockBuilder(ENDERGENIC)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get())
-                        .blockState(p -> p.singleTextureBlockC(ENDERGENIC.block().get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> builder.renderType("translucent")))
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
+                        .blockState(p -> p.singleTextureBlockC(ENDERGENIC.block().get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> mcjty.rftoolsbase.tools.ModelDataGen.renderType(builder, "translucent")))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .define('Z', VariousModule.INFUSED_ENDERPEARL.get())

@@ -17,7 +17,7 @@
     },
     "facing=up": {
       "model": "rftoolspower:block/pearl_injector",
-      "x": -90
+      "x": 270
     },
     "facing=west": {
       "model": "rftoolspower:block/pearl_injector",

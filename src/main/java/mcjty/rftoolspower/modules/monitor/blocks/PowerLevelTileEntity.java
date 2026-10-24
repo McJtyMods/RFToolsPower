@@ -36,8 +36,8 @@ public class PowerLevelTileEntity extends TickingTileEntity {
 
     private int counter = 20;
 
-    public static LogicSlabBlock createBlock() {
-        return new LogicSlabBlock(new BlockBuilder()
+    public static LogicSlabBlock createBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
+        return new LogicSlabBlock(new BlockBuilder().properties(mcjty.rftoolsbase.tools.RegistryProperties.block(properties))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolspower:powermonitor/powerlevel"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -65,13 +65,13 @@ public class PowerLevelTileEntity extends TickingTileEntity {
 
     @Override
     public void loadClientDataFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
-//        powerLevel = tag.getByte("powered");
-        support.setPowerOutput(tag.getInt("power"));
+//        powerLevel = tag.getByteOr("powered", (byte) 0);
+        support.setPowerOutput(tag.getIntOr("power", 0));
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
-        handleUpdateTag(pkt.getTag(), provider);
+    public void onDataPacket(Connection net, net.minecraft.world.level.storage.ValueInput input) {
+        super.onDataPacket(net, input);
     }
 
     @Override

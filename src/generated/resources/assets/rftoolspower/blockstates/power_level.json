@@ -34,19 +34,19 @@
     },
     "logic_facing=north_todown": {
       "model": "rftoolspower:block/power_level_1",
-      "x": -90
+      "x": 270
     },
     "logic_facing=north_toeast": {
       "model": "rftoolspower:block/power_level_3",
-      "x": -90
+      "x": 270
     },
     "logic_facing=north_toup": {
       "model": "rftoolspower:block/power_level_0",
-      "x": -90
+      "x": 270
     },
     "logic_facing=north_towest": {
       "model": "rftoolspower:block/power_level_2",
-      "x": -90
+      "x": 270
     },
     "logic_facing=south_todown": {
       "model": "rftoolspower:block/power_level_0",

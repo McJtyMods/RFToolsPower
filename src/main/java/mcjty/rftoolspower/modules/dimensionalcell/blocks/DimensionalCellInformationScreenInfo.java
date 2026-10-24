@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolspower.modules.powercell.client.PowerCellInformationRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.Direction;
 
 import javax.annotation.Nonnull;
@@ -61,7 +61,7 @@ public class DimensionalCellInformationScreenInfo implements IInformationScreenI
     }
 
     @Override
-    public void render(int mode, PoseStack matrixStack, MultiBufferSource buffer, @Nonnull TypedMap data, Direction orientation, double scale) {
+    public void render(int mode, PoseStack matrixStack, SubmitNodeCollector buffer, @Nonnull TypedMap data, Direction orientation, double scale) {
         if (mode == MODE_POWER) {
             PowerCellInformationRenderer.renderDefault(matrixStack, buffer, data, orientation, scale);
         } else {

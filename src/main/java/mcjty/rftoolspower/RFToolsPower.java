@@ -62,18 +62,40 @@ public class RFToolsPower {
         bus.addListener(this::onRegisterCapabilities);
 
         if (dist.isClient()) {
+            bus.addListener(mcjty.rftoolspower.modules.dimensionalcell.client.LinkedPowerCardProperty::register);
             bus.addListener(modules::initClient);
         }
+    }
+
+    public static <T extends Item> java.util.function.Function<Item.Properties, T> tab(java.util.function.Function<Item.Properties, T> factory) {
+        return properties -> instance.setup.tab(() -> factory.apply(properties)).get();
     }
 
     public static <T extends Item> Supplier<T> tab(Supplier<T> supplier) {
         return instance.setup.tab(supplier);
     }
 
-    private void onDataGen(GatherDataEvent event) {
+    private void onDataGen(GatherDataEvent.Client event) {
         DataGen datagen = new DataGen(MODID, event);
         modules.datagen(datagen, event.getLookupProvider());
         datagen.generate();
+        event.getGenerator().addProvider(true,
+                new mcjty.rftoolspower.modules.dimensionalcell.DataGenHelper.Provider(event.getGenerator()));
+        var card = new com.google.gson.JsonObject();
+        var model = new com.google.gson.JsonObject();
+        model.addProperty("type", "minecraft:condition");
+        model.addProperty("property", "rftoolspower:linked");
+        var linked = new com.google.gson.JsonObject();
+        linked.addProperty("type", "minecraft:model");
+        linked.addProperty("model", "rftoolspower:item/powercell_card_linked");
+        var unlinked = new com.google.gson.JsonObject();
+        unlinked.addProperty("type", "minecraft:model");
+        unlinked.addProperty("model", "rftoolspower:item/powercell_card_unlinked");
+        model.add("on_true", linked);
+        model.add("on_false", unlinked);
+        card.add("model", model);
+        event.getGenerator().addProvider(true, new mcjty.rftoolsbase.tools.ClientItemDefinitions(
+                event.getGenerator().getPackOutput(), MODID, java.util.Map.of("powercell_card", card)));
     }
 
     private void setupModules(IEventBus bus, Dist dist) {
@@ -108,13 +130,13 @@ public class RFToolsPower {
                 return null;
             }
         }, PowerCellModule.CELL1.block().get(), PowerCellModule.CELL2.block().get(), PowerCellModule.CELL3.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
-        event.registerBlock(Capabilities.EnergyStorage.BLOCK, new IBlockCapabilityProvider<>() {
+        event.registerBlock(Capabilities.Energy.BLOCK, new IBlockCapabilityProvider<>() {
             @Override
-            public @Nullable IEnergyStorage getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
+            public @Nullable net.neoforged.neoforge.transfer.energy.EnergyHandler getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
                 if (be instanceof PowerCellTileEntity te) {
-                    return te.getEnergyStorage(direction);
+                    return te.getEnergyHandler(direction);
                 } else if (be instanceof DimensionalCellTileEntity te) {
-                    return te.getEnergyStorage(direction);
+                    return te.getEnergyHandler(direction);
                 }
                 return null;
             }

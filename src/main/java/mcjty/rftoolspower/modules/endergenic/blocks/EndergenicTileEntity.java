@@ -40,7 +40,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -153,9 +153,9 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     private long ticker = -1;       // Used by TickOrderHandler to detect that we've already been added to the queue
 
 
-    public static BaseBlock createBlock() {
+    public static BaseBlock createBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
         return new BaseBlock(new BlockBuilder().properties(
-                BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL).noOcclusion())
+                properties.strength(2.0f).sound(SoundType.METAL).noOcclusion())
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/endergenic"))
@@ -667,7 +667,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         this.destination = destination;
         distance = calculateDistance(destination);
 
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             // We're on the client. Send change to server.
             PacketServerCommandTyped packet = PacketServerCommandTyped.create(getBlockPos(), getDimension(), CMD_SETDESTINATION.name(), TypedMap.builder()
                     .put(PARAM_DESTINATION, destination)
@@ -681,20 +681,22 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
+    public void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        CompoundTag tag = input.read(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
+        HolderLookup.Provider provider = input.lookup();
 
-        chargingMode = tag.getInt("charging");
-        currentAge = tag.getInt("age");
+        chargingMode = tag.getIntOr("charging", 0);
+        currentAge = tag.getIntOr("age", 0);
         destination = BlockPosTools.read(tag, "dest");
-        distance = tag.getInt("distance");
-        prevIn = tag.getBoolean("prevIn");
-        badCounter = tag.getByte("bad");
-        goodCounter = tag.getByte("good");
+        distance = tag.getIntOr("distance", 0);
+        prevIn = tag.getBooleanOr("prevIn", false);
+        badCounter = tag.getByteOr("bad", (byte) 0);
+        goodCounter = tag.getByteOr("good", (byte) 0);
         pearls.clear();
-        ListTag list = tag.getList("pearls", Tag.TAG_COMPOUND);
+        ListTag list = tag.getListOrEmpty("pearls");
         for (int i = 0; i < list.size(); i++) {
-            CompoundTag tc = list.getCompound(i);
+            CompoundTag tc = list.getCompoundOrEmpty(i);
             EndergenicPearl pearl = new EndergenicPearl(tc);
             pearls.add(pearl);
         }
@@ -704,8 +706,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    public void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        CompoundTag tag = new CompoundTag();
+        HolderLookup.Provider provider = (level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
 
         tag.putInt("charging", chargingMode);
         tag.putInt("age", currentAge);
@@ -723,13 +727,15 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
         energyStorage.save(tag, "energy", provider);
         infusable.save(tag, "infusable");
+
+        output.store(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC), tag);
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
-        infusable.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
+        energyStorage.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_ENERGY));
+        infusable.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE));
     }
 
     @Override
@@ -771,8 +777,8 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
     @Override
     public boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
-        if (world.isClientSide) {
-            SoundEvent pling = Tools.getSound(ResourceLocation.fromNamespaceAndPath("minecraft", "block.note_block.pling"));
+        if (world.isClientSide()) {
+            SoundEvent pling = Tools.getSound(Identifier.fromNamespaceAndPath("minecraft", "block.note_block.pling"));
             world.playSound(player, pos, pling, SoundSource.BLOCKS, 1.0f, 1.0f);
             useWrenchClient(player);
         }

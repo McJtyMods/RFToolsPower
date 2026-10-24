@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "rftoolspower:item/powercell_card_unlinked"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "rftoolspower:item/powercell_card_linked"
+    },
+    "property": "rftoolspower:linked"
+  }
+}

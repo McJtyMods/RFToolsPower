@@ -8,9 +8,9 @@ import mcjty.lib.gui.widgets.ImageChoiceLabel;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorModule;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
@@ -30,7 +30,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
 
     @Override
     public void init() {
-        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/coalgenerator.gui"));
+        window = new Window(this, getBE(), Identifier.fromNamespaceAndPath(RFToolsPower.MODID, "gui/coalgenerator.gui"));
         super.init();
 
         initializeFields();
@@ -49,7 +49,7 @@ public class GuiCoalGenerator extends GenericGuiContainer<CoalGeneratorTileEntit
     }
 
     @Override
-    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
         updateFields();
         drawWindow(graphics, partialTicks, mouseX, mouseY);
     }

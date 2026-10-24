@@ -206,7 +206,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
     @Nullable
     public DimensionalCellNetwork.Network getNetwork() {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             // Safety
             return null;
         }
@@ -220,14 +220,14 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
         var data = input.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
         if (data != null) {
             setData(DimensionalCellModule.DIMENSIONAL_CELL_DATA, data);
         }
-        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
-        infusableHandler.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
+        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY));
+        infusableHandler.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE));
     }
 
     @Override
@@ -239,15 +239,21 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        CompoundTag tag = new CompoundTag();
+        HolderLookup.Provider provider = (level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
         items.save(tag, "items", provider);
         infusableHandler.save(tag, "infusable");
+
+        output.store(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC), tag);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        CompoundTag tag = input.read(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
+        HolderLookup.Provider provider = input.lookup();
         items.load(tag, "items", provider);
         infusableHandler.load(tag, "infusable");
     }
@@ -301,7 +307,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         handleChargingItem();
         sendOutEnergy();
     }
-    
+
     private void handleChargingItem() {
         ItemStack stack = items.getStackInSlot(SLOT_CHARGEITEM);
         if (stack.isEmpty()) {
@@ -365,7 +371,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     private void handleCardRemoval() {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             DimensionalCellNetwork.Network network = getNetwork();
             if (network != null) {
                 int energy = network.extractEnergySingleBlock(getDimensionalCellType());
@@ -381,7 +387,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     private void handleCardInsertion() {
         ItemStack stack = items.getStackInSlot(SLOT_CARD);
         int id = PowerCellCardItem.getId(stack);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             DimensionalCellNetwork channels = DimensionalCellNetwork.get(level);
             if (id == -1) {
                 id = channels.newChannel();
@@ -460,7 +466,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     private int receiveEnergyMulti(int maxReceive, boolean simulate) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return 0;   // Safety
         }
         DimensionalCellNetwork.Network network = getNetwork();
@@ -507,7 +513,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     private int extractEnergyMulti(int maxExtract, boolean simulate, int maximum) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return 0; // Safety
         }
         DimensionalCellNetwork.Network network = getNetwork();
@@ -538,7 +544,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     public int getEnergyStored() {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return 0;
         }
         int networkId = getNetworkId();
@@ -550,7 +556,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     }
 
     public int getMaxEnergyStored() {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return 0;
         }
         int networkId = getNetworkId();
@@ -640,7 +646,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                 }
             }
 
-            Logging.message(player, "Block: " + BlockPosTools.toString(b.pos()) + " (" + b.dimension().location().getPath() + "): " + msg);
+            Logging.message(player, "Block: " + BlockPosTools.toString(b.pos()) + " (" + b.dimension().identifier().getPath() + "): " + msg);
         });
     }
 
@@ -699,6 +705,36 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
     public IInformationScreenInfo getInfoScreenInfo() {
         return infoScreenInfo.get();
+    }
+
+
+    private record EnergySnapshot(int energy, long inserted, int input) { }
+    private final mcjty.rftoolsbase.tools.EnergyTransactions.Journal<EnergySnapshot> energyJournal =
+            new mcjty.rftoolsbase.tools.EnergyTransactions.Journal<>(
+                    () -> new EnergySnapshot(getEnergy(), totalInserted, powerIn), snapshot -> {
+                        setEnergy(snapshot.energy());
+                        totalInserted = snapshot.inserted();
+                        powerIn = snapshot.input();
+                    });
+
+    @Override public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (level != null && !level.isClientSide() && getNetworkId() != -1) {
+            var network = getNetwork();
+            network.extractEnergySingleBlock(getDimensionalCellType());
+            network.remove(level, getGlobalPos(), getDimensionalCellType());
+            DimensionalCellNetwork.get(level).save();
+            setNetworkId(-1);
+        }
+        super.preRemoveSideEffects(pos, state);
+    }
+
+    public net.neoforged.neoforge.transfer.energy.EnergyHandler getEnergyHandler(Direction side) {
+        return mcjty.rftoolsbase.tools.EnergyTransactions.input(getEnergyStorage(side), () -> {
+            var journals = new java.util.ArrayList<net.neoforged.neoforge.transfer.transaction.SnapshotJournal<?>>();
+            journals.add(energyJournal);
+            if (getNetworkId() != -1) journals.add(getNetwork().energyJournal);
+            return journals;
+        });
     }
 
     public IEnergyStorage getEnergyStorage(Direction facing) {

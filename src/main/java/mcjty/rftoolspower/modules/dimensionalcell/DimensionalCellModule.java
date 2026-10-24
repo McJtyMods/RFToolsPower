@@ -13,7 +13,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
 import mcjty.rftoolspower.modules.dimensionalcell.data.PowerCardData;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
@@ -36,31 +36,27 @@ public class DimensionalCellModule implements IModule {
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellNormalTileEntity> DIMENSIONAL_CELL = RBLOCKS.registerBlock("dimensionalcell",
             DimensionalCellNormalTileEntity.class,
-            () -> new DimensionalCellBlock(DimensionalCellType.NORMAL, DimensionalCellNormalTileEntity::new),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            DimensionalCellNormalTileEntity::new
-    );
+            properties -> new DimensionalCellBlock(DimensionalCellType.NORMAL, DimensionalCellNormalTileEntity::new, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            DimensionalCellNormalTileEntity::new);
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellAdvancedTileEntity> DIMENSIONAL_CELL_ADVANCED = RBLOCKS.registerBlock("dimensionalcell_advanced",
             DimensionalCellAdvancedTileEntity.class,
-            () -> new DimensionalCellBlock(DimensionalCellType.ADVANCED, DimensionalCellAdvancedTileEntity::new),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            DimensionalCellAdvancedTileEntity::new
-    );
+            properties -> new DimensionalCellBlock(DimensionalCellType.ADVANCED, DimensionalCellAdvancedTileEntity::new, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            DimensionalCellAdvancedTileEntity::new);
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellSimpleTileEntity> DIMENSIONAL_CELL_SIMPLE = RBLOCKS.registerBlock("dimensionalcell_simple",
             DimensionalCellSimpleTileEntity.class,
-            () -> new DimensionalCellBlock(DimensionalCellType.SIMPLE, DimensionalCellSimpleTileEntity::new),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            DimensionalCellSimpleTileEntity::new
-    );
+            properties -> new DimensionalCellBlock(DimensionalCellType.SIMPLE, DimensionalCellSimpleTileEntity::new, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            DimensionalCellSimpleTileEntity::new);
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellCreativeTileEntity> DIMENSIONAL_CELL_CREATIVE = RBLOCKS.registerBlock("dimensionalcell_creative",
             DimensionalCellCreativeTileEntity.class,
-            () -> new DimensionalCellBlock(DimensionalCellType.CREATIVE, DimensionalCellCreativeTileEntity::new),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            DimensionalCellCreativeTileEntity::new
-    );
+            properties -> new DimensionalCellBlock(DimensionalCellType.CREATIVE, DimensionalCellCreativeTileEntity::new, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            DimensionalCellCreativeTileEntity::new);
 
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_DIMENSIONAL_CELL = CONTAINERS.register("dimensionalcell", GenericContainer::createContainerType);
 
@@ -68,7 +64,7 @@ public class DimensionalCellModule implements IModule {
 
     public static final Supplier<AttachmentType<DimensionalCellData>> DIMENSIONAL_CELL_DATA = ATTACHMENT_TYPES.register(
             "dimensional_cell_data", () -> AttachmentType.builder(() -> new DimensionalCellData(0, 0, 0, -1))
-                    .serialize(DimensionalCellData.CODEC)
+                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(DimensionalCellData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<DimensionalCellData>> ITEM_DIMENSIONAL_CELL_DATA = COMPONENTS.registerComponentType(
             "dimensional_cell_data",
@@ -92,9 +88,7 @@ public class DimensionalCellModule implements IModule {
 
     @Override
     public void initClient(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            PowerCellCardItem.initOverrides(POWERCELL_CARD.get());
-        });
+
     }
 
     public void registerMenuScreens(RegisterMenuScreensEvent event) {
@@ -111,8 +105,7 @@ public class DimensionalCellModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(DIMENSIONAL_CELL)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
-                        .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL.block().get(), ""))
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .define('P', Items.PRISMARINE_SHARD)
@@ -120,8 +113,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "PFP", "ReR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_ADVANCED)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
-                        .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_ADVANCED.block().get(), "advanced"))
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
                                         .define('K', DIMENSIONAL_CELL.block().get())
                                         .define('*', VariousModule.INFUSED_DIAMOND.get())
@@ -129,8 +121,7 @@ public class DimensionalCellModule implements IModule {
                                 "R*R", "*K*", "R*R"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_SIMPLE)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
-                        .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_SIMPLE.block().get(), "simple"))
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .define('q', Items.QUARTZ)
@@ -138,8 +129,7 @@ public class DimensionalCellModule implements IModule {
                                 "RdR", "qFq", "RdR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_CREATIVE)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
-                        .blockState(p -> DataGenHelper.createDimensionalCellModel(p, DIMENSIONAL_CELL_CREATIVE.block().get(), "creative")),
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get()),
                 Dob.itemBuilder(POWERCELL_CARD)
                         .shaped(builder -> builder
                                         .define('g', Items.GOLD_NUGGET)

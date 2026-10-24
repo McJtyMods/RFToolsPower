@@ -7,19 +7,19 @@
         }
       },
       "from": [
-        3,
-        3,
-        3
+        3.0,
+        3.0,
+        3.0
       ],
       "to": [
-        13,
-        13,
-        13
+        13.0,
+        13.0,
+        13.0
       ]
     }
   ],
-  "render_type": "minecraft:translucent",
   "textures": {
+    "particle": "#single",
     "single": "rftoolspower:block/dimcell/dimensionalcelloutcreative"
   }
 }

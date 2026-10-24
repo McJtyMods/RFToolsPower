@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -14,39 +14,40 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgitatorTileEntity> {
+public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgitatorTileEntity, BlazingAgitatorRenderer.State> {
 
     public BlazingAgitatorRenderer(BlockEntityRendererProvider.Context context) {
     }
 
-    @Override
-    public void render(BlazingAgitatorTileEntity te, float v, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        IItemHandler h = te.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, te.getBlockPos(), null);
-        if (h != null) {
-            matrixStack.pushPose();
+    public static class State extends net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState {
+        final ItemStack[] items = new ItemStack[9];
+        final float[] angles = new float[9];
+    }
 
-            for (int x = 0 ; x < 3 ; x++) {
-                for (int y = 0 ; y < 3 ; y++) {
-                    ItemStack stack = h.getStackInSlot(y * 3 + x);
-                    if (!stack.isEmpty()) {
-                        matrixStack.pushPose();
-                        matrixStack.scale(.3f, .3f, .3f);
-                        matrixStack.translate(x * 0.9f + 0.75f, 2.1f, y * 0.9f + 0.75f);
-                        float rotationSpeed = te.getRotationSpeed(x, y);
-                        float angle = te.getCurrentAngle(x, y);
-                        angle += rotationSpeed * 9;
-                        if (angle > 360) {
-                            angle -= 360;
-                        }
-                        te.setCurrentAngle(x, y, angle);
-                        RenderHelper.rotateYP(matrixStack, angle);
-                        RenderHelper.renderStaticFixed(matrixStack, buffer, stack, RenderHelper.MAX_BRIGHTNESS, combinedOverlay);
-                        matrixStack.popPose();
-                    }
-                }
-            }
+    @Override public State createRenderState() { return new State(); }
 
-            matrixStack.popPose();
+    @Override public void extractRenderState(BlazingAgitatorTileEntity te, State state, float partialTicks,
+            net.minecraft.world.phys.Vec3 camera, net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay overlay) {
+        BlockEntityRenderer.super.extractRenderState(te, state, partialTicks, camera, overlay);
+        var items = mcjty.lib.varia.CapabilityTools.itemHandler(te.getLevel().getCapability(Capabilities.Item.BLOCK, te.getBlockPos(), null));
+        for (int i = 0; i < 9; i++) {
+            state.items[i] = items == null ? ItemStack.EMPTY : items.getStackInSlot(i).copy();
+            state.angles[i] = (te.getCurrentAngle(i % 3, i / 3) + te.getRotationSpeed(i % 3, i / 3) * 9) % 360;
+            te.setCurrentAngle(i % 3, i / 3, state.angles[i]);
+        }
+    }
+
+    @Override public void submit(State state, PoseStack pose, SubmitNodeCollector collector,
+            net.minecraft.client.renderer.state.level.CameraRenderState camera) {
+        for (int i = 0; i < 9; i++) {
+            if (state.items[i].isEmpty()) continue;
+            pose.pushPose();
+            pose.scale(.3f, .3f, .3f);
+            pose.translate((i % 3) * .9f + .75f, 2.1f, (i / 3) * .9f + .75f);
+            RenderHelper.rotateYP(pose, state.angles[i]);
+            RenderHelper.renderStaticFixed(pose, collector, state.items[i], RenderHelper.MAX_BRIGHTNESS,
+                    net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
+            pose.popPose();
         }
     }
 

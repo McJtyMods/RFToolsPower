@@ -32,11 +32,11 @@
     },
     "facing=up,working=false": {
       "model": "rftoolspower:block/blazing_generator_idle",
-      "x": -90
+      "x": 270
     },
     "facing=up,working=true": {
       "model": "rftoolspower:block/blazing_generator_busy",
-      "x": -90
+      "x": 270
     },
     "facing=west,working=false": {
       "model": "rftoolspower:block/blazing_generator_idle",

@@ -12,7 +12,7 @@ import mcjty.rftoolspower.modules.powercell.client.ClientSetup;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -31,24 +31,21 @@ public class PowerCellModule implements IModule {
 
     public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL1 = RBLOCKS.registerBlock("cell1",
             PowerCellTileEntity.class,
-            () -> new PowerCellBlock(Tier.TIER1),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            (pos, state) -> new PowerCellTileEntity(Tier.TIER1, pos, state)
-    );
+            properties -> new PowerCellBlock(Tier.TIER1, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (pos, state) -> new PowerCellTileEntity(Tier.TIER1, pos, state));
 
     public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL2 = RBLOCKS.registerBlock("cell2",
             PowerCellTileEntity.class,
-            () -> new PowerCellBlock(Tier.TIER2),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            (pos, state) -> new PowerCellTileEntity(Tier.TIER2, pos, state)
-    );
+            properties -> new PowerCellBlock(Tier.TIER2, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (pos, state) -> new PowerCellTileEntity(Tier.TIER2, pos, state));
 
     public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL3 = RBLOCKS.registerBlock("cell3",
             PowerCellTileEntity.class,
-            () -> new PowerCellBlock(Tier.TIER3),
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            (pos, state) -> new PowerCellTileEntity(Tier.TIER3, pos, state)
-    );
+            properties -> new PowerCellBlock(Tier.TIER3, properties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (pos, state) -> new PowerCellTileEntity(Tier.TIER3, pos, state));
 
     public static final DeferredItem<Item> POWER_CORE1 = ITEMS.register("power_core1", tab(PowerCoreItem::new));
     public static final DeferredItem<Item> POWER_CORE2 = ITEMS.register("power_core2", tab(PowerCoreItem::new));

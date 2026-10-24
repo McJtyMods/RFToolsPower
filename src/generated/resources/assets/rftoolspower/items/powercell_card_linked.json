@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "rftoolspower:item/powercell_card_linked"
+  }
+}

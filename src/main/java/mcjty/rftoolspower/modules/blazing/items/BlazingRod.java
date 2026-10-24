@@ -35,14 +35,17 @@ public class BlazingRod extends Item implements ITooltipSettings {
                     parameter("duration", stack -> getTotalTicks(stack) + " ticks")));
 
 
-    public BlazingRod() {
-        super(Registration.createStandardProperties());
+    public BlazingRod(net.minecraft.world.item.Item.Properties properties) {
+        super(properties);
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack itemStack, TooltipContext context, @Nonnull List<Component> list, @Nonnull TooltipFlag flags) {
-        super.appendHoverText(itemStack, context, list, flags);
+    public void appendHoverText(@Nonnull ItemStack itemStack, TooltipContext context, @Nonnull net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> consumer, @Nonnull TooltipFlag flags) {
+        List<Component> list = new java.util.ArrayList<>();
+        super.appendHoverText(itemStack, context, display, consumer, flags);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), itemStack, list, flags);
+
+        list.forEach(consumer);
     }
 
     public static boolean isCharging(ItemStack stack) {

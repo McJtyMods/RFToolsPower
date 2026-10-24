@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "R": {
-      "item": "minecraft:redstone_block"
-    },
-    "e": {
-      "item": "minecraft:emerald"
-    },
-    "r": {
-      "item": "minecraft:redstone"
-    },
-    "s": {
-      "item": "rftoolsbase:dimensionalshard"
-    }
+    "R": "minecraft:redstone_block",
+    "e": "minecraft:emerald",
+    "r": "minecraft:redstone",
+    "s": "rftoolsbase:dimensionalshard"
   },
   "pattern": [
     "ses",
@@ -21,7 +13,6 @@
     "srs"
   ],
   "result": {
-    "count": 1,
     "id": "rftoolspower:power_core2"
   }
 }

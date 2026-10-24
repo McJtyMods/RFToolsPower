@@ -115,9 +115,9 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
         algorithm = new BlazingAgitatorAlgorithm(slot -> new BlazingRodStack(items.getStackInSlot(slot)));
     }
 
-    public static BaseBlock createBlock() {
+    public static BaseBlock createBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
         return new BaseBlock(new BlockBuilder().properties(
-                BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL))
+                properties.strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .infusable()
                 .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/blazingagitator"))
@@ -160,7 +160,7 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     @Override
     public void loadClientDataFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
         for (int i = 0 ; i < BUFFER_SIZE ; i++) {
-            rotationSpeed[i] = tag.getFloat("rs" + i);
+            rotationSpeed[i] = tag.getFloatOr("rs" + i, 0F);
         }
         items.load(tag, "items", provider);
     }
@@ -266,31 +266,37 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        CompoundTag tag = new CompoundTag();
+        HolderLookup.Provider provider = (level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
         items.save(tag, "items", provider);
         energyStorage.save(tag, "energy", provider);
         infusable.save(tag, "infusable");
+
+        output.store(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC), tag);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        CompoundTag tag = input.read(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
+        HolderLookup.Provider provider = input.lookup();
         items.load(tag, "items", provider);
         energyStorage.load(tag, "energy", provider);
         infusable.load(tag, "infusable");
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
         var data = input.get(BlazingModule.ITEM_AGITATOR_DATA);
         if (data != null) {
             setData(BlazingModule.AGITATOR_DATA, data);
         }
-        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
-        infusable.applyImplicitComponents(input.get(Registration.ITEM_INFUSABLE));
-        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
+        energyStorage.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_ENERGY));
+        infusable.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE));
+        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY));
     }
 
     @Override

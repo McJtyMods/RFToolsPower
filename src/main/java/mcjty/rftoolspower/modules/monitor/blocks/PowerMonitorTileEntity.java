@@ -54,8 +54,8 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
         super(MonitorModule.POWER_MONITOR.be().get(), pos, state);
     }
 
-    public static LogicSlabBlock createBlock() {
-        return new LogicSlabBlock(new BlockBuilder()
+    public static LogicSlabBlock createBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
+        return new LogicSlabBlock(new BlockBuilder().properties(mcjty.rftoolsbase.tools.RegistryProperties.block(properties))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolsbase:powermonitor/powermonitor"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -159,21 +159,27 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tagCompound, provider);
-        support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
-        inAlarm = tagCompound.getBoolean("inAlarm");
+    public void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        CompoundTag tagCompound = input.read(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
+        HolderLookup.Provider provider = input.lookup();
+        support.setPowerOutput(tagCompound.getBooleanOr("rs", false) ? 15 : 0);
+        inAlarm = tagCompound.getBooleanOr("inAlarm", false);
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.saveAdditional(tagCompound, provider);
+    public void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        CompoundTag tagCompound = new CompoundTag();
+        HolderLookup.Provider provider = (level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("inAlarm", inAlarm);
+
+        output.store(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC), tagCompound);
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
         var data = input.get(MonitorModule.ITEM_POWER_MONITOR_DATA);
         if (data != null) {

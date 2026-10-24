@@ -15,9 +15,9 @@ import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
@@ -34,7 +34,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     private static long lastTime = 0;
 
-    private static final ResourceLocation iconLocation = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
+    private static final Identifier iconLocation = Identifier.fromNamespaceAndPath(RFToolsPower.MODID, "textures/gui/dimensionalcell.png");
 
     public GuiDimensionalCell(GenericContainer container, Inventory inventory, Component title) {
         super(container, inventory, title, DimensionalCellModule.DIMENSIONAL_CELL.block().get().getManualEntry());
@@ -93,7 +93,7 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
 
     @Override
-    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
         drawWindow(graphics, partialTicks, mouseX, mouseY);
 
         requestRF();

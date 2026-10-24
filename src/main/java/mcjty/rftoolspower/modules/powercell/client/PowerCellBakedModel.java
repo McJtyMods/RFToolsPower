@@ -7,14 +7,13 @@ import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -26,8 +25,10 @@ import java.util.List;
 
 public class PowerCellBakedModel extends AbstractDynamicBakedModel {
 
-    public static final ResourceLocation TEXTURE_INPUTMASK = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/powercell/inputmask");
-    public static final ResourceLocation TEXTURE_OUTPUTMASK = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/powercell/outputmask");
+    public PowerCellBakedModel() { inputMask = null; outputMask = null; }
+
+    public static final Identifier TEXTURE_INPUTMASK = Identifier.fromNamespaceAndPath(RFToolsPower.MODID, "block/powercell/inputmask");
+    public static final Identifier TEXTURE_OUTPUTMASK = Identifier.fromNamespaceAndPath(RFToolsPower.MODID, "block/powercell/outputmask");
 
     private VertexFormat format;
 
@@ -60,34 +61,32 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
             s += "both_t";
         }
         s += tier;
-        return getTexture(ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, s));
+        return getTexture(Identifier.fromNamespaceAndPath(RFToolsPower.MODID, s));
     }
 
     private static TextureAtlasSprite getTopTexture() {
         String name = "block/powercell/cellhoriz_t1";
-        return getTexture(ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, name));
+        return getTexture(Identifier.fromNamespaceAndPath(RFToolsPower.MODID, name));
     }
 
     @Override
-    @NotNull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
-        if (side != null) {
-            return Collections.emptyList();
-        }
+    public void collectParts(net.minecraft.client.renderer.block.BlockAndTintGetter world, net.minecraft.core.BlockPos pos,
+            BlockState state, RandomSource random, List<net.minecraft.client.renderer.block.dispatch.BlockStateModelPart> parts) {
+        var entity = world.getBlockEntity(pos);
+        PowerCellTileEntity cell = entity instanceof PowerCellTileEntity found ? found : null;
+        parts.add(new mcjty.rftoolsbase.client.QuadModelPart(buildQuads(state, cell), particleMaterial()));
+    }
 
-        boolean upper = Boolean.TRUE.equals(state.getValue(PowerCellBlock.UPPER));
-        boolean lower = Boolean.TRUE.equals(state.getValue(PowerCellBlock.LOWER));
-
-        SideType north = data.get(PowerCellTileEntity.NORTH);
-        SideType south = data.get(PowerCellTileEntity.SOUTH);
-        SideType west = data.get(PowerCellTileEntity.WEST);
-        SideType east = data.get(PowerCellTileEntity.EAST);
-        SideType up = data.get(PowerCellTileEntity.UP);
-        SideType down = data.get(PowerCellTileEntity.DOWN);
-        Tier tier = data.get(PowerCellTileEntity.TIER);
-        if (tier == null) {
-            return Collections.emptyList();
-        }
+    private List<BakedQuad> buildQuads(BlockState state, PowerCellTileEntity cell) {
+        boolean upper = state.getValue(PowerCellBlock.UPPER);
+        boolean lower = state.getValue(PowerCellBlock.LOWER);
+        SideType north = cell == null ? SideType.NONE : cell.getMode(Direction.NORTH);
+        SideType south = cell == null ? SideType.NONE : cell.getMode(Direction.SOUTH);
+        SideType west = cell == null ? SideType.NONE : cell.getMode(Direction.WEST);
+        SideType east = cell == null ? SideType.NONE : cell.getMode(Direction.EAST);
+        SideType up = cell == null ? SideType.NONE : cell.getMode(Direction.UP);
+        SideType down = cell == null ? SideType.NONE : cell.getMode(Direction.DOWN);
+        Tier tier = cell == null ? Tier.TIER1 : cell.getTier();
         int t = tier.ordinal()+1;
 
         List<BakedQuad> quads = new ArrayList<>();
@@ -156,7 +155,7 @@ public class PowerCellBakedModel extends AbstractDynamicBakedModel {
 
     @Nonnull
     @Override
-    public TextureAtlasSprite getParticleIcon() {
-        return getSideTexture(false, false, 1);
+    public net.minecraft.client.resources.model.sprite.Material.Baked particleMaterial() {
+        return new net.minecraft.client.resources.model.sprite.Material.Baked(getSideTexture(false, false, 1), false);
     }
 }

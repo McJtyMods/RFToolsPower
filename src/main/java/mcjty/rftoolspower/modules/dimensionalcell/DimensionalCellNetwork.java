@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -35,19 +35,20 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     }
 
     public DimensionalCellNetwork(CompoundTag tag) {
-        ListTag lst = tag.getList("networks", Tag.TAG_COMPOUND);
+        ListTag lst = tag.getListOrEmpty("networks");
         for (int i = 0 ; i < lst.size() ; i++) {
-            CompoundTag tc = lst.getCompound(i);
-            int channel = tc.getInt("channel");
+            CompoundTag tc = lst.getCompoundOrEmpty(i);
+            int channel = tc.getIntOr("channel", 0);
             Network value = new Network();
             value.readFromNBT(tc);
             networks.put(channel, value);
         }
-        lastId = tag.getInt("lastId");
+        lastId = tag.getIntOr("lastId", 0);
     }
 
     public static DimensionalCellNetwork get(Level world) {
-        return getData(world, DimensionalCellNetwork::new, DimensionalCellNetwork::new, DIMENSIONALCELL_NETWORK_NAME);
+        return mcjty.rftoolsbase.tools.LegacyWorldData.get(world, DimensionalCellNetwork::new, DimensionalCellNetwork::new,
+                "rftoolspower:dimensional_cell_network", DIMENSIONALCELL_NETWORK_NAME);
     }
 
     public Network getOrCreateNetwork(int id) {
@@ -88,6 +89,9 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     }
 
     public static class Network {
+        public final mcjty.rftoolsbase.tools.EnergyTransactions.Journal<Integer> energyJournal =
+                new mcjty.rftoolsbase.tools.EnergyTransactions.Journal<>(this::getEnergy, this::setEnergy);
+
         private int energy = 0;
         private Set<GlobalPos> blocks = new HashSet<>();
         private int simpleBlocks = 0;
@@ -323,7 +327,7 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             ListTag list = new ListTag();
             for (GlobalPos block : blocks) {
                 CompoundTag tag = new CompoundTag();
-                tag.putString("dim", block.dimension().location().toString());
+                tag.putString("dim", block.dimension().identifier().toString());
                 tag.putInt("x", block.pos().getX());
                 tag.putInt("y", block.pos().getY());
                 tag.putInt("z", block.pos().getZ());
@@ -334,16 +338,16 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
         }
 
         public void readFromNBT(CompoundTag tagCompound){
-            this.energy = tagCompound.getInt("energy");
-            this.advancedBlocks = tagCompound.getInt("advanced");
-            this.simpleBlocks = tagCompound.getInt("simple");
+            this.energy = tagCompound.getIntOr("energy", 0);
+            this.advancedBlocks = tagCompound.getIntOr("advanced", 0);
+            this.simpleBlocks = tagCompound.getIntOr("simple", 0);
             blocks.clear();
-            ListTag list = tagCompound.getList("blocks", Tag.TAG_COMPOUND);
+            ListTag list = tagCompound.getListOrEmpty("blocks");
             for (int i = 0 ; i < list.size() ; i++) {
-                CompoundTag tag = list.getCompound(i);
-                ResourceLocation id = ResourceLocation.parse(tag.getString("dim"));
+                CompoundTag tag = list.getCompoundOrEmpty(i);
+                Identifier id = Identifier.parse(tag.getStringOr("dim", ""));
                 ResourceKey<Level> type = LevelTools.getId(id);
-                BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
+                BlockPos pos = new BlockPos(tag.getIntOr("x", 0), tag.getIntOr("y", 0), tag.getIntOr("z", 0));
                 blocks.add(GlobalPos.of(type, pos));
             }
         }

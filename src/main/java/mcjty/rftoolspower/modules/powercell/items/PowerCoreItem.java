@@ -24,14 +24,17 @@ public class PowerCoreItem extends Item implements ITooltipSettings {
     private final Lazy<TooltipBuilder> tooltipBuilder = Lazy.of(() -> new TooltipBuilder()
             .info(header()));
 
-    public PowerCoreItem() {
-        super(RFToolsPower.setup.defaultProperties());
+    public PowerCoreItem(net.minecraft.world.item.Item.Properties properties) {
+        super(properties);
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, TooltipContext worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(@Nonnull ItemStack stack, TooltipContext worldIn, @Nonnull net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> consumer, @Nonnull TooltipFlag flagIn) {
+        List<Component> tooltip = new java.util.ArrayList<>();
+        super.appendHoverText(stack, worldIn, display, consumer, flagIn);
         tooltipBuilder.get().makeTooltip(Tools.getId(this), stack, tooltip, flagIn);
+
+        tooltip.forEach(consumer);
     }
 
     @Override

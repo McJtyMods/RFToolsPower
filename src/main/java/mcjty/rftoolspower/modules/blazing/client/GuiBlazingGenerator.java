@@ -9,9 +9,9 @@ import mcjty.lib.gui.widgets.Label;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
@@ -32,7 +32,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
 
     @Override
     public void init() {
-        window = new Window(this, getBE(), ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_generator.gui"));
+        window = new Window(this, getBE(), Identifier.fromNamespaceAndPath(RFToolsPower.MODID, "gui/blazing_generator.gui"));
         super.init();
         initializeFields();
     }
@@ -58,7 +58,7 @@ public class GuiBlazingGenerator extends GenericGuiContainer<BlazingGeneratorTil
     }
 
     @Override
-    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
         updateFields();
         drawWindow(graphics, partialTicks, mouseX, mouseY);
     }

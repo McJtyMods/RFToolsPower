@@ -6,7 +6,7 @@ import mcjty.lib.typed.TypedMap;
 import mcjty.rftoolsbase.modules.informationscreen.blocks.DefaultPowerInformationScreenInfo;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellInformationScreenInfo;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.Direction;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import static mcjty.rftoolsbase.modules.informationscreen.client.DefaultPowerInf
 public class PowerCellInformationRenderer {
 
     // @todo 1.15 port rendering
-    public static void renderGraphical(PoseStack matrixStack, MultiBufferSource buffer, int mode, TypedMap data, Direction orientation, double scale) {
+    public static void renderGraphical(PoseStack matrixStack, SubmitNodeCollector buffer, int mode, TypedMap data, Direction orientation, double scale) {
         if (data == null || data.size() == 0) {
             return;
         }
@@ -74,7 +74,7 @@ public class PowerCellInformationRenderer {
 //        GlStateManager._popMatrix();
     }
 
-    public static void renderDefault(PoseStack matrixStack, MultiBufferSource buffer, TypedMap data, Direction orientation, double scale) {
+    public static void renderDefault(PoseStack matrixStack, SubmitNodeCollector buffer, TypedMap data, Direction orientation, double scale) {
         List<String> log = getLog(data);
         HudRenderHelper.HudPlacement hudPlacement = HudRenderHelper.HudPlacement.HUD_FRONT;
         HudRenderHelper.HudOrientation hudOrientation = HudRenderHelper.HudOrientation.HUD_SOUTH;

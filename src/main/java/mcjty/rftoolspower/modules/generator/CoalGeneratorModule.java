@@ -12,7 +12,7 @@ import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.generator.data.CoalGeneratorData;
 import mcjty.rftoolspower.setup.Config;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
@@ -34,14 +34,13 @@ public class CoalGeneratorModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, CoalGeneratorTileEntity> COALGENERATOR = RBLOCKS.registerBlock("coalgenerator",
             CoalGeneratorTileEntity.class,
             CoalGeneratorTileEntity::createBlock,
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            CoalGeneratorTileEntity::new
-    );
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            CoalGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 
     public static final Supplier<AttachmentType<CoalGeneratorData>> COAL_GENERATOR_DATA = ATTACHMENT_TYPES.register(
             "coal_generator_data", () -> AttachmentType.builder(() -> new CoalGeneratorData(0))
-                    .serialize(CoalGeneratorData.CODEC)
+                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(CoalGeneratorData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CoalGeneratorData>> ITEM_COAL_GENERATOR_DATA = COMPONENTS.registerComponentType(
             "coal_generator_data",
@@ -76,7 +75,7 @@ public class CoalGeneratorModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(COALGENERATOR)
                         .ironPickaxeTags()
-                        .standardLoot(Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), Items.REDSTONE_TORCH)),

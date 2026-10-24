@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 
 import java.text.DecimalFormat;
@@ -36,11 +36,11 @@ public class RFToolsPowerTOPDriver implements TOPDriver {
 
     public static final RFToolsPowerTOPDriver DRIVER = new RFToolsPowerTOPDriver();
 
-    private final Map<ResourceLocation, TOPDriver> drivers = new HashMap<>();
+    private final Map<Identifier, TOPDriver> drivers = new HashMap<>();
 
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
-        ResourceLocation id = Tools.getId(blockState);
+        Identifier id = Tools.getId(blockState);
         if (!drivers.containsKey(id)) {
             if (blockState.getBlock() == CoalGeneratorModule.COALGENERATOR.block().get()) {
                 drivers.put(id, new CoalDriver());

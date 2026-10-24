@@ -16,7 +16,7 @@ import mcjty.rftoolspower.modules.monitor.client.PowerLevelRenderer;
 import mcjty.rftoolspower.modules.monitor.data.PowerMonitorData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
@@ -26,7 +26,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import mcjty.lib.datagen.model.ModelFile;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -42,21 +42,19 @@ public class MonitorModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, PowerMonitorTileEntity> POWER_MONITOR = RBLOCKS.registerBlock("power_monitor",
             PowerMonitorTileEntity.class,
             PowerMonitorTileEntity::createBlock,
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            PowerMonitorTileEntity::new
-    );
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            PowerMonitorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_POWER_MONITOR = CONTAINERS.register("power_monitor", GenericContainer::createContainerType);
 
     public static final RBlock<LogicSlabBlock, BlockItem, PowerLevelTileEntity> POWER_LEVEL = RBLOCKS.registerBlock("power_level",
             PowerLevelTileEntity.class,
             PowerLevelTileEntity::createBlock,
-            block -> new BlockItem(block.get(), createStandardProperties()),
-            PowerLevelTileEntity::new
-    );
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            PowerLevelTileEntity::new);
 
     public static final Supplier<AttachmentType<PowerMonitorData>> POWER_MONITOR_DATA = ATTACHMENT_TYPES.register(
             "power_monitor_data", () -> AttachmentType.builder(() -> new PowerMonitorData(0, (byte) 0, (byte) 0))
-                    .serialize(PowerMonitorData.CODEC)
+                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(PowerMonitorData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<PowerMonitorData>> ITEM_POWER_MONITOR_DATA = COMPONENTS.registerComponentType(
             "power_monitor_data",
@@ -87,7 +85,7 @@ public class MonitorModule implements IModule {
 
     }
 
-    public static List<ResourceLocation> onTextureStitch() {
+    public static List<Identifier> onTextureStitch() {
         return Arrays.asList(PowerLevelRenderer.DIGITS);
     }
 

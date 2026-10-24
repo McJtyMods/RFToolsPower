@@ -62,7 +62,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
 
     @Override
     @Nonnull
-    public VoxelShape getOcclusionShape(@Nonnull BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos) {
+    public VoxelShape getOcclusionShape(@Nonnull BlockState state) {
         return RENDER_SHAPE;
     }
 
@@ -74,9 +74,9 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
         }
     }
 
-    public DimensionalCellBlock(DimensionalCellType type, BlockEntityType.BlockEntitySupplier<BlockEntity> supplier) {
+    public DimensionalCellBlock(DimensionalCellType type, BlockEntityType.BlockEntitySupplier<BlockEntity> supplier, net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
         super(new BlockBuilder()
-                .properties(BlockBehaviour.Properties.of()
+                .properties(properties
                         .strength(2.0f)
                         .sound(SoundType.METAL)
                         .isRedstoneConductor((state, world, pos) -> false)
@@ -104,7 +104,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
 
     @Override
     public Collection<DataComponentType<?>> getComponentsToPreserve() {
-        return List.of(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get(), Registration.ITEM_INFUSABLE.get(), Registration.ITEM_INVENTORY.get());
+        return List.of(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get(), mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), mcjty.lib.setup.Registration.ITEM_INVENTORY.get());
     }
 
     private static int getPowerFactor(DimensionalCellType type) {
@@ -116,7 +116,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
 
     @Override
     protected boolean wrenchSneakSelect(Level world, BlockPos pos, Player player) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             SmartWrenchMode currentMode = SmartWrenchItem.getCurrentMode(player.getItemInHand(InteractionHand.MAIN_HAND));
             if (currentMode == SmartWrenchMode.MODE_SELECT) {
                 BlockEntity te = world.getBlockEntity(pos);
@@ -130,7 +130,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
 
     @Override
     protected boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof DimensionalCellTileEntity cell) {
                 cell.toggleMode(side);
@@ -157,7 +157,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
     @Override
     public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             if (stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA) == null) {
                 DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
                 if (dimensionalCellTileEntity != null && type.isCreative()) {
@@ -195,7 +195,7 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
         Level world = builder.getLevel();
         Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
         List<ItemStack> drops = super.getDrops(state, builder);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             BlockEntity te = world.getBlockEntity(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z));
             if (te instanceof DimensionalCellTileEntity) {
                 DimensionalCellNetwork.Network network = ((DimensionalCellTileEntity) te).getNetwork();
@@ -211,44 +211,6 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
         return drops;
     }
 
-
-    @Override
-    public void wasExploded(Level world, @Nonnull BlockPos pos, @Nonnull Explosion explosion) {
-        if (!world.isClientSide) {
-            BlockEntity te = world.getBlockEntity(pos);
-            if (te instanceof DimensionalCellTileEntity cell) {
-                DimensionalCellNetwork.Network network = cell.getNetwork();
-                if (network != null) {
-                    int a = network.extractEnergySingleBlock(type);
-                    Block block = world.getBlockState(pos).getBlock();
-                    network.remove(world, cell.getGlobalPos(), DimensionalCellBlock.getType(block));
-                    DimensionalCellNetwork.get(world).save();
-                    cell.setNetworkId(-1);
-                }
-            }
-        }
-        super.wasExploded(world, pos, explosion);
-    }
-
-    @Override
-    public void onRemove(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState newstate, boolean isMoving) {
-        if (!world.isClientSide) {
-            if (state.getBlock() != newstate.getBlock()) {
-                BlockEntity te = world.getBlockEntity(pos);
-                if (te instanceof DimensionalCellTileEntity cell) {
-                    DimensionalCellNetwork.Network network = cell.getNetwork();
-                    if (network != null) {
-                        int a = network.extractEnergySingleBlock(type);
-                        System.out.println("a = " + a);
-                        Block block = world.getBlockState(pos).getBlock();
-                        network.remove(world, cell.getGlobalPos(), DimensionalCellBlock.getType(block));
-                        DimensionalCellNetwork.get(world).save();
-                    }
-                }
-            }
-        }
-        super.onRemove(state, world, pos, newstate, isMoving);
-    }
 
     @Override
     protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {

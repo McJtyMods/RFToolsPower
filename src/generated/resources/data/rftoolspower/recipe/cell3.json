@@ -1,18 +1,11 @@
 {
   "type": "mcjtylib:copy_components",
   "recipe": {
-    "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-      "K": {
-        "item": "rftoolspower:power_core3"
-      },
-      "P": {
-        "item": "rftoolspower:cell2"
-      },
-      "r": {
-        "item": "minecraft:redstone"
-      }
+      "K": "rftoolspower:power_core3",
+      "P": "rftoolspower:cell2",
+      "r": "minecraft:redstone"
     },
     "pattern": [
       "rKr",
@@ -20,7 +13,6 @@
       "rKr"
     ],
     "result": {
-      "count": 1,
       "id": "rftoolspower:cell3"
     }
   }

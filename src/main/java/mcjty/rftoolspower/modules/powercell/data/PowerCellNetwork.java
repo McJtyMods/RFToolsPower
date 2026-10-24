@@ -7,6 +7,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PowerCellNetwork {
+    private record EnergySnapshot(long energy, long inserted, long extracted, java.util.Map<mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity, Long> cells) { }
+    private mcjty.rftoolsbase.tools.EnergyTransactions.Journal<EnergySnapshot> energyJournal;
+
+    public net.neoforged.neoforge.transfer.transaction.SnapshotJournal<?> energyJournal(net.minecraft.world.level.Level level) {
+        if (energyJournal == null) {
+            energyJournal = new mcjty.rftoolsbase.tools.EnergyTransactions.Journal<>(() -> {
+                var cells = new java.util.IdentityHashMap<mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity, Long>();
+                for (long position : getPositions()) {
+                    var pos = net.minecraft.core.BlockPos.of(position);
+                    if (level.hasChunkAt(pos) && level.getBlockEntity(pos) instanceof mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity cell) {
+                        cells.put(cell, cell.localEnergyForTransaction());
+                    }
+                }
+                return new EnergySnapshot(getEnergy(), getInserted(), getExtracted(), cells);
+            }, snapshot -> {
+                snapshot.cells().forEach((cell, stored) -> cell.restoreEnergyForTransaction(stored));
+                setEnergy(snapshot.energy());
+                setInserted(snapshot.inserted());
+                setExtracted(snapshot.extracted());
+            });
+        }
+        return energyJournal;
+    }
+
 
     private long energy;
     private long maxEnergy;

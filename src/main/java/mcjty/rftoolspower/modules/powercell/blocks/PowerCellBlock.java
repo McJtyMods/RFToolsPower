@@ -44,8 +44,8 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
         return RotationType.NONE;
     }
 
-    public PowerCellBlock(Tier tier) {
-        super(new BlockBuilder()
+    public PowerCellBlock(Tier tier, net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
+        super(new BlockBuilder().properties(mcjty.rftoolsbase.tools.RegistryProperties.block(properties))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolspower:powerstorage/powercell"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -66,7 +66,7 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
     }
 
     private static long getEnergy(ItemStack stack) {
-        ItemEnergy energy = stack.get(Registration.ITEM_ENERGY);
+        ItemEnergy energy = stack.get(mcjty.lib.setup.Registration.ITEM_ENERGY);
         if (energy != null) {
             return energy.energy();
         }
@@ -76,7 +76,7 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
     @Override
     public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
 
             BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity powercell) {
@@ -110,7 +110,7 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
 
     @Override
     protected boolean wrenchUse(Level world, BlockPos pos, Direction side, Player player) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof PowerCellTileEntity powercell) {
                 powercell.toggleMode(side);
@@ -132,7 +132,7 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public BlockState updateShape(@Nonnull BlockState stateIn, @Nonnull Direction facing, @Nonnull BlockState facingState, @Nonnull LevelAccessor world, @Nonnull BlockPos pos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, net.minecraft.world.level.LevelReader world, net.minecraft.world.level.ScheduledTickAccess ticks, BlockPos pos, Direction facing, BlockPos facingPos, BlockState facingState, net.minecraft.util.RandomSource random) {
         if (facing == Direction.UP) {
             return stateIn.setValue(UPPER, facingState.getBlock() == this);
         }
@@ -162,6 +162,6 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
 
     @Override
     public Collection<DataComponentType<?>> getComponentsToPreserve() {
-        return List.of(Registration.ITEM_ENERGY.get());
+        return List.of(mcjty.lib.setup.Registration.ITEM_ENERGY.get());
     }
 }

@@ -80,9 +80,9 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
 
     private int counter = 10;
 
-    public static BaseBlock createBlock() {
+    public static BaseBlock createBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
         return new BaseBlock(new BlockBuilder().properties(
-                        BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.METAL))
+                        properties.strength(2.0f).sound(SoundType.METAL))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/blazinginfuser"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -171,24 +171,30 @@ public class BlazingInfuserTileEntity extends TickingTileEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
+    public void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        CompoundTag tag = input.read(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
+        HolderLookup.Provider provider = input.lookup();
         energyStorage.load(tag, "energy", provider);
         items.load(tag, "items", provider);
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    public void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        CompoundTag tag = new CompoundTag();
+        HolderLookup.Provider provider = (level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
         energyStorage.save(tag, "energy", provider);
         items.save(tag, "items", provider);
+
+        output.store(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC), tag);
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        energyStorage.applyImplicitComponents(input.get(Registration.ITEM_ENERGY));
-        items.applyImplicitComponents(input.get(Registration.ITEM_INVENTORY));
+        energyStorage.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_ENERGY));
+        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY));
     }
 
     @Override

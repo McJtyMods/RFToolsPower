@@ -20,9 +20,9 @@ public class EndergenicPearl {
     }
 
     public EndergenicPearl(CompoundTag tagCompound) {
-        ticksLeft = tagCompound.getInt("t");
+        ticksLeft = tagCompound.getIntOr("t", 0);
         destination = BlockPosTools.read(tagCompound, "dest");
-        age = tagCompound.getInt("age");
+        age = tagCompound.getIntOr("age", 0);
     }
 
     public int getTicksLeft() {

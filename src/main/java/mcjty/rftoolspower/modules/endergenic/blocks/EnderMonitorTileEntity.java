@@ -43,7 +43,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     public static final Value<EnderMonitorTileEntity, String> VALUE_MODE =
         Value.createEnum("mode", EnderMonitorMode.values(), EnderMonitorTileEntity::getMode, EnderMonitorTileEntity::setMode);
 
-    
+
     @Cap(type = CapType.CONTAINER)
     private static final Function<EnderMonitorTileEntity, MenuProvider> SCREEN_CAP = be -> new DefaultContainerProvider<GenericContainer>("Ender Monitor")
             .containerSupplier(empty(EndergenicModule.CONTAINER_ENDER_MONITOR, be))
@@ -51,8 +51,8 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
             .setupSync(be);
 
 
-    public static LogicSlabBlock createBlock() {
-        return new LogicSlabBlock(new BlockBuilder()
+    public static LogicSlabBlock createBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties properties) {
+        return new LogicSlabBlock(new BlockBuilder().properties(mcjty.rftoolsbase.tools.RegistryProperties.block(properties))
                 .topDriver(RFToolsPowerTOPDriver.DRIVER)
                 .manualEntry(ManualHelper.create("rftoolsbase:powergeneration/endergenic"))
                 .info(key("message.rftoolspower.shiftmessage"))
@@ -120,21 +120,27 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        super.loadAdditional(tagCompound, provider);
-        support.setPowerOutput(tagCompound.getBoolean("rs") ? 15 : 0);
-        needpulse = tagCompound.getBoolean("needPulse");
+    public void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        CompoundTag tagCompound = input.read(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
+        HolderLookup.Provider provider = input.lookup();
+        support.setPowerOutput(tagCompound.getBooleanOr("rs", false) ? 15 : 0);
+        needpulse = tagCompound.getBooleanOr("needPulse", false);
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag tagCompound, HolderLookup.Provider lookup) {
-        super.saveAdditional(tagCompound, lookup);
+    public void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        CompoundTag tagCompound = new CompoundTag();
+        HolderLookup.Provider lookup = (level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
         tagCompound.putBoolean("rs", support.getPowerOutput() > 0);
         tagCompound.putBoolean("needPulse", needpulse);
+
+        output.store(com.mojang.serialization.MapCodec.assumeMapUnsafe(CompoundTag.CODEC), tagCompound);
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
         var data = input.get(EndergenicModule.ITEM_ENDER_MONITOR_DATA);
         if (data != null) {
