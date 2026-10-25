@@ -34,7 +34,7 @@ public class CoalGeneratorModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, CoalGeneratorTileEntity> COALGENERATOR = RBLOCKS.registerBlock("coalgenerator",
             CoalGeneratorTileEntity.class,
             CoalGeneratorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             CoalGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 

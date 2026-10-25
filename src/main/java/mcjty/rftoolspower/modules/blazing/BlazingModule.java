@@ -50,21 +50,21 @@ public class BlazingModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, BlazingGeneratorTileEntity> BLAZING_GENERATOR = RBLOCKS.registerBlock("blazing_generator",
             BlazingGeneratorTileEntity.class,
             BlazingGeneratorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             BlazingGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_BLAZING_GENERATOR = CONTAINERS.register("blazing_generator", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, BlazingAgitatorTileEntity> BLAZING_AGITATOR = RBLOCKS.registerBlock("blazing_agitator",
             BlazingAgitatorTileEntity.class,
             BlazingAgitatorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             BlazingAgitatorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_BLAZING_AGITATOR = CONTAINERS.register("blazing_agitator", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, BlazingInfuserTileEntity> BLAZING_INFUSER = RBLOCKS.registerBlock("blazing_infuser",
             BlazingInfuserTileEntity.class,
             BlazingInfuserTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             BlazingInfuserTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_BLAZING_INFUSER = CONTAINERS.register("blazing_infuser", GenericContainer::createContainerType);
 

@@ -44,21 +44,21 @@ public class EndergenicModule implements IModule {
     public static final RBlock<LogicSlabBlock, BlockItem, EnderMonitorTileEntity> ENDER_MONITOR = RBLOCKS.registerBlock("ender_monitor",
             EnderMonitorTileEntity.class,
             EnderMonitorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             EnderMonitorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDER_MONITOR = CONTAINERS.register("ender_monitor", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, PearlInjectorTileEntity> PEARL_INJECTOR = RBLOCKS.registerBlock("pearl_injector",
             PearlInjectorTileEntity.class,
             PearlInjectorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             PearlInjectorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_PEARL_INJECTOR = CONTAINERS.register("pearl_injector", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, EndergenicTileEntity> ENDERGENIC = RBLOCKS.registerBlock("endergenic",
             EndergenicTileEntity.class,
             EndergenicTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             EndergenicTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 

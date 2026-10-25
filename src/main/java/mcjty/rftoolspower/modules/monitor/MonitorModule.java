@@ -42,14 +42,14 @@ public class MonitorModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, PowerMonitorTileEntity> POWER_MONITOR = RBLOCKS.registerBlock("power_monitor",
             PowerMonitorTileEntity.class,
             PowerMonitorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             PowerMonitorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_POWER_MONITOR = CONTAINERS.register("power_monitor", GenericContainer::createContainerType);
 
     public static final RBlock<LogicSlabBlock, BlockItem, PowerLevelTileEntity> POWER_LEVEL = RBLOCKS.registerBlock("power_level",
             PowerLevelTileEntity.class,
             PowerLevelTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties),
+            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             PowerLevelTileEntity::new);
 
     public static final Supplier<AttachmentType<PowerMonitorData>> POWER_MONITOR_DATA = ATTACHMENT_TYPES.register(

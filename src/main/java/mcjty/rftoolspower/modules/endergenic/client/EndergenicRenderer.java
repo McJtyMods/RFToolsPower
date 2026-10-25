@@ -90,7 +90,7 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
             net.minecraft.client.renderer.state.level.CameraRenderState camera, float size, Identifier texture, RenderSettings settings) {
         var sprite = mcjty.lib.client.AbstractDynamicBakedModel.getTexture(texture);
         pose.pushPose();
-        pose.translate(.5f, 1.5f, .5f);
+        pose.translate(.5f, .5f, .5f);
         pose.mulPose(camera.orientation);
         collector.submitCustomGeometry(pose, settings.renderType(), (captured, vertex) -> {
             var matrix = captured.pose();
