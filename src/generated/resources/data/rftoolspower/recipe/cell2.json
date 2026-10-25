@@ -1,7 +1,6 @@
 {
   "type": "mcjtylib:copy_components",
   "recipe": {
-    "category": "misc",
     "key": {
       "K": "rftoolspower:power_core2",
       "P": "rftoolspower:cell1",

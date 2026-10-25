@@ -12,7 +12,7 @@ import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
 import mcjty.rftoolspower.modules.generator.data.CoalGeneratorData;
 import mcjty.rftoolspower.setup.Config;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;

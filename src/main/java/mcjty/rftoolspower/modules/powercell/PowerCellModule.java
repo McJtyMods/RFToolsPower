@@ -12,7 +12,7 @@ import mcjty.rftoolspower.modules.powercell.client.ClientSetup;
 import mcjty.rftoolspower.modules.powercell.data.Tier;
 import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
