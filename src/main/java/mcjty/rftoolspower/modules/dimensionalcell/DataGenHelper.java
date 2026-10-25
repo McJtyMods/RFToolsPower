@@ -68,7 +68,7 @@ public class DataGenHelper {
     /** Own provider because the published library exposes variant builders only. */
     public static class Provider extends BaseBlockStateProvider {
         private final Map<Block, JsonObject> multipart = new LinkedHashMap<>();
-        public Provider(DataGenerator generator) { super(generator, "rftoolspower"); }
+        public Provider(net.fabricmc.fabric.api.datagen.v1.FabricPackOutput output) { super(output, "rftoolspower"); }
         @Override protected void registerStatesAndModels() {
             multipart.clear();
             createDimensionalCellModel(this, DimensionalCellModule.DIMENSIONAL_CELL.block().get(), "");

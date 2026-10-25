@@ -19,7 +19,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nonnull;
 
@@ -39,12 +38,11 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
     public GuiDimensionalCell(GenericContainer container, Inventory inventory, Component title) {
         super(container, inventory, title, DimensionalCellModule.DIMENSIONAL_CELL.block().get().getManualEntry());
 
-        imageWidth = POWERCELL_WIDTH;
-        imageHeight = POWERCELL_HEIGHT;
+        setWindowDimensions(POWERCELL_WIDTH, POWERCELL_HEIGHT);
     }
 
-    public static void register(RegisterMenuScreensEvent event) {
-        event.register(DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
+    public static void register() {
+        net.minecraft.client.gui.screens.MenuScreens.register(DimensionalCellModule.CONTAINER_DIMENSIONAL_CELL.get(), GuiDimensionalCell::new);
     }
 
     @Override

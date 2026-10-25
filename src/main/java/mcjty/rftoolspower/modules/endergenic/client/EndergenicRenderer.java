@@ -102,12 +102,8 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
         pose.popPose();
     }
 
-    @Override
-    public AABB getRenderBoundingBox(EndergenicTileEntity be) {
-        BlockPos pos = be.getBlockPos();
-        Vec3 worldPosition = new Vec3(pos.getX(), pos.getY(), pos.getZ());
-        return new AABB(worldPosition, worldPosition.add(1, 2, 1));
-    }
+    @Override public boolean shouldRenderOffScreen() { return true; }
+
 
     public static void register() {
         BlockEntityRenderers.register(EndergenicModule.ENDERGENIC.be().get(), EndergenicRenderer::new);

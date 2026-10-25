@@ -13,7 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.common.util.Lazy;
+import mcjty.lib.varia.Lazy;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -49,11 +49,11 @@ public class PowerCellCardItem extends Item implements ITooltipSettings {
     }
 
     public static int getId(ItemStack stack) {
-        return stack.getOrDefault(DimensionalCellModule.ITEM_POWERCARD_DATA, PowerCardData.EMPTY).id();
+        return stack.getOrDefault(DimensionalCellModule.ITEM_POWERCARD_DATA.get(), PowerCardData.EMPTY).id();
     }
 
     public static void setId(ItemStack stack, int id) {
-        stack.set(DimensionalCellModule.ITEM_POWERCARD_DATA, new PowerCardData(id));
+        stack.set(DimensionalCellModule.ITEM_POWERCARD_DATA.get(), new PowerCardData(id));
     }
 
     @Override

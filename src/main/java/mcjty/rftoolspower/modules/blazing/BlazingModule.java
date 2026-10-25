@@ -27,16 +27,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import mcjty.lib.datagen.model.ModelFile;
 import mcjty.lib.datagen.model.VariantBlockStateBuilder;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
+import mcjty.lib.setup.DeferredHolder;
+import mcjty.lib.setup.DeferredItem;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -70,10 +65,8 @@ public class BlazingModule implements IModule {
 
     public static final DeferredItem<BlazingRod> BLAZING_ROD = ITEMS.register("blazing_rod", tab(BlazingRod::new));
 
-    public static final Supplier<AttachmentType<AgitatorData>> AGITATOR_DATA = ATTACHMENT_TYPES.register(
-            "agitator_data", () -> AttachmentType.builder(() -> new AgitatorData(new ArrayList<>()))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(AgitatorData.CODEC))
-                    .build());
+    public static final AttachmentType<AgitatorData> AGITATOR_DATA = net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry.create(
+            net.minecraft.resources.Identifier.fromNamespaceAndPath("rftoolspower", "agitator_data"), builder -> builder.initializer(() -> new AgitatorData(new ArrayList<>())).persistent(AgitatorData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AgitatorData>> ITEM_AGITATOR_DATA = COMPONENTS.registerComponentType(
             "agitator_data",
             builder -> builder
@@ -86,28 +79,26 @@ public class BlazingModule implements IModule {
                     .persistent(BlazingRodData.CODEC)
                     .networkSynchronized(BlazingRodData.STREAM_CODEC));
 
-    public BlazingModule(IEventBus bus) {
-        bus.addListener(this::registerScreens);
+
+    @Override
+    public void init() {
+
     }
 
     @Override
-    public void init(FMLCommonSetupEvent event) {
-
-    }
-
-    @Override
-    public void initClient(FMLClientSetupEvent event) {
+    public void initClient() {
+        registerScreens();
         BlazingAgitatorRenderer.register();
     }
 
-    public void registerScreens(RegisterMenuScreensEvent event) {
-        GuiBlazingAgitator.register(event);
-        GuiBlazingGenerator.register(event);
-        GuiBlazingInfuser.register(event);
+    public void registerScreens() {
+        GuiBlazingAgitator.register();
+        GuiBlazingGenerator.register();
+        GuiBlazingInfuser.register();
     }
 
     @Override
-    public void initConfig(IEventBus bus) {
+    public void initConfig() {
         BlazingConfiguration.setup(Config.SERVER_BUILDER, Config.CLIENT_BUILDER);
     }
 
@@ -125,7 +116,7 @@ public class BlazingModule implements IModule {
                         })
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
-                                        .define('X', Tags.Items.RODS_BLAZE)
+                                        .define('X', net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, net.minecraft.resources.Identifier.parse("c:rods/blaze")))
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "XXX", "GFG", "iii"),
                 Dob.blockBuilder(BLAZING_GENERATOR)
@@ -140,7 +131,7 @@ public class BlazingModule implements IModule {
                         })
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
-                                        .define('X', Tags.Items.RODS_BLAZE)
+                                        .define('X', net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, net.minecraft.resources.Identifier.parse("c:rods/blaze")))
                                         .define('Y', VariousModule.INFUSED_DIAMOND.get())
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "XYX", "RFR", "XYX"),
@@ -151,7 +142,7 @@ public class BlazingModule implements IModule {
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .define('s', VariousModule.DIMENSIONALSHARD.get())
-                                        .define('X', Tags.Items.RODS_BLAZE)
+                                        .define('X', net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, net.minecraft.resources.Identifier.parse("c:rods/blaze")))
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "iXi", "sFs", "iXi")
         );

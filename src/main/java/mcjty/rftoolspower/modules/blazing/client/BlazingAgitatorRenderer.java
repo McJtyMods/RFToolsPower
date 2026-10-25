@@ -9,8 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import mcjty.lib.container.IItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -29,7 +28,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
     @Override public void extractRenderState(BlazingAgitatorTileEntity te, State state, float partialTicks,
             net.minecraft.world.phys.Vec3 camera, net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay overlay) {
         BlockEntityRenderer.super.extractRenderState(te, state, partialTicks, camera, overlay);
-        var items = mcjty.lib.varia.CapabilityTools.itemHandler(te.getLevel().getCapability(Capabilities.Item.BLOCK, te.getBlockPos(), null));
+        var items = mcjty.lib.varia.CapabilityTools.itemHandler(net.fabricmc.fabric.api.transfer.v1.item.ItemStorage.SIDED.find(te.getLevel(), te.getBlockPos(), null));
         for (int i = 0; i < 9; i++) {
             state.items[i] = items == null ? ItemStack.EMPTY : items.getStackInSlot(i).copy();
             state.angles[i] = (te.getCurrentAngle(i % 3, i / 3) + te.getRotationSpeed(i % 3, i / 3) * 9) % 360;

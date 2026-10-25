@@ -10,7 +10,7 @@ public class PowerCellNetwork {
     private record EnergySnapshot(long energy, long inserted, long extracted, java.util.Map<mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity, Long> cells) { }
     private mcjty.rftoolsbase.tools.EnergyTransactions.Journal<EnergySnapshot> energyJournal;
 
-    public net.neoforged.neoforge.transfer.transaction.SnapshotJournal<?> energyJournal(net.minecraft.world.level.Level level) {
+    public net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant<?> energyJournal(net.minecraft.world.level.Level level) {
         if (energyJournal == null) {
             energyJournal = new mcjty.rftoolsbase.tools.EnergyTransactions.Journal<>(() -> {
                 var cells = new java.util.IdentityHashMap<mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity, Long>();

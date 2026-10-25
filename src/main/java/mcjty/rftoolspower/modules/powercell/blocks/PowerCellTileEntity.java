@@ -22,9 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import mcjty.lib.varia.Lazy;
+import mcjty.lib.varia.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -270,7 +269,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
                 BlockEntity te = getLevel().getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (te != null) {
-                    IEnergyStorage e = mcjty.lib.varia.CapabilityTools.energyHandler(getLevel().getCapability(Capabilities.Energy.BLOCK, pos, opposite));
+                    IEnergyStorage e = mcjty.lib.varia.CapabilityTools.energyHandler(team.reborn.energy.api.EnergyStorage.SIDED.find(getLevel(), pos, opposite));
                     if (e != null) {
                         if (!(te instanceof PowerCellTileEntity)) {
                             long rfPerTick = getRfPerTickReal();
@@ -413,20 +412,6 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         }
     }
 
-    @Override
-    public void onDataPacket(Connection net, net.minecraft.world.level.storage.ValueInput input) {
-        SideType[] old = new SideType[] { modes[0], modes[1], modes[2], modes[3], modes[4], modes[5] };
-        super.onDataPacket(net, input);
-        for (int i = 0 ; i < 6 ; i++) {
-            if (old[i] != modes[i]) {
-                // Dynamic models read the synchronized block entity when rebuilding the section.
-                BlockState state = level.getBlockState(worldPosition);
-                level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
-                return;
-            }
-        }
-    }
-
 
     @Override
     public void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
@@ -435,6 +420,9 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         HolderLookup.Provider provider = input.lookup();
         loadClientDataFromNBT(tag, provider);
         localEnergy = tag.getLongOr("energy", 0L);
+            if (level != null && level.isClientSide()) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        }
     }
 
     @Override
@@ -472,7 +460,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        ItemEnergy energy = input.get(mcjty.lib.setup.Registration.ITEM_ENERGY);
+        ItemEnergy energy = input.get(mcjty.lib.setup.Registration.ITEM_ENERGY.get());
         if (energy != null) {
             setLocalEnergy(energy.energy());
         }
@@ -481,7 +469,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        builder.set(mcjty.lib.setup.Registration.ITEM_ENERGY, new ItemEnergy(getLocalEnergy()));
+        builder.set(mcjty.lib.setup.Registration.ITEM_ENERGY.get(), new ItemEnergy(getLocalEnergy()));
     }
 
     public IInformationScreenInfo getInfoScreenInfo() {
@@ -491,7 +479,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
     public long localEnergyForTransaction() { return localEnergy; }
     public void restoreEnergyForTransaction(long energy) { localEnergy = energy; markDirtyQuick(); }
-    public net.neoforged.neoforge.transfer.energy.EnergyHandler getEnergyHandler(Direction side) {
+    public team.reborn.energy.api.EnergyStorage getEnergyHandler(Direction side) {
         return mcjty.rftoolsbase.tools.EnergyTransactions.input(getEnergyStorage(side),
                 () -> java.util.List.of(getNetwork().energyJournal(level)), this::getStoredPower, this::getCapacity);
     }

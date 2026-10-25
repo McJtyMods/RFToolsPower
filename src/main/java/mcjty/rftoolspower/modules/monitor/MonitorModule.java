@@ -20,15 +20,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import mcjty.lib.datagen.model.ModelFile;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import mcjty.lib.setup.DeferredHolder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,36 +46,32 @@ public class MonitorModule implements IModule {
             (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             PowerLevelTileEntity::new);
 
-    public static final Supplier<AttachmentType<PowerMonitorData>> POWER_MONITOR_DATA = ATTACHMENT_TYPES.register(
-            "power_monitor_data", () -> AttachmentType.builder(() -> new PowerMonitorData(0, (byte) 0, (byte) 0))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(PowerMonitorData.CODEC))
-                    .build());
+    public static final AttachmentType<PowerMonitorData> POWER_MONITOR_DATA = net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry.create(
+            net.minecraft.resources.Identifier.fromNamespaceAndPath("rftoolspower", "power_monitor_data"), builder -> builder.initializer(() -> new PowerMonitorData(0, (byte) 0, (byte) 0)).persistent(PowerMonitorData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<PowerMonitorData>> ITEM_POWER_MONITOR_DATA = COMPONENTS.registerComponentType(
             "power_monitor_data",
             builder -> builder
                     .persistent(PowerMonitorData.CODEC)
                     .networkSynchronized(PowerMonitorData.STREAM_CODEC));
 
-    public MonitorModule(IEventBus bus, Dist dist) {
-        bus.addListener(this::registerMenuScreens);
+
+    @Override
+    public void init() {
+
     }
 
     @Override
-    public void init(FMLCommonSetupEvent event) {
-
-    }
-
-    @Override
-    public void initClient(FMLClientSetupEvent event) {
+    public void initClient() {
+        registerMenuScreens();
         PowerLevelRenderer.register();
     }
 
-    public void registerMenuScreens(RegisterMenuScreensEvent event) {
-        GuiPowerMonitor.register(event);
+    public void registerMenuScreens() {
+        GuiPowerMonitor.register();
     }
 
     @Override
-    public void initConfig(IEventBus bus) {
+    public void initConfig() {
 
     }
 
@@ -119,7 +109,7 @@ public class MonitorModule implements IModule {
                         .simpleLoot()
                         .blockState(p -> p.logicSlabBlock(POWER_LEVEL.block().get(), "power_level", p.modLoc("block/monitor/power_level")))
                         .shaped(builder -> builder
-                                        .define('P', Tags.Items.GLASS_PANES)
+                                        .define('P', net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, net.minecraft.resources.Identifier.parse("c:glass_panes")))
                                         .define('A', VariousModule.MACHINE_BASE.get())
                                         .unlockedBy("frame", has(VariousModule.MACHINE_BASE.get())),
                                 " P ", "rAr", " R ")

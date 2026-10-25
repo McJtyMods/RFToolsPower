@@ -18,12 +18,8 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
+import mcjty.lib.setup.DeferredHolder;
 
 import java.util.function.Supplier;
 
@@ -38,35 +34,31 @@ public class CoalGeneratorModule implements IModule {
             CoalGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 
-    public static final Supplier<AttachmentType<CoalGeneratorData>> COAL_GENERATOR_DATA = ATTACHMENT_TYPES.register(
-            "coal_generator_data", () -> AttachmentType.builder(() -> new CoalGeneratorData(0))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(CoalGeneratorData.CODEC))
-                    .build());
+    public static final AttachmentType<CoalGeneratorData> COAL_GENERATOR_DATA = net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry.create(
+            net.minecraft.resources.Identifier.fromNamespaceAndPath("rftoolspower", "coal_generator_data"), builder -> builder.initializer(() -> new CoalGeneratorData(0)).persistent(CoalGeneratorData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CoalGeneratorData>> ITEM_COAL_GENERATOR_DATA = COMPONENTS.registerComponentType(
             "coal_generator_data",
             builder -> builder
                     .persistent(CoalGeneratorData.CODEC)
                     .networkSynchronized(CoalGeneratorData.STREAM_CODEC));
 
-    public CoalGeneratorModule(IEventBus bus) {
-        bus.addListener(this::registerMenuScreens);
-    }
 
     @Override
-    public void init(FMLCommonSetupEvent event) {
+    public void init() {
 
     }
 
     @Override
-    public void initClient(FMLClientSetupEvent event) {
+    public void initClient() {
+        registerMenuScreens();
     }
 
-    public void registerMenuScreens(RegisterMenuScreensEvent event) {
-        GuiCoalGenerator.register(event);
+    public void registerMenuScreens() {
+        GuiCoalGenerator.register();
     }
 
     @Override
-    public void initConfig(IEventBus bus) {
+    public void initConfig() {
         CoalGeneratorConfig.setup(Config.SERVER_BUILDER);
     }
 

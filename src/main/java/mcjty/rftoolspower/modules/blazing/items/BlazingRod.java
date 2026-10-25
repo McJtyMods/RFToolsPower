@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.common.util.Lazy;
+import mcjty.lib.varia.Lazy;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -65,26 +65,26 @@ public class BlazingRod extends Item implements ITooltipSettings {
 
     // Get the number of infusing steps that are still possible
     public static int getInfusionStepsLeft(ItemStack stack) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         return data.steps();
     }
 
     public static void setInfusionStepsLeft(ItemStack stack, int steps) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         data = data.withSteps(steps);
-        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), data);
     }
 
     // Get time left (in ticks) before ready
     public static float getAgitationTimeLeft(ItemStack stack) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         return data.time();
     }
 
     public static void setAgitationTimeLeft(ItemStack stack, float time) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         data = data.withTime(time);
-        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), data);
     }
 
     public static int getAgitationTimePercentage(ItemStack stack) {
@@ -94,14 +94,14 @@ public class BlazingRod extends Item implements ITooltipSettings {
 
     // Quality is expressed in RF per 1000 ticks
     public static float getPowerQuality(ItemStack stack) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         return data.quality();
     }
 
     public static void setPowerQuality(ItemStack stack, float quality) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         data = data.withQuality(quality);
-        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), data);
     }
 
     public static int getRfPerTick(ItemStack stack) {
@@ -110,14 +110,14 @@ public class BlazingRod extends Item implements ITooltipSettings {
 
     // Duration is expressed in ticks
     public static float getPowerDuration(ItemStack stack) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         return data.duration();
     }
 
     public static void setPowerDuration(ItemStack stack, float duration) {
-        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA, BlazingRodData.DEFAULT);
+        BlazingRodData data = stack.getOrDefault(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), BlazingRodData.DEFAULT);
         data = data.withDuration(duration);
-        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA, data);
+        stack.set(BlazingModule.ITEM_BLAZING_ROD_DATA.get(), data);
     }
 
     public static int getTotalTicks(ItemStack stack) {

@@ -142,7 +142,7 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     @Override
     protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        var data = input.get(EndergenicModule.ITEM_ENDER_MONITOR_DATA);
+        var data = input.get(EndergenicModule.ITEM_ENDER_MONITOR_DATA.get());
         if (data != null) {
             setData(EndergenicModule.ENDER_MONITOR_DATA, data);
         }
@@ -152,6 +152,6 @@ public class EnderMonitorTileEntity extends TickingTileEntity implements TickOrd
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
         var data = getData(EndergenicModule.ENDER_MONITOR_DATA);
-        builder.set(EndergenicModule.ITEM_ENDER_MONITOR_DATA, data);
+        builder.set(EndergenicModule.ITEM_ENDER_MONITOR_DATA.get(), data);
     }
 }

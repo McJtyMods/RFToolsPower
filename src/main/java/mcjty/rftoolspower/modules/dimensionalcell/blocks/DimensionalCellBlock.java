@@ -140,25 +140,25 @@ public class DimensionalCellBlock extends BaseBlock implements IComponentsToPres
     }
 
     private static int getEnergy(ItemStack stack) {
-        var data = stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
+        var data = stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get());
         return data == null ? 0 : data.energy();
     }
 
     private static void setEnergy(ItemStack stack, int energy) {
-        var data = stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
+        var data = stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get());
         if (data == null) {
             data = new DimensionalCellData(energy, 0, 0, -1);
         } else {
             data = data.withEnergy(energy);
         }
-        stack.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA, data);
+        stack.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get(), data);
     }
 
     @Override
     public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
         if (!world.isClientSide()) {
-            if (stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA) == null) {
+            if (stack.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get()) == null) {
                 DimensionalCellTileEntity dimensionalCellTileEntity = (DimensionalCellTileEntity) world.getBlockEntity(pos);
                 if (dimensionalCellTileEntity != null && type.isCreative()) {
                     dimensionalCellTileEntity.setAllOutput();

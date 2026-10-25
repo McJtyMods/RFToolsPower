@@ -1,11 +1,8 @@
 package mcjty.rftoolspower;
 
-import mcjty.lib.datagen.DataGen;
 import mcjty.lib.modules.Modules;
 import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
-import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolsbase.api.machineinfo.CapabilityMachineInformation;
-import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellTileEntity;
@@ -18,55 +15,30 @@ import mcjty.rftoolspower.modules.powercell.blocks.PowerCellTileEntity;
 import mcjty.rftoolspower.setup.Config;
 import mcjty.rftoolspower.setup.ModSetup;
 import mcjty.rftoolspower.setup.Registration;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.function.Supplier;
 
-@Mod(RFToolsPower.MODID)
-public class RFToolsPower {
-
+public class RFToolsPower implements net.fabricmc.api.ModInitializer {
     public static final String MODID = "rftoolspower";
-
-    @SuppressWarnings("PublicField")
     public static final ModSetup setup = new ModSetup();
-    private final Modules modules = new Modules();
-
     public static RFToolsPower instance;
-
-    public RFToolsPower(ModContainer mod, IEventBus bus, Dist dist) {
+    public final Modules modules = new Modules();
+    @Override
+    public void onInitialize() {
         instance = this;
-        setupModules(bus, dist);
-
-        Config.register(mod, bus, modules);
-        Registration.register(bus);
-
-        bus.addListener(setup::init);
-        bus.addListener(modules::init);
-        bus.addListener(this::onDataGen);
-        bus.addListener(setup.getBlockCapabilityRegistrar(Registration.RBLOCKS));
-        bus.addListener(this::onRegisterCapabilities);
-
-        if (dist.isClient()) {
-            bus.addListener(mcjty.rftoolspower.modules.dimensionalcell.client.LinkedPowerCardProperty::register);
-            bus.addListener(modules::initClient);
-        }
+        modules.register(new BlazingModule());
+        modules.register(new DimensionalCellModule());
+        modules.register(new EndergenicModule());
+        modules.register(new CoalGeneratorModule());
+        modules.register(new MonitorModule());
+        modules.register(new PowerCellModule());
+        Config.register(modules);
+        Registration.register();
+        setup.init();
+        modules.init();
+        setup.registerBlockCapabilities(Registration.RBLOCKS);
+        registerCapabilities();
     }
-
     public static <T extends Item> java.util.function.Function<Item.Properties, T> tab(java.util.function.Function<Item.Properties, T> factory) {
         return properties -> instance.setup.tab(() -> factory.apply(properties)).get();
     }
@@ -75,71 +47,21 @@ public class RFToolsPower {
         return instance.setup.tab(supplier);
     }
 
-    private void onDataGen(GatherDataEvent.Client event) {
-        DataGen datagen = new DataGen(MODID, event);
-        modules.datagen(datagen, event.getLookupProvider());
-        datagen.generate();
-        event.getGenerator().addProvider(true,
-                new mcjty.rftoolspower.modules.dimensionalcell.DataGenHelper.Provider(event.getGenerator()));
-        var card = new com.google.gson.JsonObject();
-        var model = new com.google.gson.JsonObject();
-        model.addProperty("type", "minecraft:condition");
-        model.addProperty("property", "rftoolspower:linked");
-        var linked = new com.google.gson.JsonObject();
-        linked.addProperty("type", "minecraft:model");
-        linked.addProperty("model", "rftoolspower:item/powercell_card_linked");
-        var unlinked = new com.google.gson.JsonObject();
-        unlinked.addProperty("type", "minecraft:model");
-        unlinked.addProperty("model", "rftoolspower:item/powercell_card_unlinked");
-        model.add("on_true", linked);
-        model.add("on_false", unlinked);
-        card.add("model", model);
-        event.getGenerator().addProvider(true, new mcjty.rftoolsbase.tools.ClientItemDefinitions(
-                event.getGenerator().getPackOutput(), MODID, java.util.Map.of("powercell_card", card)));
-    }
-
-    private void setupModules(IEventBus bus, Dist dist) {
-        modules.register(new BlazingModule(bus));
-        modules.register(new DimensionalCellModule(bus));
-        modules.register(new EndergenicModule(bus, dist));
-        modules.register(new CoalGeneratorModule(bus));
-        modules.register(new MonitorModule(bus, dist));
-        modules.register(new PowerCellModule(bus, dist));
-    }
-
-    private void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlock(CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY, new IBlockCapabilityProvider<>() {
-            @Override
-            public @Nullable IMachineInformation getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
-                if (be instanceof EndergenicTileEntity te) {
-                    return te.getInfoHandler();
-                } else if (be instanceof DimensionalCellTileEntity te) {
-                    return te.getInfoHandler();
-                }
-                return null;
-            }
+    private void registerCapabilities() {
+        CapabilityMachineInformation.MACHINE_INFORMATION_CAPABILITY.registerForBlocks((level, pos, state, be, side) -> {
+            if (be instanceof EndergenicTileEntity te) return te.getInfoHandler();
+            if (be instanceof DimensionalCellTileEntity te) return te.getInfoHandler();
+            return null;
         }, EndergenicModule.ENDERGENIC.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
-        event.registerBlock(CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY, new IBlockCapabilityProvider<>() {
-            @Override
-            public @Nullable IInformationScreenInfo getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
-                if (be instanceof PowerCellTileEntity te) {
-                    return te.getInfoScreenInfo();
-                } else if (be instanceof DimensionalCellTileEntity te) {
-                    return te.getInfoScreenInfo();
-                }
-                return null;
-            }
+        CapabilityInformationScreenInfo.INFORMATION_SCREEN_INFO_CAPABILITY.registerForBlocks((level, pos, state, be, side) -> {
+            if (be instanceof PowerCellTileEntity te) return te.getInfoScreenInfo();
+            if (be instanceof DimensionalCellTileEntity te) return te.getInfoScreenInfo();
+            return null;
         }, PowerCellModule.CELL1.block().get(), PowerCellModule.CELL2.block().get(), PowerCellModule.CELL3.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
-        event.registerBlock(Capabilities.Energy.BLOCK, new IBlockCapabilityProvider<>() {
-            @Override
-            public @Nullable net.neoforged.neoforge.transfer.energy.EnergyHandler getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction) {
-                if (be instanceof PowerCellTileEntity te) {
-                    return te.getEnergyHandler(direction);
-                } else if (be instanceof DimensionalCellTileEntity te) {
-                    return te.getEnergyHandler(direction);
-                }
-                return null;
-            }
+        team.reborn.energy.api.EnergyStorage.SIDED.registerForBlocks((level, pos, state, be, side) -> {
+            if (be instanceof PowerCellTileEntity te) return te.getEnergyHandler(side);
+            if (be instanceof DimensionalCellTileEntity te) return te.getEnergyHandler(side);
+            return null;
         }, PowerCellModule.CELL1.block().get(), PowerCellModule.CELL2.block().get(), PowerCellModule.CELL3.block().get(), DimensionalCellModule.DIMENSIONAL_CELL.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_ADVANCED.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_SIMPLE.block().get(), DimensionalCellModule.DIMENSIONAL_CELL_CREATIVE.block().get());
     }
 }

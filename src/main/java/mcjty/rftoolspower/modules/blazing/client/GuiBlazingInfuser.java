@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nonnull;
 
@@ -23,8 +22,8 @@ public class GuiBlazingInfuser extends GenericGuiContainer<BlazingInfuserTileEnt
         super(container, inventory, title, BlazingModule.BLAZING_INFUSER.block().get().getManualEntry());
     }
 
-    public static void register(RegisterMenuScreensEvent event) {
-        event.register(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
+    public static void register() {
+        net.minecraft.client.gui.screens.MenuScreens.register(BlazingModule.CONTAINER_BLAZING_INFUSER.get(), GuiBlazingInfuser::new);
     }
 
     @Override

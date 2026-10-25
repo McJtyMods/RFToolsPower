@@ -181,7 +181,7 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     @Override
     protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        var data = input.get(MonitorModule.ITEM_POWER_MONITOR_DATA);
+        var data = input.get(MonitorModule.ITEM_POWER_MONITOR_DATA.get());
         if (data != null) {
             setData(MonitorModule.POWER_MONITOR_DATA, data);
         }
@@ -191,6 +191,6 @@ public class PowerMonitorTileEntity extends TickingTileEntity {
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
         var data = getData(MonitorModule.POWER_MONITOR_DATA);
-        builder.set(MonitorModule.ITEM_POWER_MONITOR_DATA, data);
+        builder.set(MonitorModule.ITEM_POWER_MONITOR_DATA.get(), data);
     }
 }

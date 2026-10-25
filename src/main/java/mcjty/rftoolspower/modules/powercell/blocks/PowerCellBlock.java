@@ -66,7 +66,7 @@ public class PowerCellBlock extends BaseBlock implements IComponentsToPreserve {
     }
 
     private static long getEnergy(ItemStack stack) {
-        ItemEnergy energy = stack.get(mcjty.lib.setup.Registration.ITEM_ENERGY);
+        ItemEnergy energy = stack.get(mcjty.lib.setup.Registration.ITEM_ENERGY.get());
         if (energy != null) {
             return energy.energy();
         }

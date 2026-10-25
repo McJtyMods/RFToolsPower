@@ -12,7 +12,6 @@ import mcjty.rftoolspower.modules.monitor.blocks.PowerMonitorTileEntity;
 import mcjty.rftoolspower.modules.monitor.data.PowerMonitorData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import java.awt.*;
 
@@ -21,12 +20,11 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
     public GuiPowerMonitor(GenericContainer container, Inventory inventory, Component title) {
         super(container, inventory, title, MonitorModule.POWER_MONITOR.block().get().getManualEntry());
 
-        imageWidth = 256;
-        imageHeight = 50;
+        setWindowDimensions(256, 50);
     }
 
-    public static void register(RegisterMenuScreensEvent event) {
-        event.register(MonitorModule.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
+    public static void register() {
+        net.minecraft.client.gui.screens.MenuScreens.register(MonitorModule.CONTAINER_POWER_MONITOR.get(), GuiPowerMonitor::new);
     }
 
     @Override
@@ -46,11 +44,11 @@ public class GuiPowerMonitor extends GenericGuiContainer<PowerMonitorTileEntity,
         toplevel.setBounds(new Rectangle(leftPos, topPos, imageWidth, imageHeight));
         window = new Window(this, toplevel);
 
-        PowerMonitorData monitorData = menu.getAttachmentData(MonitorModule.POWER_MONITOR_DATA.get());
+        PowerMonitorData monitorData = menu.getAttachmentData(MonitorModule.POWER_MONITOR_DATA);
         minimumLabel.realValue(monitorData.minimum());
         maximumLabel.realValue(monitorData.maximum());
 
-        window.bindData("minimum", "minimum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get());
-        window.bindData("maximum", "maximum", tileEntity, MonitorModule.POWER_MONITOR_DATA.get());
+        window.bindData("minimum", "minimum", tileEntity, MonitorModule.POWER_MONITOR_DATA);
+        window.bindData("maximum", "maximum", tileEntity, MonitorModule.POWER_MONITOR_DATA);
     }
 }

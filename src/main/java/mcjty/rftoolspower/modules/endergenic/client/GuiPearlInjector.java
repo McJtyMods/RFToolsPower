@@ -9,7 +9,6 @@ import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
 
@@ -17,8 +16,8 @@ public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntit
         super(container, inventory, title, EndergenicModule.PEARL_INJECTOR.block().get().getManualEntry());
     }
 
-    public static void register(RegisterMenuScreensEvent event) {
-        event.register(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+    public static void register() {
+        net.minecraft.client.gui.screens.MenuScreens.register(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
     }
 
     @Override

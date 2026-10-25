@@ -19,13 +19,9 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
+import mcjty.lib.setup.DeferredHolder;
+import mcjty.lib.setup.DeferredItem;
 
 import java.util.function.Supplier;
 
@@ -62,10 +58,8 @@ public class DimensionalCellModule implements IModule {
 
     public static final DeferredItem<PowerCellCardItem> POWERCELL_CARD = ITEMS.register("powercell_card", tab(PowerCellCardItem::new));
 
-    public static final Supplier<AttachmentType<DimensionalCellData>> DIMENSIONAL_CELL_DATA = ATTACHMENT_TYPES.register(
-            "dimensional_cell_data", () -> AttachmentType.builder(() -> new DimensionalCellData(0, 0, 0, -1))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(DimensionalCellData.CODEC))
-                    .build());
+    public static final AttachmentType<DimensionalCellData> DIMENSIONAL_CELL_DATA = net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry.create(
+            net.minecraft.resources.Identifier.fromNamespaceAndPath("rftoolspower", "dimensional_cell_data"), builder -> builder.initializer(() -> new DimensionalCellData(0, 0, 0, -1)).persistent(DimensionalCellData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<DimensionalCellData>> ITEM_DIMENSIONAL_CELL_DATA = COMPONENTS.registerComponentType(
             "dimensional_cell_data",
             builder -> builder
@@ -77,26 +71,24 @@ public class DimensionalCellModule implements IModule {
                     .persistent(PowerCardData.CODEC)
                     .networkSynchronized(PowerCardData.STREAM_CODEC));
 
-    public DimensionalCellModule(IEventBus bus) {
-        bus.addListener(this::registerMenuScreens);
-    }
 
     @Override
-    public void init(FMLCommonSetupEvent event) {
+    public void init() {
 
     }
 
     @Override
-    public void initClient(FMLClientSetupEvent event) {
+    public void initClient() {
+        registerMenuScreens();
 
     }
 
-    public void registerMenuScreens(RegisterMenuScreensEvent event) {
-        GuiDimensionalCell.register(event);
+    public void registerMenuScreens() {
+        GuiDimensionalCell.register();
     }
 
     @Override
-    public void initConfig(IEventBus bus) {
+    public void initConfig() {
         DimensionalCellConfiguration.setup(Config.SERVER_BUILDER, Config.CLIENT_BUILDER);
     }
 

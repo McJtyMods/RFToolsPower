@@ -43,8 +43,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import mcjty.lib.varia.Lazy;
+import mcjty.lib.varia.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -222,18 +222,18 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     @Override
     protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        var data = input.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA);
+        var data = input.get(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get());
         if (data != null) {
             setData(DimensionalCellModule.DIMENSIONAL_CELL_DATA, data);
         }
-        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY));
-        infusableHandler.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE));
+        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY.get()));
+        infusableHandler.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get()));
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        builder.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA, getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA));
+        builder.set(DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get(), getData(DimensionalCellModule.DIMENSIONAL_CELL_DATA));
         items.collectImplicitComponents(builder);
         infusableHandler.collectImplicitComponents(builder);
     }
@@ -728,9 +728,9 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         super.preRemoveSideEffects(pos, state);
     }
 
-    public net.neoforged.neoforge.transfer.energy.EnergyHandler getEnergyHandler(Direction side) {
+    public team.reborn.energy.api.EnergyStorage getEnergyHandler(Direction side) {
         return mcjty.rftoolsbase.tools.EnergyTransactions.input(getEnergyStorage(side), () -> {
-            var journals = new java.util.ArrayList<net.neoforged.neoforge.transfer.transaction.SnapshotJournal<?>>();
+            var journals = new java.util.ArrayList<net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant<?>>();
             journals.add(energyJournal);
             if (getNetworkId() != -1) journals.add(getNetwork().energyJournal);
             return journals;

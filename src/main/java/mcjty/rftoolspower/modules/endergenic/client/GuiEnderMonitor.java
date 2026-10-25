@@ -9,7 +9,6 @@ import mcjty.rftoolspower.modules.endergenic.blocks.EnderMonitorTileEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity, GenericContainer> {
 
@@ -17,8 +16,8 @@ public class GuiEnderMonitor extends GenericGuiContainer<EnderMonitorTileEntity,
         super(container, inventory, title, EndergenicModule.ENDER_MONITOR.block().get().getManualEntry());
     }
 
-    public static void register(RegisterMenuScreensEvent event) {
-        event.register(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
+    public static void register() {
+        net.minecraft.client.gui.screens.MenuScreens.register(EndergenicModule.CONTAINER_ENDER_MONITOR.get(), GuiEnderMonitor::new);
     }
 
     @Override

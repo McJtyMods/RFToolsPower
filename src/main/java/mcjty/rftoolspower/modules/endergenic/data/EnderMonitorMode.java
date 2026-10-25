@@ -5,7 +5,7 @@ import mcjty.lib.varia.NamedEnum;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import mcjty.lib.network.StreamCodecs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public enum EnderMonitorMode implements NamedEnum<EnderMonitorMode>, StringRepre
     ;
 
     public static final Codec<EnderMonitorMode> CODEC = StringRepresentable.fromEnum(EnderMonitorMode::values);
-    public static final StreamCodec<FriendlyByteBuf, EnderMonitorMode> STREAM_CODEC = NeoForgeStreamCodecs.enumCodec(EnderMonitorMode.class);
+    public static final StreamCodec<FriendlyByteBuf, EnderMonitorMode> STREAM_CODEC = StreamCodecs.enumCodec(EnderMonitorMode.class);
 
     private static final Map<String,EnderMonitorMode> modeToMode = new HashMap<>();
 
@@ -41,7 +41,6 @@ public enum EnderMonitorMode implements NamedEnum<EnderMonitorMode>, StringRepre
     public static EnderMonitorMode getMode(String mode) {
         return modeToMode.get(mode);
     }
-
 
 
     static {

@@ -40,7 +40,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.util.Lazy;
+import mcjty.lib.varia.Lazy;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
@@ -290,19 +290,19 @@ public class BlazingAgitatorTileEntity extends TickingTileEntity {
     @Override
     protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        var data = input.get(BlazingModule.ITEM_AGITATOR_DATA);
+        var data = input.get(BlazingModule.ITEM_AGITATOR_DATA.get());
         if (data != null) {
             setData(BlazingModule.AGITATOR_DATA, data);
         }
-        energyStorage.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_ENERGY));
-        infusable.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE));
-        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY));
+        energyStorage.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_ENERGY.get()));
+        infusable.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get()));
+        items.applyImplicitComponents(input.get(mcjty.lib.setup.Registration.ITEM_INVENTORY.get()));
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        builder.set(BlazingModule.ITEM_AGITATOR_DATA, getData(BlazingModule.AGITATOR_DATA));
+        builder.set(BlazingModule.ITEM_AGITATOR_DATA.get(), getData(BlazingModule.AGITATOR_DATA));
         energyStorage.collectImplicitComponents(builder);
         infusable.collectImplicitComponents(builder);
         items.collectImplicitComponents(builder);

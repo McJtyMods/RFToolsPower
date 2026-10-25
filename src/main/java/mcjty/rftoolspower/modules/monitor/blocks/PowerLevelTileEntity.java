@@ -69,10 +69,6 @@ public class PowerLevelTileEntity extends TickingTileEntity {
         support.setPowerOutput(tag.getIntOr("power", 0));
     }
 
-    @Override
-    public void onDataPacket(Connection net, net.minecraft.world.level.storage.ValueInput input) {
-        super.onDataPacket(net, input);
-    }
 
     @Override
     protected void tickServer() {

@@ -17,11 +17,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.registries.DeferredItem;
+import mcjty.lib.setup.DeferredItem;
 
 import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.RFToolsPower.tab;
@@ -51,23 +47,19 @@ public class PowerCellModule implements IModule {
     public static final DeferredItem<Item> POWER_CORE2 = ITEMS.register("power_core2", tab(PowerCoreItem::new));
     public static final DeferredItem<Item> POWER_CORE3 = ITEMS.register("power_core3", tab(PowerCoreItem::new));
 
-    public PowerCellModule(IEventBus bus, Dist dist) {
-        if (dist.isClient()) {
-            ModelTools.registerModelBakeEvent(bus, ClientSetup::onModelBake);
-        }
-    }
 
     @Override
-    public void init(FMLCommonSetupEvent event) {
+    public void init() {
 
     }
 
     @Override
-    public void initClient(FMLClientSetupEvent event) {
+    public void initClient() {
+        ModelTools.registerModelBakeEvent(ClientSetup::onModelBake);
     }
 
     @Override
-    public void initConfig(IEventBus bus) {
+    public void initConfig() {
         PowerCellConfig.setup(Config.SERVER_BUILDER);
     }
 

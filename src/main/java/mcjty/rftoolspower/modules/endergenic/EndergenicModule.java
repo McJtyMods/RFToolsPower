@@ -24,15 +24,9 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import mcjty.lib.datagen.model.ModelProvider;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import mcjty.lib.setup.DeferredHolder;
 
 import java.util.function.Supplier;
 
@@ -62,42 +56,38 @@ public class EndergenicModule implements IModule {
             EndergenicTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_ENDERGENIC = CONTAINERS.register("endergenic", GenericContainer::createContainerType);
 
-    public static final Supplier<AttachmentType<EnderMonitorData>> ENDER_MONITOR_DATA = ATTACHMENT_TYPES.register(
-            "ender_monitor_data", () -> AttachmentType.builder(() -> new EnderMonitorData(EnderMonitorMode.MODE_LOSTPEARL))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(EnderMonitorData.CODEC))
-                    .build());
+    public static final AttachmentType<EnderMonitorData> ENDER_MONITOR_DATA = net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry.create(
+            net.minecraft.resources.Identifier.fromNamespaceAndPath("rftoolspower", "ender_monitor_data"), builder -> builder.initializer(() -> new EnderMonitorData(EnderMonitorMode.MODE_LOSTPEARL)).persistent(EnderMonitorData.CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<EnderMonitorData>> ITEM_ENDER_MONITOR_DATA = COMPONENTS.registerComponentType(
             "ender_monitor_data",
             builder -> builder
                     .persistent(EnderMonitorData.CODEC)
                     .networkSynchronized(EnderMonitorData.STREAM_CODEC));
 
-    public EndergenicModule(IEventBus bus, Dist dist) {
-        bus.addListener(this::registerMenuScreens);
+
+    @Override
+    public void init() {
+
     }
 
     @Override
-    public void init(FMLCommonSetupEvent event) {
+    public void initClient() {
+        registerMenuScreens();
 
-    }
-
-    @Override
-    public void initClient(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
             ClientCommandHandler.registerCommands();
-        });
+
 
         EndergenicRenderer.register();
     }
 
-    public void registerMenuScreens(RegisterMenuScreensEvent event) {
-        GuiEnderMonitor.register(event);
-        GuiEndergenic.register(event);
-        GuiPearlInjector.register(event);
+    public void registerMenuScreens() {
+        GuiEnderMonitor.register();
+        GuiEndergenic.register();
+        GuiPearlInjector.register();
     }
 
     @Override
-    public void initConfig(IEventBus bus) {
+    public void initConfig() {
         EndergenicConfiguration.setup(Config.SERVER_BUILDER, Config.CLIENT_BUILDER);
     }
 
@@ -118,7 +108,7 @@ public class EndergenicModule implements IModule {
                         .blockState(p -> p.orientedBlock(PEARL_INJECTOR.block().get(), p.frontBasedModel("pearl_injector", p.modLoc("block/endergenic/pearl_injector"))))
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
-                                        .define('C', Tags.Items.CHESTS)
+                                        .define('C', net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, net.minecraft.resources.Identifier.parse("c:chests")))
                                         .define('H', Blocks.HOPPER)
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 " C ", "rFr", " H "),
