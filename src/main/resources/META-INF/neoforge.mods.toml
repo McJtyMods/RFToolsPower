@@ -22,25 +22,25 @@ Everything related to power generation
 [[dependencies.rftoolspower]]
     modId="neoforge"
     type="required"
-    versionRange="[26.1.2.99,)"
+    versionRange="[26.2.0.75,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.rftoolspower]]
     modId="mcjtylib"
     type="required"
-    versionRange="[26.1.2-10.0.0,)"
+    versionRange="[26.2-10.0.1,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.rftoolspower]]
     modId="rftoolsbase"
     type="required"
-    versionRange="[26.1.2-7.0.0,)"
+    versionRange="[26.2-7.0.0,)"
     ordering="AFTER"
     side="BOTH"
 
 [[dependencies.rftoolspower]]
 modId="minecraft"
 type="required"
-versionRange="[26.1.2]"
+versionRange="[26.2]"
 ordering="NONE"
 side="BOTH"

@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "*": "rftoolsbase:infused_diamond",
     "K": "rftoolspower:dimensionalcell",

@@ -13,7 +13,7 @@ import mcjty.rftoolspower.modules.dimensionalcell.data.DimensionalCellData;
 import mcjty.rftoolspower.modules.dimensionalcell.data.PowerCardData;
 import mcjty.rftoolspower.modules.dimensionalcell.items.PowerCellCardItem;
 import mcjty.rftoolspower.setup.Config;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
