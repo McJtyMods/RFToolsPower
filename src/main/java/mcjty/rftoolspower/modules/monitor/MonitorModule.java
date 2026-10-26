@@ -83,6 +83,7 @@ public class MonitorModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(POWER_MONITOR)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> {
@@ -105,6 +106,7 @@ public class MonitorModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_BASE.get())),
                                 " P ", "rAr", " R "),
                 Dob.blockBuilder(POWER_LEVEL)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .simpleLoot()
                         .blockState(p -> p.logicSlabBlock(POWER_LEVEL.block().get(), "power_level", p.modLoc("block/monitor/power_level")))

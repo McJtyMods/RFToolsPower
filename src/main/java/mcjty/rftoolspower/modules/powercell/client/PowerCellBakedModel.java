@@ -1,6 +1,6 @@
 package mcjty.rftoolspower.modules.powercell.client;
 
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.renderpearl.api.vertex.VertexFormat;
 import mcjty.lib.client.AbstractDynamicBakedModel;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;

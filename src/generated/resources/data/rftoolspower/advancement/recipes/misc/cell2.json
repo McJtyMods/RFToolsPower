@@ -12,7 +12,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:cell2"
+        "recipes": "rftoolspower:cell2"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:blazing_agitator"
+        "recipes": "rftoolspower:blazing_agitator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

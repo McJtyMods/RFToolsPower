@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:powercell_card"
+        "recipes": "rftoolspower:powercell_card"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

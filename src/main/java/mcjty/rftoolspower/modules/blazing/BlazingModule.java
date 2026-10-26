@@ -106,6 +106,7 @@ public class BlazingModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(BLAZING_AGITATOR)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(BlazingModule.ITEM_AGITATOR_DATA.get(), mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> {
@@ -120,6 +121,7 @@ public class BlazingModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "XXX", "GFG", "iii"),
                 Dob.blockBuilder(BLAZING_GENERATOR)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> {
@@ -136,6 +138,7 @@ public class BlazingModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "XYX", "RFR", "XYX"),
                 Dob.blockBuilder(BLAZING_INFUSER)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> p.orientedBlock(BLAZING_INFUSER.block().get(), p.frontBasedModel("blazing_infuser", p.modLoc("block/blazing/blazing_infuser"))))

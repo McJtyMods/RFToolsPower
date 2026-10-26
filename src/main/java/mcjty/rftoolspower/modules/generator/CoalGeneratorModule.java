@@ -66,6 +66,7 @@ public class CoalGeneratorModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(COALGENERATOR)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .shaped(builder -> builder

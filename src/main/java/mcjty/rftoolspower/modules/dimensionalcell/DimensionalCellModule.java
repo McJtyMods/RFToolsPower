@@ -96,6 +96,7 @@ public class DimensionalCellModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(DIMENSIONAL_CELL)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
@@ -104,6 +105,7 @@ public class DimensionalCellModule implements IModule {
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                                 "RdR", "PFP", "ReR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_ADVANCED)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
@@ -112,6 +114,7 @@ public class DimensionalCellModule implements IModule {
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                                 "R*R", "*K*", "R*R"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_SIMPLE)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
@@ -120,6 +123,7 @@ public class DimensionalCellModule implements IModule {
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_BASE.get(), Items.REDSTONE)),
                                 "RdR", "qFq", "RdR"),
                 Dob.blockBuilder(DIMENSIONAL_CELL_CREATIVE)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get()),
                 Dob.itemBuilder(POWERCELL_CARD)

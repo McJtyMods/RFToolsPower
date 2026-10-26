@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:ender_monitor"
+        "recipes": "rftoolspower:ender_monitor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

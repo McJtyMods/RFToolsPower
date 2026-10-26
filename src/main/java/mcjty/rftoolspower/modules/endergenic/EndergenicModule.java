@@ -95,6 +95,7 @@ public class EndergenicModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(ENDER_MONITOR)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> p.logicSlabBlock(ENDER_MONITOR.block().get(), "ender_monitor", p.modLoc("block/endergenic/ender_monitor")))
@@ -103,6 +104,7 @@ public class EndergenicModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_BASE.get())),
                                 " o ", "rAr", "TrT"),
                 Dob.blockBuilder(PEARL_INJECTOR)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> p.orientedBlock(PEARL_INJECTOR.block().get(), p.frontBasedModel("pearl_injector", p.modLoc("block/endergenic/pearl_injector"))))
@@ -113,6 +115,7 @@ public class EndergenicModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 " C ", "rFr", " H "),
                 Dob.blockBuilder(ENDERGENIC)
+                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> p.singleTextureBlockC(ENDERGENIC.block().get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> mcjty.rftoolsbase.tools.ModelDataGen.renderType(builder, "translucent")))
