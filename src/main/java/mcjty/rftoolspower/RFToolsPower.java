@@ -1,5 +1,6 @@
 package mcjty.rftoolspower;
 
+import java.util.function.Supplier;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.modules.Modules;
 import mcjty.rftoolsbase.api.infoscreen.CapabilityInformationScreenInfo;
@@ -32,10 +33,9 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Supplier;
 
 @Mod(RFToolsPower.MODID)
 public class RFToolsPower {
@@ -77,7 +77,7 @@ public class RFToolsPower {
 
     private void onDataGen(GatherDataEvent.Client event) {
         DataGen datagen = new DataGen(MODID, event);
-        modules.datagen(datagen, event.getLookupProvider());
+        modules.datagen(datagen, event.getWorldLookupProvider());
         datagen.generate();
         event.getGenerator().addProvider(true,
                 new mcjty.rftoolspower.modules.dimensionalcell.DataGenHelper.Provider(event.getGenerator()));

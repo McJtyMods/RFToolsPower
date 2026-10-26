@@ -1,10 +1,10 @@
 package mcjty.rftoolspower.setup;
 
 import mcjty.lib.modules.Modules;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.bus.api.IEventBus;
 
 public class Config {
 
@@ -29,6 +29,6 @@ public class Config {
         CLIENT_CONFIG = CLIENT_BUILDER.build();
 
         mod.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG);
-        mod.registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
+        mod.registerConfig(ModConfig.Type.SYNCED, SERVER_CONFIG, "rftoolspower-server.toml");
     }
 }

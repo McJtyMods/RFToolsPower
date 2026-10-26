@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:power_core2"
+        "recipes": "rftoolspower:power_core2"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

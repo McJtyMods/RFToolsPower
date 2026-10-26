@@ -1,5 +1,6 @@
 package mcjty.rftoolspower.modules.powercell;
 
+import java.util.List;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.client.ModelTools;
 import mcjty.lib.datagen.DataGen;
@@ -14,6 +15,7 @@ import mcjty.rftoolspower.modules.powercell.items.PowerCoreItem;
 import mcjty.rftoolspower.setup.Config;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -75,6 +77,7 @@ public class PowerCellModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(CELL1)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shaped(builder -> builder
@@ -83,6 +86,7 @@ public class PowerCellModule implements IModule {
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), PowerCellModule.POWER_CORE1.get())),
                                 "rKr", "KFK", "rKr"),
                 Dob.blockBuilder(CELL2)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shapedComponentPreserve(builder -> builder
@@ -91,6 +95,7 @@ public class PowerCellModule implements IModule {
                                         .unlockedBy("cell", has(PowerCellModule.CELL1.block().get())),
                                 "rKr", "KPK", "rKr"),
                 Dob.blockBuilder(CELL3)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shapedComponentPreserve(builder -> builder

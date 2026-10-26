@@ -16,7 +16,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:dimensionalcell_simple"
+        "recipes": "rftoolspower:dimensionalcell_simple"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

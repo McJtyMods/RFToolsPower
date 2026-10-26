@@ -9,7 +9,7 @@
         }
       ],
       "name": "power_level",
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "rftoolspower:blocks/power_level"

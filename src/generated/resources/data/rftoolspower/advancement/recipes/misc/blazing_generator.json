@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:blazing_generator"
+        "recipes": "rftoolspower:blazing_generator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

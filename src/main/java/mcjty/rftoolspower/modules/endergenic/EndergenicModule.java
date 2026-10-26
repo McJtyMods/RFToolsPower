@@ -1,11 +1,14 @@
 package mcjty.rftoolspower.modules.endergenic;
 
+import java.util.List;
+import java.util.function.Supplier;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.LogicSlabBlock;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.datagen.model.ModelProvider;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.VariousModule;
@@ -21,6 +24,7 @@ import mcjty.rftoolspower.modules.endergenic.data.EnderMonitorMode;
 import mcjty.rftoolspower.setup.Config;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Blocks;
@@ -30,11 +34,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import mcjty.lib.datagen.model.ModelProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
-
-import java.util.function.Supplier;
 
 import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.setup.Registration.*;
@@ -105,6 +106,7 @@ public class EndergenicModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(ENDER_MONITOR)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> p.logicSlabBlock(ENDER_MONITOR.block().get(), "ender_monitor", p.modLoc("block/endergenic/ender_monitor")))
@@ -113,6 +115,7 @@ public class EndergenicModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_BASE.get())),
                                 " o ", "rAr", "TrT"),
                 Dob.blockBuilder(PEARL_INJECTOR)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> p.orientedBlock(PEARL_INJECTOR.block().get(), p.frontBasedModel("pearl_injector", p.modLoc("block/endergenic/pearl_injector"))))
@@ -123,6 +126,7 @@ public class EndergenicModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 " C ", "rFr", " H "),
                 Dob.blockBuilder(ENDERGENIC)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> p.singleTextureBlockC(ENDERGENIC.block().get(), "endergenic", ModelProvider.BLOCK_FOLDER + "/endergenic/endergenic", builder -> mcjty.rftoolsbase.tools.ModelDataGen.renderType(builder, "translucent")))

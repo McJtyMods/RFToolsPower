@@ -16,7 +16,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:coalgenerator"
+        "recipes": "rftoolspower:coalgenerator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

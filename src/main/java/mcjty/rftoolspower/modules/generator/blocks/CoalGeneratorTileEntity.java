@@ -1,5 +1,7 @@
 package mcjty.rftoolspower.modules.generator.blocks;
 
+import java.util.function.Function;
+import javax.annotation.Nonnull;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.information.IPowerInformation;
 import mcjty.lib.api.infusable.DefaultInfusable;
@@ -15,6 +17,7 @@ import mcjty.lib.tileentity.CapType;
 import mcjty.lib.tileentity.GenericEnergyStorage;
 import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
+import mcjty.lib.varia.IEnergyItem;
 import mcjty.rftoolsbase.tools.ManualHelper;
 import mcjty.rftoolspower.compat.RFToolsPowerTOPDriver;
 import mcjty.rftoolspower.modules.generator.CoalGeneratorConfig;
@@ -32,11 +35,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.items.IItemHandler;
-
-import javax.annotation.Nonnull;
-import java.util.function.Function;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.builder.TooltipBuilder.*;
@@ -168,12 +173,24 @@ public class CoalGeneratorTileEntity extends TickingTileEntity {
         return getData(CoalGeneratorModule.COAL_GENERATOR_DATA).burning() > 0 && isMachineEnabled();
     }
 
-    private void handleChargingItem(IItemHandler handler) {
-        ItemStack stack = handler.getStackInSlot(SLOT_CHARGEITEM);
+    private void handleChargingItem(ResourceHandler<ItemResource> handler) {
+        ItemStack stack = ItemUtil.getStack(handler, SLOT_CHARGEITEM);
         if (!stack.isEmpty()) {
             long storedPower = energyStorage.getEnergy();
             long rfToGive = Math.min(CoalGeneratorConfig.CHARGEITEMPERTICK.get(), storedPower);
-            long received = EnergyTools.receiveEnergy(stack, rfToGive);
+            long received;
+            if (stack.getItem() instanceof IEnergyItem) {
+                received = EnergyTools.receiveEnergy(stack, rfToGive);
+                items.setStackInSlot(SLOT_CHARGEITEM, stack);
+            } else {
+                var access = ItemAccess.forHandlerIndexStrict(handler, SLOT_CHARGEITEM);
+                var battery = access.getCapability(Capabilities.Energy.ITEM);
+                if (battery == null) return;
+                try (var transaction = Transaction.openRoot()) {
+                    received = battery.insert(EnergyTools.unsignedClampToInt(rfToGive), transaction);
+                    transaction.commit();
+                }
+            }
             energyStorage.consumeEnergy(received);
         }
     }

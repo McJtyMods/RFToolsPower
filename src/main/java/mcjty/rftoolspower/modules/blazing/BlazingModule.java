@@ -1,10 +1,15 @@
 package mcjty.rftoolspower.modules.blazing;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.datagen.model.ModelFile;
+import mcjty.lib.datagen.model.VariantBlockStateBuilder;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.Registration;
 import mcjty.lib.varia.OrientationTools;
@@ -24,6 +29,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,14 +38,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import mcjty.lib.datagen.model.ModelFile;
-import mcjty.lib.datagen.model.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
-
-import java.util.ArrayList;
-import java.util.function.Supplier;
 
 import static mcjty.lib.datagen.DataGen.has;
 import static mcjty.rftoolspower.RFToolsPower.tab;
@@ -115,6 +116,7 @@ public class BlazingModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(BLAZING_AGITATOR)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(BlazingModule.ITEM_AGITATOR_DATA.get(), mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> {
@@ -129,6 +131,7 @@ public class BlazingModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "XXX", "GFG", "iii"),
                 Dob.blockBuilder(BLAZING_GENERATOR)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
                         .blockState(p -> {
@@ -145,6 +148,7 @@ public class BlazingModule implements IModule {
                                         .unlockedBy("frame", has(VariousModule.MACHINE_FRAME.get())),
                                 "XYX", "RFR", "XYX"),
                 Dob.blockBuilder(BLAZING_INFUSER)
+                        .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
                         .standardLoot()
                         .blockState(p -> p.orientedBlock(BLAZING_INFUSER.block().get(), p.frontBasedModel("blazing_infuser", p.modLoc("block/blazing/blazing_infuser"))))

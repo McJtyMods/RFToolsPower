@@ -1,5 +1,9 @@
 package mcjty.rftoolspower.modules.dimensionalcell.blocks;
 
+import java.util.Set;
+import java.util.function.Function;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import mcjty.lib.api.container.DefaultContainerProvider;
 import mcjty.lib.api.infusable.DefaultInfusable;
 import mcjty.lib.api.infusable.IInfusable;
@@ -22,6 +26,7 @@ import mcjty.lib.typed.TypedMap;
 import mcjty.lib.varia.*;
 import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
 import mcjty.rftoolsbase.api.machineinfo.IMachineInformation;
+import mcjty.rftoolsbase.tools.EnergyBuffer;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellConfiguration;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellModule;
 import mcjty.rftoolspower.modules.dimensionalcell.DimensionalCellNetwork;
@@ -44,12 +49,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Set;
-import java.util.function.Function;
 
 import static mcjty.lib.api.container.DefaultContainerProvider.container;
 import static mcjty.lib.container.SlotDefinition.generic;
@@ -737,7 +736,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         });
     }
 
-    public IEnergyStorage getEnergyStorage(Direction facing) {
+    public EnergyBuffer getEnergyStorage(Direction facing) {
         if (facing == null) {
             return nullStorage.get();
         } else {
@@ -745,7 +744,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     }
 
-    private class SidedHandler implements IEnergyStorage {
+    private class SidedHandler implements EnergyBuffer {
         private final Direction facing;
 
         private SidedHandler(Direction facing) {
@@ -783,7 +782,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
     }
 
-    private class NullHandler implements IEnergyStorage {
+    private class NullHandler implements EnergyBuffer {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
             return 0;

@@ -1,5 +1,8 @@
 package mcjty.rftoolspower.modules.powercell.blocks;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.annotation.Nonnull;
 import mcjty.lib.api.power.IBigPower;
 import mcjty.lib.api.power.ItemEnergy;
 import mcjty.lib.setup.Registration;
@@ -7,6 +10,7 @@ import mcjty.lib.tileentity.TickingTileEntity;
 import mcjty.lib.varia.EnergyTools;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.api.infoscreen.IInformationScreenInfo;
+import mcjty.rftoolsbase.tools.EnergyBuffer;
 import mcjty.rftoolspower.modules.powercell.PowerCellConfig;
 import mcjty.rftoolspower.modules.powercell.data.PowerCellNetwork;
 import mcjty.rftoolspower.modules.powercell.data.SideType;
@@ -24,11 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-
-import javax.annotation.Nonnull;
-import java.util.HashSet;
-import java.util.Set;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 import static mcjty.rftoolspower.modules.powercell.data.SideType.NONE;
 
@@ -270,7 +270,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
                 BlockEntity te = getLevel().getBlockEntity(pos);
                 Direction opposite = face.getOpposite();
                 if (te != null) {
-                    IEnergyStorage e = mcjty.lib.varia.CapabilityTools.energyHandler(getLevel().getCapability(Capabilities.Energy.BLOCK, pos, opposite));
+                    EnergyHandler e = mcjty.lib.varia.CapabilityTools.energyHandler(getLevel().getCapability(Capabilities.Energy.BLOCK, pos, opposite));
                     if (e != null) {
                         if (!(te instanceof PowerCellTileEntity)) {
                             long rfPerTick = getRfPerTickReal();
@@ -491,12 +491,12 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
 
     public long localEnergyForTransaction() { return localEnergy; }
     public void restoreEnergyForTransaction(long energy) { localEnergy = energy; markDirtyQuick(); }
-    public net.neoforged.neoforge.transfer.energy.EnergyHandler getEnergyHandler(Direction side) {
+    public EnergyHandler getEnergyHandler(Direction side) {
         return mcjty.rftoolsbase.tools.EnergyTransactions.input(getEnergyStorage(side),
                 () -> java.util.List.of(getNetwork().energyJournal(level)), this::getStoredPower, this::getCapacity);
     }
 
-    public IEnergyStorage getEnergyStorage(Direction facing) {
+    public EnergyBuffer getEnergyStorage(Direction facing) {
         if (facing == null) {
             return nullStorage.get();
         } else {
@@ -504,7 +504,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         }
     }
 
-    class SidedHandler implements IEnergyStorage {
+    class SidedHandler implements EnergyBuffer {
 
         private final Direction facing;
 
@@ -552,7 +552,7 @@ public class PowerCellTileEntity extends TickingTileEntity implements IBigPower 
         return new SidedHandler(facing);
     }
 
-    class NullHandler implements IEnergyStorage {
+    class NullHandler implements EnergyBuffer {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
             return 0;

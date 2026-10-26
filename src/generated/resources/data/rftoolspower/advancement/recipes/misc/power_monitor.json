@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:power_monitor"
+        "recipes": "rftoolspower:power_monitor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

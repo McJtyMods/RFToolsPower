@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:endergenic"
+        "recipes": "rftoolspower:endergenic"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

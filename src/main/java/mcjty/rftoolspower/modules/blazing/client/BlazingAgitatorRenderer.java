@@ -1,6 +1,7 @@
 package mcjty.rftoolspower.modules.blazing.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import javax.annotation.Nonnull;
 import mcjty.lib.client.RenderHelper;
 import mcjty.rftoolspower.modules.blazing.BlazingModule;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
@@ -10,9 +11,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 
-import javax.annotation.Nonnull;
+
 
 public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgitatorTileEntity, BlazingAgitatorRenderer.State> {
 
@@ -31,7 +34,7 @@ public class BlazingAgitatorRenderer implements BlockEntityRenderer<BlazingAgita
         BlockEntityRenderer.super.extractRenderState(te, state, partialTicks, camera, overlay);
         var items = mcjty.lib.varia.CapabilityTools.itemHandler(te.getLevel().getCapability(Capabilities.Item.BLOCK, te.getBlockPos(), null));
         for (int i = 0; i < 9; i++) {
-            state.items[i] = items == null ? ItemStack.EMPTY : items.getStackInSlot(i).copy();
+            state.items[i] = items == null ? ItemStack.EMPTY : ItemUtil.getStack(items, i).copy();
             state.angles[i] = (te.getCurrentAngle(i % 3, i / 3) + te.getRotationSpeed(i % 3, i / 3) * 9) % 360;
             te.setCurrentAngle(i % 3, i / 3, state.angles[i]);
         }

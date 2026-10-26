@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rftoolspower:blazing_infuser"
+        "recipes": "rftoolspower:blazing_infuser"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

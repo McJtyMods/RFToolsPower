@@ -1,6 +1,7 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import javax.annotation.Nonnull;
 import mcjty.lib.client.CustomRenderTypes;
 import mcjty.lib.client.RenderGlowEffect;
 import mcjty.lib.client.RenderHelper;
@@ -22,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nonnull;
 
 public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEntity, EndergenicRenderer.State> {
 
@@ -91,7 +91,7 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
         var sprite = mcjty.lib.client.AbstractDynamicBakedModel.getTexture(texture);
         pose.pushPose();
         pose.translate(.5f, .5f, .5f);
-        pose.mulPose(camera.orientation);
+        pose.rotate(camera.orientation);
         collector.submitCustomGeometry(pose, settings.renderType(), (captured, vertex) -> {
             var matrix = captured.pose();
             vertex.addVertex(matrix, -size, -size, 0).setColor(settings.r(), settings.g(), settings.b(), settings.a()).setUv(sprite.getU0(), sprite.getV1()).setOverlay(0).setLight(settings.brightness()).setNormal(0, 0, 1);
