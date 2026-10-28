@@ -1,5 +1,6 @@
 package mcjty.rftoolspower.modules.generator;
 
+import com.mojang.serialization.MapCodec;
 import java.util.List;
 import java.util.function.Supplier;
 import mcjty.lib.blocks.BaseBlock;
@@ -7,6 +8,7 @@ import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.items.BaseBlockItem;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.VariousModule;
@@ -28,6 +30,7 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
+import static mcjty.lib.setup.Registration.ITEM_INFUSABLE;
 import static mcjty.rftoolspower.setup.Registration.*;
 
 public class CoalGeneratorModule implements IModule {
@@ -35,13 +38,13 @@ public class CoalGeneratorModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, CoalGeneratorTileEntity> COALGENERATOR = RBLOCKS.registerBlock("coalgenerator",
             CoalGeneratorTileEntity.class,
             CoalGeneratorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             CoalGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 
     public static final Supplier<AttachmentType<CoalGeneratorData>> COAL_GENERATOR_DATA = ATTACHMENT_TYPES.register(
             "coal_generator_data", () -> AttachmentType.builder(() -> new CoalGeneratorData(0))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(CoalGeneratorData.CODEC))
+                    .serialize(MapCodec.assumeMapUnsafe(CoalGeneratorData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CoalGeneratorData>> ITEM_COAL_GENERATOR_DATA = COMPONENTS.registerComponentType(
             "coal_generator_data",
@@ -77,7 +80,7 @@ public class CoalGeneratorModule implements IModule {
                 Dob.blockBuilder(COALGENERATOR)
                         .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(ITEM_INFUSABLE.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), Items.REDSTONE_TORCH)),

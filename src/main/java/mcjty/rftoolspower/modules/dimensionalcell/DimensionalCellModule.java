@@ -1,11 +1,13 @@
 package mcjty.rftoolspower.modules.dimensionalcell;
 
+import com.mojang.serialization.MapCodec;
 import java.util.List;
 import java.util.function.Supplier;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.items.BaseBlockItem;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.VariousModule;
@@ -30,6 +32,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
+import static mcjty.lib.setup.Registration.ITEM_INFUSABLE;
 import static mcjty.rftoolspower.RFToolsPower.tab;
 import static mcjty.rftoolspower.setup.Registration.*;
 
@@ -38,25 +41,25 @@ public class DimensionalCellModule implements IModule {
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellNormalTileEntity> DIMENSIONAL_CELL = RBLOCKS.registerBlock("dimensionalcell",
             DimensionalCellNormalTileEntity.class,
             properties -> new DimensionalCellBlock(DimensionalCellType.NORMAL, DimensionalCellNormalTileEntity::new, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             DimensionalCellNormalTileEntity::new);
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellAdvancedTileEntity> DIMENSIONAL_CELL_ADVANCED = RBLOCKS.registerBlock("dimensionalcell_advanced",
             DimensionalCellAdvancedTileEntity.class,
             properties -> new DimensionalCellBlock(DimensionalCellType.ADVANCED, DimensionalCellAdvancedTileEntity::new, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             DimensionalCellAdvancedTileEntity::new);
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellSimpleTileEntity> DIMENSIONAL_CELL_SIMPLE = RBLOCKS.registerBlock("dimensionalcell_simple",
             DimensionalCellSimpleTileEntity.class,
             properties -> new DimensionalCellBlock(DimensionalCellType.SIMPLE, DimensionalCellSimpleTileEntity::new, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             DimensionalCellSimpleTileEntity::new);
 
     public static final RBlock<DimensionalCellBlock, BlockItem, DimensionalCellCreativeTileEntity> DIMENSIONAL_CELL_CREATIVE = RBLOCKS.registerBlock("dimensionalcell_creative",
             DimensionalCellCreativeTileEntity.class,
             properties -> new DimensionalCellBlock(DimensionalCellType.CREATIVE, DimensionalCellCreativeTileEntity::new, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             DimensionalCellCreativeTileEntity::new);
 
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_DIMENSIONAL_CELL = CONTAINERS.register("dimensionalcell", GenericContainer::createContainerType);
@@ -65,7 +68,7 @@ public class DimensionalCellModule implements IModule {
 
     public static final Supplier<AttachmentType<DimensionalCellData>> DIMENSIONAL_CELL_DATA = ATTACHMENT_TYPES.register(
             "dimensional_cell_data", () -> AttachmentType.builder(() -> new DimensionalCellData(0, 0, 0, -1))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(DimensionalCellData.CODEC))
+                    .serialize(MapCodec.assumeMapUnsafe(DimensionalCellData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<DimensionalCellData>> ITEM_DIMENSIONAL_CELL_DATA = COMPONENTS.registerComponentType(
             "dimensional_cell_data",
@@ -107,7 +110,7 @@ public class DimensionalCellModule implements IModule {
                 Dob.blockBuilder(DIMENSIONAL_CELL)
                         .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
+                        .standardLoot(ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .define('P', Items.PRISMARINE_SHARD)
@@ -116,7 +119,7 @@ public class DimensionalCellModule implements IModule {
                 Dob.blockBuilder(DIMENSIONAL_CELL_ADVANCED)
                         .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
+                        .standardLoot(ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
                                         .define('K', DIMENSIONAL_CELL.block().get())
                                         .define('*', VariousModule.INFUSED_DIAMOND.get())
@@ -125,7 +128,7 @@ public class DimensionalCellModule implements IModule {
                 Dob.blockBuilder(DIMENSIONAL_CELL_SIMPLE)
                         .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
+                        .standardLoot(ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .define('q', Items.QUARTZ)
@@ -134,7 +137,7 @@ public class DimensionalCellModule implements IModule {
                 Dob.blockBuilder(DIMENSIONAL_CELL_CREATIVE)
                         .blockTags(List.of(BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get()),
+                        .standardLoot(ITEM_INFUSABLE.get(), DimensionalCellModule.ITEM_DIMENSIONAL_CELL_DATA.get()),
                 Dob.itemBuilder(POWERCELL_CARD)
                         .shaped(builder -> builder
                                         .define('g', Items.GOLD_NUGGET)
