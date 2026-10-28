@@ -1,14 +1,21 @@
 package mcjty.rftoolspower.modules.blazing;
 
+import com.mojang.serialization.MapCodec;
+import java.util.ArrayList;
+import java.util.function.Supplier;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.datagen.model.ModelFile;
+import mcjty.lib.datagen.model.VariantBlockStateBuilder;
+import mcjty.lib.items.BaseBlockItem;
 import mcjty.lib.modules.IModule;
 import mcjty.lib.setup.Registration;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.rftoolsbase.modules.various.VariousModule;
+import mcjty.rftoolsbase.tools.ModelDataGen;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingAgitatorTileEntity;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingGeneratorTileEntity;
 import mcjty.rftoolspower.modules.blazing.blocks.BlazingInfuserTileEntity;
@@ -32,16 +39,12 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import mcjty.lib.datagen.model.ModelFile;
-import mcjty.lib.datagen.model.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
-import java.util.ArrayList;
-import java.util.function.Supplier;
-
 import static mcjty.lib.datagen.DataGen.has;
+import static mcjty.lib.setup.Registration.ITEM_INFUSABLE;
 import static mcjty.rftoolspower.RFToolsPower.tab;
 import static mcjty.rftoolspower.setup.Registration.*;
 
@@ -50,21 +53,21 @@ public class BlazingModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, BlazingGeneratorTileEntity> BLAZING_GENERATOR = RBLOCKS.registerBlock("blazing_generator",
             BlazingGeneratorTileEntity.class,
             BlazingGeneratorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             BlazingGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_BLAZING_GENERATOR = CONTAINERS.register("blazing_generator", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, BlazingAgitatorTileEntity> BLAZING_AGITATOR = RBLOCKS.registerBlock("blazing_agitator",
             BlazingAgitatorTileEntity.class,
             BlazingAgitatorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             BlazingAgitatorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_BLAZING_AGITATOR = CONTAINERS.register("blazing_agitator", GenericContainer::createContainerType);
 
     public static final RBlock<BaseBlock, BlockItem, BlazingInfuserTileEntity> BLAZING_INFUSER = RBLOCKS.registerBlock("blazing_infuser",
             BlazingInfuserTileEntity.class,
             BlazingInfuserTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             BlazingInfuserTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_BLAZING_INFUSER = CONTAINERS.register("blazing_infuser", GenericContainer::createContainerType);
 
@@ -72,7 +75,7 @@ public class BlazingModule implements IModule {
 
     public static final Supplier<AttachmentType<AgitatorData>> AGITATOR_DATA = ATTACHMENT_TYPES.register(
             "agitator_data", () -> AttachmentType.builder(() -> new AgitatorData(new ArrayList<>()))
-                    .serialize(com.mojang.serialization.MapCodec.assumeMapUnsafe(AgitatorData.CODEC))
+                    .serialize(MapCodec.assumeMapUnsafe(AgitatorData.CODEC))
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AgitatorData>> ITEM_AGITATOR_DATA = COMPONENTS.registerComponentType(
             "agitator_data",
@@ -116,7 +119,7 @@ public class BlazingModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(BLAZING_AGITATOR)
                         .ironPickaxeTags()
-                        .standardLoot(BlazingModule.ITEM_AGITATOR_DATA.get(), mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(BlazingModule.ITEM_AGITATOR_DATA.get(), ITEM_INFUSABLE.get())
                         .blockState(p -> {
                             p.simpleBlock(BLAZING_AGITATOR.block().get(), p.models().getBuilder("blazing_agitator").parent(p.models().getExistingFile(Identifier.withDefaultNamespace("block/slab"))).texture("side",
                                     p.modLoc("block/blazing/blazing_agitator_side")).texture("bottom",
@@ -130,12 +133,12 @@ public class BlazingModule implements IModule {
                                 "XXX", "GFG", "iii"),
                 Dob.blockBuilder(BLAZING_GENERATOR)
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(ITEM_INFUSABLE.get())
                         .blockState(p -> {
                             ModelFile modelIdle = p.frontBasedModel("blazing_generator_idle", p.modLoc("block/blazing/blazing_generator_idle"));
                             ModelFile modelBusy = p.frontBasedModel("blazing_generator_busy", p.modLoc("block/blazing/blazing_generator_busy"));
                             VariantBlockStateBuilder builder = p.getVariantBuilder(BLAZING_GENERATOR.block().get());
-                            builder.forAllStates(state -> mcjty.rftoolsbase.tools.ModelDataGen.rotated(
+                            builder.forAllStates(state -> ModelDataGen.rotated(
                                     state.getValue(BlazingGeneratorTileEntity.WORKING) ? modelBusy : modelIdle, state.getValue(BlockStateProperties.FACING)));
                         })
                         .shaped(builder -> builder
