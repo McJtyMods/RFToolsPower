@@ -1,12 +1,14 @@
 package mcjty.rftoolspower.modules.generator;
 
+import java.util.List;
+import java.util.function.Supplier;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.blocks.RBlock;
 import mcjty.lib.container.GenericContainer;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.items.BaseBlockItem;
 import mcjty.lib.modules.IModule;
-import mcjty.lib.setup.Registration;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.generator.blocks.CoalGeneratorTileEntity;
 import mcjty.rftoolspower.modules.generator.client.GuiCoalGenerator;
@@ -20,9 +22,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import mcjty.lib.setup.DeferredHolder;
-
-import java.util.function.Supplier;
-
+import static mcjty.lib.setup.Registration.ITEM_INFUSABLE;
 import static mcjty.rftoolspower.setup.Registration.*;
 
 public class CoalGeneratorModule implements IModule {
@@ -30,7 +30,7 @@ public class CoalGeneratorModule implements IModule {
     public static final RBlock<BaseBlock, BlockItem, CoalGeneratorTileEntity> COALGENERATOR = RBLOCKS.registerBlock("coalgenerator",
             CoalGeneratorTileEntity.class,
             CoalGeneratorTileEntity::createBlock,
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             CoalGeneratorTileEntity::new);
     public static final Supplier<MenuType<GenericContainer>> CONTAINER_COALGENERATOR = CONTAINERS.register("coalgenerator", GenericContainer::createContainerType);
 
@@ -41,7 +41,6 @@ public class CoalGeneratorModule implements IModule {
             builder -> builder
                     .persistent(CoalGeneratorData.CODEC)
                     .networkSynchronized(CoalGeneratorData.STREAM_CODEC));
-
 
     @Override
     public void init() {
@@ -66,9 +65,9 @@ public class CoalGeneratorModule implements IModule {
     public void initDatagen(DataGen dataGen, HolderLookup.Provider provider) {
         dataGen.add(
                 Dob.blockBuilder(COALGENERATOR)
-                        .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
+                        .blockTags(List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
                         .ironPickaxeTags()
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_INFUSABLE.get())
+                        .standardLoot(ITEM_INFUSABLE.get())
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
                                         .unlockedBy("frame", InventoryChangeTrigger.TriggerInstance.hasItems(VariousModule.MACHINE_FRAME.get(), Items.REDSTONE_TORCH)),

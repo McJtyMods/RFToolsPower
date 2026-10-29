@@ -4,6 +4,7 @@ import mcjty.lib.blocks.RBlock;
 import mcjty.lib.client.ModelTools;
 import mcjty.lib.datagen.DataGen;
 import mcjty.lib.datagen.Dob;
+import mcjty.lib.items.BaseBlockItem;
 import mcjty.lib.modules.IModule;
 import mcjty.rftoolsbase.modules.various.VariousModule;
 import mcjty.rftoolspower.modules.powercell.blocks.PowerCellBlock;
@@ -18,8 +19,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import mcjty.lib.setup.DeferredItem;
-
 import static mcjty.lib.datagen.DataGen.has;
+import static mcjty.lib.setup.Registration.ITEM_ENERGY;
 import static mcjty.rftoolspower.RFToolsPower.tab;
 import static mcjty.rftoolspower.setup.Registration.*;
 
@@ -28,25 +29,24 @@ public class PowerCellModule implements IModule {
     public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL1 = RBLOCKS.registerBlock("cell1",
             PowerCellTileEntity.class,
             properties -> new PowerCellBlock(Tier.TIER1, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             (pos, state) -> new PowerCellTileEntity(Tier.TIER1, pos, state));
 
     public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL2 = RBLOCKS.registerBlock("cell2",
             PowerCellTileEntity.class,
             properties -> new PowerCellBlock(Tier.TIER2, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             (pos, state) -> new PowerCellTileEntity(Tier.TIER2, pos, state));
 
     public static final RBlock<PowerCellBlock, BlockItem, PowerCellTileEntity> CELL3 = RBLOCKS.registerBlock("cell3",
             PowerCellTileEntity.class,
             properties -> new PowerCellBlock(Tier.TIER3, properties),
-            (block, itemProperties) -> new BlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
+            (block, itemProperties) -> new BaseBlockItem(block.get(), itemProperties.useBlockDescriptionPrefix()),
             (pos, state) -> new PowerCellTileEntity(Tier.TIER3, pos, state));
 
     public static final DeferredItem<Item> POWER_CORE1 = ITEMS.register("power_core1", tab(PowerCoreItem::new));
     public static final DeferredItem<Item> POWER_CORE2 = ITEMS.register("power_core2", tab(PowerCoreItem::new));
     public static final DeferredItem<Item> POWER_CORE3 = ITEMS.register("power_core3", tab(PowerCoreItem::new));
-
 
     @Override
     public void init() {
@@ -68,7 +68,7 @@ public class PowerCellModule implements IModule {
         dataGen.add(
                 Dob.blockBuilder(CELL1)
                         .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
+                        .standardLoot(ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shaped(builder -> builder
                                         .define('F', VariousModule.MACHINE_FRAME.get())
@@ -77,7 +77,7 @@ public class PowerCellModule implements IModule {
                                 "rKr", "KFK", "rKr"),
                 Dob.blockBuilder(CELL2)
                         .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
+                        .standardLoot(ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shapedComponentPreserve(builder -> builder
                                         .define('K', POWER_CORE2.get())
@@ -86,7 +86,7 @@ public class PowerCellModule implements IModule {
                                 "rKr", "KPK", "rKr"),
                 Dob.blockBuilder(CELL3)
                         .blockTags(java.util.List.of(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES))
-                        .standardLoot(mcjty.lib.setup.Registration.ITEM_ENERGY.get())
+                        .standardLoot(ITEM_ENERGY.get())
                         .ironPickaxeTags()
                         .shapedComponentPreserve(builder -> builder
                                         .define('K', POWER_CORE3.get())
