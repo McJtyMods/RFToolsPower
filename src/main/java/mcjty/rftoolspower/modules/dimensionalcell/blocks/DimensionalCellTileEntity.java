@@ -43,7 +43,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.Lazy;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
@@ -315,7 +318,23 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
 
         int rfToGive = Math.min(DimensionalCellConfiguration.CHARGEITEMPERTICK.get(), getEnergyStored());
-        int received = (int) EnergyTools.receiveEnergy(stack, rfToGive);
+        int received;
+        if (stack.getItem() instanceof IEnergyItem) {
+            received = (int) EnergyTools.receiveEnergy(stack, rfToGive);
+            if (received > 0) {
+                items.setStackInSlot(SLOT_CHARGEITEM, stack);
+            }
+        } else {
+            var access = ItemAccess.forHandlerIndexStrict(items, SLOT_CHARGEITEM);
+            var battery = access.getCapability(Capabilities.Energy.ITEM);
+            if (battery == null) {
+                return;
+            }
+            try (var transaction = Transaction.openRoot()) {
+                received = battery.insert(rfToGive, transaction);
+                transaction.commit();
+            }
+        }
         if (received == 0) {
             return;
         }
