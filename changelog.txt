@@ -1,3 +1,6 @@
+26.3-10.0.2:
+- Fixed item charging in dimensional cells, including the creative cell
+
 26.3-10.0.1:
 - Restored block tooltips, including the extra information shown while holding Shift
 
