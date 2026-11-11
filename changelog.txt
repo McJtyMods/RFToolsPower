@@ -1,3 +1,6 @@
+26.1.2-8.0.2-fabric:
+- Fixed dimensional cells charging items without saving their updated energy
+
 26.1.2-8.0.1-fabric:
 - Restored block tooltips, including the extra information shown while holding Shift
 

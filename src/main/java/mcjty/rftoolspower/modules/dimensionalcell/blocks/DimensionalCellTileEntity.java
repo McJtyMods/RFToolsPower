@@ -319,6 +319,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         if (received == 0) {
             return;
         }
+        items.setStackInSlot(SLOT_CHARGEITEM, stack);
         extractEnergyInternal(received, false, DimensionalCellConfiguration.CHARGEITEMPERTICK.get());
     }
 
