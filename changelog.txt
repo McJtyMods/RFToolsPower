@@ -1,3 +1,6 @@
+26.1.2-8.0.3-fabric:
+- Fixed clipped pearl loss reasons in the Endergenic Generator Smart Wrench HUD (#185)
+
 26.1.2-8.0.2-fabric:
 - Fixed dimensional cells charging items without saving their updated energy
 
