@@ -133,7 +133,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     private int lastPearlsLaunched = 0;
     private int lastChargeCounter = 0;
     private int lastPearlArrivedAt = 0;
-    private String lastPearlsLostReason = "";
+    private List<String> lastPearlLossReasonLines = List.of();
 
     // Current traveling pearls.
     private List<EndergenicPearl> pearls = new ArrayList<>();
@@ -218,7 +218,9 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         list.add("    Fired: " + getLastPearlsLaunched());
         list.add("    Lost: " + getLastPearlsLost());
         if (getLastPearlsLost() > 0) {
-            list.add(ChatFormatting.RED + "    " + getLastPearlsLostReason());
+            for (String line : lastPearlLossReasonLines) {
+                list.add(ChatFormatting.RED + "    " + line);
+            }
         }
         if (getLastPearlArrivedAt() > -2) {
             list.add("    Last pearl at " + getLastPearlArrivedAt());
@@ -283,7 +285,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     public String getLastPearlsLostReason() {
-        return lastPearlsLostReason;
+        return String.join(" ", lastPearlLossReasonLines);
     }
 
     public int getGoodCounter() {
@@ -324,7 +326,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
             if (random.nextInt(1000) <= EndergenicConfiguration.chanceLost.get()) {
                 // Pearl is lost.
                 log("Server Tick: discard pearl randomly");
-                discardPearl("Random pearl discard");
+                discardPearl("Random discard");
             }
         }
 
@@ -356,7 +358,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
             if (rfStored < rf) {
                 // Not enough energy. Pearl is lost.
                 log("Server Tick: insufficient energy to hold pearl (" + rfStored + " vs " + rf + ")");
-                discardPearl("Not enough energy to hold pearl");
+                discardPearl("Not enough RF", "to hold pearl");
             } else {
                 long rfExtracted = energyStorage.extractEnergy((int) rf, false);
                 log("Server Tick: holding pearl, consume " + rfExtracted + " RF");
@@ -494,11 +496,12 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         this.badCounter = badCounter;
     }
 
-    private void discardPearl(String reason) {
+    // The HUD fits at most two short lines for the loss reason.
+    private void discardPearl(String... reasonLines) {
         badCounter = 20;
         markDirtyClientNoRender();
         pearlsLost++;
-        lastPearlsLostReason = reason;
+        lastPearlLossReasonLines = List.of(reasonLines);
         chargingMode = CHARGE_IDLE;
         fireMonitors(EnderMonitorMode.MODE_LOSTPEARL);
     }
@@ -530,7 +533,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (destination == null) {
             // There is no destination so the pearl is simply lost.
             log("Fire Pearl: pearl lost due to lack of destination");
-            discardPearl("Missing destination");
+            discardPearl("No destination");
         } else {
             log("Fire Pearl: pearl is launched to " + destination.getX() + "," + destination.getY() + "," + destination.getZ());
             chargingMode = CHARGE_IDLE;
@@ -548,7 +551,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (destination == null) {
             // There is no destination so the injected pearl is simply lost.
             log("Fire Pearl from injector: pearl lost due to lack of destination");
-            discardPearl("Missing destination");
+            discardPearl("No destination");
         } else {
             log("Fire Pearl from injector: pearl is launched to " + destination.getX() + "," + destination.getY() + "," + destination.getZ());
             pearlsLaunched++;
@@ -566,12 +569,12 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
             log("Receive Pearl: pearl arrives but already holding -> both are lost");
             // If this block is already holding a pearl and it still has one then both pearls are
             // automatically lost.
-            discardPearl("Pearl arrived while holding");
+            discardPearl("Pearl arrived", "while holding");
         } else if (chargingMode == CHARGE_IDLE) {
             log("Receive Pearl: pearl arrives but generator is idle -> pearl is lost");
             // If this block is idle and it is hit by a pearl then the pearl is lost and nothing
             // happens.
-            discardPearl("Pearl arrived while idle");
+            discardPearl("Pearl arrived", "while idle");
         } else {
             pearlArrivedAt = chargingMode;
             // Otherwise we get RF and this block goes into holding mode.
