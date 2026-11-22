@@ -1,3 +1,6 @@
+1.21-7.0.7:
+- Fixed clipped pearl loss reasons in the Endergenic Generator Smart Wrench HUD (#185)
+
 1.21-7.0.6:
 - Updated and expanded the Patchouli manual documentation
 
