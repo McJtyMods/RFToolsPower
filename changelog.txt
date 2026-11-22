@@ -1,3 +1,6 @@
+26.3-10.0.3:
+- Fixed clipped pearl loss reasons in the Endergenic Generator Smart Wrench HUD (#185)
+
 26.3-10.0.2:
 - Fixed item charging in dimensional cells, including the creative cell
 
