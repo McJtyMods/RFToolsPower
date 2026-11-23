@@ -617,13 +617,10 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
         if (!(tileEntity instanceof EndergenicTileEntity)) {
             // None selected. Just select this one.
             RFToolsBase.instance.clientInfo.setSelectedTE(thisCoord);
-            EndergenicTileEntity destinationTE = getDestinationTE();
-            if (destinationTE == null) {
-                RFToolsBase.instance.clientInfo.setDestinationTE(null);
+            RFToolsBase.instance.clientInfo.setDestinationTE(destination);
+            if (destination == null) {
                 Logging.message(player, "Select another endergenic generator as destination");
             } else {
-                RFToolsBase.instance.clientInfo.setDestinationTE(destinationTE.getBlockPos());
-                int distance = getDistanceInTicks();
                 Logging.message(player, "Select another endergenic generator as destination (current distance " + distance + ")");
             }
         } else if (coord.equals(thisCoord)) {
@@ -666,7 +663,6 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     public void setDestination(BlockPos destination) {
-        markDirtyQuick();
         this.destination = destination;
         distance = calculateDistance(destination);
 
@@ -676,6 +672,8 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
                     .put(PARAM_DESTINATION, destination)
                     .build());
             Networking.sendToServer(packet);
+        } else {
+            markDirtyClient();
         }
     }
 
@@ -684,13 +682,24 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
     }
 
     @Override
+    public void loadClientDataFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
+        destination = BlockPosTools.read(tag, "dest");
+        distance = tag.getInt("distance");
+    }
+
+    @Override
+    public void saveClientDataToNBT(CompoundTag tag, HolderLookup.Provider provider) {
+        BlockPosTools.write(tag, "dest", destination);
+        tag.putInt("distance", distance);
+    }
+
+    @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
 
         chargingMode = tag.getInt("charging");
         currentAge = tag.getInt("age");
-        destination = BlockPosTools.read(tag, "dest");
-        distance = tag.getInt("distance");
+        loadClientDataFromNBT(tag, provider);
         prevIn = tag.getBoolean("prevIn");
         badCounter = tag.getByte("bad");
         goodCounter = tag.getByte("good");
@@ -712,8 +721,7 @@ public class EndergenicTileEntity extends TickingTileEntity implements IHudSuppo
 
         tag.putInt("charging", chargingMode);
         tag.putInt("age", currentAge);
-        BlockPosTools.write(tag, "dest", destination);
-        tag.putInt("distance", distance);
+        saveClientDataToNBT(tag, provider);
         tag.putBoolean("prevIn", prevIn);
         tag.putByte("bad", (byte) badCounter);
         tag.putByte("good", (byte) goodCounter);

@@ -1,3 +1,6 @@
+1.21-7.0.9:
+- Fixed the Smart Wrench sometimes failing to highlight an Endergenic Generator's linked destination.
+
 1.21-7.0.8:
 - Fixed the dark border around the Endergenic Generator's pearl and flashes
 - The Dimensional Cell Stats button now shows live FE totals for the linked network or the unlinked cell, with a separate Clear button
