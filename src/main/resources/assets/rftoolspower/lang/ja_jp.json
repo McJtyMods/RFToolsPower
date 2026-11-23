@@ -1,0 +1,89 @@
+{
+    "item.rftoolspower.power_core1": "パワーコア (低)",
+    "item.rftoolspower.power_core2": "パワーコア (中)",
+    "item.rftoolspower.power_core3": "パワーコア (高)",
+    "item.rftoolspower.blazing_rod": "ブレイジングロッド",
+    "item.rftoolspower.powercell_card": "パワーセルカード",
+
+    "block.rftoolspower.dimensionalcell": "ディメンショナルセル",
+    "block.rftoolspower.dimensionalcell_simple": "ディメンショナルセル (基本)",
+    "block.rftoolspower.dimensionalcell_advanced": "ディメンショナルセル (発展)",
+    "block.rftoolspower.dimensionalcell_creative": "ディメンショナルセル (クリエイティブ)",
+    "block.rftoolspower.cell1": "パワーセル (低)",
+    "block.rftoolspower.cell2": "パワーセル (中)",
+    "block.rftoolspower.cell3": "パワーセル (高)",
+    "block.rftoolspower.coalgenerator": "石炭発電機",
+    "block.rftoolspower.power_monitor": "パワーモニター",
+    "block.rftoolspower.power_level": "パワーレベル",
+    "block.rftoolspower.endergenic": "エンダージェニック",
+    "block.rftoolspower.ender_monitor": "エンダーモニター",
+    "block.rftoolspower.pearl_injector": "パールインジェクター",
+    "block.rftoolspower.blazing_generator": "ブレイジング発電機",
+    "block.rftoolspower.blazing_agitator": "ブレイジングアジテーター",
+    "block.rftoolspower.blazing_infuser": "ブレイジング注入機",
+
+    "itemGroup.rftoolspower": "RFTools Power",
+
+    "message.rftoolspower.shiftmessage": "<Shiftを押す>",
+
+    "message.rftoolspower.powercell_card.header": "ディメンショナルセルを接続するために使用します",
+    "message.rftoolspower.powercell_card.info": "リンク: ",
+
+    "message.rftoolspower.power_core1.header": "パワーセルの中間素材です",
+    "message.rftoolspower.power_core2.header": "パワーセルの中間素材です",
+    "message.rftoolspower.power_core3.header": "パワーセルの中間素材です",
+
+    "message.rftoolspower.blazing_rod.header": "ブレイジングアジテーターで生成され、ブレイジング発電機に使用することができます",
+    "message.rftoolspower.blazing_rod.time": "時間: ",
+    "message.rftoolspower.blazing_rod.power": "電力: ",
+    "message.rftoolspower.blazing_rod.duration": "持続: ",
+    "message.rftoolspower.blazing_rod.infused": "注入: ",
+
+    "message.rftoolspower.cell1.header": "電力を貯蓄することができ、セルを組み合わせて大電力貯蔵マルチブロックを形成することができます。レンチで右クリックして、面の入出力を切り替えます",
+    "message.rftoolspower.cell1.info": "電力: ",
+
+    "message.rftoolspower.cell2.header": "電力を貯蓄することができ、セルを組み合わせて大電力貯蔵マルチブロックを形成することができます。レンチで右クリックして、面の入出力を切り替えます",
+    "message.rftoolspower.cell2.info": "電力: ",
+
+    "message.rftoolspower.cell3.header": "電力を貯蓄することができ、セルを組み合わせて大電力貯蔵マルチブロックを形成することができます。レンチで右クリックして、面の入出力を切り替えます",
+    "message.rftoolspower.cell3.info": "電力: ",
+
+    "message.rftoolspower.power_monitor.header": "パワーモニターは、ターゲットブロックの電力量に応じてレッドストーン信号を送信できます",
+
+    "message.rftoolspower.power_level.header": "パワーレベルブロックは、何かの電力量を表す数字を表示します。また、同じ量のレッドストーン信号を出力します",
+
+    "message.rftoolspower.blazing_generator.header": "ブレイズロッドを使用して電力を生成します。これらのブレイズロッドは、事前にブレイジングアジテーターで「アジテート」する必要があります",
+    "message.rftoolspower.blazing_generator.gold": "注入ボーナス: より多くの電力生成",
+
+    "message.rftoolspower.blazing_agitator.header": "この装置は、ブレイズロッドを「アジテート」して、ブレイジング発電機で使用可能にします",
+    "message.rftoolspower.blazing_agitator.gold": "注入ボーナス: より高品質のブレイジングロッド",
+
+    "message.rftoolspower.blazing_infuser.header": "この装置は、ディメンショナルシャード、レッドストーン、またはグロウストーンダストを使用して、ブレイジングロッドを注入できます。これにより、ブレイジング発電機での電力生産やその持続時間が向上します",
+
+    "message.rftoolspower.endergenic.header": "エンダーパールを使用して電力を生成します。これには少なくとも2つの発電機が必要で、設定は比較的複雑です。タイミングが重要です",
+    "message.rftoolspower.endergenic.gold": "注入ボーナス: より多くの電力生成とエンダーパール保持時の電力損失の削減",
+
+    "message.rftoolspower.ender_monitor.header": "このブロックは、隣接するエンダージェニック発電機内のさまざまな変化を検出し、それに基づいてレッドストーン信号を送信できます",
+
+    "message.rftoolspower.pearl_injector.header": "隣接するエンダージェニック発電機に、レッドストーン信号を受信した際にエンダーパールを注入します",
+
+    "message.rftoolspower.coalgenerator.header": "この機械は、石炭または木炭からRF/FEを生成します",
+    "message.rftoolspower.coalgenerator.gold": "注入ボーナス: より多くの電力生成と、燃料効率向上",
+    "message.rftoolspower.coalgenerator.info": "生成中: ",
+
+    "message.rftoolspower.dimensionalcell.header": "このブロックは電力を貯蔵できます。オプションで、大規模なディメンション構造内で使用可能です",
+    "message.rftoolspower.dimensionalcell.gold": "注入ボーナス: 長距離電力抽出コストの削減とRF/tick出力の増加",
+    "message.rftoolspower.dimensionalcell.info": "エネルギー: ",
+
+    "message.rftoolspower.dimensionalcell_advanced.header": "このブロックは電力を貯蔵できます。オプションで、大規模なディメンション構造内で使用可能です",
+    "message.rftoolspower.dimensionalcell_advanced.gold": "注入ボーナス: 長距離電力抽出コストの削減とRF/tick出力の増加",
+    "message.rftoolspower.dimensionalcell_advanced.info": "エネルギー: ",
+
+    "message.rftoolspower.dimensionalcell_simple.header": "このブロックは電力を貯蔵できます。オプションで、大規模なディメンション構造内で使用可能です",
+    "message.rftoolspower.dimensionalcell_simple.gold": "注入ボーナス: 長距離電力抽出コストの削減とRF/tick出力の増加",
+    "message.rftoolspower.dimensionalcell_simple.info": "エネルギー: ",
+
+    "message.rftoolspower.dimensionalcell_creative.header": "このブロックは電力を貯蔵できます。オプションで、大規模なディメンション構造内で使用可能です",
+    "message.rftoolspower.dimensionalcell_creative.gold": "注入ボーナス: 長距離電力抽出コストの削減とRF/tick出力の増加",
+    "message.rftoolspower.dimensionalcell_creative.info": "エネルギー: "
+}
