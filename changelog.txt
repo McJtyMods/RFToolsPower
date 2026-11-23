@@ -1,3 +1,6 @@
+26.2-9.0.5-fabric:
+- Fixed the Smart Wrench sometimes failing to highlight an Endergenic Generator's linked destination.
+
 26.2-9.0.4-fabric:
 - The Dimensional Cell Stats button now shows live FE totals for the linked network or the unlinked cell, with a separate Clear button
 
