@@ -4,6 +4,7 @@ import mcjty.lib.varia.LevelTools;
 import mcjty.lib.varia.Logging;
 import mcjty.lib.varia.OrientationTools;
 import mcjty.lib.worlddata.AbstractWorldData;
+import mcjty.rftoolsbase.tools.EnergyTransactions;
 import mcjty.rftoolspower.RFToolsPower;
 import mcjty.rftoolspower.compat.RFToolsDimensionChecker;
 import mcjty.rftoolspower.modules.dimensionalcell.blocks.DimensionalCellBlock;
@@ -89,10 +90,20 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
     }
 
     public static class Network {
-        public final mcjty.rftoolsbase.tools.EnergyTransactions.Journal<Integer> energyJournal =
-                new mcjty.rftoolsbase.tools.EnergyTransactions.Journal<>(this::getEnergy, this::setEnergy);
+        private record EnergySnapshot(int energy, long inserted, long extracted) {
+        }
 
         private int energy = 0;
+        private long totalInserted;
+        private long totalExtracted;
+
+        public final EnergyTransactions.Journal<EnergySnapshot> energyJournal =
+                new EnergyTransactions.Journal<>(() -> new EnergySnapshot(energy, totalInserted, totalExtracted), snapshot -> {
+                    setEnergy(snapshot.energy());
+                    totalInserted = snapshot.inserted();
+                    totalExtracted = snapshot.extracted();
+                });
+
         private Set<GlobalPos> blocks = new HashSet<>();
         private int simpleBlocks = 0;
         private int advancedBlocks = 0;
@@ -300,6 +311,27 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             return energy;
         }
 
+        public long getTotalInserted() {
+            return totalInserted;
+        }
+
+        public long getTotalExtracted() {
+            return totalExtracted;
+        }
+
+        public void recordInsertion(int amount) {
+            totalInserted += amount;
+        }
+
+        public void recordExtraction(int amount) {
+            totalExtracted += amount;
+        }
+
+        public void clearStats() {
+            totalInserted = 0;
+            totalExtracted = 0;
+        }
+
         public int extractEnergy(int amount) {
             if(amount > energy) {
                 amount = energy;
@@ -322,6 +354,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
         public void writeToNBT(CompoundTag tagCompound){
             tagCompound.putInt("energy", energy);
+            tagCompound.putLong("totalInserted", totalInserted);
+            tagCompound.putLong("totalExtracted", totalExtracted);
             tagCompound.putInt("advanced", advancedBlocks);
             tagCompound.putInt("simple", simpleBlocks);
             ListTag list = new ListTag();
@@ -339,6 +373,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
         public void readFromNBT(CompoundTag tagCompound){
             this.energy = tagCompound.getIntOr("energy", 0);
+            totalInserted = tagCompound.getLongOr("totalInserted", 0L);
+            totalExtracted = tagCompound.getLongOr("totalExtracted", 0L);
             this.advancedBlocks = tagCompound.getIntOr("advanced", 0);
             this.simpleBlocks = tagCompound.getIntOr("simple", 0);
             blocks.clear();
