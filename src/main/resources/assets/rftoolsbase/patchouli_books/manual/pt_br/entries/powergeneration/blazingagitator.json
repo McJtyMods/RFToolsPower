@@ -1,0 +1,16 @@
+{
+  "name": "Agitador de Blazing",
+  "icon": "rftoolspower:blazing_agitator",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "sortnum": 23,
+  "pages": [
+    {
+      "type": "text",
+      "text": "As varas de blaze precisam ser processadas pelo Agitador de Blazing antes de poderem ser usadas no $(l:rftoolspower:powergeneration/blazinggenerator)Gerador de Blazing$(/l). Usando um pouco de energia, o agitador acumula lentamente o potencial das varas de blaze que são colocadas na área de entrada. Note que varas de blaze adjacentes a outras varas melhoram a qualidade e a velocidade com que isso acontece."
+    },
+    {
+      "type": "text",
+      "text": "Vale a pena dedicar um tempo para aprimorar as varas de blazing até obter varas de alta qualidade, que podem ser usadas para melhorar a qualidade de outras varas de blazing produzidas por este agitador. Por esse motivo, existem 9 botões que você pode usar para evitar que as varas de blazing totalmente processadas sejam enviadas para a área de saída."
+    }
+  ]
+}

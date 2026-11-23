@@ -1,0 +1,17 @@
+{
+  "name": "Monitor de Energia",
+  "icon": "rftoolspower:power_monitor",
+  "category": "rftoolsbase:category_rftoolspower_monitor",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este bloco lógico pode ser colocado com o lado de entrada voltado para um $(thing)bloco de energia$(). Ele possui uma interface gráfica que permite controlar a faixa de energia na qual deve emitir um $(thing)sinal de redstone$(). $(br2)Redstone é emitida quando o nível de energia está acima da porcentagem mínima e abaixo da porcentagem máxima."
+    },
+    {
+      "type": "crafting",
+      "heading": "Power Monitor",
+      "recipe": "rftoolspower:power_monitor"
+    }
+  ]
+}

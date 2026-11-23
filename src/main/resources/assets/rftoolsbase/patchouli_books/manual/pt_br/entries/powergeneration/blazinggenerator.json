@@ -1,0 +1,12 @@
+{
+  "name": "Gerador Blazing",
+  "icon": "rftoolspower:blazing_generator",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "sortnum": 20,
+  "pages": [
+    {
+      "type": "text",
+      "text": "O Gerador Blazing pode gerar energia a partir de bastões de blaze. Mas antes disso, os bastões precisam ser processados pelo $(l:rftoolspower:powergeneration/blazingagitator)Agitador Blazing$(/l). Note que o Gerador Blazing pode gerar energia de até quatro bastões e funciona melhor se conseguir gerar energia constantemente. O gerador precisa de tempo para se energizar antes de poder usar todo o potencial de um bastão de blaze."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Armazenamento de Energia",
+  "description": "Soluções para armazenar energia, tanto localmente quanto interdimensionalmente.",
+  "parent": "rftoolsbase:category_rftoolspower",
+  "icon": "rftoolspower:dimensionalcell",
+  "sortnum": 20
+}

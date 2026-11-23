@@ -1,0 +1,16 @@
+{
+  "name": "Infusor Blazing",
+  "icon": "rftoolspower:blazing_infuser",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "sortnum": 26,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Blazing rods produzidas pelo $(l:rftoolspower:powergeneration/blazingagitator)Agitador Blazing$(/l) podem ser melhoradas ainda mais ao infundi-las com um stack de certos itens catalisadores. Note que, uma vez infundida, uma Blazing Rod não pode mais ser usada no Agitador Blazing para ajudar a melhorar outras varas."
+    },
+    {
+      "type": "text",
+      "text": "Catalisadores (benefício de poder/tempo para um stack cheio):$(br2)$(li)$(item)redstone$() 40% mais poder$(li)$(item)glowstone$() 10% mais poder, 30% mais tempo$(li)$(item)quartz$() 40% mais tempo$(li)$(item)dimensional shards$() 60% mais poder, 60% mais tempo$(li)$(item)nether star$() 120% mais poder, 120% mais tempo$(li)$(item)ghast tear$() 80% mais poder, 80% mais tempo"
+    }
+  ]
+}

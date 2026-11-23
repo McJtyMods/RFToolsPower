@@ -1,0 +1,17 @@
+{
+  "name": "Nível de Energia",
+  "icon": "rftoolspower:power_level",
+  "category": "rftoolsbase:category_rftoolspower_monitor",
+  "sortnum": 20,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Este bloco lógico pode ser colocado com seu lado de entrada voltado para um $(thing)bloco de energia$(). Ele mostrará um dígito representando a quantidade de energia naquele bloco, e também emitirá um sinal de redstone com essa intensidade, variando de 0 a 9."
+    },
+    {
+      "type": "crafting",
+      "heading": "Power Monitor",
+      "recipe": "rftoolspower:power_level"
+    }
+  ]
+}

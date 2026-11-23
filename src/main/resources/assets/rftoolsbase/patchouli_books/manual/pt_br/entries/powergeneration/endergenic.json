@@ -1,0 +1,42 @@
+{
+  "name": "Gerador Endergenic",
+  "icon": "rftoolspower:endergenic",
+  "category": "rftoolsbase:category_rftoolspower_powergeneration",
+  "sortnum": 30,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Cientistas trabalhando no The End descobriram uma propriedade interessante das pérolas do ender. Quando uma pérola é arremessada de maneira controlada, as propriedades místicas que ocorrem na chegada podem ser aproveitadas e convertidas em RF. Se feito no momento exato, isso pode gerar muita energia. Uma pérola arremessada dessa forma é chamada de $(o)Pérola Endergenic$()."
+    },
+    {
+      "type": "text",
+      "text": "Além disso, parece que as pérolas 'lembram' que foram capturadas dessa forma. Se uma pérola é capturada e então arremessada novamente o mais rápido possível, sua capacidade interna de energia aumenta, o que pode trazer grandes benefícios para a produção de RF. Porém, isso significa que a pérola deve ser disparada novamente o quanto antes, pois tentar conter uma pérola é muito custoso em energia."
+    },
+    {
+      "type": "image",
+      "images": [
+        "rftoolspower:textures/manual/endergenic.png"
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Note que, mesmo em condições ótimas, pérolas podem ser perdidas. Portanto, é necessário garantir que o sistema esteja sempre operacional.$(br2)O Gerador Endergenic é o bloco principal. Ele pode capturar pérolas endergenic e dispará-las novamente. Possui três modos controlados por pulsos de redstone:$(br)$(li)$(d)Ocioso: $()apenas esperando (padrão)$(li)$(d)Carregando: $()o dispositivo pode receber pérolas endergenic$(li)$(d)Segurando: $()o dispositivo está segurando uma pérola"
+    },
+    {
+      "type": "text",
+      "text": "O modo de carregamento tem um ciclo de 15 ticks. O momento mais ideal para capturar uma pérola é no tick 10 (começando no tick 1). RF também será gerada se uma pérola endergenic chegar em outro ponto do ciclo, mas a energia gerada será muito menor.$(br2)Quando o ciclo de carregamento termina sem receber pérola, a máquina volta para o modo ocioso."
+    },
+    {
+      "type": "text",
+      "text": "Ao receber uma pérola, o modo carregando termina e a máquina entra em modo segurando, consumindo RF a cada tick. Portanto, não segure por muito tempo para não consumir mais RF do que gerou. Se o gerador não tiver energia suficiente para segurar a pérola, ela será perdida. Também há uma pequena chance da pérola se perder a cada tick.$(br2)Use uma chave inglesa para controlar o destino de cada gerador. Caso contrário, as pérolas serão automaticamente perdidas."
+    },
+    {
+      "type": "text",
+      "text": "Com a chave inglesa, você pode parear geradores. Preste atenção na mensagem exibida, pois informa a distância (em ticks) entre eles. Isso ajuda a sincronizar o restante do sistema com precisão. Note que a distância máxima é 4 ticks.$(br2)Essa mecânica de carregar, segurar e disparar pérolas endergenic em tempos específicos exige precisão e cooperação. Será necessário pelo menos dois geradores para produzir energia."
+    },
+    {
+      "type": "text",
+      "text": "Se você tiver muitas pérolas do ender e não se importar com uma geração menos eficiente, pode simplesmente lançar várias pérolas de um gerador e capturá-las em outro. Depois, no segundo gerador, dispare-as imediatamente sem se preocupar com o destino. Contudo, isso consumirá muitas pérolas rapidamente, então pode não ser o método mais eficiente."
+    }
+  ]
+}
