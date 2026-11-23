@@ -27,9 +27,13 @@ import static mcjty.lib.gui.widgets.Widgets.*;
 public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileEntity, GenericContainer> {
     public static final int POWERCELL_WIDTH = 180;
     public static final int POWERCELL_HEIGHT = 152;
+    private static final int STATS_WIDTH = 202;
 
     private EnergyBar energyBar;
     private Button stats;
+    private Label statsTitle;
+    private Label statsInserted;
+    private Label statsExtracted;
 
     private static long lastTime = 0;
 
@@ -63,8 +67,10 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
                 .tooltips("Set all sides to", "send energy");
 
         stats = button(100, 10, 32, 15, "Stats")
-                .name("clearstats")
-                .tooltips("Power statistics. Press to clear:");
+                .event(this::openStats);
+        statsTitle = label(8, 4, STATS_WIDTH - 16, 14, "");
+        statsInserted = label(8, 20, STATS_WIDTH - 16, 14, "");
+        statsExtracted = label(8, 35, STATS_WIDTH - 16, 14, "");
 
         Label label = label(26, 30, 40, 18, "Link:").tooltips("Link a powercard to card", "on the left");
 
@@ -77,9 +83,21 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
         window.action("allnone", getBE(), DimensionalCellTileEntity.ACTION_SETNONE);
         window.action("allinput", getBE(), DimensionalCellTileEntity.ACTION_SETINPUT);
         window.action("alloutput", getBE(), DimensionalCellTileEntity.ACTION_SETOUTPUT);
-        window.action("clearstats", getBE(), DimensionalCellTileEntity.ACTION_CLEARSTATS);
 
         requestRF();
+    }
+
+    private void openStats() {
+        Panel panel = positional()
+                .filledBackground(0xffc6c6c6, 0xff555555)
+                .filledRectThickness(1);
+        panel.bounds(leftPos + (imageWidth - STATS_WIDTH) / 2, topPos, STATS_WIDTH, 69);
+        Window statsWindow = getWindowManager().createModalWindow(panel);
+        panel.children(statsTitle,
+                statsInserted, statsExtracted,
+                button(43, 51, 54, 15, "Clear").name("clearstats"),
+                button(105, 51, 54, 15, "Close").event(() -> getWindowManager().closeWindow(statsWindow)));
+        statsWindow.action("clearstats", getBE(), DimensionalCellTileEntity.ACTION_CLEARSTATS);
     }
 
     private void requestRF() {
@@ -92,17 +110,23 @@ public class GuiDimensionalCell extends GenericGuiContainer<DimensionalCellTileE
 
     @Override
     protected void renderBg(@Nonnull GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
-        drawWindow(graphics, partialTicks, mouseX, mouseY);
-
         requestRF();
 
         DimensionalCellTileEntity tileEntity = getBE();
-        stats.tooltips("Power statistics. Press to clear:", "Inserted: " + tileEntity.tooltipInserted, "Extracted: " + tileEntity.tooltipExtracted);
+        String inserted = "Inserted: " + tileEntity.tooltipInserted + " FE";
+        String extracted = "Extracted: " + tileEntity.tooltipExtracted + " FE";
+        String title = tileEntity.tooltipNetworked ? "Network Power Statistics" : "Power Statistics";
+        stats.tooltips(title, inserted, extracted);
+        statsTitle.text(title);
+        statsInserted.text(inserted);
+        statsExtracted.text(extracted);
 
         int maxValue = (tileEntity.tooltipBlocks - tileEntity.tooltipAdvancedBlocks - tileEntity.tooltipSimpleBlocks) * DimensionalCellConfiguration.rfPerNormalCell.get();
         maxValue += tileEntity.tooltipAdvancedBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() * DimensionalCellConfiguration.advancedFactor.get();
         maxValue += tileEntity.tooltipSimpleBlocks * DimensionalCellConfiguration.rfPerNormalCell.get() / DimensionalCellConfiguration.simpleFactor.get();
         energyBar.maxValue(maxValue);
         energyBar.value(tileEntity.tooltipEnergy);
+
+        drawWindow(graphics, partialTicks, mouseX, mouseY);
     }
 }
