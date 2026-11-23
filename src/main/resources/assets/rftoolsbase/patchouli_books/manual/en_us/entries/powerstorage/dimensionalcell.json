@@ -20,7 +20,7 @@
     },
     {
       "type": "text",
-      "text": "The GUI has card slots for linking/copying, a charge slot for FE items, a network storage bar, side mode buttons, and a Stats button for inserted/extracted FE."
+      "text": "The GUI has card slots for linking/copying, a charge slot for FE items, a network storage bar, and side mode buttons. Click Stats to see the linked network's FE totals or the unlinked cell's own totals. Use Clear to reset the displayed totals."
     },
     {
       "type": "text",

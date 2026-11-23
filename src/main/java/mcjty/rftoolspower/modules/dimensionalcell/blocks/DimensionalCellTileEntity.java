@@ -77,6 +77,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     public int tooltipBlocks = 0;
     public int tooltipSimpleBlocks = 0;
     public int tooltipAdvancedBlocks = 0;
+    public boolean tooltipNetworked;
     public long tooltipInserted = 0;
     public long tooltipExtracted = 0;
     public int tooltipRfPerTick = 0;
@@ -479,6 +480,10 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         if (!simulate) {
             totalInserted += received;
             powerIn += received;
+            if (networkId != -1 && received > 0) {
+                getNetwork().recordInsertion(received);
+                DimensionalCellNetwork.get(level).save();
+            }
             setChanged();
         }
         return received;
@@ -541,6 +546,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
         }
         if (!simulate) {
             maxExtract = network.extractEnergy(maxExtract);
+            network.recordExtraction(maxExtract);
             DimensionalCellNetwork.get(level).save();
         }
         return maxExtract;
@@ -588,9 +594,15 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
 
     @ServerCommand
     public static final Command<?> ACTION_CLEARSTATS = Command.<DimensionalCellTileEntity>create("clearStats", (te, player, params) -> {
-        te.totalExtracted = 0;
-        te.totalInserted = 0;
-        te.setChanged();
+        DimensionalCellNetwork.Network network = te.getNetwork();
+        if (network == null) {
+            te.resetTotalExtracted();
+            te.resetTotalInserted();
+            te.setChanged();
+        } else {
+            network.clearStats();
+            DimensionalCellNetwork.get(te.level).save();
+        }
     });
 
     @ServerCommand
@@ -673,6 +685,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
     public static final Key<Integer> PARAM_BLOCKS = new Key<>("block", Type.INTEGER);
     public static final Key<Integer> PARAM_SIMPLEBLOCKS = new Key<>("simpleblocks", Type.INTEGER);
     public static final Key<Integer> PARAM_ADVANCEDBLOCKS = new Key<>("advancedblocks", Type.INTEGER);
+    public static final Key<Boolean> PARAM_NETWORKED = new Key<>("networked", Type.BOOLEAN);
     public static final Key<Long> PARAM_TOTAL_INSERTED = new Key<>("totalinserted", Type.LONG);
     public static final Key<Long> PARAM_TOTAL_EXTRACTED = new Key<>("totalextracted", Type.LONG);
     public static final Key<Integer> PARAM_RFPERTICK = new Key<>("rfpertick", Type.INTEGER);
@@ -685,6 +698,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                 te.tooltipBlocks = params.get(PARAM_BLOCKS);
                 te.tooltipSimpleBlocks = params.get(PARAM_SIMPLEBLOCKS);
                 te.tooltipAdvancedBlocks = params.get(PARAM_ADVANCEDBLOCKS);
+                te.tooltipNetworked = Boolean.TRUE.equals(params.get(PARAM_NETWORKED));
                 te.tooltipInserted = params.get(PARAM_TOTAL_INSERTED);
                 te.tooltipExtracted = params.get(PARAM_TOTAL_EXTRACTED);
                 te.tooltipRfPerTick = params.get(PARAM_RFPERTICK);
@@ -698,6 +712,7 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                     .put(PARAM_BLOCKS, 1)
                     .put(PARAM_SIMPLEBLOCKS, getDimensionalCellType().isSimple() ? 1 : 0)
                     .put(PARAM_ADVANCEDBLOCKS, getDimensionalCellType().isAdvanced() ? 1 : 0)
+                    .put(PARAM_NETWORKED, false)
                     .put(PARAM_TOTAL_INSERTED, getTotalInserted())
                     .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
                     .put(PARAM_RFPERTICK, getRfPerTickPerSide())
@@ -710,8 +725,9 @@ public class DimensionalCellTileEntity extends TickingTileEntity implements ISma
                     .put(PARAM_BLOCKS, network.getBlockCount())
                     .put(PARAM_SIMPLEBLOCKS, network.getSimpleBlockCount())
                     .put(PARAM_ADVANCEDBLOCKS, network.getAdvancedBlockCount())
-                    .put(PARAM_TOTAL_INSERTED, getTotalInserted())
-                    .put(PARAM_TOTAL_EXTRACTED, getTotalExtracted())
+                    .put(PARAM_NETWORKED, true)
+                    .put(PARAM_TOTAL_INSERTED, network.getTotalInserted())
+                    .put(PARAM_TOTAL_EXTRACTED, network.getTotalExtracted())
                     .put(PARAM_RFPERTICK, getRfPerTickPerSide())
                     .put(PARAM_COSTFACTOR, (double) getCostFactor())
                     .build();
