@@ -1667,6 +1667,7 @@
   ],
   "render_type": "minecraft:translucent",
   "textures": {
+    "particle": "#window",
     "window": "rftoolspower:block/dimcell/dimensionalcellwindows"
   }
 }

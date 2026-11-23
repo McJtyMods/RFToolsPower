@@ -1,3 +1,8 @@
+1.21-7.0.8:
+- Fixed the dark border around the Endergenic Generator's pearl and flashes
+- The Dimensional Cell Stats button now shows live FE totals for the linked network or the unlinked cell, with a separate Clear button
+- Fixed missing break particle textures for all four Dimensional Cell variants
+
 1.21-7.0.7:
 - Fixed clipped pearl loss reasons in the Endergenic Generator Smart Wrench HUD (#185)
 

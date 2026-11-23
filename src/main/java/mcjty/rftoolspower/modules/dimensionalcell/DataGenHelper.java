@@ -17,18 +17,22 @@ public class DataGenHelper {
         provider.createFrame(dimCellFrame, "#window", 1f);
         provider.innerCube(dimCellFrame, "#window", 1f, 1f, 1f, 15f, 15f, 15f);
         dimCellFrame.texture("window", provider.modLoc("block/dimcell/dimensionalcellwindows"));
+        dimCellFrame.texture("particle", "#window");
 
         BlockModelBuilder singleNone = provider.models().getBuilder("block/dimcell/singlenone" + suffix)
                 .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end().end()
                 .texture("single", provider.modLoc("block/dimcell/dimensionalcell" + suffix))
+                .texture("particle", "#single")
                 .renderType("translucent");
         BlockModelBuilder singleIn = provider.models().getBuilder("block/dimcell/singlein" + suffix)
                 .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end().end()
                 .texture("single", provider.modLoc("block/dimcell/dimensionalcellin" + suffix))
+                .texture("particle", "#single")
                 .renderType("translucent");
         BlockModelBuilder singleOut = provider.models().getBuilder("block/dimcell/singleout" + suffix)
                 .element().from(3, 3, 3).to(13, 13, 13).face(Direction.DOWN).texture("#single").end().end()
                 .texture("single", provider.modLoc("block/dimcell/dimensionalcellout" + suffix))
+                .texture("particle", "#single")
                 .renderType("translucent");
 
         MultiPartBlockStateBuilder bld = provider.getMultipartBuilder(block);

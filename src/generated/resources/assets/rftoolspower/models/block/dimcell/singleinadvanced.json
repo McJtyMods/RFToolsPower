@@ -20,6 +20,7 @@
   ],
   "render_type": "minecraft:translucent",
   "textures": {
+    "particle": "#single",
     "single": "rftoolspower:block/dimcell/dimensionalcellinadvanced"
   }
 }

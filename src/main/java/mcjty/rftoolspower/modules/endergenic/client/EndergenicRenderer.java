@@ -1,7 +1,8 @@
 package mcjty.rftoolspower.modules.endergenic.client;
 
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import mcjty.lib.client.CustomRenderTypes;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import mcjty.lib.client.RenderGlowEffect;
 import mcjty.lib.client.RenderHelper;
 import mcjty.lib.client.RenderSettings;
@@ -13,6 +14,7 @@ import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
 import mcjty.rftoolspower.modules.endergenic.blocks.EndergenicTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -33,11 +35,13 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
     public static final ResourceLocation REDGLOW = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/redglow");
     public static final ResourceLocation BLUEGLOW = ResourceLocation.fromNamespaceAndPath(RFToolsPower.MODID, "block/endergenic/blueglow");
 
+    private static final RenderSettings PEARL_SETTINGS = RenderSettings.builder()
+            .renderType(RenderType.cutout())
+            .build();
+
     public static final RenderSettings FLASH_SETTINGS = RenderSettings.builder()
-            .color(255, 255, 255)
             .alpha(128)
-//            .renderType(CustomRenderTypes.TRANSLUCENT_LIGHTNING_NOLIGHTMAPS)
-            .renderType(CustomRenderTypes.translucent())
+            .renderType(FlashRenderType.INSTANCE)
             .build();
 
     public EndergenicRenderer(BlockEntityRendererProvider.Context context) {
@@ -56,7 +60,7 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
         if (s > 0.5f) {
             s = 1.0f - s;
         }
-        RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.2f + s * 0.3f, HALO);// + random.nextFloat() * .05f);
+        RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.2f + s * 0.3f, HALO, PEARL_SETTINGS);
 
         if (tileEntity.getGoodCounter() > 0) {
             RenderHelper.renderBillboardQuadBright(matrixStackIn, bufferIn, 0.8f * (tileEntity.getGoodCounter() / 10.0f), WHITEFLASH, FLASH_SETTINGS);
@@ -83,5 +87,24 @@ public class EndergenicRenderer implements BlockEntityRenderer<EndergenicTileEnt
 
     public static void register() {
         BlockEntityRenderers.register(EndergenicModule.ENDERGENIC.be().get(), EndergenicRenderer::new);
+    }
+
+    private static final class FlashRenderType extends RenderType {
+
+        // Avoid masking the translucent glass behind transparent parts of the flash.
+        private static final RenderType INSTANCE = create("endergenic_flash", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256, false, true,
+                CompositeState.builder()
+                        .setShaderState(RENDERTYPE_TRANSLUCENT_SHADER)
+                        .setTextureState(BLOCK_SHEET_MIPPED)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setLightmapState(LIGHTMAP)
+                        .setOutputState(TRANSLUCENT_TARGET)
+                        .setWriteMaskState(COLOR_WRITE)
+                        .createCompositeState(false));
+
+        private FlashRenderType(String name, VertexFormat format, VertexFormat.Mode mode, int size, boolean affectsCrumbling,
+                                boolean sortOnUpload, Runnable setupState, Runnable clearState) {
+            super(name, format, mode, size, affectsCrumbling, sortOnUpload, setupState, clearState);
+        }
     }
 }
