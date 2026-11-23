@@ -88,6 +88,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
     public static class Network {
         private int energy = 0;
+        private long totalInserted;
+        private long totalExtracted;
         private Set<GlobalPos> blocks = new HashSet<>();
         private int simpleBlocks = 0;
         private int advancedBlocks = 0;
@@ -295,6 +297,27 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
             return energy;
         }
 
+        public long getTotalInserted() {
+            return totalInserted;
+        }
+
+        public long getTotalExtracted() {
+            return totalExtracted;
+        }
+
+        public void recordInsertion(int amount) {
+            totalInserted += amount;
+        }
+
+        public void recordExtraction(int amount) {
+            totalExtracted += amount;
+        }
+
+        public void clearStats() {
+            totalInserted = 0;
+            totalExtracted = 0;
+        }
+
         public int extractEnergy(int amount) {
             if(amount > energy) {
                 amount = energy;
@@ -317,6 +340,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
         public void writeToNBT(CompoundTag tagCompound){
             tagCompound.putInt("energy", energy);
+            tagCompound.putLong("totalInserted", totalInserted);
+            tagCompound.putLong("totalExtracted", totalExtracted);
             tagCompound.putInt("advanced", advancedBlocks);
             tagCompound.putInt("simple", simpleBlocks);
             ListTag list = new ListTag();
@@ -334,6 +359,8 @@ public class DimensionalCellNetwork extends AbstractWorldData<DimensionalCellNet
 
         public void readFromNBT(CompoundTag tagCompound){
             this.energy = tagCompound.getInt("energy");
+            totalInserted = tagCompound.getLong("totalInserted");
+            totalExtracted = tagCompound.getLong("totalExtracted");
             this.advancedBlocks = tagCompound.getInt("advanced");
             this.simpleBlocks = tagCompound.getInt("simple");
             blocks.clear();
