@@ -1,3 +1,6 @@
+26.3-10.0.4:
+- The Dimensional Cell Stats button now shows live FE totals for the linked network or the unlinked cell, with a separate Clear button
+
 26.3-10.0.3:
 - Fixed clipped pearl loss reasons in the Endergenic Generator Smart Wrench HUD (#185)
 
